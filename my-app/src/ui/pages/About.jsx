@@ -1,5 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const galleryData = [
   "https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=1000",
@@ -10,6 +12,8 @@ const galleryData = [
 
 const About = () => {
   return (
+  <>
+  <Navbar/>
     <div className="bg-black text-white">
 
       {/* Hero Banner */}
@@ -211,6 +215,8 @@ const About = () => {
       </section>
 
     </div>
+    <Footer/>
+    </>
   );
 };
 

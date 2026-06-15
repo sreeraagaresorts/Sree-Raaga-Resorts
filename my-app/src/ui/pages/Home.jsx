@@ -1,5 +1,8 @@
 import React from "react";
 import { motion, useScroll, useTransform } from "motion/react";
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+
 
 export default function Home() {
 
@@ -35,6 +38,8 @@ export default function Home() {
   ];
 
   return (
+<>
+  <Navbar/>
     <div className="bg-black text-white">
       {/* HERO SECTION */}
       <section className="relative h-screen overflow-hidden flex items-center justify-center">
@@ -246,5 +251,7 @@ export default function Home() {
         </div>
       </section>
     </div>
+        <Footer/>
+</>
   );
 }

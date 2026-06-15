@@ -16,23 +16,49 @@ const Register = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = (e) => {
-    e.preventDefault();
+const handleRegister = async (e) => {
+  e.preventDefault();
 
-    setError("");
+  setError("");
 
-    if (formData.password !== formData.confirmPassword) {
-      return setError("Passwords do not match");
-    }
+  if (formData.password !== formData.confirmPassword) {
+    return setError("Passwords do not match");
+  }
 
+  try {
     setLoading(true);
 
-    // Demo Registration
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/login");
-    }, 1500);
-  };
+    const response = await fetch(
+      "http://localhost:5000/api/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+     body: JSON.stringify({
+  full_name: formData.name,
+  email: formData.email,
+  phone: formData.phone,
+  password: formData.password,
+}),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    alert("Registration Successful");
+
+    navigate("/login");
+  } catch (err) {
+    setError(err.message || "Registration Failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="bg-black text-white min-h-screen">

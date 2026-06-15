@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import { MapPin, Mail, Phone } from "lucide-react";
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -34,6 +37,8 @@ const Contact = () => {
   };
 
   return (
+  <>
+    <Navbar/>
     <div className="bg-black text-white">
 
       {/* Hero Section */}
@@ -336,6 +341,8 @@ const Contact = () => {
       </section>
 
     </div>
+        <Footer/>
+    </>
   );
 };
 

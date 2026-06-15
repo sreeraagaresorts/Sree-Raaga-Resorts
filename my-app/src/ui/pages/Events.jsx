@@ -1,5 +1,8 @@
 import React from "react";
 import { motion } from "motion/react";
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+
 
 const events = [
   {
@@ -66,6 +69,8 @@ const events = [
 
 const Events = () => {
   return (
+   <>
+     <Navbar/>
     <div className="bg-black text-white">
 
       {/* Hero Section */}
@@ -185,6 +190,8 @@ const Events = () => {
       </section>
 
     </div>
+        <Footer/>
+   </>
   );
 };
 

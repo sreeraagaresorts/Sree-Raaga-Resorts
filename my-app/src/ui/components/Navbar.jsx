@@ -111,7 +111,7 @@ const Navbar = () => {
             </Link>
 
             <Link
-              to="/profile"
+              to="/dashboard/profile"
               className="w-9 h-9 rounded-full border border-yellow-500 flex items-center justify-center text-yellow-500 hover:bg-yellow-500 hover:text-black transition"
             >
               <User size={16} />

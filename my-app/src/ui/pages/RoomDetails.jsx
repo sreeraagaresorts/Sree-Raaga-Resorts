@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Check, Star } from "lucide-react";
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const rooms = [
   {
@@ -79,6 +81,8 @@ const RoomDetails = () => {
   const totals = calculateTotal();
 
   return (
+ <>
+  <Navbar/>
     <div className="bg-black text-white">
 
       {/* Hero */}
@@ -343,6 +347,8 @@ const RoomDetails = () => {
 
       </section>
     </div>
+      <Footer/>
+ </>
   );
 };
 

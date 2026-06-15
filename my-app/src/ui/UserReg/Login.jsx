@@ -11,23 +11,50 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-    setLoading(true);
-    setError("");
+  setLoading(true);
+  setError("");
 
-    // Temporary Demo Login
-    setTimeout(() => {
-      if (email && password) {
-        navigate("/");
-      } else {
-        setError("Please enter email and password.");
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       }
+    );
 
-      setLoading(false);
-    }, 1500);
-  };
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    // Save JWT Token
+    localStorage.setItem("token", data.token);
+
+    // Save User Data
+    localStorage.setItem(
+      "user",
+      JSON.stringify(data.user)
+    );
+
+    navigate("/");
+
+  } catch (err) {
+    setError(err.message || "Login Failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="bg-black text-white min-h-screen">

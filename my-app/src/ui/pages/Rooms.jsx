@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const rooms = [
   {
@@ -55,6 +57,8 @@ const rooms = [
 
 const Rooms = () => {
   return (
+   <>
+    <Navbar/>
     <div className="bg-black text-white">
 
       {/* Hero Banner */}
@@ -178,6 +182,8 @@ const Rooms = () => {
       </section>
 
     </div>
+      <Footer/>
+   </>
   );
 };
 
