@@ -27,6 +27,25 @@ const navItems = [
 
 const  AdminLayout=()=> {
   const location = useLocation();
+  const [adminUser, setAdminUser] = React.useState(null);
+
+  React.useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setAdminUser(JSON.parse(storedUser));
+      } catch (e) {
+        setAdminUser(null);
+      }
+    }
+  }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/admin/login";
+  };
 
   const isActive = (path) =>
     location.pathname === path ||
@@ -68,17 +87,20 @@ const  AdminLayout=()=> {
 
           <div className="flex items-center gap-3 bg-[#081A2F] p-3 rounded-lg">
             <div className="w-8 h-8 bg-[#C8A64D] text-[#071524] flex items-center justify-center rounded-full font-bold">
-              A
+              {adminUser ? adminUser.full_name.charAt(0).toUpperCase() : "A"}
             </div>
-            <div>
-              <div className="text-sm font-medium">Admin User</div>
-              <div className="text-[10px] text-white/40 uppercase">
-                Administrator
+            <div className="overflow-hidden">
+              <div className="text-sm font-medium truncate">{adminUser ? adminUser.full_name : "Admin User"}</div>
+              <div className="text-[10px] text-white/40 uppercase truncate">
+                {adminUser ? adminUser.email : "Administrator"}
               </div>
             </div>
           </div>
 
-          <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/50 hover:text-red-400 hover:bg-red-500/10 rounded-md">
+          <button 
+            onClick={handleSignOut}
+            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/50 hover:text-red-400 hover:bg-red-500/10 rounded-md cursor-pointer bg-transparent border-0"
+          >
             <LogOut className="w-4 h-4" />
             Sign Out
           </button>

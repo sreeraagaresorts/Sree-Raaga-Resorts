@@ -1,73 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-
-const events = [
-  {
-    id: 1,
-    name: "Luxury Wedding Ceremony",
-    category: "Wedding",
-    date: "Available All Year",
-    image:
-      "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200",
-    description:
-      "Celebrate your dream wedding surrounded by breathtaking landscapes and luxurious hospitality.",
-  },
-  {
-    id: 2,
-    name: "Corporate Conference",
-    category: "Business",
-    date: "Year Round",
-    image:
-      "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200",
-    description:
-      "Host professional meetings and conferences with world-class facilities and premium services.",
-  },
-  {
-    id: 3,
-    name: "Private Birthday Party",
-    category: "Celebration",
-    date: "Available Anytime",
-    image:
-      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1200",
-    description:
-      "Create unforgettable memories with customized birthday celebrations and luxury dining.",
-  },
-  {
-    id: 4,
-    name: "Engagement Ceremony",
-    category: "Wedding",
-    date: "All Seasons",
-    image:
-      "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200",
-    description:
-      "Elegant engagement setups with personalized decorations and premium hospitality.",
-  },
-  {
-    id: 5,
-    name: "Family Gatherings",
-    category: "Family",
-    date: "Year Round",
-    image:
-      "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=1200",
-    description:
-      "Reconnect with loved ones in a beautiful and relaxing environment designed for families.",
-  },
-  {
-    id: 6,
-    name: "Anniversary Celebrations",
-    category: "Celebration",
-    date: "Available Anytime",
-    image:
-      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1200",
-    description:
-      "Celebrate milestones with luxury dining, private setups, and memorable experiences.",
-  },
-];
-
 const Events = () => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/events");
+        if (!response.ok) {
+          throw new Error("Failed to fetch events");
+        }
+        const data = await response.json();
+        if (data.success) {
+          setEvents(data.data);
+        } else {
+          throw new Error(data.message || "Failed to fetch events");
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  const getImageUrl = (image) => {
+    if (!image) return "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200";
+    if (image.startsWith("http")) return image;
+    return `http://localhost:5000/uploads/${image}`;
+  };
   return (
    <>
      <Navbar/>
@@ -107,8 +75,25 @@ const Events = () => {
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {loading && (
+          <div className="text-center text-yellow-500 py-12 text-xl">
+            Loading events...
+          </div>
+        )}
 
+        {error && (
+          <div className="text-center text-red-500 py-12 text-xl">
+            Error: {error}
+          </div>
+        )}
+
+        {!loading && !error && events.length === 0 && (
+          <div className="text-center text-white/50 py-12 text-xl">
+            No events scheduled at the moment.
+          </div>
+        )}
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {events.map((event, index) => (
             <motion.div
               key={event.id}
@@ -124,7 +109,7 @@ const Events = () => {
               <div className="relative overflow-hidden aspect-[4/3]">
 
                 <img
-                  src={event.image}
+                  src={getImageUrl(event.image)}
                   alt={event.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition duration-1000"
                 />
@@ -139,7 +124,7 @@ const Events = () => {
               <div className="p-8">
 
                 <div className="text-yellow-500 text-xs uppercase tracking-widest mb-3">
-                  {event.date}
+                  {event.event_date || event.date}
                 </div>
 
                 <h3 className="text-2xl mb-4 group-hover:text-yellow-500 transition">
@@ -159,7 +144,6 @@ const Events = () => {
               </div>
             </motion.div>
           ))}
-
         </div>
       </section>
 

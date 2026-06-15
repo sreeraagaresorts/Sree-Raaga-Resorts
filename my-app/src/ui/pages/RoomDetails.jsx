@@ -1,72 +1,73 @@
-import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Check, Star } from "lucide-react";
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-const rooms = [
-  {
-    id: 1,
-    name: "Luxury Suite",
-    price: 8999,
-    image:
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200",
-    area: "600 SQ FT",
-    beds: "KING BED",
-    bathrooms: "1 BATHROOM",
-    description:
-      "Experience premium comfort with stunning views and luxury amenities.",
-    features: [
-      "Free WiFi",
-      "Swimming Pool",
-      "Breakfast Included",
-      "Room Service",
-      "Smart TV",
-      "Private Balcony",
-    ],
-  },
-  {
-    id: 2,
-    name: "Royal Villa",
-    price: 12999,
-    image:
-      "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=1200",
-    area: "900 SQ FT",
-    beds: "2 KING BEDS",
-    bathrooms: "2 BATHROOMS",
-    description:
-      "An elegant villa designed for families and luxury travelers.",
-    features: [
-      "Private Garden",
-      "Free WiFi",
-      "Luxury Bathroom",
-      "Mini Bar",
-      "Private Dining",
-      "Room Service",
-    ],
-  },
-];
-
 const RoomDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  const room =
-    rooms.find((r) => r.id === Number(id)) || rooms[0];
+  const [room, setRoom] = useState(null);
+  const [similarRooms, setSimilarRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
 
+  useEffect(() => {
+    const fetchRoomDetails = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`http://localhost:5000/api/rooms/${id}`);
+        if (!response.ok) {
+          throw new Error("Room not found");
+        }
+        const data = await response.json();
+        if (data.success) {
+          setRoom(data.data);
+        } else {
+          throw new Error(data.message || "Failed to load room details");
+        }
+
+        // Fetch other rooms for similar rooms section
+        const allRes = await fetch("http://localhost:5000/api/rooms");
+        if (allRes.ok) {
+          const allData = await allRes.json();
+          if (allData.success) {
+            setSimilarRooms(allData.data.filter(r => r.id !== Number(id)).slice(0, 2));
+          }
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoomDetails();
+  }, [id]);
+
+  const getImageUrl = (image) => {
+    if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
+    if (image.startsWith("http")) return image;
+    return `http://localhost:5000/uploads/${image}`;
+  };
+
   const calculateTotal = () => {
-    if (!checkIn || !checkOut)
-      return { nights: 0, total: room.price };
+    if (!room || !checkIn || !checkOut)
+      return { nights: 0, total: room ? parseFloat(room.price) : 0 };
 
     const start = new Date(checkIn);
     const end = new Date(checkOut);
 
     if (end <= start)
-      return { nights: 0, total: room.price };
+      return { nights: 0, total: parseFloat(room.price) };
 
     const nights = Math.ceil(
       (end - start) / (1000 * 60 * 60 * 24)
@@ -74,11 +75,96 @@ const RoomDetails = () => {
 
     return {
       nights,
-      total: nights * room.price,
+      total: nights * parseFloat(room.price),
     };
   };
 
+  const handleBooking = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please sign in to book a room.");
+      navigate("/login");
+      return;
+    }
+
+    if (!checkIn || !checkOut) {
+      alert("Please select check-in and check-out dates.");
+      return;
+    }
+
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    if (end <= start) {
+      alert("Check-out date must be after check-in date.");
+      return;
+    }
+
+    setBookingLoading(true);
+    try {
+      const response = await fetch("http://localhost:5000/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          room_id: room.id,
+          check_in: checkIn,
+          check_out: checkOut,
+          adults,
+          children
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to submit booking.");
+      }
+
+      alert("Booking Request Submitted Successfully!");
+      navigate("/dashboard/bookings");
+    } catch (err) {
+      alert(err.message || "Booking failed.");
+    } finally {
+      setBookingLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="bg-black text-white min-h-screen flex items-center justify-center">
+          <p className="text-yellow-500 text-2xl font-light">Loading room details...</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error || !room) {
+    return (
+      <>
+        <Navbar />
+        <div className="bg-black text-white min-h-screen flex items-center justify-center">
+          <p className="text-red-500 text-2xl font-light">Error: {error || "Room not found"}</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
   const totals = calculateTotal();
+  const features = room.features || [
+    "Free WiFi",
+    "Swimming Pool",
+    "Breakfast Included",
+    "Room Service",
+    "Smart TV",
+    "Private Balcony",
+  ];
+
+
 
   return (
  <>
@@ -89,7 +175,7 @@ const RoomDetails = () => {
       <section
         className="relative h-[60vh] bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage: `url(${room.image})`,
+          backgroundImage: `url(${getImageUrl(room.image)})`,
         }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
@@ -114,7 +200,7 @@ const RoomDetails = () => {
           <div className="lg:col-span-2">
 
             <img
-              src={room.image}
+              src={getImageUrl(room.image)}
               alt={room.name}
               className="w-full h-[500px] object-cover mb-10"
             />
@@ -140,7 +226,7 @@ const RoomDetails = () => {
                 </p>
 
                 <p className="text-2xl text-yellow-500">
-                  ₹{room.price}
+                  ₹{parseFloat(room.price).toLocaleString()}
                 </p>
               </div>
             </div>
@@ -160,7 +246,7 @@ const RoomDetails = () => {
             </h3>
 
             <div className="grid md:grid-cols-2 gap-4 mb-12">
-              {room.features.map((feature, index) => (
+              {features.map((feature, index) => (
                 <div
                   key={index}
                   className="flex items-center gap-3"
@@ -205,7 +291,7 @@ const RoomDetails = () => {
           {/* Booking Sidebar */}
           <div>
 
-            <div className="bg-zinc-950 border border-yellow-500/20 p-8 sticky top-28">
+            <div className="bg-[oklch(0.35_0.05_96.46)] border border-yellow-500/20 p-8 sticky top-28">
 
               <h3 className="text-3xl mb-8">
                 Booking Now
@@ -292,14 +378,11 @@ const RoomDetails = () => {
                   )}
 
                   <button
-                    className="w-full py-4 bg-yellow-500 text-black hover:bg-yellow-400 transition"
-                    onClick={() =>
-                      alert(
-                        "Booking integration will be added later."
-                      )
-                    }
+                    className="w-full py-4 bg-yellow-500 text-black hover:bg-yellow-400 transition font-bold disabled:bg-yellow-500/50"
+                    onClick={handleBooking}
+                    disabled={bookingLoading}
                   >
-                    Book Now
+                    {bookingLoading ? "Booking..." : "Book Now"}
                   </button>
 
                 </div>
@@ -321,25 +404,29 @@ const RoomDetails = () => {
 
           <div className="grid md:grid-cols-2 gap-10">
 
-            {rooms.map((item) => (
-              <Link
-                key={item.id}
-                to={`/rooms/${item.id}`}
-                className="group"
-              >
-                <div className="overflow-hidden mb-4">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-[300px] object-cover group-hover:scale-105 transition duration-700"
-                  />
-                </div>
+            {similarRooms.length === 0 ? (
+              <p className="text-center text-white/40 col-span-2">No other rooms available.</p>
+            ) : (
+              similarRooms.map((item) => (
+                <Link
+                  key={item.id}
+                  to={`/rooms/${item.id}`}
+                  className="group"
+                >
+                  <div className="overflow-hidden mb-4">
+                    <img
+                      src={getImageUrl(item.image)}
+                      alt={item.name}
+                      className="w-full h-[300px] object-cover group-hover:scale-105 transition duration-700"
+                    />
+                  </div>
 
-                <h3 className="text-2xl group-hover:text-yellow-500">
-                  {item.name}
-                </h3>
-              </Link>
-            ))}
+                  <h3 className="text-2xl group-hover:text-yellow-500">
+                    {item.name}
+                  </h3>
+                </Link>
+              ))
+            )}
 
           </div>
 
@@ -348,7 +435,7 @@ const RoomDetails = () => {
       </section>
     </div>
       <Footer/>
- </>
+   </>
   );
 };
 

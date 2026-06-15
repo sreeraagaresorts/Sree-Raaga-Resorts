@@ -15,14 +15,26 @@ const Contact = () => {
 
   const [status, setStatus] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setStatus("sending");
 
-    setTimeout(() => {
-      setStatus("success");
+    try {
+      const response = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to send message.");
+      }
+
+      setStatus("success");
       setFormData({
         name: "",
         email: "",
@@ -32,8 +44,11 @@ const Contact = () => {
 
       setTimeout(() => {
         setStatus("");
-      }, 3000);
-    }, 1500);
+      }, 5000);
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
   };
 
   return (
@@ -90,6 +105,12 @@ const Contact = () => {
             {status === "success" && (
               <div className="bg-green-500/10 border border-green-500 text-green-400 p-4 mb-6">
                 Thank you! Your message has been sent successfully.
+              </div>
+            )}
+
+            {status === "error" && (
+              <div className="bg-red-500/10 border border-red-500 text-red-400 p-4 mb-6">
+                Failed to send message. Please try again.
               </div>
             )}
 

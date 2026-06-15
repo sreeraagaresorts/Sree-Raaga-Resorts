@@ -40,6 +40,11 @@ exports.register = async (req, res) => {
     const hashedPassword =
       await bcrypt.hash(password, 10);
 
+    // If there are no users in the database, make the first registered user an admin
+    const [countResult] = await db.query("SELECT COUNT(*) as count FROM users");
+    const isFirstUser = countResult[0].count === 0;
+    const role = isFirstUser ? "admin" : "user";
+
     const [result] = await db.query(
       `INSERT INTO users
       (
@@ -55,7 +60,7 @@ exports.register = async (req, res) => {
         email,
         phone,
         hashedPassword,
-        "user"
+        role
       ]
     );
 
@@ -181,6 +186,101 @@ exports.getProfile = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server Error"
+    });
+  }
+};
+
+
+// Admin-only: Get all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const [users] = await db.query(
+      "SELECT id, full_name, email, phone, role, created_at FROM users ORDER BY id DESC"
+    );
+
+    res.json({
+      success: true,
+      count: users.length,
+      data: users
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users."
+    });
+  }
+};
+
+// Admin-only: Update user role
+exports.updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    const { id } = req.params;
+
+    if (role !== "admin" && role !== "user") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid role. Must be 'admin' or 'user'."
+      });
+    }
+
+    const [result] = await db.query(
+      "UPDATE users SET role = ? WHERE id = ?",
+      [role, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found."
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "User role updated successfully."
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update user role."
+    });
+  }
+};
+
+// Admin-only: Delete user
+exports.deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Prevent admin from deleting themselves
+    if (parseInt(id) === req.user.id) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot delete your own admin account."
+      });
+    }
+
+    const [result] = await db.query("DELETE FROM users WHERE id = ?", [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found."
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "User deleted successfully."
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete user."
     });
   }
 };

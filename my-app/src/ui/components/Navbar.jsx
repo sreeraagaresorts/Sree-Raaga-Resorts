@@ -15,6 +15,27 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
+  }, [location.pathname]);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    window.location.href = "/";
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -103,19 +124,36 @@ const Navbar = () => {
               </Link>
             ))}
 
-            <Link
-              to="/login"
-              className="hover:text-yellow-500 text-white"
-            >
-              Login
-            </Link>
-
-            <Link
-              to="/dashboard/profile"
-              className="w-9 h-9 rounded-full border border-yellow-500 flex items-center justify-center text-yellow-500 hover:bg-yellow-500 hover:text-black transition"
-            >
-              <User size={16} />
-            </Link>
+            {user ? (
+              <>
+                {/* <Link
+                  to="/dashboard"
+                  className="hover:text-yellow-500 text-white"
+                >
+                  Dashboard
+                </Link> */}
+                <button
+                  onClick={handleSignOut}
+                  className="hover:text-red-400 text-white cursor-pointer uppercase tracking-wider text-sm bg-transparent border-0"
+                >
+                  Sign Out
+                </button>
+                <Link
+                  to="/dashboard/profile"
+                  className="w-9 h-9 rounded-full border border-yellow-500 flex items-center justify-center text-yellow-500 hover:bg-yellow-500 hover:text-black transition"
+                  title={user.full_name}
+                >
+                  <User size={16} />
+                </Link>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="hover:text-yellow-500 text-white"
+              >
+                Login
+              </Link>
+            )}
 
             <Link
               to="/rooms"
@@ -179,12 +217,29 @@ const Navbar = () => {
               ))}
 
               <div className="mt-10 flex flex-col gap-4 w-72">
-                <Link
-                  to="/login"
-                  className="border border-yellow-500 py-3 text-center text-white hover:bg-yellow-500 hover:text-black transition"
-                >
-                  Sign In
-                </Link>
+                {user ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      className="border border-yellow-500 py-3 text-center text-white hover:bg-yellow-500 hover:text-black transition"
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={handleSignOut}
+                      className="border border-red-500 py-3 text-center text-white hover:bg-red-500 hover:text-white transition cursor-pointer bg-transparent"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="border border-yellow-500 py-3 text-center text-white hover:bg-yellow-500 hover:text-black transition"
+                  >
+                    Sign In
+                  </Link>
+                )}
 
                 <Link
                   to="/rooms"

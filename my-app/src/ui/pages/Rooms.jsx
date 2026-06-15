@@ -1,61 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-const rooms = [
-  {
-    id: 1,
-    name: "Luxury Suite",
-    price: "8,999",
-    image:
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200",
-    area: "600 SQ FT",
-    beds: "KING BED",
-    bathrooms: "1 BATHROOM",
-    description:
-      "Experience premium comfort with stunning views and luxury amenities.",
-  },
-  {
-    id: 2,
-    name: "Royal Villa",
-    price: "12,999",
-    image:
-      "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=1200",
-    area: "900 SQ FT",
-    beds: "2 KING BEDS",
-    bathrooms: "2 BATHROOMS",
-    description:
-      "An elegant villa designed for families and luxury travelers.",
-  },
-  {
-    id: 3,
-    name: "Presidential Suite",
-    price: "18,999",
-    image:
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200",
-    area: "1200 SQ FT",
-    beds: "KING BED",
-    bathrooms: "2 BATHROOMS",
-    description:
-      "Ultimate luxury experience with private lounge and premium services.",
-  },
-  {
-    id: 4,
-    name: "Garden Cottage",
-    price: "7,499",
-    image:
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1200",
-    area: "500 SQ FT",
-    beds: "QUEEN BED",
-    bathrooms: "1 BATHROOM",
-    description:
-      "Surrounded by nature and designed for a peaceful retreat.",
-  },
-];
-
 const Rooms = () => {
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/rooms");
+        if (!response.ok) {
+          throw new Error("Failed to fetch rooms");
+        }
+        const data = await response.json();
+        if (data.success) {
+          setRooms(data.data);
+        } else {
+          throw new Error(data.message || "Failed to fetch rooms");
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
+  }, []);
+
+  const getImageUrl = (image) => {
+    if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
+    if (image.startsWith("http")) return image;
+    return `http://localhost:5000/uploads/${image}`;
+  };
   return (
    <>
     <Navbar/>
@@ -95,8 +76,25 @@ const Rooms = () => {
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-x-12 gap-y-20">
+        {loading && (
+          <div className="text-center text-yellow-500 py-12 text-xl">
+            Loading rooms...
+          </div>
+        )}
 
+        {error && (
+          <div className="text-center text-red-500 py-12 text-xl">
+            Error: {error}
+          </div>
+        )}
+
+        {!loading && !error && rooms.length === 0 && (
+          <div className="text-center text-white/50 py-12 text-xl">
+            No rooms available at the moment.
+          </div>
+        )}
+
+        <div className="grid md:grid-cols-2 gap-x-12 gap-y-20">
           {rooms.map((room, idx) => (
             <motion.div
               key={room.id}
@@ -109,22 +107,22 @@ const Rooms = () => {
               }}
               className="group"
             >
-              <div className="relative overflow-hidden mb-6 aspect-[4/3]">
+              <Link to={`/rooms/${room.id}`} className="block relative overflow-hidden mb-6 aspect-[4/3]">
 
                 <div className="absolute inset-0 bg-black/20 z-10 group-hover:bg-transparent transition duration-500"></div>
 
                 <img
-                  src={room.image}
+                  src={getImageUrl(room.image)}
                   alt={room.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition duration-1000"
                 />
 
-                <div className="absolute bottom-6 left-6 z-20 bg-black/80 backdrop-blur px-4 py-2 border border-yellow-500/30">
+                <div className="absolute bottom-6 left-6 z-20 bg-black/80 backdrop-blur px-4 py-2 border border-yellow-500/30 text-white">
                   <span className="text-xs uppercase tracking-widest">
-                    Starts at ₹{room.price}
+                    Starts at ₹{parseFloat(room.price).toLocaleString()}
                   </span>
                 </div>
-              </div>
+              </Link>
 
               <h3 className="text-3xl font-light mb-4 group-hover:text-yellow-500 transition">
                 {room.name}

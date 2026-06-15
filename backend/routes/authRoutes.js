@@ -5,11 +5,14 @@ const router = express.Router();
 const {
   register,
   login,
-  getProfile
+  getProfile,
+  getAllUsers,
+  updateUserRole,
+  deleteUser
 } = require("../controllers/authController");
 
-const verifyToken =
-require("../middleware/authMiddleware");
+const verifyToken = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
 
 router.post("/register", register);
 
@@ -20,5 +23,10 @@ router.get(
   verifyToken,
   getProfile
 );
+
+// Admin-only User Management
+router.get("/users", verifyToken, adminMiddleware, getAllUsers);
+router.put("/users/:id/role", verifyToken, adminMiddleware, updateUserRole);
+router.delete("/users/:id", verifyToken, adminMiddleware, deleteUser);
 
 module.exports = router;
