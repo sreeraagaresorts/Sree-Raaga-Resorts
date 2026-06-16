@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_URL } from '../config/api';
 import {
   Download,
   FileText,
@@ -21,7 +22,7 @@ const AdminBilling = () => {
     setLoading(true);
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:5000/api/bookings", {
+      const response = await fetch(`${API_URL}/api/bookings`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
