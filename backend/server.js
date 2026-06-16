@@ -12,6 +12,12 @@ app.use(
     credentials: true,
   })
 );
+
+const allowedOrigins=[
+  "http//localhost:5173",
+  "http://uqi93mcr9lh88oflqkbrwihk.187.127.179.194.sslip.io"
+]
+
 app.use(express.json());
 
 app.use("/uploads", express.static("uploads"));
