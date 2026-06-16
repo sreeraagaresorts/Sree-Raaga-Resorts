@@ -9,6 +9,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
+import { API_URL } from "../config/api";
 
 const AdminEvents = () => {
   const toast = useToast();
@@ -31,7 +32,7 @@ const AdminEvents = () => {
   const fetchEvents = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/events");
+      const response = await fetch(`${API_URL}/api/events`);
       const data = await response.json();
       if (data.success) {
         setEvents(data.data);
@@ -67,7 +68,7 @@ const AdminEvents = () => {
     setEventDate(event.event_date || "");
     setDescription(event.description || "");
     setImageFile(null);
-    setImagePreview(event.image ? (event.image.startsWith("http") ? event.image : `http://localhost:5000/uploads/${event.image}`) : "");
+    setImagePreview(event.image ? (event.image.startsWith("http") ? event.image : `${API_URL}/uploads/${event.image}`) : "");
     setIsFormOpen(true);
   };
 
@@ -96,11 +97,11 @@ const AdminEvents = () => {
     }
 
     try {
-      let url = "http://localhost:5000/api/events";
+      let url = `${API_URL}/api/events`;
       let method = "POST";
 
       if (editingEvent) {
-        url = `http://localhost:5000/api/events/${editingEvent.id}`;
+        url = `${API_URL}/api/events/${editingEvent.id}`;
         method = "PUT";
       }
 
@@ -133,7 +134,7 @@ const AdminEvents = () => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
     try {
-      const response = await fetch(`http://localhost:5000/api/events/${id}`, {
+      const response = await fetch(`${API_URL}/api/events/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -155,7 +156,7 @@ const AdminEvents = () => {
   const getImageUrl = (image) => {
     if (!image) return "https://images.unsplash.com/photo-1511795409834-ef04bbd61622";
     if (image.startsWith("http")) return image;
-    return `http://localhost:5000/uploads/${image}`;
+    return `${API_URL}/uploads/${image}`;
   };
 
   return (

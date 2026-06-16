@@ -12,6 +12,7 @@ import {
   UserCheck,
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
+import { API_URL } from "../config/api";
 
 const AdminBookings = () => {
   const toast = useToast();
@@ -46,7 +47,7 @@ const AdminBookings = () => {
     setLoading(true);
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:5000/api/bookings", {
+      const response = await fetch(`${API_URL}/api/bookings`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,7 +69,7 @@ const AdminBookings = () => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
       // Fetch users
-      const uRes = await fetch("http://localhost:5000/api/auth/users", {
+      const uRes = await fetch(`${API_URL}/api/auth/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const uData = await uRes.json();
@@ -83,7 +84,7 @@ const AdminBookings = () => {
       }
 
       // Fetch rooms
-      const rRes = await fetch("http://localhost:5000/api/rooms");
+      const rRes = await fetch(`${API_URL}/api/rooms`);
       const rData = await rRes.json();
       if (rData.success) {
         setRooms(rData.data);
@@ -137,7 +138,7 @@ const AdminBookings = () => {
 
       if (guestMode === "new") {
         // Register the new user first
-        const regRes = await fetch("http://localhost:5000/api/auth/register", {
+        const regRes = await fetch(`${API_URL}/api/auth/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -160,7 +161,7 @@ const AdminBookings = () => {
       }
 
       // Create the booking
-      const response = await fetch("http://localhost:5000/api/bookings", {
+      const response = await fetch(`${API_URL}/api/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -195,7 +196,7 @@ const AdminBookings = () => {
   const handleUpdateStatus = async (id, status) => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
-      const response = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+      const response = await fetch(`${API_URL}/api/bookings/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -219,7 +220,7 @@ const AdminBookings = () => {
   const handleUpdatePaymentMethod = async (id, paymentMethod) => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
-      const response = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+      const response = await fetch(`${API_URL}/api/bookings/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -245,7 +246,7 @@ const AdminBookings = () => {
 
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
-      const response = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+      const response = await fetch(`${API_URL}/api/bookings/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

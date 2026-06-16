@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axiosReal from "axios";
 import { User, Mail, Phone, Calendar, ShieldCheck, RefreshCw } from "lucide-react";
 import { useToast } from "../../components/Toast";
+import { API_URL } from "../../../config/api";
 
 const UserProfile = () => {
   const toast = useToast();
@@ -13,7 +14,7 @@ const UserProfile = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await axiosReal.get("http://localhost:5000/api/auth/profile", {
+        const res = await axiosReal.get(`${API_URL}/api/auth/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

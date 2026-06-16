@@ -11,6 +11,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
+import { API_URL } from "../config/api";
 
 const AdminRooms = () => {
   const toast = useToast();
@@ -35,7 +36,7 @@ const AdminRooms = () => {
   const fetchRooms = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/rooms");
+      const response = await fetch(`${API_URL}/api/rooms`);
       const data = await response.json();
       if (data.success) {
         setRooms(data.data);
@@ -75,7 +76,7 @@ const AdminRooms = () => {
     setBathrooms(room.bathrooms);
     setDescription(room.description);
     setImageFile(null);
-    setImagePreview(room.image ? (room.image.startsWith("http") ? room.image : `http://localhost:5000/uploads/${room.image}`) : "");
+    setImagePreview(room.image ? (room.image.startsWith("http") ? room.image : `${API_URL}/uploads/${room.image}`) : "");
     setIsFormOpen(true);
   };
 
@@ -106,11 +107,11 @@ const AdminRooms = () => {
     }
 
     try {
-      let url = "http://localhost:5000/api/rooms";
+      let url = `${API_URL}/api/rooms`;
       let method = "POST";
 
       if (editingRoom) {
-        url = `http://localhost:5000/api/rooms/${editingRoom.id}`;
+        url = `${API_URL}/api/rooms/${editingRoom.id}`;
         method = "PUT";
       }
 
@@ -143,7 +144,7 @@ const AdminRooms = () => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
     try {
-      const response = await fetch(`http://localhost:5000/api/rooms/${id}`, {
+      const response = await fetch(`${API_URL}/api/rooms/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -165,7 +166,7 @@ const AdminRooms = () => {
   const getImageUrl = (image) => {
     if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32";
     if (image.startsWith("http")) return image;
-    return `http://localhost:5000/uploads/${image}`;
+    return `${API_URL}/uploads/${image}`;
   };
 
   return (

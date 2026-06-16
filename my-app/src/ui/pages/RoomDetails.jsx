@@ -4,6 +4,7 @@ import { Check, Star } from "lucide-react";
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useToast } from "../components/Toast";
+import { API_URL } from "../../config/api";
 
 const RoomDetails = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ const RoomDetails = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:5000/api/rooms/${id}`);
+        const response = await fetch(`${API_URL}/api/rooms/${id}`);
         if (!response.ok) {
           throw new Error("Room not found");
         }
@@ -39,7 +40,7 @@ const RoomDetails = () => {
         }
 
         // Fetch other rooms for similar rooms section
-        const allRes = await fetch("http://localhost:5000/api/rooms");
+        const allRes = await fetch(`${API_URL}/api/rooms`);
         if (allRes.ok) {
           const allData = await allRes.json();
           if (allData.success) {
@@ -59,7 +60,7 @@ const RoomDetails = () => {
   const getImageUrl = (image) => {
     if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
     if (image.startsWith("http")) return image;
-    return `http://localhost:5000/uploads/${image}`;
+    return `${API_URL}/uploads/${image}`;
   };
 
   const calculateTotal = () => {
@@ -123,7 +124,7 @@ const RoomDetails = () => {
         }
 
         // 1. Create order on backend
-        const orderRes = await fetch("http://localhost:5000/api/bookings/razorpay-order", {
+        const orderRes = await fetch(`${API_URL}/api/bookings/razorpay-order`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -153,7 +154,7 @@ const RoomDetails = () => {
           handler: async function (response) {
             try {
               setBookingLoading(true);
-              const verifyRes = await fetch("http://localhost:5000/api/bookings/verify-payment", {
+              const verifyRes = await fetch(`${API_URL}/api/bookings/verify-payment`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -199,7 +200,7 @@ const RoomDetails = () => {
     } else {
       // CASH payment method
       try {
-        const response = await fetch("http://localhost:5000/api/bookings", {
+        const response = await fetch(`${API_URL}/api/bookings`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -301,12 +302,12 @@ const RoomDetails = () => {
             <img
               src={getImageUrl(room.image)}
               alt={room.name}
-              className="w-full h-[500px] object-cover mb-10"
+              className="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover mb-10"
             />
 
-            <div className="flex justify-between items-center border-b border-yellow-500/20 pb-8 mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 border-b border-yellow-500/20 pb-8 mb-8">
               <div>
-                <h2 className="text-4xl mb-4">
+                <h2 className="text-3xl sm:text-4xl mb-4">
                   {room.name}
                 </h2>
 
@@ -319,12 +320,12 @@ const RoomDetails = () => {
                 </div>
               </div>
 
-              <div className="border border-yellow-500/30 px-6 py-3">
+              <div className="border border-yellow-500/30 px-6 py-3 shrink-0">
                 <p className="text-xs text-gray-400 mb-1">
                   Price
                 </p>
 
-                <p className="text-2xl text-yellow-500">
+                <p className="text-xl sm:text-2xl text-yellow-500">
                   ₹{parseFloat(room.price).toLocaleString()}
                 </p>
               </div>

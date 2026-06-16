@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { RefreshCw, Calendar, Users, Maximize } from "lucide-react";
+import { API_URL } from "../../../config/api";
 
 const UserBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -11,7 +12,7 @@ const UserBookings = () => {
     const fetchBookings = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/bookings/my-bookings", {
+        const res = await axios.get(`${API_URL}/api/bookings/my-bookings`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,7 +36,7 @@ const UserBookings = () => {
   const getImageUrl = (image) => {
     if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
     if (image.startsWith("http")) return image;
-    return `http://localhost:5000/uploads/${image}`;
+    return `${API_URL}/uploads/${image}`;
   };
 
   const getStatusBadgeClass = (status) => {

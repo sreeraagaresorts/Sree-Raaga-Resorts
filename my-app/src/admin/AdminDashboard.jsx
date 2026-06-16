@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_URL } from "../config/api";
 import {
   Users,
   BedDouble,
@@ -31,7 +32,7 @@ const AdminDashboard = () => {
       const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
       try {
         // 1. Fetch bookings
-        const bRes = await fetch("http://localhost:5000/api/bookings", {
+        const bRes = await fetch(`${API_URL}/api/bookings`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const bData = await bRes.json();
@@ -42,14 +43,14 @@ const AdminDashboard = () => {
         }
 
         // 2. Fetch rooms
-        const rRes = await fetch("http://localhost:5000/api/rooms");
+        const rRes = await fetch(`${API_URL}/api/rooms`);
         const rData = await rRes.json();
         if (rData.success) {
           setRoomsCount(rData.data.length);
         }
 
         // 3. Fetch users
-        const uRes = await fetch("http://localhost:5000/api/auth/users", {
+        const uRes = await fetch(`${API_URL}/api/auth/users`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const uData = await uRes.json();

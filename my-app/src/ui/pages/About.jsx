@@ -84,7 +84,7 @@ const About = () => {
             <img
               src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800"
               alt="Luxury Resort"
-              className="w-full h-[600px] object-cover"
+              className="w-full h-[350px] sm:h-[450px] md:h-[600px] object-cover"
             />
           </motion.div>
 
@@ -150,7 +150,7 @@ const About = () => {
             <img
               src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=800"
               alt=""
-              className="w-full h-full object-cover"
+              className="w-full h-[300px] md:h-full object-cover"
             />
           </motion.div>
 

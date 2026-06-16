@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_URL } from "../config/api";
 import { motion } from "motion/react";
 import { ShieldCheck, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -15,7 +16,7 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

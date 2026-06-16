@@ -14,6 +14,7 @@ import {
   Settings,
 } from "lucide-react";
 import axios from "axios";
+import { API_URL } from "../../../config/api";
 
 const UserDashboard = () => {
   const [user, setUser] = useState(null);
@@ -34,7 +35,7 @@ const UserDashboard = () => {
 
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/bookings/my-bookings", {
+        const res = await axios.get(`${API_URL}/api/bookings/my-bookings`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

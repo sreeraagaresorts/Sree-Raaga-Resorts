@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Trash, Shield, ShieldAlert, RefreshCw, Users } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
+import { API_URL } from "../config/api";
 
 const AdminUsers = () => {
   const toast = useToast();
@@ -13,7 +14,7 @@ const AdminUsers = () => {
     setLoading(true);
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:5000/api/auth/users", {
+      const response = await fetch(`${API_URL}/api/auth/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -41,7 +42,7 @@ const AdminUsers = () => {
 
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/users/${user.id}/role`, {
+      const response = await fetch(`${API_URL}/api/auth/users/${user.id}/role`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -67,7 +68,7 @@ const AdminUsers = () => {
 
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/users/${id}`, {
+      const response = await fetch(`${API_URL}/api/auth/users/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
