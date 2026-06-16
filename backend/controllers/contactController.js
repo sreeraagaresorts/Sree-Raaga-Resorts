@@ -1,15 +1,7 @@
-const db = require("../config/db");
-
-/*
-|--------------------------------------------------------------------------
-| Submit Contact Form
-|--------------------------------------------------------------------------
-*/
+const Contact = require("../models/Contact");
 
 exports.sendMessage = async (req, res) => {
-
   try {
-
     const {
       name,
       email,
@@ -29,33 +21,21 @@ exports.sendMessage = async (req, res) => {
       });
     }
 
-    const [result] = await db.query(
-      `INSERT INTO contacts
-      (
-        name,
-        email,
-        subject,
-        message
-      )
-      VALUES(?,?,?,?)`,
-      [
-        name,
-        email,
-        subject,
-        message
-      ]
-    );
+    const contact = new Contact({
+      name,
+      email,
+      subject,
+      message
+    });
+    await contact.save();
 
     res.status(201).json({
       success: true,
       message: "Message Sent Successfully",
-      contactId: result.insertId
+      contactId: contact.id
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Failed To Send Message"
@@ -64,25 +44,16 @@ exports.sendMessage = async (req, res) => {
 };
 
 exports.getAllMessages = async (req, res) => {
-
   try {
-
-    const [messages] = await db.query(
-      `SELECT *
-       FROM contacts
-       ORDER BY id DESC`
-    );
+    const messages = await Contact.find({}).sort({ id: -1 });
 
     res.json({
       success: true,
       count: messages.length,
       data: messages
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Failed To Fetch Messages"
@@ -91,21 +62,20 @@ exports.getAllMessages = async (req, res) => {
 };
 
 exports.deleteMessage = async (req, res) => {
-
   try {
-
-    await db.query(
-      "DELETE FROM contacts WHERE id=?",
-      [req.params.id]
-    );
+    const contact = await Contact.findOneAndDelete({ id: Number(req.params.id) });
+    if (!contact) {
+      return res.status(404).json({
+        success: false,
+        message: "Message Not Found"
+      });
+    }
 
     res.json({
       success: true,
       message: "Message Deleted"
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: "Delete Failed"

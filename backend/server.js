@@ -6,17 +6,17 @@ dotenv.config();
 
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  "http://localhost:5173", // keep only for local development
-];
+// const allowedOrigins=[
+//   "http//localhost:5173",
+//   ""
+// ]
 
 app.use(express.json());
 

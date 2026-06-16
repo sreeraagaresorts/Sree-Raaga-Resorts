@@ -1,4 +1,6 @@
-const db = require("../config/db");
+const Booking = require("../models/Booking");
+const Room = require("../models/Room");
+const User = require("../models/User");
 
 // 1. Create a booking
 exports.createBooking = async (req, res) => {
@@ -18,14 +20,14 @@ exports.createBooking = async (req, res) => {
     }
 
     // Fetch room price to compute or verify price
-    const [rooms] = await db.query("SELECT price FROM rooms WHERE id = ?", [room_id]);
-    if (rooms.length === 0) {
+    const room = await Room.findOne({ id: Number(room_id) });
+    if (!room) {
       return res.status(404).json({
         success: false,
         message: "Room not found."
       });
     }
-    const roomPrice = parseFloat(rooms[0].price);
+    const roomPrice = parseFloat(room.price);
 
     // Calculate nights
     const start = new Date(check_in);
@@ -48,28 +50,33 @@ exports.createBooking = async (req, res) => {
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     const total_price = nights * roomPrice;
 
-    const [result] = await db.query(
-      `INSERT INTO bookings (user_id, room_id, check_in, check_out, adults, children, total_price, status, payment_method)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)`,
-      [user_id, room_id, check_in, check_out, adults || 1, children || 0, total_price, payment_method || 'online']
-    );
+    const booking = new Booking({
+      user_id: Number(user_id),
+      room_id: Number(room_id),
+      check_in: start,
+      check_out: end,
+      adults: adults || 1,
+      children: children || 0,
+      total_price,
+      status: 'pending',
+      payment_method: payment_method || 'online'
+    });
+    await booking.save();
 
     // Fetch details for email notification
     try {
-      const [bookingRows] = await db.query(
-        `SELECT b.*, r.name as room_name, u.full_name as guest_name, u.email as guest_email
-         FROM bookings b
-         JOIN rooms r ON b.room_id = r.id
-         JOIN users u ON b.user_id = u.id
-         WHERE b.id = ?`,
-        [result.insertId]
-      );
-      if (bookingRows.length > 0) {
-        const { sendBookingCreatedEmail } = require("../utils/email");
-        sendBookingCreatedEmail(bookingRows[0]).catch(err => {
-          console.error("[Email Error] Failed to send booking created email:", err);
-        });
-      }
+      const user = await User.findOne({ id: Number(user_id) });
+      const emailPayload = {
+        ...booking.toObject(),
+        room_name: room ? room.name : null,
+        guest_name: user ? user.full_name : null,
+        guest_email: user ? user.email : null
+      };
+
+      const { sendBookingCreatedEmail } = require("../utils/email");
+      sendBookingCreatedEmail(emailPayload).catch(err => {
+        console.error("[Email Error] Failed to send booking created email:", err);
+      });
     } catch (err) {
       console.error("[Email] Failed to fetch booking details for creation notification:", err);
     }
@@ -77,7 +84,7 @@ exports.createBooking = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Booking request submitted successfully.",
-      bookingId: result.insertId,
+      bookingId: booking.id,
       total_price
     });
   } catch (error) {
@@ -93,19 +100,24 @@ exports.createBooking = async (req, res) => {
 exports.getUserBookings = async (req, res) => {
   try {
     const user_id = req.user.id;
-    const [bookings] = await db.query(
-      `SELECT b.*, r.name as room_name, r.image as room_image, r.price as room_price
-       FROM bookings b
-       JOIN rooms r ON b.room_id = r.id
-       WHERE b.user_id = ?
-       ORDER BY b.id DESC`,
-      [user_id]
+    const bookings = await Booking.find({ user_id: Number(user_id) }).sort({ id: -1 });
+
+    const populatedBookings = await Promise.all(
+      bookings.map(async (b) => {
+        const room = await Room.findOne({ id: b.room_id });
+        return {
+          ...b.toObject(),
+          room_name: room ? room.name : null,
+          room_image: room ? room.image : null,
+          room_price: room ? room.price : null
+        };
+      })
     );
 
     res.json({
       success: true,
-      count: bookings.length,
-      data: bookings
+      count: populatedBookings.length,
+      data: populatedBookings
     });
   } catch (error) {
     console.error(error);
@@ -119,18 +131,26 @@ exports.getUserBookings = async (req, res) => {
 // 3. Fetch all bookings (Admin only)
 exports.getAllBookings = async (req, res) => {
   try {
-    const [bookings] = await db.query(
-      `SELECT b.*, r.name as room_name, u.full_name as guest_name, u.email as guest_email, u.phone as guest_phone
-       FROM bookings b
-       JOIN rooms r ON b.room_id = r.id
-       JOIN users u ON b.user_id = u.id
-       ORDER BY b.id DESC`
+    const bookings = await Booking.find({}).sort({ id: -1 });
+
+    const populatedBookings = await Promise.all(
+      bookings.map(async (b) => {
+        const room = await Room.findOne({ id: b.room_id });
+        const user = await User.findOne({ id: b.user_id });
+        return {
+          ...b.toObject(),
+          room_name: room ? room.name : null,
+          guest_name: user ? user.full_name : null,
+          guest_email: user ? user.email : null,
+          guest_phone: user ? user.phone : null
+        };
+      })
     );
 
     res.json({
       success: true,
-      count: bookings.length,
-      data: bookings
+      count: populatedBookings.length,
+      data: populatedBookings
     });
   } catch (error) {
     console.error(error);
@@ -147,8 +167,7 @@ exports.updateBookingStatus = async (req, res) => {
     const { status, payment_method } = req.body;
     const { id } = req.params;
 
-    let updateFields = [];
-    let queryParams = [];
+    const updateFields = {};
 
     if (status !== undefined) {
       const validStatuses = ['pending', 'confirmed', 'checked_in', 'cancelled'];
@@ -158,8 +177,7 @@ exports.updateBookingStatus = async (req, res) => {
           message: `Invalid status. Must be one of: ${validStatuses.join(", ")}`
         });
       }
-      updateFields.push("status = ?");
-      queryParams.push(status);
+      updateFields.status = status;
     }
 
     if (payment_method !== undefined) {
@@ -170,25 +188,23 @@ exports.updateBookingStatus = async (req, res) => {
           message: `Invalid payment method. Must be one of: ${validMethods.join(", ")}`
         });
       }
-      updateFields.push("payment_method = ?");
-      queryParams.push(payment_method);
+      updateFields.payment_method = payment_method;
     }
 
-    if (updateFields.length === 0) {
+    if (Object.keys(updateFields).length === 0) {
       return res.status(400).json({
         success: false,
         message: "No fields to update."
       });
     }
 
-    queryParams.push(id);
-
-    const [result] = await db.query(
-      `UPDATE bookings SET ${updateFields.join(", ")} WHERE id = ?`,
-      queryParams
+    const booking = await Booking.findOneAndUpdate(
+      { id: Number(id) },
+      updateFields,
+      { new: true }
     );
 
-    if (result.affectedRows === 0) {
+    if (!booking) {
       return res.status(404).json({
         success: false,
         message: "Booking not found."
@@ -197,20 +213,19 @@ exports.updateBookingStatus = async (req, res) => {
 
     // Fetch details for email notification
     try {
-      const [bookingRows] = await db.query(
-        `SELECT b.*, r.name as room_name, u.full_name as guest_name, u.email as guest_email
-         FROM bookings b
-         JOIN rooms r ON b.room_id = r.id
-         JOIN users u ON b.user_id = u.id
-         WHERE b.id = ?`,
-        [id]
-      );
-      if (bookingRows.length > 0) {
-        const { sendBookingUpdatedEmail } = require("../utils/email");
-        sendBookingUpdatedEmail(bookingRows[0]).catch(err => {
-          console.error("[Email Error] Failed to send booking updated email:", err);
-        });
-      }
+      const room = await Room.findOne({ id: booking.room_id });
+      const user = await User.findOne({ id: booking.user_id });
+      const emailPayload = {
+        ...booking.toObject(),
+        room_name: room ? room.name : null,
+        guest_name: user ? user.full_name : null,
+        guest_email: user ? user.email : null
+      };
+
+      const { sendBookingUpdatedEmail } = require("../utils/email");
+      sendBookingUpdatedEmail(emailPayload).catch(err => {
+        console.error("[Email Error] Failed to send booking updated email:", err);
+      });
     } catch (err) {
       console.error("[Email] Failed to fetch booking details for update notification:", err);
     }
@@ -233,30 +248,34 @@ exports.deleteBooking = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Fetch details before deleting
-    const [bookingRows] = await db.query(
-      `SELECT b.*, r.name as room_name, u.full_name as guest_name, u.email as guest_email
-       FROM bookings b
-       JOIN rooms r ON b.room_id = r.id
-       JOIN users u ON b.user_id = u.id
-       WHERE b.id = ?`,
-      [id]
-    );
-
-    if (bookingRows.length === 0) {
+    const booking = await Booking.findOne({ id: Number(id) });
+    if (!booking) {
       return res.status(404).json({
         success: false,
         message: "Booking not found."
       });
     }
 
-    await db.query("DELETE FROM bookings WHERE id = ?", [id]);
+    await Booking.findOneAndDelete({ id: Number(id) });
 
     // Send cancel notification email in background
-    const { sendBookingDeletedEmail } = require("../utils/email");
-    sendBookingDeletedEmail(bookingRows[0]).catch(err => {
-      console.error("[Email Error] Failed to send booking deleted email:", err);
-    });
+    try {
+      const room = await Room.findOne({ id: booking.room_id });
+      const user = await User.findOne({ id: booking.user_id });
+      const emailPayload = {
+        ...booking.toObject(),
+        room_name: room ? room.name : null,
+        guest_name: user ? user.full_name : null,
+        guest_email: user ? user.email : null
+      };
+
+      const { sendBookingDeletedEmail } = require("../utils/email");
+      sendBookingDeletedEmail(emailPayload).catch(err => {
+        console.error("[Email Error] Failed to send booking deleted email:", err);
+      });
+    } catch (err) {
+      console.error("[Email] Failed to fetch booking details for deletion notification:", err);
+    }
 
     res.json({
       success: true,
@@ -283,14 +302,14 @@ exports.createRazorpayOrder = async (req, res) => {
     }
 
     // Fetch room price
-    const [rooms] = await db.query("SELECT price FROM rooms WHERE id = ?", [room_id]);
-    if (rooms.length === 0) {
+    const room = await Room.findOne({ id: Number(room_id) });
+    if (!room) {
       return res.status(404).json({
         success: false,
         message: "Room not found."
       });
     }
-    const roomPrice = parseFloat(rooms[0].price);
+    const roomPrice = parseFloat(room.price);
 
     // Calculate nights
     const start = new Date(check_in);
@@ -377,14 +396,14 @@ exports.verifyRazorpayPayment = async (req, res) => {
     const user_id = req.user.id;
 
     // Fetch room price to compute price
-    const [rooms] = await db.query("SELECT price FROM rooms WHERE id = ?", [room_id]);
-    if (rooms.length === 0) {
+    const room = await Room.findOne({ id: Number(room_id) });
+    if (!room) {
       return res.status(404).json({
         success: false,
         message: "Room not found."
       });
     }
-    const roomPrice = parseFloat(rooms[0].price);
+    const roomPrice = parseFloat(room.price);
 
     // Calculate nights
     const start = new Date(check_in);
@@ -393,28 +412,33 @@ exports.verifyRazorpayPayment = async (req, res) => {
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     const total_price = nights * roomPrice;
 
-    const [result] = await db.query(
-      `INSERT INTO bookings (user_id, room_id, check_in, check_out, adults, children, total_price, status, payment_method)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'confirmed', 'online')`,
-      [user_id, room_id, check_in, check_out, adults || 1, children || 0, total_price]
-    );
+    const booking = new Booking({
+      user_id: Number(user_id),
+      room_id: Number(room_id),
+      check_in: start,
+      check_out: end,
+      adults: adults || 1,
+      children: children || 0,
+      total_price,
+      status: 'confirmed',
+      payment_method: 'online'
+    });
+    await booking.save();
 
     // Fetch details for email notification (confirmed online)
     try {
-      const [bookingRows] = await db.query(
-        `SELECT b.*, r.name as room_name, u.full_name as guest_name, u.email as guest_email
-         FROM bookings b
-         JOIN rooms r ON b.room_id = r.id
-         JOIN users u ON b.user_id = u.id
-         WHERE b.id = ?`,
-        [result.insertId]
-      );
-      if (bookingRows.length > 0) {
-        const { sendBookingUpdatedEmail } = require("../utils/email");
-        sendBookingUpdatedEmail(bookingRows[0]).catch(err => {
-          console.error("[Email Error] Failed to send booking confirmed email:", err);
-        });
-      }
+      const user = await User.findOne({ id: Number(user_id) });
+      const emailPayload = {
+        ...booking.toObject(),
+        room_name: room ? room.name : null,
+        guest_name: user ? user.full_name : null,
+        guest_email: user ? user.email : null
+      };
+
+      const { sendBookingUpdatedEmail } = require("../utils/email");
+      sendBookingUpdatedEmail(emailPayload).catch(err => {
+        console.error("[Email Error] Failed to send booking confirmed email:", err);
+      });
     } catch (err) {
       console.error("[Email] Failed to fetch booking details for confirmation notification:", err);
     }
@@ -422,7 +446,7 @@ exports.verifyRazorpayPayment = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Online payment verified and booking confirmed successfully.",
-      bookingId: result.insertId,
+      bookingId: booking.id,
       total_price
     });
   } catch (error) {

@@ -1,22 +1,16 @@
-const db = require("../config/db");
+const Room = require("../models/Room");
 
 exports.getRooms = async (req, res) => {
   try {
-
-    const [rooms] = await db.query(
-      "SELECT * FROM rooms ORDER BY id DESC"
-    );
+    const rooms = await Room.find({}).sort({ id: -1 });
 
     res.json({
       success: true,
       count: rooms.length,
       data: rooms
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Failed To Fetch Rooms"
@@ -25,15 +19,10 @@ exports.getRooms = async (req, res) => {
 };
 
 exports.getRoom = async (req, res) => {
-
   try {
+    const room = await Room.findOne({ id: Number(req.params.id) });
 
-    const [room] = await db.query(
-      "SELECT * FROM rooms WHERE id=?",
-      [req.params.id]
-    );
-
-    if (room.length === 0) {
+    if (!room) {
       return res.status(404).json({
         success: false,
         message: "Room Not Found"
@@ -42,11 +31,9 @@ exports.getRoom = async (req, res) => {
 
     res.json({
       success: true,
-      data: room[0]
+      data: room
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: "Server Error"
@@ -55,9 +42,7 @@ exports.getRoom = async (req, res) => {
 };
 
 exports.createRoom = async (req, res) => {
-
   try {
-
     const {
       name,
       price,
@@ -73,39 +58,24 @@ exports.createRoom = async (req, res) => {
       image = req.file.filename;
     }
 
-    const [result] = await db.query(
-      `INSERT INTO rooms
-      (
-        name,
-        price,
-        image,
-        area,
-        beds,
-        bathrooms,
-        description
-      )
-      VALUES(?,?,?,?,?,?,?)`,
-      [
-        name,
-        price,
-        image,
-        area,
-        beds,
-        bathrooms,
-        description
-      ]
-    );
+    const room = new Room({
+      name,
+      price: parseFloat(price),
+      image,
+      area: area ? parseInt(area) : null,
+      beds: beds ? parseInt(beds) : null,
+      bathrooms: bathrooms ? parseInt(bathrooms) : null,
+      description
+    });
+    await room.save();
 
     res.status(201).json({
       success: true,
       message: "Room Created",
-      roomId: result.insertId
+      roomId: room.id
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Room Creation Failed"
@@ -114,9 +84,7 @@ exports.createRoom = async (req, res) => {
 };
 
 exports.updateRoom = async (req, res) => {
-
   try {
-
     const {
       name,
       price,
@@ -126,48 +94,38 @@ exports.updateRoom = async (req, res) => {
       description
     } = req.body;
 
-    let imageQuery = "";
-    let values = [
+    const updateData = {
       name,
-      price,
-      area,
-      beds,
-      bathrooms,
+      price: parseFloat(price),
+      area: area ? parseInt(area) : null,
+      beds: beds ? parseInt(beds) : null,
+      bathrooms: bathrooms ? parseInt(bathrooms) : null,
       description
-    ];
+    };
 
     if (req.file) {
-
-      imageQuery = ", image=?";
-
-      values.push(req.file.filename);
+      updateData.image = req.file.filename;
     }
 
-    values.push(req.params.id);
-
-    await db.query(
-      `UPDATE rooms
-       SET
-       name=?,
-       price=?,
-       area=?,
-       beds=?,
-       bathrooms=?,
-       description=?
-       ${imageQuery}
-       WHERE id=?`,
-      values
+    const room = await Room.findOneAndUpdate(
+      { id: Number(req.params.id) },
+      updateData,
+      { new: true }
     );
+
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        message: "Room Not Found"
+      });
+    }
 
     res.json({
       success: true,
       message: "Room Updated"
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Update Failed"
@@ -175,23 +133,21 @@ exports.updateRoom = async (req, res) => {
   }
 };
 
-
 exports.deleteRoom = async (req, res) => {
-
   try {
-
-    await db.query(
-      "DELETE FROM rooms WHERE id=?",
-      [req.params.id]
-    );
+    const room = await Room.findOneAndDelete({ id: Number(req.params.id) });
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        message: "Room Not Found"
+      });
+    }
 
     res.json({
       success: true,
       message: "Room Deleted"
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: "Delete Failed"

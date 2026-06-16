@@ -1,22 +1,16 @@
-const db = require("../config/db");
+const Event = require("../models/Event");
 
 exports.getEvents = async (req, res) => {
   try {
-
-    const [events] = await db.query(
-      "SELECT * FROM events ORDER BY id DESC"
-    );
+    const events = await Event.find({}).sort({ id: -1 });
 
     res.json({
       success: true,
       count: events.length,
       data: events
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Failed To Fetch Events"
@@ -25,15 +19,10 @@ exports.getEvents = async (req, res) => {
 };
 
 exports.getEvent = async (req, res) => {
-
   try {
+    const event = await Event.findOne({ id: Number(req.params.id) });
 
-    const [event] = await db.query(
-      "SELECT * FROM events WHERE id=?",
-      [req.params.id]
-    );
-
-    if (event.length === 0) {
+    if (!event) {
       return res.status(404).json({
         success: false,
         message: "Event Not Found"
@@ -42,11 +31,9 @@ exports.getEvent = async (req, res) => {
 
     res.json({
       success: true,
-      data: event[0]
+      data: event
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: "Server Error"
@@ -55,9 +42,7 @@ exports.getEvent = async (req, res) => {
 };
 
 exports.createEvent = async (req, res) => {
-
   try {
-
     const {
       name,
       category,
@@ -71,35 +56,22 @@ exports.createEvent = async (req, res) => {
       image = req.file.filename;
     }
 
-    const [result] = await db.query(
-      `INSERT INTO events
-      (
-        name,
-        category,
-        image,
-        event_date,
-        description
-      )
-      VALUES(?,?,?,?,?)`,
-      [
-        name,
-        category,
-        image,
-        event_date,
-        description
-      ]
-    );
+    const event = new Event({
+      name,
+      category,
+      image,
+      event_date,
+      description
+    });
+    await event.save();
 
     res.status(201).json({
       success: true,
       message: "Event Created",
-      eventId: result.insertId
+      eventId: event.id
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Event Creation Failed"
@@ -108,9 +80,7 @@ exports.createEvent = async (req, res) => {
 };
 
 exports.updateEvent = async (req, res) => {
-
   try {
-
     const {
       name,
       category,
@@ -118,45 +88,36 @@ exports.updateEvent = async (req, res) => {
       description
     } = req.body;
 
-    let imageQuery = "";
-
-    let values = [
+    const updateData = {
       name,
       category,
       event_date,
       description
-    ];
+    };
 
     if (req.file) {
-
-      imageQuery = ", image=?";
-
-      values.push(req.file.filename);
+      updateData.image = req.file.filename;
     }
 
-    values.push(req.params.id);
-
-    await db.query(
-      `UPDATE events
-       SET
-       name=?,
-       category=?,
-       event_date=?,
-       description=?
-       ${imageQuery}
-       WHERE id=?`,
-      values
+    const event = await Event.findOneAndUpdate(
+      { id: Number(req.params.id) },
+      updateData,
+      { new: true }
     );
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event Not Found"
+      });
+    }
 
     res.json({
       success: true,
       message: "Event Updated"
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Update Failed"
@@ -164,23 +125,21 @@ exports.updateEvent = async (req, res) => {
   }
 };
 
-
 exports.deleteEvent = async (req, res) => {
-
   try {
-
-    await db.query(
-      "DELETE FROM events WHERE id=?",
-      [req.params.id]
-    );
+    const event = await Event.findOneAndDelete({ id: Number(req.params.id) });
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event Not Found"
+      });
+    }
 
     res.json({
       success: true,
       message: "Event Deleted"
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: "Delete Failed"

@@ -1,85 +1,54 @@
-const db = require("../config/db");
+const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
-
   try {
+    const { full_name, email, phone, password } = req.body;
 
-    const {
-      full_name,
-      email,
-      phone,
-      password
-    } = req.body;
-
-    if (
-      !full_name ||
-      !email ||
-      !phone ||
-      !password
-    ) {
+    if (!full_name || !email || !phone || !password) {
       return res.status(400).json({
         success: false,
         message: "All Fields Are Required"
       });
     }
 
-    const [existingUser] = await db.query(
-      "SELECT * FROM users WHERE email=?",
-      [email]
-    );
-
-    if (existingUser.length > 0) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res.status(400).json({
         success: false,
         message: "Email Already Exists"
       });
     }
 
-    const hashedPassword =
-      await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // If there are no users in the database, make the first registered user an admin
-    const [countResult] = await db.query("SELECT COUNT(*) as count FROM users");
-    const isFirstUser = countResult[0].count === 0;
+    const count = await User.countDocuments();
+    const isFirstUser = count === 0;
     const role = isFirstUser ? "admin" : "user";
 
-    const [result] = await db.query(
-      `INSERT INTO users
-      (
-        full_name,
-        email,
-        phone,
-        password,
-        role
-      )
-      VALUES(?,?,?,?,?)`,
-      [
-        full_name,
-        email,
-        phone,
-        hashedPassword,
-        role
-      ]
-    );
+    const user = new User({
+      full_name,
+      email,
+      phone,
+      password: hashedPassword,
+      role
+    });
+    await user.save();
 
     // Trigger welcome email in background
     const { sendWelcomeEmail } = require("../utils/email");
-    sendWelcomeEmail({ id: result.insertId, full_name, email, role }).catch(err => {
+    sendWelcomeEmail({ id: user.id, full_name, email, role }).catch(err => {
       console.error("[Email Error] Failed to send welcome email:", err);
     });
 
     res.status(201).json({
       success: true,
       message: "Registration Successful",
-      userId: result.insertId
+      userId: user.id
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Server Error"
@@ -87,34 +56,19 @@ exports.register = async (req, res) => {
   }
 };
 
-
 exports.login = async (req, res) => {
-
   try {
+    const { email, password } = req.body;
 
-    const {
-      email,
-      password
-    } = req.body;
-
-    const [user] = await db.query(
-      "SELECT * FROM users WHERE email=?",
-      [email]
-    );
-
-    if (user.length === 0) {
+    const user = await User.findOne({ email });
+    if (!user) {
       return res.status(400).json({
         success: false,
         message: "Invalid Email"
       });
     }
 
-    const validPassword =
-      await bcrypt.compare(
-        password,
-        user[0].password
-      );
-
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(400).json({
         success: false,
@@ -124,9 +78,9 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       {
-        id: user[0].id,
-        role: user[0].role,
-        email: user[0].email
+        id: user.id,
+        role: user.role,
+        email: user.email
       },
       process.env.JWT_SECRET,
       {
@@ -136,7 +90,7 @@ exports.login = async (req, res) => {
 
     // Trigger login alert in background
     const { sendLoginAlert } = require("../utils/email");
-    sendLoginAlert(user[0]).catch(err => {
+    sendLoginAlert(user.toObject()).catch(err => {
       console.error("[Email Error] Failed to send login alert:", err);
     });
 
@@ -144,18 +98,15 @@ exports.login = async (req, res) => {
       success: true,
       token,
       user: {
-        id: user[0].id,
-        full_name: user[0].full_name,
-        email: user[0].email,
-        phone: user[0].phone,
-        role: user[0].role
+        id: user.id,
+        full_name: user.full_name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role
       }
     });
-
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: "Server Error"
@@ -163,25 +114,10 @@ exports.login = async (req, res) => {
   }
 };
 
-
 exports.getProfile = async (req, res) => {
-
   try {
-
-    const [user] = await db.query(
-      `SELECT
-      id,
-      full_name,
-      email,
-      phone,
-      role,
-      created_at
-      FROM users
-      WHERE id=?`,
-      [req.user.id]
-    );
-
-    if (user.length === 0) {
+    const user = await User.findOne({ id: Number(req.user.id) });
+    if (!user) {
       return res.status(404).json({
         success: false,
         message: "User Not Found"
@@ -190,11 +126,16 @@ exports.getProfile = async (req, res) => {
 
     res.json({
       success: true,
-      user: user[0]
+      user: {
+        id: user.id,
+        full_name: user.full_name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        created_at: user.created_at
+      }
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: "Server Error"
@@ -202,13 +143,10 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-
 // Admin-only: Get all users
 exports.getAllUsers = async (req, res) => {
   try {
-    const [users] = await db.query(
-      "SELECT id, full_name, email, phone, role, created_at FROM users ORDER BY id DESC"
-    );
+    const users = await User.find({}, 'id full_name email phone role created_at').sort({ id: -1 });
 
     res.json({
       success: true,
@@ -237,30 +175,24 @@ exports.updateUserRole = async (req, res) => {
       });
     }
 
-    const [result] = await db.query(
-      "UPDATE users SET role = ? WHERE id = ?",
-      [role, id]
+    const user = await User.findOneAndUpdate(
+      { id: Number(id) },
+      { role },
+      { new: true }
     );
 
-    if (result.affectedRows === 0) {
+    if (!user) {
       return res.status(404).json({
         success: false,
         message: "User not found."
       });
     }
 
-    // Fetch user details for email notification
-    try {
-      const [userRows] = await db.query("SELECT * FROM users WHERE id = ?", [id]);
-      if (userRows.length > 0) {
-        const { sendRoleUpdatedEmail } = require("../utils/email");
-        sendRoleUpdatedEmail(userRows[0]).catch(err => {
-          console.error("[Email Error] Failed to send role updated email:", err);
-        });
-      }
-    } catch (err) {
-      console.error("[Email] Failed to fetch user details for role update notification:", err);
-    }
+    // Send role updated email in background
+    const { sendRoleUpdatedEmail } = require("../utils/email");
+    sendRoleUpdatedEmail(user.toObject()).catch(err => {
+      console.error("[Email Error] Failed to send role updated email:", err);
+    });
 
     res.json({
       success: true,
@@ -281,27 +213,24 @@ exports.deleteUser = async (req, res) => {
     const { id } = req.params;
 
     // Prevent admin from deleting themselves
-    if (parseInt(id) === req.user.id) {
+    if (Number(id) === req.user.id) {
       return res.status(400).json({
         success: false,
         message: "You cannot delete your own admin account."
       });
     }
 
-    // Fetch user details before deleting
-    const [userRows] = await db.query("SELECT * FROM users WHERE id = ?", [id]);
-    if (userRows.length === 0) {
+    const user = await User.findOneAndDelete({ id: Number(id) });
+    if (!user) {
       return res.status(404).json({
         success: false,
         message: "User not found."
       });
     }
 
-    const [result] = await db.query("DELETE FROM users WHERE id = ?", [id]);
-
     // Send account deleted email in background
     const { sendAccountDeletedEmail } = require("../utils/email");
-    sendAccountDeletedEmail(userRows[0]).catch(err => {
+    sendAccountDeletedEmail(user.toObject()).catch(err => {
       console.error("[Email Error] Failed to send account deleted email:", err);
     });
 
