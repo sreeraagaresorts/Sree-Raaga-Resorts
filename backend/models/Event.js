@@ -11,15 +11,10 @@ const eventSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-eventSchema.pre("save", async function (next) {
+eventSchema.pre("save", async function () {
   if (this.isNew && !this.id) {
-    try {
-      this.id = await getNextSequenceValue("eventId");
-    } catch (err) {
-      return next(err);
-    }
+    this.id = await getNextSequenceValue("eventId");
   }
-  next();
 });
 
 module.exports = mongoose.model("Event", eventSchema);

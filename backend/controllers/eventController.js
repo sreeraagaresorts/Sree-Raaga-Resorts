@@ -102,7 +102,7 @@ exports.updateEvent = async (req, res) => {
     const event = await Event.findOneAndUpdate(
       { id: Number(req.params.id) },
       updateData,
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!event) {

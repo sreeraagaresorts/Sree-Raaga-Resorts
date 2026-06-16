@@ -15,15 +15,10 @@ const bookingSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-bookingSchema.pre("save", async function (next) {
+bookingSchema.pre("save", async function () {
   if (this.isNew && !this.id) {
-    try {
-      this.id = await getNextSequenceValue("bookingId");
-    } catch (err) {
-      return next(err);
-    }
+    this.id = await getNextSequenceValue("bookingId");
   }
-  next();
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);

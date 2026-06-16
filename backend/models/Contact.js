@@ -10,15 +10,10 @@ const contactSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-contactSchema.pre("save", async function (next) {
+contactSchema.pre("save", async function () {
   if (this.isNew && !this.id) {
-    try {
-      this.id = await getNextSequenceValue("contactId");
-    } catch (err) {
-      return next(err);
-    }
+    this.id = await getNextSequenceValue("contactId");
   }
-  next();
 });
 
 module.exports = mongoose.model("Contact", contactSchema);

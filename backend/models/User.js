@@ -11,15 +11,10 @@ const userSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
   if (this.isNew && !this.id) {
-    try {
-      this.id = await getNextSequenceValue("userId");
-    } catch (err) {
-      return next(err);
-    }
+    this.id = await getNextSequenceValue("userId");
   }
-  next();
 });
 
 module.exports = mongoose.model("User", userSchema);

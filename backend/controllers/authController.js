@@ -178,7 +178,7 @@ exports.updateUserRole = async (req, res) => {
     const user = await User.findOneAndUpdate(
       { id: Number(id) },
       { role },
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!user) {

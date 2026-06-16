@@ -201,7 +201,7 @@ exports.updateBookingStatus = async (req, res) => {
     const booking = await Booking.findOneAndUpdate(
       { id: Number(id) },
       updateFields,
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!booking) {

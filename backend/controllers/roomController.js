@@ -110,7 +110,7 @@ exports.updateRoom = async (req, res) => {
     const room = await Room.findOneAndUpdate(
       { id: Number(req.params.id) },
       updateData,
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!room) {

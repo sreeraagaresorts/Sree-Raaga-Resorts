@@ -13,15 +13,10 @@ const roomSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-roomSchema.pre("save", async function (next) {
+roomSchema.pre("save", async function () {
   if (this.isNew && !this.id) {
-    try {
-      this.id = await getNextSequenceValue("roomId");
-    } catch (err) {
-      return next(err);
-    }
+    this.id = await getNextSequenceValue("roomId");
   }
-  next();
 });
 
 module.exports = mongoose.model("Room", roomSchema);
