@@ -6,17 +6,17 @@ dotenv.config();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     credentials: true,
+//   })
+// );
 
-const allowedOrigins=[
-  "http//localhost:5173",
-  "http://uqi93mcr9lh88oflqkbrwihk.187.127.179.194.sslip.io"
-]
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173", // keep only for local development
+];
 
 app.use(express.json());
 
