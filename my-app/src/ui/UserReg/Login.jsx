@@ -1,60 +1,59 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
+import { useToast } from "../components/Toast";
 
 const Login = () => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-const handleLogin = async (e) => {
-  e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  setLoading(true);
-  setError("");
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
-  try {
-    const response = await fetch(
-      "http://localhost:5000/api/auth/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
       }
-    );
 
-    const data = await response.json();
+      // Save JWT Token
+      localStorage.setItem("token", data.token);
 
-    if (!response.ok) {
-      throw new Error(data.message);
+      // Save User Data
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
+      toast.success("Welcome back! Signed in successfully.");
+      navigate("/");
+
+    } catch (err) {
+      toast.error(err.message || "Login Failed");
+    } finally {
+      setLoading(false);
     }
-
-    // Save JWT Token
-    localStorage.setItem("token", data.token);
-
-    // Save User Data
-    localStorage.setItem(
-      "user",
-      JSON.stringify(data.user)
-    );
-
-    navigate("/");
-
-  } catch (err) {
-    setError(err.message || "Login Failed");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="bg-black text-white min-h-screen">
@@ -95,13 +94,6 @@ const handleLogin = async (e) => {
             <h2 className="text-4xl text-center mb-10">
               User Login
             </h2>
-
-            {error && (
-              <div className="bg-red-500/10 border border-red-500 text-red-400 p-4 mb-6">
-                {error}
-              </div>
-            )}
-
             <form
               onSubmit={handleLogin}
               className="space-y-8"

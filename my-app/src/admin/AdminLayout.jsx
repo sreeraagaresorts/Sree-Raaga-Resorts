@@ -1,5 +1,6 @@
 import React from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import { useToast } from "../ui/components/Toast";
 import {
   LayoutDashboard,
   Calendar,
@@ -27,6 +28,8 @@ const navItems = [
 
 const  AdminLayout=()=> {
   const location = useLocation();
+  const navigate = useNavigate();
+  const toast = useToast();
   const [adminUser, setAdminUser] = React.useState(null);
 
   React.useEffect(() => {
@@ -44,7 +47,8 @@ const  AdminLayout=()=> {
     localStorage.removeItem("adminToken");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    window.location.href = "/admin/login";
+    toast.success("Signed out successfully!\nHave a productive day.");
+    navigate("/admin/login");
   };
 
   const isActive = (path) =>

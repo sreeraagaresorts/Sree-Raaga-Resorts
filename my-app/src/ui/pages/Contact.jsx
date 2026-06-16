@@ -3,9 +3,11 @@ import { motion } from "motion/react";
 import { MapPin, Mail, Phone } from "lucide-react";
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { useToast } from "../components/Toast";
 
 
 const Contact = () => {
+  const toast = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,20 +36,18 @@ const Contact = () => {
         throw new Error(data.message || "Failed to send message.");
       }
 
-      setStatus("success");
+      toast.success("Thank you! Your message has been sent successfully.");
       setFormData({
         name: "",
         email: "",
         subject: "",
         message: "",
       });
-
-      setTimeout(() => {
-        setStatus("");
-      }, 5000);
+      setStatus("");
     } catch (err) {
       console.error(err);
-      setStatus("error");
+      toast.error(err.message || "Failed to send message. Please try again.");
+      setStatus("");
     }
   };
 
@@ -101,18 +101,6 @@ const Contact = () => {
               special requests, and any questions about your stay
               at Sree Raaga Resorts.
             </p>
-
-            {status === "success" && (
-              <div className="bg-green-500/10 border border-green-500 text-green-400 p-4 mb-6">
-                Thank you! Your message has been sent successfully.
-              </div>
-            )}
-
-            {status === "error" && (
-              <div className="bg-red-500/10 border border-red-500 text-red-400 p-4 mb-6">
-                Failed to send message. Please try again.
-              </div>
-            )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
 

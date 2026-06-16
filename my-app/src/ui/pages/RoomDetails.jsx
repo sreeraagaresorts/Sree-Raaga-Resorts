@@ -3,10 +3,12 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Check, Star } from "lucide-react";
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { useToast } from "../components/Toast";
 
 const RoomDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [room, setRoom] = useState(null);
   const [similarRooms, setSimilarRooms] = useState([]);
@@ -82,20 +84,20 @@ const RoomDetails = () => {
   const handleBooking = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Please sign in to book a room.");
+      toast.warning("Please sign in to book a room.");
       navigate("/login");
       return;
     }
 
     if (!checkIn || !checkOut) {
-      alert("Please select check-in and check-out dates.");
+      toast.warning("Please select check-in and check-out dates.");
       return;
     }
 
     const start = new Date(checkIn);
     const end = new Date(checkOut);
     if (end <= start) {
-      alert("Check-out date must be after check-in date.");
+      toast.error("Check-out date must be after check-in date.");
       return;
     }
 
@@ -121,10 +123,10 @@ const RoomDetails = () => {
         throw new Error(data.message || "Failed to submit booking.");
       }
 
-      alert("Booking Request Submitted Successfully!");
+      toast.success("Booking Request Submitted Successfully!");
       navigate("/dashboard/bookings");
     } catch (err) {
-      alert(err.message || "Booking failed.");
+      toast.error(err.message || "Booking failed.");
     } finally {
       setBookingLoading(false);
     }
@@ -294,7 +296,7 @@ const RoomDetails = () => {
             <div className="bg-[oklch(0.35_0.05_96.46)] border border-yellow-500/20 p-8 sticky top-28">
 
               <h3 className="text-3xl mb-8">
-                Booking Now
+                Book Now
               </h3>
 
               <div className="space-y-5">

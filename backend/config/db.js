@@ -10,12 +10,24 @@ const db = mysql.createPool({
   queueLimit: 0
 });
 
-db.getConnection((err, connection) => {
+db.getConnection(async (err, connection) => {
   if (err) {
     console.log("Database Connection Failed");
     console.log(err.message);
   } else {
     console.log("MySQL Connected Successfully");
+    try {
+      await connection.promise().query(
+        "ALTER TABLE bookings ADD COLUMN payment_method VARCHAR(50) DEFAULT 'cash'"
+      );
+      console.log("Added payment_method column to bookings table.");
+    } catch (migrationErr) {
+      if (migrationErr.errno === 1060 || migrationErr.code === 'ER_DUP_FIELDNAME') {
+        // Column already exists, no action needed
+      } else {
+        console.error("Migration warning:", migrationErr.message);
+      }
+    }
     connection.release();
   }
 });

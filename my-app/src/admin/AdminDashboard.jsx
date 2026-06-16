@@ -20,6 +20,7 @@ const AdminDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [roomsCount, setRoomsCount] = useState(0);
   const [usersCount, setUsersCount] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -95,8 +96,53 @@ const AdminDashboard = () => {
 
   const metrics = getMetrics();
 
+  const getMonthlyRevenueData = () => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const data = [];
+    const now = new Date();
+
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      data.push({
+        monthName: months[d.getMonth()],
+        year: d.getFullYear(),
+        monthIndex: d.getMonth(),
+        revenue: 0,
+        pending: 0
+      });
+    }
+
+    bookings.forEach((b) => {
+      const bookingDate = new Date(b.created_at || b.check_in);
+      const bookingMonth = bookingDate.getMonth();
+      const bookingYear = bookingDate.getFullYear();
+      const price = parseFloat(b.total_price) || 0;
+
+      const monthObj = data.find(m => m.monthIndex === bookingMonth && m.year === bookingYear);
+      if (monthObj) {
+        if (b.status === "confirmed" || b.status === "checked_in") {
+          monthObj.revenue += price;
+        } else if (b.status === "pending") {
+          monthObj.pending += price;
+        }
+      }
+    });
+
+    return data.map((d) => {
+      return {
+        label: d.monthName,
+        revenue: d.revenue,
+        pending: d.pending,
+        total: d.revenue + d.pending
+      };
+    });
+  };
+
+  const chartData = getMonthlyRevenueData();
+  const maxVal = Math.max(...chartData.map(d => d.total), 1000) * 1.15;
+
   const stats = [
-    { label: "Room Occupancy", value: `${metrics.occupancyRate}%`, icon: BedDouble, trend: "+2.1%", isPositive: true },
+    // { label: "Room Occupancy", value: `${metrics.occupancyRate}%`, icon: BedDouble, trend: "+2.1%", isPositive: true },
     { label: "Total Revenue", value: `₹${metrics.totalRevenue.toLocaleString()}`, icon: DollarSign, trend: "+12.5%", isPositive: true },
     { label: "Pending Payments", value: `₹${metrics.pendingPayments.toLocaleString()}`, icon: Wallet, trend: "-8.1%", isPositive: false },
     { label: "Registered Users", value: usersCount.toString(), icon: Users, trend: "+4.3%", isPositive: true },
@@ -168,15 +214,187 @@ const AdminDashboard = () => {
       {/* MIDDLE SECTION */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* LEFT */}
-        <div className="lg:col-span-2 bg-[#081A2F] border border-white/5 p-6 rounded-xl">
-          <h3 className="text-lg font-bold text-white">Revenue Overview</h3>
-          <p className="text-xs text-white/50 mb-6">
-            Monthly performance analytics
-          </p>
+        <div className="lg:col-span-2 bg-[#081A2F] border border-white/5 p-6 rounded-xl relative">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h3 className="text-lg font-bold text-white">Revenue Overview</h3>
+              <p className="text-xs text-white/50">
+                Monthly performance analytics
+              </p>
+            </div>
+            <div className="text-right">
+              <span className="text-xs text-white/40">Total Pool Value</span>
+              <p className="text-lg font-bold text-[#C8A64D]">₹{(metrics.totalRevenue + metrics.pendingPayments).toLocaleString()}</p>
+            </div>
+          </div>
 
-          <div className="h-[250px] flex flex-col items-center justify-center text-white/30 border border-dashed border-white/10 rounded-lg bg-[#071524]/30 p-6">
-            <span className="text-2xl font-bold text-white mb-2">₹{(metrics.totalRevenue + metrics.pendingPayments).toLocaleString()}</span>
-            <p className="text-sm text-center max-w-sm">Total booking pool value (inclusive of pending reservations) is currently loaded.</p>
+          <div className="h-[220px] relative w-full select-none">
+            <svg viewBox="0 0 500 200" className="w-full h-full overflow-visible">
+              <defs>
+                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#C8A64D" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="#C8A64D" stopOpacity="0.0" />
+                </linearGradient>
+              </defs>
+
+              {/* Grid Lines */}
+              {[0, 0.33, 0.66, 1].map((ratio, index) => {
+                const y = 15 + ratio * 160;
+                const tickVal = Math.round((1 - ratio) * maxVal);
+                return (
+                  <g key={index}>
+                    <line
+                      x1="45"
+                      y1={y}
+                      x2="485"
+                      y2={y}
+                      stroke="rgba(255,255,255,0.06)"
+                      strokeWidth="1"
+                      strokeDasharray="4 4"
+                    />
+                    <text
+                      x="35"
+                      y={y + 3}
+                      textAnchor="end"
+                      className="text-[9px] fill-white/40 font-mono"
+                    >
+                      ₹{tickVal >= 1000 ? `${(tickVal / 1000).toFixed(0)}K` : tickVal}
+                    </text>
+                  </g>
+                );
+              })}
+
+              {/* Area Under Curve */}
+              <path
+                d={`M 45,175 L ${chartData
+                  .map((d, i) => `${45 + (i / 5) * 440},${15 + (1 - d.total / maxVal) * 160}`)
+                  .join(" L ")} L 485,175 Z`}
+                fill="url(#chartGradient)"
+              />
+
+              {/* Curve Line */}
+              <path
+                d={`M ${chartData
+                  .map((d, i) => `${45 + (i / 5) * 440},${15 + (1 - d.total / maxVal) * 160}`)
+                  .join(" L ")}`}
+                fill="none"
+                stroke="#C8A64D"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              {/* Interactive Vertical Guide Line */}
+              {hoveredIndex !== null && (
+                <line
+                  x1={45 + (hoveredIndex / 5) * 440}
+                  y1="15"
+                  x2={45 + (hoveredIndex / 5) * 440}
+                  y2="175"
+                  stroke="rgba(200, 166, 77, 0.3)"
+                  strokeWidth="1.5"
+                  strokeDasharray="3 3"
+                />
+              )}
+
+              {/* Dots for Points */}
+              {chartData.map((d, i) => {
+                const x = 45 + (i / 5) * 440;
+                const y = 15 + (1 - d.total / maxVal) * 160;
+                const isHovered = hoveredIndex === i;
+                return (
+                  <g key={i}>
+                    {/* Ripple/Pulse effect for hovered dot */}
+                    {isHovered && (
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r="8"
+                        fill="#C8A64D"
+                        opacity="0.3"
+                      />
+                    )}
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r={isHovered ? "5" : "3.5"}
+                      fill={isHovered ? "#FFFFFF" : "#C8A64D"}
+                      stroke="#081A2F"
+                      strokeWidth={isHovered ? "1.5" : "1"}
+                      className="transition-all duration-200"
+                    />
+                  </g>
+                );
+              })}
+
+              {/* X Axis month labels */}
+              {chartData.map((d, i) => {
+                const x = 45 + (i / 5) * 440;
+                return (
+                  <text
+                    key={i}
+                    x={x}
+                    y="192"
+                    textAnchor="middle"
+                    className={`text-[10px] font-sans font-semibold tracking-wider transition-colors duration-200 ${
+                      hoveredIndex === i ? "fill-[#C8A64D]" : "fill-white/40"
+                    }`}
+                  >
+                    {d.label}
+                  </text>
+                );
+              })}
+
+              {/* Invisible Hover Overlay Blocks */}
+              {chartData.map((d, i) => {
+                const xStart = i === 0 ? 45 : 45 + ((i - 0.5) / 5) * 440;
+                const xEnd = i === 5 ? 485 : 45 + ((i + 0.5) / 5) * 440;
+                const width = xEnd - xStart;
+                return (
+                  <rect
+                    key={i}
+                    x={xStart}
+                    y="10"
+                    width={width}
+                    height="180"
+                    fill="transparent"
+                    className="cursor-pointer"
+                    onMouseEnter={() => setHoveredIndex(i)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  />
+                );
+              })}
+            </svg>
+
+            {/* Hover Tooltip Overlay */}
+            {hoveredIndex !== null && (
+              <div
+                className="absolute bg-zinc-950/95 border border-yellow-500/20 p-3 shadow-2xl rounded-lg pointer-events-none z-20 text-xs text-left"
+                style={{
+                  left: `${((45 + (hoveredIndex / 5) * 440) / 500) * 100}%`,
+                  transform: "translateX(-50%)",
+                  bottom: "185px",
+                }}
+              >
+                <p className="text-yellow-500 font-bold uppercase tracking-wider text-[9px] mb-1.5 border-b border-white/5 pb-1">
+                  {chartData[hoveredIndex].label} Summary
+                </p>
+                <div className="space-y-1 text-white/70 font-sans">
+                  <p className="flex justify-between gap-5">
+                    <span>Confirmed:</span>
+                    <span className="font-semibold text-white">₹{chartData[hoveredIndex].revenue.toLocaleString()}</span>
+                  </p>
+                  <p className="flex justify-between gap-5">
+                    <span>Pending:</span>
+                    <span className="font-semibold text-white">₹{chartData[hoveredIndex].pending.toLocaleString()}</span>
+                  </p>
+                  <div className="border-t border-white/10 pt-1 mt-1.5 flex justify-between font-bold text-white">
+                    <span>Total pool:</span>
+                    <span className="text-[#C8A64D]">₹{chartData[hoveredIndex].total.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

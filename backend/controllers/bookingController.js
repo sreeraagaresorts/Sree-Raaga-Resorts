@@ -3,7 +3,7 @@ const db = require("../config/db");
 // 1. Create a booking
 exports.createBooking = async (req, res) => {
   try {
-    const { room_id, check_in, check_out, adults, children, user_id: bodyUserId } = req.body;
+    const { room_id, check_in, check_out, adults, children, user_id: bodyUserId, payment_method } = req.body;
     let user_id = req.user.id;
 
     if (req.user.role === "admin" && bodyUserId) {
@@ -49,9 +49,9 @@ exports.createBooking = async (req, res) => {
     const total_price = nights * roomPrice;
 
     const [result] = await db.query(
-      `INSERT INTO bookings (user_id, room_id, check_in, check_out, adults, children, total_price, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')`,
-      [user_id, room_id, check_in, check_out, adults || 1, children || 0, total_price]
+      `INSERT INTO bookings (user_id, room_id, check_in, check_out, adults, children, total_price, status, payment_method)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)`,
+      [user_id, room_id, check_in, check_out, adults || 1, children || 0, total_price, payment_method || 'online']
     );
 
     res.status(201).json({
@@ -146,6 +146,8 @@ exports.updateBookingStatus = async (req, res) => {
         message: "Booking not found."
       });
     }
+
+
 
     res.json({
       success: true,

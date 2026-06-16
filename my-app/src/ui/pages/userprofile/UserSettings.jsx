@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Lock, Bell, AlertTriangle } from "lucide-react";
+import { useToast } from "../../components/Toast";
 
 const UserSettings = () => {
+  const toast = useToast();
   const [emailAlerts, setEmailAlerts] = useState(true);
   const [smsAlerts, setSmsAlerts] = useState(false);
 
@@ -14,10 +16,10 @@ const UserSettings = () => {
   const handlePasswordChange = (e) => {
     e.preventDefault();
     if (passwordData.new !== passwordData.confirm) {
-      alert("New passwords do not match!");
+      toast.error("New passwords do not match!");
       return;
     }
-    alert("Password updated successfully! (UI Demo only)");
+    toast.success("Password updated successfully! (UI Demo only)");
     setPasswordData({ current: "", new: "", confirm: "" });
   };
 
@@ -139,7 +141,7 @@ const UserSettings = () => {
                 <p className="text-gray-400 text-[10px]">Permanently remove your profile details and archive booking logs.</p>
               </div>
               <button 
-                onClick={() => alert("Please contact resort admin at info@sreeraaga.com for account deletion.")}
+                onClick={() => toast.info("Please contact resort admin at info@sreeraaga.com for account deletion.")}
                 className="bg-red-500/10 text-red-400 border border-red-500/30 px-5 py-2.5 rounded-none font-bold uppercase tracking-widest text-[10px] hover:bg-red-500 hover:text-white transition cursor-pointer"
               >
                 Delete Account

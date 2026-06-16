@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Trash, Shield, ShieldAlert, RefreshCw, Users } from "lucide-react";
+import { useToast } from "../ui/components/Toast";
 
 const AdminUsers = () => {
+  const toast = useToast();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState("guests");
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -52,10 +55,10 @@ const AdminUsers = () => {
         throw new Error(data.message || "Failed to change user role.");
       }
 
-      alert("User role updated successfully!");
+      toast.success("User role updated successfully!");
       fetchUsers();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to change user role.");
     }
   };
 
@@ -76,23 +79,54 @@ const AdminUsers = () => {
         throw new Error(data.message || "Failed to delete user.");
       }
 
-      alert("User account deleted successfully!");
+      toast.success("User account deleted successfully!");
       fetchUsers();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to delete user.");
     }
   };
+
+  const displayedUsers = users.filter((u) => {
+    if (activeTab === "admins") {
+      return u.role === "admin";
+    }
+    return u.role !== "admin";
+  });
 
   return (
     <div className="space-y-6 text-white max-w-7xl mx-auto">
       {/* HEADER */}
       <div className="flex justify-between items-center border-b border-white/5 pb-6">
         <div>
-          <h1 className="text-2xl font-bold">Guests & Users</h1>
+          <h1 className="text-2xl font-bold">Guests & Administrators</h1>
           <p className="text-white/50 text-sm">
             Manage user profiles, registration details, and administrative roles.
           </p>
         </div>
+      </div>
+
+      {/* TABS */}
+      <div className="flex gap-4 border-b border-white/5 pb-2">
+        <button
+          onClick={() => setActiveTab("guests")}
+          className={`px-4 py-2.5 text-xs font-bold uppercase tracking-widest border-b-2 transition cursor-pointer ${
+            activeTab === "guests"
+              ? "border-[#C8A64D] text-[#C8A64D]"
+              : "border-transparent text-white/50 hover:text-white/80"
+          }`}
+        >
+          Guests ({users.filter((u) => u.role !== "admin").length})
+        </button>
+        <button
+          onClick={() => setActiveTab("admins")}
+          className={`px-4 py-2.5 text-xs font-bold uppercase tracking-widest border-b-2 transition cursor-pointer ${
+            activeTab === "admins"
+              ? "border-[#C8A64D] text-[#C8A64D]"
+              : "border-transparent text-white/50 hover:text-white/80"
+          }`}
+        >
+          Administrators ({users.filter((u) => u.role === "admin").length})
+        </button>
       </div>
 
       {/* ERROR DISPLAY */}
@@ -108,9 +142,11 @@ const AdminUsers = () => {
           <RefreshCw className="animate-spin w-6 h-6 text-[#C8A64D]" />
           <span>Loading guest profiles...</span>
         </div>
-      ) : users.length === 0 ? (
+      ) : displayedUsers.length === 0 ? (
         <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl text-white/50">
-          No registered user profiles found.
+          {activeTab === "admins"
+            ? "No registered administrator profiles found."
+            : "No registered guest profiles found."}
         </div>
       ) : (
         <div className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
@@ -127,7 +163,7 @@ const AdminUsers = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((u) => (
+                {displayedUsers.map((u) => (
                   <tr
                     key={u.id}
                     className="border-t border-white/5 hover:bg-white/5 transition"

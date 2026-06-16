@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useToast } from "../../components/Toast";
 import {
   LayoutDashboard,
   User,
@@ -23,6 +24,7 @@ const navItems = [
 const UserLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const toast = useToast();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -40,7 +42,8 @@ const UserLayout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("adminToken");
-    window.location.href = "/";
+    toast.success("Signed out successfully!\nHave a wonderful day.");
+    navigate("/");
   };
 
   const isActive = (path) => {

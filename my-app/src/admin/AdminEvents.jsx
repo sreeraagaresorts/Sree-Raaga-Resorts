@@ -8,8 +8,10 @@ import {
   Calendar,
   RefreshCw,
 } from "lucide-react";
+import { useToast } from "../ui/components/Toast";
 
 const AdminEvents = () => {
+  const toast = useToast();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -115,11 +117,11 @@ const AdminEvents = () => {
         throw new Error(data.message || "Failed to save event.");
       }
 
-      alert(editingEvent ? "Event updated successfully!" : "Event created successfully!");
+      toast.success(editingEvent ? "Event updated successfully!" : "Event created successfully!");
       setIsFormOpen(false);
       fetchEvents();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to save event.");
     } finally {
       setSaving(false);
     }
@@ -143,10 +145,10 @@ const AdminEvents = () => {
         throw new Error(data.message || "Failed to delete event.");
       }
 
-      alert("Event deleted successfully!");
+      toast.success("Event deleted successfully!");
       fetchEvents();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to delete event.");
     }
   };
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, User } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useToast } from "./Toast";
 
 const links = [
   { name: "Home", path: "/" },
@@ -12,6 +13,8 @@ const links = [
 ];
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const toast = useToast();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -34,7 +37,8 @@ const Navbar = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    window.location.href = "/";
+    toast.success("Signed out successfully!\nHave a wonderful day.");
+    navigate("/");
   };
 
   useEffect(() => {

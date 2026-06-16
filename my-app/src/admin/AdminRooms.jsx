@@ -10,8 +10,10 @@ import {
   BedDouble,
   RefreshCw,
 } from "lucide-react";
+import { useToast } from "../ui/components/Toast";
 
 const AdminRooms = () => {
+  const toast = useToast();
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -125,11 +127,11 @@ const AdminRooms = () => {
         throw new Error(data.message || "Failed to save room.");
       }
 
-      alert(editingRoom ? "Room updated successfully!" : "Room created successfully!");
+      toast.success(editingRoom ? "Room updated successfully!" : "Room created successfully!");
       setIsFormOpen(false);
       fetchRooms();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to save room.");
     } finally {
       setSaving(false);
     }
@@ -153,10 +155,10 @@ const AdminRooms = () => {
         throw new Error(data.message || "Failed to delete room.");
       }
 
-      alert("Room deleted successfully!");
+      toast.success("Room deleted successfully!");
       fetchRooms();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to delete room.");
     }
   };
 

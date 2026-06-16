@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
+import { useToast } from "../components/Toast";
 
 const Register = () => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -13,52 +15,49 @@ const Register = () => {
     confirmPassword: "",
   });
 
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-const handleRegister = async (e) => {
-  e.preventDefault();
+  const handleRegister = async (e) => {
+    e.preventDefault();
 
-  setError("");
-
-  if (formData.password !== formData.confirmPassword) {
-    return setError("Passwords do not match");
-  }
-
-  try {
-    setLoading(true);
-
-    const response = await fetch(
-      "http://localhost:5000/api/auth/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-     body: JSON.stringify({
-  full_name: formData.name,
-  email: formData.email,
-  phone: formData.phone,
-  password: formData.password,
-}),
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message);
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
     }
 
-    alert("Registration Successful");
+    try {
+      setLoading(true);
 
-    navigate("/login");
-  } catch (err) {
-    setError(err.message || "Registration Failed");
-  } finally {
-    setLoading(false);
-  }
-};
+      const response = await fetch(
+        "http://localhost:5000/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            full_name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            password: formData.password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      toast.success("Registration Successful! Please sign in.");
+      navigate("/login");
+    } catch (err) {
+      toast.error(err.message || "Registration Failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-black text-white min-h-screen">
@@ -98,13 +97,6 @@ const handleRegister = async (e) => {
             <h2 className="text-4xl text-center mb-10">
               Create Account
             </h2>
-
-            {error && (
-              <div className="bg-red-500/10 border border-red-500 text-red-400 p-4 mb-6">
-                {error}
-              </div>
-            )}
-
             <form
               onSubmit={handleRegister}
               className="space-y-6"

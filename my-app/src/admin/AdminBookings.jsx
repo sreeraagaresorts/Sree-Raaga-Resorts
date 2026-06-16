@@ -11,8 +11,10 @@ import {
   RefreshCw,
   UserCheck,
 } from "lucide-react";
+import { useToast } from "../ui/components/Toast";
 
 const AdminBookings = () => {
+  const toast = useToast();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,6 +34,13 @@ const AdminBookings = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [saving, setSaving] = useState(false);
+
+  // Manual guest registration details
+  const [guestMode, setGuestMode] = useState("existing");
+  const [guestName, setGuestName] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("cash");
 
   const fetchBookings = async () => {
     setLoading(true);
@@ -65,7 +74,12 @@ const AdminBookings = () => {
       const uData = await uRes.json();
       if (uData.success) {
         setUsers(uData.data);
-        if (uData.data.length > 0) setSelectedUser(uData.data[0].id.toString());
+        const nonAdmins = uData.data.filter(u => u.role !== "admin");
+        if (nonAdmins.length > 0) {
+          setSelectedUser(nonAdmins[0].id.toString());
+        } else {
+          setSelectedUser("");
+        }
       }
 
       // Fetch rooms
@@ -90,13 +104,28 @@ const AdminBookings = () => {
     setCheckOut("");
     setAdults(1);
     setChildren(0);
+    setGuestMode("existing");
+    setGuestName("");
+    setGuestEmail("");
+    setGuestPhone("");
+    setPaymentMethod("cash");
     setIsFormOpen(true);
   };
 
   const handleCreateBooking = async (e) => {
     e.preventDefault();
-    if (!selectedUser || !selectedRoom || !checkIn || !checkOut) {
-      alert("All fields are required.");
+    if (!selectedRoom || !checkIn || !checkOut) {
+      toast.warning("Please select a room and enter check-in/check-out dates.");
+      return;
+    }
+
+    if (guestMode === "existing" && !selectedUser) {
+      toast.warning("Please select a guest account.");
+      return;
+    }
+
+    if (guestMode === "new" && (!guestName || !guestEmail || !guestPhone)) {
+      toast.warning("Please enter all new guest details.");
       return;
     }
 
@@ -104,6 +133,33 @@ const AdminBookings = () => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
     try {
+      let finalUserId = null;
+
+      if (guestMode === "new") {
+        // Register the new user first
+        const regRes = await fetch("http://localhost:5000/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            full_name: guestName,
+            email: guestEmail,
+            phone: guestPhone,
+            password: "SreeRaagaGuest@123",
+          }),
+        });
+
+        const regData = await regRes.json();
+        if (!regRes.ok) {
+          throw new Error(regData.message || "Failed to register new guest.");
+        }
+        finalUserId = regData.userId;
+      } else {
+        finalUserId = Number(selectedUser);
+      }
+
+      // Create the booking
       const response = await fetch("http://localhost:5000/api/bookings", {
         method: "POST",
         headers: {
@@ -111,12 +167,13 @@ const AdminBookings = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          user_id: Number(selectedUser),
+          user_id: finalUserId,
           room_id: Number(selectedRoom),
           check_in: checkIn,
           check_out: checkOut,
           adults: Number(adults),
           children: Number(children),
+          payment_method: paymentMethod,
         }),
       });
 
@@ -125,11 +182,11 @@ const AdminBookings = () => {
         throw new Error(data.message || "Failed to create booking.");
       }
 
-      alert("Booking created successfully!");
+      toast.success("Booking created successfully!");
       setIsFormOpen(false);
       fetchBookings();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to create booking.");
     } finally {
       setSaving(false);
     }
@@ -152,10 +209,10 @@ const AdminBookings = () => {
         throw new Error(data.message || "Failed to update booking status.");
       }
 
-      alert(`Booking status changed to ${status}!`);
+      toast.success(`Booking status changed to ${status}!`);
       fetchBookings();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to update booking status.");
     }
   };
 
@@ -176,10 +233,10 @@ const AdminBookings = () => {
         throw new Error(data.message || "Failed to delete booking.");
       }
 
-      alert("Booking deleted successfully!");
+      toast.success("Booking deleted successfully!");
       fetchBookings();
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message || "Failed to delete booking.");
     }
   };
 
@@ -266,6 +323,7 @@ const AdminBookings = () => {
                   <th className="p-4 text-left font-semibold">Room booked</th>
                   <th className="p-4 text-left font-semibold">Reservation Dates</th>
                   <th className="p-4 text-left font-semibold">Amount</th>
+                  <th className="p-4 text-left font-semibold">Payment</th>
                   <th className="p-4 text-left font-semibold">Status</th>
                   <th className="p-4 text-center font-semibold">Actions</th>
                 </tr>
@@ -306,6 +364,19 @@ const AdminBookings = () => {
                       ₹{parseFloat(b.total_price).toLocaleString()}
                     </td>
 
+                    {/* PAYMENT METHOD */}
+                    <td className="p-4">
+                      <span
+                        className={`text-xs px-2.5 py-1 rounded border font-semibold inline-flex items-center gap-1 uppercase ${
+                          b.payment_method === "online"
+                            ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"
+                            : "bg-[#C8A64D]/10 text-[#C8A64D] border-[#C8A64D]/20"
+                        }`}
+                      >
+                        {b.payment_method || "cash"}
+                      </span>
+                    </td>
+
                     {/* STATUS */}
                     <td className="p-4">
                       <span
@@ -326,33 +397,52 @@ const AdminBookings = () => {
                     {/* ACTIONS */}
                     <td className="p-4 text-center">
                       <div className="flex items-center justify-center gap-2">
-                        {b.status === "pending" && (
-                          <button
-                            onClick={() => handleUpdateStatus(b.id, "confirmed")}
-                            className="p-1.5 bg-green-500/10 text-green-400 hover:bg-green-500/20 rounded cursor-pointer"
-                            title="Confirm Booking"
-                          >
-                            <CheckCircle size={14} />
-                          </button>
-                        )}
-                        {b.status === "confirmed" && (
-                          <button
-                            onClick={() => handleUpdateStatus(b.id, "checked_in")}
-                            className="p-1.5 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 rounded cursor-pointer"
-                            title="Check In"
-                          >
-                            <UserCheck size={14} />
-                          </button>
-                        )}
-                        {b.status !== "cancelled" && b.status !== "checked_in" && (
-                          <button
-                            onClick={() => handleUpdateStatus(b.id, "cancelled")}
-                            className="p-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded cursor-pointer"
-                            title="Cancel Booking"
-                          >
-                            <XCircle size={14} />
-                          </button>
-                        )}
+                        {/* Confirm Button */}
+                        <button
+                          onClick={() => b.status === "pending" && handleUpdateStatus(b.id, "confirmed")}
+                          disabled={b.status !== "pending"}
+                          className={`p-1.5 rounded transition ${
+                            b.status === "pending"
+                              ? "bg-green-500/10 text-green-400 hover:bg-green-500/20 cursor-pointer"
+                              : "bg-white/5 text-white/20 cursor-not-allowed opacity-30"
+                          }`}
+                          title={b.status === "pending" ? "Confirm Booking" : "Cannot Confirm"}
+                        >
+                          <CheckCircle size={14} />
+                        </button>
+
+                        {/* Check In Button */}
+                        <button
+                          onClick={() => b.status === "confirmed" && handleUpdateStatus(b.id, "checked_in")}
+                          disabled={b.status !== "confirmed"}
+                          className={`p-1.5 rounded transition ${
+                            b.status === "confirmed"
+                              ? "bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 cursor-pointer"
+                              : "bg-white/5 text-white/20 cursor-not-allowed opacity-30"
+                          }`}
+                          title={b.status === "confirmed" ? "Check In" : "Cannot Check In"}
+                        >
+                          <UserCheck size={14} />
+                        </button>
+
+                        {/* Cancel Button */}
+                        <button
+                          onClick={() => 
+                            (b.status === "pending" || b.status === "confirmed") && 
+                            handleUpdateStatus(b.id, "cancelled")
+                          }
+                          disabled={b.status !== "pending" && b.status !== "confirmed"}
+                          className={`p-1.5 rounded transition ${
+                            b.status === "pending" || b.status === "confirmed"
+                              ? "bg-red-500/10 text-red-400 hover:bg-red-500/20 cursor-pointer"
+                              : "bg-white/5 text-white/20 cursor-not-allowed opacity-30"
+                          }`}
+                          title={b.status === "pending" || b.status === "confirmed" ? "Cancel Booking" : "Cannot Cancel"}
+                        >
+                          <XCircle size={14} />
+                        </button>
+
+                        {/* Delete Button */}
                         <button
                           onClick={() => handleDelete(b.id)}
                           className="p-1.5 bg-white/10 text-white/60 hover:bg-red-500/20 hover:text-red-400 rounded cursor-pointer transition"
@@ -386,24 +476,92 @@ const AdminBookings = () => {
 
             <form onSubmit={handleCreateBooking} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Guest dropdown */}
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Guest / User Account</label>
-                  <select
-                    value={selectedUser}
-                    onChange={(e) => setSelectedUser(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-                  >
-                    {users.map((user) => (
-                      <option key={user.id} value={user.id}>
-                        {user.full_name} ({user.email})
-                      </option>
-                    ))}
-                  </select>
+                {/* Guest Selection Mode */}
+                <div className="col-span-1 md:col-span-2">
+                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Guest Selection Mode</label>
+                  <div className="flex gap-6 bg-[#071524] p-3 rounded-lg border border-white/5">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-white/80 hover:text-white">
+                      <input
+                        type="radio"
+                        name="guestMode"
+                        value="existing"
+                        checked={guestMode === "existing"}
+                        onChange={() => setGuestMode("existing")}
+                        className="accent-yellow-500"
+                      />
+                      Select Existing User
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-white/80 hover:text-white">
+                      <input
+                        type="radio"
+                        name="guestMode"
+                        value="new"
+                        checked={guestMode === "new"}
+                        onChange={() => setGuestMode("new")}
+                        className="accent-yellow-500"
+                      />
+                      Register New Guest
+                    </label>
+                  </div>
                 </div>
 
+                {/* Guest Selection or Fields */}
+                {guestMode === "existing" ? (
+                  <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Guest / User Account</label>
+                    <select
+                      value={selectedUser}
+                      onChange={(e) => setSelectedUser(e.target.value)}
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                    >
+                      <option value="">-- Select Guest --</option>
+                      {users.filter(u => u.role !== "admin").map((user) => (
+                        <option key={user.id} value={user.id}>
+                          {user.full_name} ({user.email})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : (
+                  <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 bg-yellow-500/5 p-4 rounded-lg border border-yellow-500/10">
+                    <h3 className="col-span-1 md:col-span-3 text-xs font-semibold text-yellow-500 uppercase tracking-widest border-b border-yellow-500/10 pb-2 mb-1">
+                      New Guest Information
+                    </h3>
+                    <div>
+                      <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Full Name</label>
+                      <input
+                        type="text"
+                        placeholder="John Doe"
+                        value={guestName}
+                        onChange={(e) => setGuestName(e.target.value)}
+                        className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Email Address</label>
+                      <input
+                        type="email"
+                        placeholder="john@example.com"
+                        value={guestEmail}
+                        onChange={(e) => setGuestEmail(e.target.value)}
+                        className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Phone Number</label>
+                      <input
+                        type="tel"
+                        placeholder="+91 9876543210"
+                        value={guestPhone}
+                        onChange={(e) => setGuestPhone(e.target.value)}
+                        className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Room dropdown */}
-                <div>
+                <div className={guestMode === "new" ? "col-span-1 md:col-span-2" : ""}>
                   <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Room Inventory</label>
                   <select
                     value={selectedRoom}
@@ -466,6 +624,19 @@ const AdminBookings = () => {
                     onChange={(e) => setChildren(e.target.value)}
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
                   />
+                </div>
+
+                {/* Payment Method */}
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Payment Method</label>
+                  <select
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                  >
+                    <option value="cash">Cash Payment</option>
+                    <option value="online">Online Payment</option>
+                  </select>
                 </div>
               </div>
 

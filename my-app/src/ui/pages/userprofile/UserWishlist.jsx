@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Heart, Maximize, BedDouble, Trash2, ArrowRight } from "lucide-react";
+import { useToast } from "../../components/Toast";
 
 const mockWishlist = [
   {
@@ -15,6 +16,7 @@ const mockWishlist = [
 ];
 
 const UserWishlist = () => {
+  const toast = useToast();
   return (
     <div className="max-w-4xl mx-auto space-y-6 text-white">
       <h1 className="text-3xl font-serif font-light mb-6 text-white border-b border-yellow-500/10 pb-3">My Wishlist</h1>
@@ -36,7 +38,7 @@ const UserWishlist = () => {
                 <div className="h-48 relative">
                   <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   <button 
-                    onClick={() => alert("Room removed from wishlist.")}
+                    onClick={() => toast.success("Room removed from wishlist.")}
                     className="absolute top-3 right-3 p-1.5 bg-black/60 rounded-full text-rose-400 hover:bg-black/80 hover:text-rose-500 cursor-pointer"
                     title="Remove from Wishlist"
                   >
