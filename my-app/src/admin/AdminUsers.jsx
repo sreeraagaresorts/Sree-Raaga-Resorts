@@ -10,8 +10,8 @@ const AdminUsers = () => {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("guests");
 
-  const fetchUsers = async () => {
-    setLoading(true);
+  const fetchUsers = async (silent = false) => {
+    if (!silent) setLoading(true);
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
       const response = await fetch(`${API_URL}/api/auth/users`, {
@@ -26,14 +26,21 @@ const AdminUsers = () => {
         throw new Error(data.message || "Failed to load users.");
       }
     } catch (err) {
-      setError(err.message);
+      if (!silent) setError(err.message);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchUsers();
+
+    // Auto-refresh users silently every 10 seconds
+    const interval = setInterval(() => {
+      fetchUsers(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleToggleRole = async (user) => {

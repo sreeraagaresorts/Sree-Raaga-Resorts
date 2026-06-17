@@ -3,6 +3,7 @@ const { getNextSequenceValue } = require("./Counter");
 
 const roomSchema = new mongoose.Schema({
   id: { type: Number, unique: true },
+  roomNumber: { type: String, required: true },
   name: { type: String, required: true },
   price: { type: Number, required: true },
   image: { type: String },

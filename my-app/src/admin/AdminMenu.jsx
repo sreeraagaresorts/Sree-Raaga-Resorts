@@ -1,0 +1,703 @@
+import React, { useState, useEffect } from "react";
+import { Plus, Edit2, Trash2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList } from "lucide-react";
+import { useToast } from "../ui/components/Toast";
+import { API_URL } from "../config/api";
+
+const AdminMenu = () => {
+  const toast = useToast();
+  const [activeTab, setActiveTab] = useState("orders"); // "dishes" or "orders"
+
+  // Dishes Inventory states
+  const [dishes, setDishes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("All");
+
+  // Dishes Modal & Form states
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingDish, setEditingDish] = useState(null);
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("Starters");
+  const [description, setDescription] = useState("");
+  const [isVegetarian, setIsVegetarian] = useState(true);
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
+
+  // Room Service Orders states
+  const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [orderSearchQuery, setOrderSearchQuery] = useState("");
+  const [updatingStatusId, setUpdatingStatusId] = useState(null);
+
+  const categories = ["Starters", "Main Course", "Desserts", "Beverages"];
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+
+  useEffect(() => {
+    fetchDishes();
+    fetchOrders();
+
+    // Auto-poll orders every 10 seconds silently to show new room service requests in real-time
+    const interval = setInterval(() => {
+      fetchOrders(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchDishes = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/api/dishes`);
+      const data = await response.json();
+      if (data.success) {
+        setDishes(data.data);
+      } else {
+        throw new Error(data.message || "Failed to load menu items.");
+      }
+    } catch (err) {
+      setError(err.message);
+      toast.error(err.message || "Failed to fetch dishes.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchOrders = async (silent = false) => {
+    if (!silent) setLoadingOrders(true);
+    try {
+      const response = await fetch(`${API_URL}/api/orders`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        setOrders(data.data);
+      } else {
+        throw new Error(data.message || "Failed to load orders.");
+      }
+    } catch (err) {
+      if (!silent) toast.error(err.message || "Failed to fetch orders.");
+    } finally {
+      if (!silent) setLoadingOrders(false);
+    }
+  };
+
+  const openAddModal = () => {
+    setEditingDish(null);
+    setName("");
+    setPrice("");
+    setCategory("Starters");
+    setDescription("");
+    setIsVegetarian(true);
+    setIsAvailable(true);
+    setImageFile(null);
+    setImagePreview("");
+    setIsFormOpen(true);
+  };
+
+  const openEditModal = (dish) => {
+    setEditingDish(dish);
+    setName(dish.name);
+    setPrice(dish.price);
+    setCategory(dish.category);
+    setDescription(dish.description || "");
+    setIsVegetarian(dish.isVegetarian);
+    setIsAvailable(dish.isAvailable);
+    setImageFile(null);
+    setImagePreview(dish.image ? (dish.image.startsWith("http") ? dish.image : `${API_URL}/uploads/${dish.image}`) : "");
+    setIsFormOpen(true);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("category", category);
+    formData.append("description", description);
+    formData.append("isVegetarian", isVegetarian);
+    formData.append("isAvailable", isAvailable);
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    try {
+      let url = `${API_URL}/api/dishes`;
+      let method = "POST";
+
+      if (editingDish) {
+        url = `${API_URL}/api/dishes/${editingDish.id}`;
+        method = "PUT";
+      }
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to save dish.");
+      }
+
+      toast.success(editingDish ? "Dish updated successfully!" : "Dish created successfully!");
+      setIsFormOpen(false);
+      fetchDishes();
+    } catch (err) {
+      toast.error(err.message || "Failed to save dish.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this dish from the menu?")) return;
+
+    try {
+      const response = await fetch(`${API_URL}/api/dishes/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete dish.");
+      }
+
+      toast.success("Dish deleted successfully!");
+      fetchDishes();
+    } catch (err) {
+      toast.error(err.message || "Failed to delete dish.");
+    }
+  };
+
+  const handleUpdateStatus = async (id, newStatus) => {
+    setUpdatingStatusId(id);
+    try {
+      const response = await fetch(`${API_URL}/api/orders/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success(`Order status updated to ${newStatus}!`);
+        fetchOrders();
+      } else {
+        throw new Error(data.message || "Failed to update order status.");
+      }
+    } catch (err) {
+      toast.error(err.message || "Error updating order status.");
+    } finally {
+      setUpdatingStatusId(null);
+    }
+  };
+
+  const handleDeleteOrder = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this order?")) return;
+    try {
+      const response = await fetch(`${API_URL}/api/orders/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success("Order deleted successfully!");
+        fetchOrders();
+      } else {
+        throw new Error(data.message || "Failed to delete order.");
+      }
+    } catch (err) {
+      toast.error(err.message || "Error deleting order.");
+    }
+  };
+
+  const getImageUrl = (image) => {
+    if (!image) return "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600";
+    if (image.startsWith("http")) return image;
+    return `${API_URL}/uploads/${image}`;
+  };
+
+  // Filters
+  const filteredDishes = dishes.filter((dish) => {
+    const matchesSearch = dish.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          (dish.description && dish.description.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesCategory = selectedCategoryFilter === "All" || dish.category === selectedCategoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
+  const filteredOrders = orders.filter((order) => {
+    const term = orderSearchQuery.toLowerCase();
+    return order.guestName.toLowerCase().includes(term) ||
+           order.roomNumber.toLowerCase().includes(term) ||
+           order.dishName.toLowerCase().includes(term);
+  });
+
+  return (
+    <div className="space-y-6 text-white max-w-7xl mx-auto">
+      {/* HEADER */}
+      <div className="flex justify-between items-center border-b border-white/5 pb-6">
+        <div>
+          <h1 className="text-2xl font-bold">Restaurant Dashboard</h1>
+          <p className="text-white/50 text-sm">
+            Configure hotel dishes and track guest room service requests.
+          </p>
+        </div>
+
+        {activeTab === "dishes" && (
+          <button
+            onClick={openAddModal}
+            className="bg-[#C8A64D] text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition"
+          >
+            <Plus size={16} /> Add Dish
+          </button>
+        )}
+      </div>
+
+      {/* TABS */}
+      <div className="flex border-b border-white/10 gap-6">
+        <button
+          onClick={() => setActiveTab("dishes")}
+          className={`pb-4 text-sm font-medium tracking-wider uppercase cursor-pointer transition ${
+            activeTab === "dishes"
+              ? "text-[#C8A64D] border-b-2 border-[#C8A64D]"
+              : "text-white/40 hover:text-white"
+          }`}
+        >
+          Dishes Inventory
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab("orders");
+            fetchOrders();
+          }}
+          className={`pb-4 text-sm font-medium tracking-wider uppercase cursor-pointer transition ${
+            activeTab === "orders"
+              ? "text-[#C8A64D] border-b-2 border-[#C8A64D]"
+              : "text-white/40 hover:text-white"
+          }`}
+        >
+          Room Service Orders ({orders.filter(o => o.status === "pending" || o.status === "preparing").length})
+        </button>
+      </div>
+
+      {/* TAB 1: DISHES INVENTORY */}
+      {activeTab === "dishes" && (
+        <>
+          {/* FILTER BAR */}
+          <div className="bg-[#081A2F] border border-white/10 p-4 rounded-xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
+            <div className="flex-1 flex items-center bg-[#071524] px-3 rounded-lg border border-white/5 w-full">
+              <Search className="text-white/40 mr-2" size={18} />
+              <input
+                type="text"
+                placeholder="Search dishes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent py-2.5 outline-none text-white text-sm"
+              />
+            </div>
+
+            <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+              {["All", ...categories].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategoryFilter(cat)}
+                  className={`px-4 py-2 text-xs uppercase tracking-wider transition rounded shrink-0 font-medium cursor-pointer ${
+                    selectedCategoryFilter === cat
+                      ? "bg-[#C8A64D] text-black font-bold"
+                      : "bg-[#071524] border border-white/10 text-white hover:border-yellow-500/50"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* DISHES LIST GRID */}
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 text-[#C8A64D]">
+              <RefreshCw className="animate-spin mb-4" size={32} />
+              <span>Loading menu dishes...</span>
+            </div>
+          ) : filteredDishes.length === 0 ? (
+            <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl text-white/50">
+              <p className="text-white/50 text-lg">No dishes found in the menu.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredDishes.map((dish) => (
+                <div key={dish.id} className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden shadow-2xl flex flex-col justify-between group">
+                  <div>
+                    <div className="relative h-48 w-full overflow-hidden">
+                      <img
+                        src={getImageUrl(dish.image)}
+                        alt={dish.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                      />
+                      {/* Veg indicator badge */}
+                      <div className="absolute top-3 left-3 z-20 bg-black/80 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-white/5">
+                        <span className={`w-2 h-2 rounded-full ${dish.isVegetarian ? "bg-green-500" : "bg-red-600"}`}></span>
+                        <span>{dish.isVegetarian ? "Veg" : "Non-Veg"}</span>
+                      </div>
+
+                      {/* Availability badge */}
+                      {!dish.isAvailable && (
+                        <div className="absolute inset-0 bg-black/75 z-10 flex items-center justify-center text-red-400 font-bold uppercase tracking-widest text-sm">
+                          Sold Out / Unavailable
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-5">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-lg font-bold group-hover:text-yellow-500 transition">{dish.name}</h3>
+                        <span className="text-[#C8A64D] font-bold">₹{dish.price}</span>
+                      </div>
+                      <p className="text-white/40 text-xs uppercase tracking-wider mb-3">{dish.category}</p>
+                      <p className="text-white/60 text-sm leading-relaxed line-clamp-3 font-light">
+                        {dish.description || "No description provided."}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* ACTION BUTTONS */}
+                  <div className="p-5 pt-0 border-t border-white/5 flex justify-end gap-2 mt-4">
+                    <button
+                      onClick={() => openEditModal(dish)}
+                      className="p-2 bg-yellow-500/10 text-[#C8A64D] hover:bg-yellow-500/20 rounded transition cursor-pointer"
+                      title="Edit Dish"
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(dish.id)}
+                      className="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded transition cursor-pointer"
+                      title="Delete Dish"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* TAB 2: ROOM SERVICE ORDERS */}
+      {activeTab === "orders" && (
+        <>
+          {/* SEARCH & REFRESH */}
+          <div className="bg-[#081A2F] border border-white/10 p-4 rounded-xl flex items-center gap-4 shadow-md justify-between">
+            <div className="flex-1 flex items-center bg-[#071524] px-3 rounded-lg border border-white/5 max-w-md">
+              <Search className="text-white/40 mr-2" size={18} />
+              <input
+                type="text"
+                placeholder="Search by room, guest, or dish name..."
+                value={orderSearchQuery}
+                onChange={(e) => setOrderSearchQuery(e.target.value)}
+                className="w-full bg-transparent py-2.5 outline-none text-white text-sm"
+              />
+            </div>
+
+            <button
+              onClick={fetchOrders}
+              disabled={loadingOrders}
+              className="p-3 bg-[#071524] border border-white/10 hover:border-yellow-500/50 rounded-lg text-white transition flex items-center gap-2 text-sm cursor-pointer disabled:opacity-50 font-bold"
+            >
+              <RefreshCw className={loadingOrders ? "animate-spin" : ""} size={16} /> Refresh
+            </button>
+          </div>
+
+          {/* ORDERS TABLE */}
+          {loadingOrders ? (
+            <div className="flex flex-col items-center justify-center py-20 text-[#C8A64D]">
+              <RefreshCw className="animate-spin mb-4" size={32} />
+              <span>Loading food orders...</span>
+            </div>
+          ) : filteredOrders.length === 0 ? (
+            <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl text-white/50">
+              <p className="text-white/50 text-lg">No orders found.</p>
+            </div>
+          ) : (
+            <div className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-[#071524] text-white/50 text-xs uppercase tracking-wider border-b border-white/5">
+                      <th className="p-4 font-bold">Order ID</th>
+                      <th className="p-4 font-bold">Guest & Room</th>
+                      <th className="p-4 font-bold">Dish & Qty</th>
+                      <th className="p-4 font-bold">Total Price</th>
+                      <th className="p-4 font-bold">Instructions</th>
+                      <th className="p-4 font-bold">Date & Time</th>
+                      <th className="p-4 font-bold text-center">Status</th>
+                      <th className="p-4 font-bold text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 text-sm">
+                    {filteredOrders.map((order) => (
+                      <tr key={order.id} className="hover:bg-white/2">
+                        {/* ID */}
+                        <td className="p-4 font-semibold text-white/90">#{order.id}</td>
+                        
+                        {/* Guest details */}
+                        <td className="p-4">
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-white flex items-center gap-1">
+                              <User size={13} className="text-[#C8A64D]" /> {order.guestName}
+                            </span>
+                            <span className="text-white/50 text-xs flex items-center gap-1 mt-0.5">
+                              <MapPin size={12} className="text-yellow-500/60" /> Room {order.roomNumber}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* Dish Details */}
+                        <td className="p-4">
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-white flex items-center gap-1.5">
+                              <ShoppingBag size={13} className="text-[#C8A64D]" /> {order.dishName}
+                            </span>
+                            <span className="text-white/50 text-xs mt-0.5">Qty: {order.quantity} x ₹{order.price}</span>
+                          </div>
+                        </td>
+
+                        {/* Total Price */}
+                        <td className="p-4 font-bold text-[#C8A64D]">₹{order.totalPrice.toLocaleString()}</td>
+
+                        {/* Special instructions */}
+                        <td className="p-4 max-w-xs">
+                          <p className="text-white/60 text-xs italic truncate" title={order.specialInstructions}>
+                            {order.specialInstructions || <span className="text-white/20 not-italic">None</span>}
+                          </p>
+                        </td>
+
+                        {/* Time */}
+                        <td className="p-4 text-white/50 text-xs">
+                          {new Date(order.created_at).toLocaleString("en-IN")}
+                        </td>
+
+                        {/* Status Editor */}
+                        <td className="p-4 text-center">
+                          <select
+                            value={order.status}
+                            onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
+                            disabled={updatingStatusId === order.id}
+                            className={`px-3 py-1.5 bg-[#071524] rounded border font-semibold outline-none text-xs cursor-pointer ${
+                              order.status === "pending"
+                                ? "text-yellow-500 border-yellow-500/20"
+                                : order.status === "preparing"
+                                ? "text-blue-500 border-blue-500/20"
+                                : order.status === "delivered"
+                                ? "text-green-500 border-green-500/20"
+                                : "text-red-500 border-red-500/20"
+                            }`}
+                          >
+                            <option value="pending" className="bg-[#081A2F] text-yellow-500">PENDING</option>
+                            <option value="preparing" className="bg-[#081A2F] text-blue-500">PREPARING</option>
+                            <option value="delivered" className="bg-[#081A2F] text-green-500">DELIVERED</option>
+                            <option value="cancelled" className="bg-[#081A2F] text-red-500">CANCELLED</option>
+                          </select>
+                        </td>
+
+                        {/* Actions */}
+                        <td className="p-4 text-right">
+                          <button
+                            onClick={() => handleDeleteOrder(order.id)}
+                            className="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded transition cursor-pointer bg-transparent border-0"
+                            title="Delete Order"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* DISHES ADD / EDIT MODAL */}
+      {isFormOpen && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-[#081A2F] w-full max-w-2xl rounded-xl p-6 border border-white/10 my-8 shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">{editingDish ? "Edit Dish" : "Add Dish"}</h2>
+              <button
+                onClick={() => setIsFormOpen(false)}
+                className="text-white/60 hover:text-white cursor-pointer"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSave} className="space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Dish Name</label>
+                  <input
+                    required
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white"
+                    placeholder="e.g. Kerala Prawn Curry"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Price (₹)</label>
+                  <input
+                    required
+                    type="number"
+                    min="0"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white"
+                    placeholder="e.g. 380"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Category</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white cursor-pointer"
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat} className="bg-[#081A2F]">
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-6 pt-4 pl-2">
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={isVegetarian}
+                      onChange={(e) => setIsVegetarian(e.target.checked)}
+                      className="w-4.5 h-4.5 rounded border-white/10 bg-black text-[#C8A64D] focus:ring-[#C8A64D] accent-[#C8A64D]"
+                    />
+                    <span className="text-xs uppercase tracking-wider text-white/80 flex items-center gap-1 font-bold">
+                      <Leaf size={14} className="text-green-500" /> Vegetarian
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={isAvailable}
+                      onChange={(e) => setIsAvailable(e.target.checked)}
+                      className="w-4.5 h-4.5 rounded border-white/10 bg-black text-[#C8A64D] focus:ring-[#C8A64D] accent-[#C8A64D]"
+                    />
+                    <span className="text-xs uppercase tracking-wider text-white/80 font-bold">
+                      In Stock
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Description</label>
+                <textarea
+                  required
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="w-full bg-[#071524] p-3 rounded-lg border border-white/10 outline-none focus:border-yellow-500 transition text-white font-light text-sm"
+                  rows={3}
+                  placeholder="Describe the dish ingredients, flavor, spice level..."
+                />
+              </div>
+
+              {/* IMAGE UPLOAD */}
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Dish Image</label>
+                <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                  />
+                  {imagePreview ? (
+                    <div className="space-y-2">
+                      <img src={imagePreview} className="max-h-40 mx-auto object-cover rounded shadow" alt="Preview" />
+                      <p className="text-[#C8A64D] text-xs">Click or drag another image to change</p>
+                    </div>
+                  ) : (
+                    <>
+                      <Upload className="mx-auto mb-2 text-[#C8A64D]" />
+                      <p className="text-white/60 text-sm">Click or drag image to upload</p>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="flex justify-end gap-3 pt-3 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={() => setIsFormOpen(false)}
+                  className="px-5 py-2.5 border border-white/10 text-white/60 hover:text-white rounded-lg transition text-sm cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="bg-[#C8A64D] text-black px-6 py-2.5 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition disabled:opacity-50 text-sm"
+                >
+                  {saving ? (
+                    <>
+                      <RefreshCw className="animate-spin" size={16} /> Saving...
+                    </>
+                  ) : (
+                    "Save Dish"
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminMenu;

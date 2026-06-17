@@ -44,6 +44,7 @@ exports.getRoom = async (req, res) => {
 exports.createRoom = async (req, res) => {
   try {
     const {
+      roomNumber,
       name,
       price,
       area,
@@ -52,6 +53,21 @@ exports.createRoom = async (req, res) => {
       description
     } = req.body;
 
+    if (!roomNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "Room number is required"
+      });
+    }
+
+    const existingRoom = await Room.findOne({ roomNumber });
+    if (existingRoom) {
+      return res.status(400).json({
+        success: false,
+        message: "Room number already exists"
+      });
+    }
+
     let image = null;
 
     if (req.file) {
@@ -59,6 +75,7 @@ exports.createRoom = async (req, res) => {
     }
 
     const room = new Room({
+      roomNumber,
       name,
       price: parseFloat(price),
       image,
@@ -86,6 +103,7 @@ exports.createRoom = async (req, res) => {
 exports.updateRoom = async (req, res) => {
   try {
     const {
+      roomNumber,
       name,
       price,
       area,
@@ -94,7 +112,23 @@ exports.updateRoom = async (req, res) => {
       description
     } = req.body;
 
+    if (!roomNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "Room number is required"
+      });
+    }
+
+    const existingRoom = await Room.findOne({ roomNumber, id: { $ne: Number(req.params.id) } });
+    if (existingRoom) {
+      return res.status(400).json({
+        success: false,
+        message: "Room number already in use by another room"
+      });
+    }
+
     const updateData = {
+      roomNumber,
       name,
       price: parseFloat(price),
       area: area || null,

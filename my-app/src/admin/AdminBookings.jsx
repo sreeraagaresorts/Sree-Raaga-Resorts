@@ -43,8 +43,8 @@ const AdminBookings = () => {
   const [guestPhone, setGuestPhone] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
-  const fetchBookings = async () => {
-    setLoading(true);
+  const fetchBookings = async (silent = false) => {
+    if (!silent) setLoading(true);
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
       const response = await fetch(`${API_URL}/api/bookings`, {
@@ -59,9 +59,9 @@ const AdminBookings = () => {
         throw new Error(data.message || "Failed to load bookings.");
       }
     } catch (err) {
-      setError(err.message);
+      if (!silent) setError(err.message);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -97,6 +97,13 @@ const AdminBookings = () => {
 
   useEffect(() => {
     fetchBookings();
+
+    // Auto-refresh bookings silently every 10 seconds
+    const interval = setInterval(() => {
+      fetchBookings(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleOpenForm = async () => {

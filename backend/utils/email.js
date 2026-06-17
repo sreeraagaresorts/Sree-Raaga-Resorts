@@ -170,19 +170,19 @@ exports.sendWelcomeEmail = async (user) => {
   const content = `
     <div class="greeting">Welcome to Sree Raaga Resort!</div>
     <p>Dear <strong>${user.full_name}</strong>,</p>
-    <p>Thank you for registering an account at Sree Raaga Resort. We are delighted to have you as part of our guest member club.</p>
+    <p>Thank you for signing up at Sree Raaga Resort. We are very happy to have you with us.</p>
     <div class="box">
-      <strong>Your Account Credentials:</strong><br>
-      • Registered Email: ${user.email}<br>
-      • Profile Type: Guest Member
+      <strong>Your Account Details:</strong><br>
+      • Email: ${user.email}<br>
+      • Account Type: Guest Member
     </div>
-    <p>You can now sign in to our booking website to view room inventories, book reservations, and manage your stays online.</p>
+    <p>You can now log in to our website to see available rooms, make bookings, and check your reservations online.</p>
   `;
   return sendMail({
     to: user.email,
-    subject: "Welcome to Sree Raaga Resort - Registration Successful",
+    subject: "Welcome to Sree Raaga Resort",
     html: getEmailShell("Welcome to Sree Raaga Resort", content),
-    text: `Welcome to Sree Raaga Resort, ${user.full_name}! Registration successful.`
+    text: `Welcome to Sree Raaga Resort, ${user.full_name}! Your account is ready.`
   });
 };
 
@@ -190,64 +190,64 @@ exports.sendWelcomeEmail = async (user) => {
 exports.sendLoginAlert = async (user) => {
   const dateStr = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
   const content = `
-    <div class="greeting">Account Login</div>
+    <div class="greeting">New Account Login</div>
     <p>Dear <strong>${user.full_name}</strong>,</p>
-    <p>A new login was successfully processed for your Sree Raaga Resort account.</p>
+    <p>A new login was made to your Sree Raaga Resort account.</p>
     <div class="box">
-      <strong>Login Audit Details:</strong><br>
-      • User Email: ${user.email}<br>
-      • Timestamp: ${dateStr}<br>
+      <strong>Login Details:</strong><br>
+      • Email: ${user.email}<br>
+      • Date and Time: ${dateStr}<br>
       • Status: Success
     </div>
-    <p>If this was you, no action is required. If you do not recognize this activity, please contact support immediately to lock your account.</p>
+    <p>If you did this, you can ignore this email. If not, please contact us immediately to protect your account.</p>
   `;
   return sendMail({
     to: user.email,
-    subject: "Security Alert: Login Detected - Sree Raaga Resort",
-    html: getEmailShell("Account Login Alert", content),
-    text: `Security Alert: New login detected for ${user.email} on ${dateStr}.`
+    subject: "New Login to Your Account - Sree Raaga Resort",
+    html: getEmailShell("New Login Detected", content),
+    text: `New login detected for ${user.email} on ${dateStr}.`
   });
 };
 
 // 3. User Role Update Alert
 exports.sendRoleUpdatedEmail = async (user) => {
   const content = `
-    <div class="greeting">Profile Update </div>
+    <div class="greeting">Account Role Updated</div>
     <p>Dear <strong>${user.full_name}</strong>,</p>
-    <p>This is to inform you that your account profile privileges have been updated by the system administrator.</p>
+    <p>We are writing to let you know that your account role has been updated by the admin.</p>
     <div class="box">
-      <strong>Updated Profile Details:</strong><br>
-      • Account Email: ${user.email}<br>
-      • Assigned Role: <strong>${user.role}</strong>
+      <strong>New Details:</strong><br>
+      • Email: ${user.email}<br>
+      • New Role: <strong>${user.role}</strong>
     </div>
-    <p>Please log in again to see your updated features.</p>
+    <p>Please log in again to see your new features.</p>
   `;
   return sendMail({
     to: user.email,
-    subject: "Profile Update Alert - Sree Raaga Resort",
-    html: getEmailShell("Profile Update Alert", content),
-    text: `Profile Alert: Your user role has been updated to: ${user.role}.`
+    subject: "Account Role Updated - Sree Raaga Resort",
+    html: getEmailShell("Account Updated", content),
+    text: `Your account role has been updated to: ${user.role}.`
   });
 };
 
 // 4. User Account Deletion Alert
 exports.sendAccountDeletedEmail = async (user) => {
   const content = `
-    <div class="greeting">Account Closed</div>
+    <div class="greeting">Account Deleted</div>
     <p>Dear <strong>${user.full_name}</strong>,</p>
-    <p>We are writing to confirm that your guest profile account at Sree Raaga Resort has been closed and successfully deleted from our records.</p>
+    <p>We are writing to confirm that your account at Sree Raaga Resort has been deleted from our records.</p>
     <div class="box">
-      • Profile Name: ${user.full_name}<br>
-      • Account Email: ${user.email}<br>
-      • Status: Terminated
+      • Name: ${user.full_name}<br>
+      • Email: ${user.email}<br>
+      • Status: Closed
     </div>
-    <p>If this account deletion was performed in error, please contact our guest support desk immediately.</p>
+    <p>If you did not want to delete your account, please contact our support team immediately.</p>
   `;
   return sendMail({
     to: user.email,
-    subject: "Account Closure Confirmation - Sree Raaga Resort",
-    html: getEmailShell("Account Closed", content),
-    text: `Account Closed: Your profile account for ${user.email} has been deleted.`
+    subject: "Account Deleted - Sree Raaga Resort",
+    html: getEmailShell("Account Deleted", content),
+    text: `Your account for ${user.email} has been deleted.`
   });
 };
 
@@ -260,23 +260,24 @@ exports.sendBookingCreatedEmail = async (booking) => {
   const content = `
     <div class="greeting">Booking Request Received</div>
     <p>Dear <strong>${booking.guest_name || "Guest"}</strong>,</p>
-    <p>Thank you for submitting a room booking request. We have received your reservation request and it is currently being processed.</p>
+    <p>Thank you for booking with us. We have received your booking and are checking it now.</p>
     <div class="box">
-      <strong>Reservation Details:</strong><br>
+      <strong>Booking Details:</strong><br>
       • Booking ID: #${booking.id || "N/A"}<br>
-      • Selected Room: ${booking.room_name || "Premium Room"}<br>
+      • Room: ${booking.room_name || "Premium Room"}<br>
+      ${booking.room_number ? `• Room Number: <strong>${booking.room_number}</strong><br>` : ""}
       • Dates: ${checkIn} to ${checkOut}<br>
-      • Total Guests: ${booking.adults || 1} Adults, ${booking.children || 0} Children<br>
-      • Total Price: ₹${price.toLocaleString("en-IN")}<br>
-      • Payment Type: ${booking.payment_method || "cash"}<br>
+      • Guests: ${booking.adults || 1} Adults, ${booking.children || 0} Children<br>
+      • Price: ₹${price.toLocaleString("en-IN")}<br>
+      • Payment Method: ${booking.payment_method || "cash"}<br>
       • Status: <strong>${booking.status || "pending"}</strong>
     </div>
-    <p>We will notify you immediately once your booking is confirmed by the resort management team.</p>
+    <p>We will email you as soon as your booking is confirmed by the resort.</p>
   `;
   return sendMail({
     to: booking.guest_email,
     subject: `Booking Request Received - #${booking.id} - Sree Raaga Resort`,
-    html: getEmailShell("Booking Request Submitted", content),
+    html: getEmailShell("Booking Received", content),
     text: `Booking Request Received: Booking #${booking.id} for ${booking.room_name} is currently ${booking.status}.`
   });
 };
@@ -288,19 +289,20 @@ exports.sendBookingUpdatedEmail = async (booking) => {
   const price = parseFloat(booking.total_price) || 0;
 
   const content = `
-    <div class="greeting">Booking Status Update</div>
+    <div class="greeting">Booking Updated</div>
     <p>Dear <strong>${booking.guest_name || "Guest"}</strong>,</p>
-    <p>We are writing to inform you that your booking status has been updated in our reservation system.</p>
+    <p>Your booking status has been updated.</p>
     <div class="box">
-      <strong>Updated Reservation Details:</strong><br>
+      <strong>Booking Details:</strong><br>
       • Booking ID: #${booking.id}<br>
-      • Selected Room: ${booking.room_name}<br>
-      • Stay Dates: ${checkIn} to ${checkOut}<br>
-      • Total Price: ₹${price.toLocaleString("en-IN")}<br>
-      • Payment Type: ${booking.payment_method || "cash"}<br>
-      • Updated Status: <strong style="text-transform: uppercase; color: #c8a64d;">${booking.status}</strong>
+      • Room: ${booking.room_name}<br>
+      ${booking.room_number ? `• Room Number: <strong>${booking.room_number}</strong><br>` : ""}
+      • Dates: ${checkIn} to ${checkOut}<br>
+      • Price: ₹${price.toLocaleString("en-IN")}<br>
+      • Payment Method: ${booking.payment_method || "cash"}<br>
+      • Status: <strong style="text-transform: uppercase; color: #c8a64d;">${booking.status}</strong>
     </div>
-    <p>We look forward to providing you with an exceptional stay experience. Safe travels!</p>
+    <p>We look forward to your stay. Have a safe trip!</p>
   `;
   return sendMail({
     to: booking.guest_email,
@@ -316,20 +318,93 @@ exports.sendBookingDeletedEmail = async (booking) => {
   const checkOut = formatDate(booking.check_out);
   
   const content = `
-    <div class="greeting">Booking Cancellation </div>
+    <div class="greeting">Booking Cancelled</div>
     <p>Dear <strong>${booking.guest_name || "Guest"}</strong>,</p>
-    <p>This email confirms that reservation <strong>#${booking.id}</strong> has been cancelled and removed from Sree Raaga Resort active logs.</p>
+    <p>This email confirms that your booking <strong>#${booking.id}</strong> has been cancelled.</p>
     <div class="box">
-      • Room Type: ${booking.room_name}<br>
-      • Stay Schedule: ${checkIn} to ${checkOut}<br>
-      • Cancellation Status: Completed
+      • Room: ${booking.room_name}<br>
+      ${booking.room_number ? `• Room Number: <strong>${booking.room_number}</strong><br>` : ""}
+      • Dates: ${checkIn} to ${checkOut}<br>
+      • Status: Cancelled
     </div>
-    <p>If you did not initiate this request or have questions regarding refunds, please contact our support office.</p>
+    <p>If you did not ask to cancel this, or if you have questions, please contact us.</p>
   `;
   return sendMail({
     to: booking.guest_email,
     subject: `Booking Cancelled - #${booking.id} - Sree Raaga Resort`,
     html: getEmailShell("Booking Cancelled", content),
-    text: `Booking Cancellation: Booking #${booking.id} has been cancelled and deleted.`
+    text: `Booking Cancellation: Booking #${booking.id} has been cancelled.`
+  });
+};
+
+// 8. Food Order Created Notification (Simple & Normal language)
+exports.sendFoodOrderCreatedEmail = async (order) => {
+  if (!order.guestEmail) {
+    console.log(`[Email Alert] No email found for food order #${order.id}. Skipping email.`);
+    return false;
+  }
+
+  const content = `
+    <div class="greeting">Food Order Received!</div>
+    <p>Dear <strong>${order.guestName}</strong>,</p>
+    <p>We have received your food order. Our kitchen team is starting to make your food now.</p>
+    <div class="box">
+      <strong>Order Details:</strong><br>
+      • Order ID: #${order.id}<br>
+      • Dish Name: ${order.dishName}<br>
+      • Quantity: ${order.quantity}<br>
+      • Price: ₹${order.price} each (Total Price: ₹${order.totalPrice})<br>
+      • Room Number: <strong>${order.roomNumber}</strong><br>
+      • Status: <strong>${order.status}</strong>
+    </div>
+    <p>We will bring the food to your room as soon as it is ready.</p>
+  `;
+
+  return sendMail({
+    to: order.guestEmail,
+    subject: `Food Order Placed - #${order.id} - Sree Raaga Resort`,
+    html: getEmailShell("Food Order Received", content),
+    text: `We received your food order for ${order.quantity}x ${order.dishName}. We will deliver it to room ${order.roomNumber} shortly.`
+  });
+};
+
+// 9. Food Order Status Updated Notification (Simple & Normal language)
+exports.sendFoodOrderStatusUpdatedEmail = async (order) => {
+  if (!order.guestEmail) {
+    console.log(`[Email Alert] No email found for food order #${order.id}. Skipping email.`);
+    return false;
+  }
+
+  let statusMsg = "";
+  if (order.status === "preparing") {
+    statusMsg = "Our chefs are now cooking your food.";
+  } else if (order.status === "delivered") {
+    statusMsg = "Your food has been delivered to your room. Enjoy your meal!";
+  } else if (order.status === "cancelled") {
+    statusMsg = "Your food order has been cancelled. Please contact us if you need help.";
+  } else {
+    statusMsg = `Your order status is now: ${order.status}`;
+  }
+
+  const content = `
+    <div class="greeting">Food Order Update</div>
+    <p>Dear <strong>${order.guestName}</strong>,</p>
+    <p>${statusMsg}</p>
+    <div class="box">
+      <strong>Order Details:</strong><br>
+      • Order ID: #${order.id}<br>
+      • Dish Name: ${order.dishName}<br>
+      • Quantity: ${order.quantity}<br>
+      • Room Number: <strong>${order.roomNumber}</strong><br>
+      • Status: <strong style="text-transform: uppercase; color: #c8a64d;">${order.status}</strong>
+    </div>
+    <p>Thank you for choosing Sree Raaga Resort!</p>
+  `;
+
+  return sendMail({
+    to: order.guestEmail,
+    subject: `Food Order Update - #${order.id} - ${order.status.toUpperCase()}`,
+    html: getEmailShell("Food Order Update", content),
+    text: `Your food order status has been updated to ${order.status}.`
   });
 };

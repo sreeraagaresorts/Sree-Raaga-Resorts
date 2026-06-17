@@ -26,45 +26,52 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      setLoading(true);
-      const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-      try {
-        // 1. Fetch bookings
-        const bRes = await fetch(`${API_URL}/api/bookings`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const bData = await bRes.json();
-        if (bData.success) {
-          setBookings(bData.data);
-        } else {
-          throw new Error(bData.message || "Failed to fetch bookings.");
-        }
-
-        // 2. Fetch rooms
-        const rRes = await fetch(`${API_URL}/api/rooms`);
-        const rData = await rRes.json();
-        if (rData.success) {
-          setRoomsCount(rData.data.length);
-        }
-
-        // 3. Fetch users
-        const uRes = await fetch(`${API_URL}/api/auth/users`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const uData = await uRes.json();
-        if (uData.success) {
-          setUsersCount(uData.data.length);
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const fetchDashboardData = async (silent = false) => {
+    if (!silent) setLoading(true);
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    try {
+      // 1. Fetch bookings
+      const bRes = await fetch(`${API_URL}/api/bookings`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const bData = await bRes.json();
+      if (bData.success) {
+        setBookings(bData.data);
+      } else {
+        throw new Error(bData.message || "Failed to fetch bookings.");
       }
-    };
 
+      // 2. Fetch rooms
+      const rRes = await fetch(`${API_URL}/api/rooms`);
+      const rData = await rRes.json();
+      if (rData.success) {
+        setRoomsCount(rData.data.length);
+      }
+
+      // 3. Fetch users
+      const uRes = await fetch(`${API_URL}/api/auth/users`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const uData = await uRes.json();
+      if (uData.success) {
+        setUsersCount(uData.data.length);
+      }
+    } catch (err) {
+      if (!silent) setError(err.message);
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchDashboardData();
+
+    // Auto-refresh stats silently every 10 seconds
+    const interval = setInterval(() => {
+      fetchDashboardData(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Compute metrics

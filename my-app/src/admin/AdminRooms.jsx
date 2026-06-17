@@ -22,6 +22,7 @@ const AdminRooms = () => {
   const [editingRoom, setEditingRoom] = useState(null);
 
   // Form states
+  const [roomNumber, setRoomNumber] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [area, setArea] = useState("");
@@ -33,8 +34,8 @@ const AdminRooms = () => {
 
   const [saving, setSaving] = useState(false);
 
-  const fetchRooms = async () => {
-    setLoading(true);
+  const fetchRooms = async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const response = await fetch(`${API_URL}/api/rooms`);
       const data = await response.json();
@@ -44,18 +45,26 @@ const AdminRooms = () => {
         throw new Error(data.message || "Failed to load rooms.");
       }
     } catch (err) {
-      setError(err.message);
+      if (!silent) setError(err.message);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchRooms();
+
+    // Auto-refresh rooms silently every 10 seconds
+    const interval = setInterval(() => {
+      fetchRooms(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const openAddModal = () => {
     setEditingRoom(null);
+    setRoomNumber("");
     setName("");
     setPrice("");
     setArea("");
@@ -69,6 +78,7 @@ const AdminRooms = () => {
 
   const openEditModal = (room) => {
     setEditingRoom(room);
+    setRoomNumber(room.roomNumber || "");
     setName(room.name);
     setPrice(room.price);
     setArea(room.area);
@@ -96,6 +106,7 @@ const AdminRooms = () => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
     const formData = new FormData();
+    formData.append("roomNumber", roomNumber);
     formData.append("name", name);
     formData.append("price", price);
     formData.append("area", area);
@@ -213,6 +224,16 @@ const AdminRooms = () => {
             {/* FORM UI */}
             <form onSubmit={handleSave} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Number</label>
+                  <input 
+                    required 
+                    placeholder="e.g. 101" 
+                    value={roomNumber} 
+                    onChange={(e) => setRoomNumber(e.target.value)} 
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
+                  />
+                </div>
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Name</label>
                   <input 
@@ -359,6 +380,11 @@ const AdminRooms = () => {
                 <div className="p-4 space-y-3">
                   <div className="flex justify-between items-start">
                     <h2 className="font-bold text-lg">{room.name}</h2>
+                    {room.roomNumber && (
+                      <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                        Room {room.roomNumber}
+                      </span>
+                    )}
                   </div>
 
                   <p className="text-[#C8A64D] font-bold text-lg">

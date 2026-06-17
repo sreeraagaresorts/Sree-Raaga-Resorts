@@ -9,6 +9,7 @@ import Rooms from "./ui/pages/Rooms";
 import RoomDetails from "./ui/pages/RoomDetails";
 import Events from "./ui/pages/Events";
 import Contact from "./ui/pages/Contact";
+import Menu from "./ui/pages/Menu";
 import Login from "./ui/UserReg/Login";
 import Register from "./ui/UserReg/Register";
 
@@ -29,6 +30,7 @@ import AdminDashboard from "./admin/AdminDashboard";
 import AdminBookings from "./admin/AdminBookings";
 import AdminRooms from "./admin/AdminRooms";
 import AdminEvents from "./admin/AdminEvents";
+import AdminMenu from "./admin/AdminMenu";
 import AdminUsers from "./admin/AdminUsers";
 import AdminBilling from "./admin/AdminBilling";
 import AdminSettings from "./admin/AdminSettings";
@@ -46,6 +48,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/rooms" element={<Rooms />} />
         <Route path="/rooms/:id" element={<RoomDetails />} />
+        <Route path="/menu" element={<Menu />} />
         <Route path="/events" element={<Events />} />
         <Route path="/contact" element={<Contact />} />
 
@@ -86,6 +89,7 @@ const App = () => {
         <Route index element={<AdminDashboard />} />
         <Route path="bookings" element={<AdminBookings />} />
         <Route path="rooms" element={<AdminRooms />} />
+        <Route path="menu" element={<AdminMenu />} />
         <Route path="events" element={<AdminEvents />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="billing" element={<AdminBilling />} />

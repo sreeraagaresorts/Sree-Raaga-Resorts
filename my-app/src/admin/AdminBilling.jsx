@@ -18,8 +18,8 @@ const AdminBilling = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchBookings = async () => {
-    setLoading(true);
+  const fetchBookings = async (silent = false) => {
+    if (!silent) setLoading(true);
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
       const response = await fetch(`${API_URL}/api/bookings`, {
@@ -34,14 +34,21 @@ const AdminBilling = () => {
         throw new Error(data.message || "Failed to load bookings for billing.");
       }
     } catch (err) {
-      setError(err.message);
+      if (!silent) setError(err.message);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchBookings();
+
+    // Auto-refresh billing silently every 10 seconds
+    const interval = setInterval(() => {
+      fetchBookings(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Calculate dynamic stats

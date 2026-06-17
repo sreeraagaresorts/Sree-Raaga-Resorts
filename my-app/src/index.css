@@ -2,7 +2,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 
-body{
-      /* font-family: "Cormorant Garamond", serif; */
-       font-family: "Playfair Display", serif;
+@theme {
+  --color-black: #0D2B4E;                /* Royal Blue */
+  --color-zinc-950: #0D2B4E;             /* Royal Blue */
+  --color-zinc-900: #1E3A6D;             /* Deep Blue */
+  --color-zinc-800: #2D5B8A;             /* Ocean Blue */
+  --color-yellow-500: #C8A64D;           /* Luxury Gold */
+  --color-yellow-400: #D8BF72;           /* Champagne Gold */
+  --color-white: #F7F4EC;                /* Soft Cream */
+  --color-gray-400: #D8C8A5;             /* Earth Beige */
+  --color-gray-300: #D8C8A5;             /* Earth Beige */
+  --color-gray-500: #2D5B8A;             /* Ocean Blue */
+}
+
+body {
+  font-family: "Playfair Display", serif;
+  background-color: #0D2B4E;
+  color: #F7F4EC;
 }

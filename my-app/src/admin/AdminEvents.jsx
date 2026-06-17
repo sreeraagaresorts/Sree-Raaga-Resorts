@@ -29,8 +29,8 @@ const AdminEvents = () => {
 
   const [saving, setSaving] = useState(false);
 
-  const fetchEvents = async () => {
-    setLoading(true);
+  const fetchEvents = async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const response = await fetch(`${API_URL}/api/events`);
       const data = await response.json();
@@ -40,14 +40,21 @@ const AdminEvents = () => {
         throw new Error(data.message || "Failed to load events.");
       }
     } catch (err) {
-      setError(err.message);
+      if (!silent) setError(err.message);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchEvents();
+
+    // Auto-refresh events silently every 10 seconds
+    const interval = setInterval(() => {
+      fetchEvents(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const openAddModal = () => {
