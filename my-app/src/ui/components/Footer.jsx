@@ -124,23 +124,25 @@ const Footer = () => {
 
             <div className="space-y-3 text-gray-400 text-sm">
               <p>
-                123 Luxury Avenue,
+                No. 1246, Budigere Bypass Road,
                 <br />
-                Forest Valley, Kerala
+                Devanahalli Hobli, Taluk Chamarayapatna,
+                <br />
+                Karnataka 562129
               </p>
 
               <a
-                href="mailto:info@sreeraaga.com"
+                href="mailto:info@sreeraagaresorts.in"
                 className="block hover:text-yellow-500 transition"
               >
-                info@sreeraaga.com
+                info@sreeraagaresorts.in
               </a>
 
               <a
-                href="tel:+18001234567"
+                href="tel:+918904561155"
                 className="block hover:text-yellow-500 transition"
               >
-                +1 800 123 4567
+                089045 61155
               </a>
             </div>
           </motion.div>

@@ -208,11 +208,13 @@ const Contact = () => {
                   </h3>
 
                   <p className="text-gray-400">
-                    123 Luxury Avenue
+                    No. 1246, Budigere Bypass Road,
                     <br />
-                    Forest Valley, Kerala
+                    Devanahalli Hobli,
                     <br />
-                    India
+                    Taluk Chamarayapatna,
+                    <br />
+                    Karnataka 562129
                   </p>
 
                 </div>
@@ -319,7 +321,7 @@ const Contact = () => {
               />
               <h3 className="mb-2">Call Us</h3>
               <p className="text-gray-400">
-                +91 9876543210
+                089045 61155
               </p>
             </div>
 
@@ -330,7 +332,7 @@ const Contact = () => {
               />
               <h3 className="mb-2">Email Us</h3>
               <p className="text-gray-400">
-                info@sreeraaga.com
+                info@sreeraagaresorts.in
               </p>
             </div>
 
@@ -340,8 +342,8 @@ const Contact = () => {
                 className="mx-auto mb-4 text-yellow-500"
               />
               <h3 className="mb-2">Address</h3>
-              <p className="text-gray-400">
-                Forest Valley, Kerala, India
+              <p className="text-gray-400 text-sm">
+                No. 1246, Budigere Bypass Road, Devanahalli Hobli, Taluk Chamarayapatna, Karnataka 562129
               </p>
             </div>
 

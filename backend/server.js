@@ -2,8 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
-const mongoSanitize = require("express-mongo-sanitize");
-const rateLimit = require("express-rate-limit");
+const mongoSanitize = require("./middleware/mongoSanitize");
 
 dotenv.config();
 
@@ -20,7 +19,7 @@ app.use(
 );
 
 // Prevent NoSQL Injection by sanitizing user-supplied data
-app.use(mongoSanitize());
+app.use(mongoSanitize);
 
 app.use(
   cors({
@@ -29,33 +28,7 @@ app.use(
   })
 );
 
-// Rate Limiting to prevent brute force / DDoS
-const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: {
-    success: false,
-    message: "Too many requests from this IP, please try again after 15 minutes."
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
 
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // limit each IP to 20 requests per windowMs
-  message: {
-    success: false,
-    message: "Too many authentication requests, please try again after 15 minutes."
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// Apply rate limiters to auth & general endpoints
-app.use("/api/auth/login", authLimiter);
-app.use("/api/auth/register", authLimiter);
-app.use("/api/", generalLimiter);
 
 app.use(express.json());
 

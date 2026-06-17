@@ -68,14 +68,33 @@ const Rooms = () => {
       {/* Rooms Section */}
       <section className="py-24 max-w-7xl mx-auto px-6">
 
-        <div className="text-center mb-16">
-          <p className="text-yellow-500 uppercase tracking-[4px] mb-4">
+        <div className="text-center mb-12">
+          <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs font-semibold">
             Accommodation
           </p>
 
-          <h2 className="text-5xl font-light">
-            Luxury Rooms & Suites
+          <h2 className="text-5xl font-light mb-6">
+            Stay With Comfort
           </h2>
+          
+          <p className="text-gray-400 max-w-3xl mx-auto leading-relaxed text-sm mb-12">
+            Choose from a range of comfortable accommodations designed for families, couples, and groups. Sree Raaga Resort features 55 total units across distinct categories, offering cozy rooms and premium villas. All rooms and villas accommodate 2 guests, except our signature Duplex Villa which accommodates 4.
+          </p>
+
+          {/* Quick Categories Overview */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto border border-yellow-500/10 p-6 bg-zinc-950 mb-16">
+            {[
+              { title: "Executive Rooms", desc: "35 well-appointed rooms" },
+              { title: "1 BHK Villas", desc: "9 villas for couples/families" },
+              { title: "Compact Villas", desc: "5 private villas" },
+              { title: "Duplex Villa", desc: "Private pool & premium experience" }
+            ].map((cat, idx) => (
+              <div key={idx} className="text-center">
+                <h4 className="text-yellow-500 font-semibold text-xs tracking-wider uppercase mb-1">{cat.title}</h4>
+                <p className="text-[10px] text-gray-500">{cat.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {loading && (
@@ -126,11 +145,17 @@ const Rooms = () => {
                 </div>
               </Link>
 
-              <h3 className="text-3xl font-light mb-4 group-hover:text-yellow-500 transition">
+              <h3 className="text-3xl font-light mb-1 group-hover:text-yellow-500 transition">
                 {room.name}
               </h3>
 
-              <div className="flex flex-wrap items-center gap-3 text-yellow-500 text-xs uppercase tracking-wider mb-5">
+              {room.category && (
+                <div className="text-[10px] text-yellow-500/80 uppercase tracking-widest font-bold mb-3">
+                  {room.category}
+                </div>
+              )}
+
+              <div className="flex flex-wrap items-center gap-3 text-white/50 text-xs uppercase tracking-wider mb-5">
                 <span>{room.area}</span>
                 <span>•</span>
                 <span>{room.beds}</span>

@@ -158,6 +158,52 @@ const Menu = () => {
           </div>
         </section>
 
+        {/* DINING VENUES SECTION */}
+        <section className="py-16 px-6 max-w-7xl mx-auto border-b border-yellow-500/10 bg-zinc-950/20">
+          <div className="text-center mb-12">
+            <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs font-semibold">
+              Our Culinary Spaces
+            </p>
+            <h2 className="text-4xl md:text-5xl font-light">
+              Delicious Culinary Experiences
+            </h2>
+            <p className="text-white/40 mt-4 max-w-2xl mx-auto font-light text-sm">
+              Enjoy a variety of authentic vegetarian and non-vegetarian dishes prepared by our experienced culinary team across four unique venues.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-6 text-center">
+            {[
+              {
+                title: "Dining Hall",
+                desc: "Spacious multi-cuisine dining hall offering fresh local specialties and buffet options.",
+                icon: "🍽️"
+              },
+              {
+                title: "Coffee Shop",
+                desc: "Charming space for freshly brewed coffee, light refreshments, and quick bites.",
+                icon: "☕"
+              },
+              {
+                title: "Bar & Restaurant",
+                desc: "Comfortable seating capacity for 150 members serving curated drinks and authentic dishes.",
+                icon: "🍷"
+              },
+              {
+                title: "Sports Bar & Club",
+                desc: "Features TT, Snooker, DJ sound, and indoor games. Ready to transform into a lively pub/nightclub.",
+                icon: "🎱"
+              }
+            ].map((venue, idx) => (
+              <div key={idx} className="border border-yellow-500/10 p-6 bg-zinc-900/40 rounded hover:border-yellow-500/30 transition">
+                <div className="text-3xl mb-4">{venue.icon}</div>
+                <h3 className="text-lg text-yellow-500 font-semibold mb-2">{venue.title}</h3>
+                <p className="text-xs text-gray-400 leading-relaxed font-light">{venue.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Menu Section */}
         <section className="py-20 max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">

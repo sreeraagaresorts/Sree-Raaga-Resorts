@@ -98,10 +98,10 @@ const About = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
 
             {[
-              { num: "99+", label: "Booking Month" },
-              { num: "130+", label: "Visitors Daily" },
-              { num: "86+", label: "Positive Feedback" },
-              { num: "23+", label: "Awards & Honors" },
+              { num: "55", label: "Luxury Rooms & Villas" },
+              { num: "5", label: "Banquet & Dining Spaces" },
+              { num: "800+", label: "Event Guest Capacity" },
+              { num: "60 ft", label: "Recreational Pool" },
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -121,6 +121,108 @@ const About = () => {
             ))}
 
           </div>
+        </div>
+      </section>
+
+      {/* PROPERTY OVERVIEW & INFRASTRUCTURE */}
+      <section className="py-24 max-w-7xl mx-auto px-6 border-b border-yellow-500/10">
+        <div className="text-center mb-16">
+          <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs font-semibold">
+            Property Overview
+          </p>
+          <h2 className="text-4xl md:text-5xl font-light">
+            Resort Facilities & Infrastructure
+          </h2>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          
+          {/* Rooms Inventory Card */}
+          <div className="bg-zinc-900/40 border border-yellow-500/10 p-8 rounded hover:border-yellow-500/30 transition duration-300">
+            <h3 className="text-2xl font-light text-yellow-500 mb-6 uppercase tracking-wider">Rooms Inventory</h3>
+            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+              Total 55 well-appointed rooms and luxury villas designed for couples, families, and groups.
+            </p>
+            <ul className="space-y-3.5 text-sm text-gray-300">
+              <li className="flex justify-between border-b border-white/5 pb-2">
+                <span>Executive Rooms</span>
+                <span className="font-bold text-yellow-500">35 units</span>
+              </li>
+              <li className="text-xs text-white/50 pl-4 space-y-1">
+                <p>• High-end Executive: 24 rooms</p>
+                <p>• Executive with Balcony: 9 rooms</p>
+                <p>• Executive without Balcony: 3 rooms</p>
+              </li>
+              <li className="flex justify-between border-b border-white/5 pb-2 pt-2">
+                <span>Luxury 1 BHK Villas</span>
+                <span className="font-bold text-yellow-500">9 units</span>
+              </li>
+              <li className="flex justify-between border-b border-white/5 pb-2">
+                <span>Compact Villas (Row-House Style)</span>
+                <span className="font-bold text-yellow-500">5 units</span>
+              </li>
+              <li className="flex justify-between pb-1">
+                <span>Premium Duplex Villa (with private pool)</span>
+                <span className="font-bold text-yellow-500">1 unit</span>
+              </li>
+              <p className="text-[10px] text-yellow-500/70 pt-2 italic leading-relaxed">
+                * Note: All units are double occupancy, except the Duplex Villa which accommodates 4.
+              </p>
+            </ul>
+          </div>
+
+          {/* Banquet & Dining Card */}
+          <div className="bg-zinc-900/40 border border-yellow-500/10 p-8 rounded hover:border-yellow-500/30 transition duration-300">
+            <h3 className="text-2xl font-light text-yellow-500 mb-6 uppercase tracking-wider">Banquet & Dining</h3>
+            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+              Equipped with 5 elegant banquet and culinary venues to support celebrations and conferences of all sizes.
+            </p>
+            <ul className="space-y-4 text-sm text-gray-300">
+              <li className="border-b border-white/5 pb-3">
+                <span className="font-bold text-yellow-500 block">Big Banquet Hall & Dining Hall</span>
+                <span className="text-xs text-gray-400">Hall: 500 seated, 800-900 floating. Attached Dining: 300 seated, 500-600 floating.</span>
+              </li>
+              <li className="border-b border-white/5 pb-3">
+                <span className="font-bold text-yellow-500 block">Mini Banquet Hall</span>
+                <span className="text-xs text-gray-400">Capacity: 300 seated, 400-500 floating. Intimate meetings & gatherings.</span>
+              </li>
+              <li className="border-b border-white/5 pb-3">
+                <span className="font-bold text-yellow-500 block">Restaurant & Bar</span>
+                <span className="text-xs text-gray-400">Indoor seating capacity for 150 members with multi-cuisine menu options.</span>
+              </li>
+              <li>
+                <span className="font-bold text-yellow-500 block">Sports Bar & Club</span>
+                <span className="text-xs text-gray-400">Features Snooker, Table Tennis, Carrom, Chess, Ludo, DJ setup. Perfect as a pub/night club.</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Recreation & Common Areas Card */}
+          <div className="bg-zinc-900/40 border border-yellow-500/10 p-8 rounded hover:border-yellow-500/30 transition duration-300">
+            <h3 className="text-2xl font-light text-yellow-500 mb-6 uppercase tracking-wider">Recreation & Outdoors</h3>
+            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+              Unwind and bond with various leisure spaces, water amenities, and outdoor event venues.
+            </p>
+            <ul className="space-y-4 text-sm text-gray-300">
+              <li className="border-b border-white/5 pb-3">
+                <span className="font-bold text-yellow-500 block">Luxury Swimming Pool</span>
+                <span className="text-xs text-gray-400">Size: 60 ft x 30 ft. Adult pool depth 5 ft. Kids splash pool depth 2.5 ft.</span>
+              </li>
+              <li className="border-b border-white/5 pb-3">
+                <span className="font-bold text-yellow-500 block">Poolside Facilities</span>
+                <span className="text-xs text-gray-400">Attached common washrooms, changing rooms, and open showers for convenience.</span>
+              </li>
+              <li className="border-b border-white/5 pb-3">
+                <span className="font-bold text-yellow-500 block">Large Landscaped Lawn</span>
+                <span className="text-xs text-gray-400">Spacious multi-utility outdoor lawn for open-air functions, corporate dinners, and team play.</span>
+              </li>
+              <li>
+                <span className="font-bold text-yellow-500 block">Big Outdoor Kitchen</span>
+                <span className="text-xs text-gray-400">Fully equipped separate outdoor kitchen for custom large scale catering events.</span>
+              </li>
+            </ul>
+          </div>
+
         </div>
       </section>
 

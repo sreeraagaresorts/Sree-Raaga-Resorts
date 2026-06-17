@@ -25,6 +25,7 @@ const AdminRooms = () => {
   const [roomNumber, setRoomNumber] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("Executive Rooms");
   const [area, setArea] = useState("");
   const [beds, setBeds] = useState("");
   const [bathrooms, setBathrooms] = useState("");
@@ -67,6 +68,7 @@ const AdminRooms = () => {
     setRoomNumber("");
     setName("");
     setPrice("");
+    setCategory("Executive Rooms");
     setArea("");
     setBeds("");
     setBathrooms("");
@@ -81,6 +83,7 @@ const AdminRooms = () => {
     setRoomNumber(room.roomNumber || "");
     setName(room.name);
     setPrice(room.price);
+    setCategory(room.category || "Executive Rooms");
     setArea(room.area);
     setBeds(room.beds);
     setBathrooms(room.bathrooms);
@@ -109,6 +112,7 @@ const AdminRooms = () => {
     formData.append("roomNumber", roomNumber);
     formData.append("name", name);
     formData.append("price", price);
+    formData.append("category", category);
     formData.append("area", area);
     formData.append("beds", beds);
     formData.append("bathrooms", bathrooms);
@@ -275,7 +279,7 @@ const AdminRooms = () => {
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
                   />
                 </div>
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Bathrooms</label>
                   <input 
                     required 
@@ -284,6 +288,19 @@ const AdminRooms = () => {
                     onChange={(e) => setBathrooms(e.target.value)} 
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
                   />
+                </div>
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Category</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white text-xs"
+                  >
+                    <option value="Executive Rooms">Executive Rooms</option>
+                    <option value="Luxury Villas">Luxury Villas</option>
+                    <option value="Compact Villas">Compact Villas</option>
+                    <option value="Duplex Villa">Duplex Villa</option>
+                  </select>
                 </div>
               </div>
 
@@ -379,9 +396,16 @@ const AdminRooms = () => {
                 {/* CONTENT */}
                 <div className="p-4 space-y-3">
                   <div className="flex justify-between items-start">
-                    <h2 className="font-bold text-lg">{room.name}</h2>
+                    <div>
+                      <h2 className="font-bold text-lg leading-tight">{room.name}</h2>
+                      {room.category && (
+                        <span className="text-[10px] text-yellow-500/80 uppercase tracking-widest font-bold">
+                          {room.category}
+                        </span>
+                      )}
+                    </div>
                     {room.roomNumber && (
-                      <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                      <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
                         Room {room.roomNumber}
                       </span>
                     )}

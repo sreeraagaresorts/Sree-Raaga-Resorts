@@ -141,7 +141,7 @@ const UserSettings = () => {
                 <p className="text-gray-400 text-[10px]">Permanently remove your profile details and archive booking logs.</p>
               </div>
               <button 
-                onClick={() => toast.info("Please contact resort admin at info@sreeraaga.com for account deletion.")}
+                onClick={() => toast.info("Please contact resort admin at info@sreeraagaresorts.in for account deletion.")}
                 className="bg-red-500/10 text-red-400 border border-red-500/30 px-5 py-2.5 rounded-none font-bold uppercase tracking-widest text-[10px] hover:bg-red-500 hover:text-white transition cursor-pointer"
               >
                 Delete Account
