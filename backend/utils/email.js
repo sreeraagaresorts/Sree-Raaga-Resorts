@@ -190,7 +190,7 @@ exports.sendWelcomeEmail = async (user) => {
 exports.sendLoginAlert = async (user) => {
   const dateStr = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
   const content = `
-    <div class="greeting">Account Login Security Alert</div>
+    <div class="greeting">Account Login</div>
     <p>Dear <strong>${user.full_name}</strong>,</p>
     <p>A new login was successfully processed for your Sree Raaga Resort account.</p>
     <div class="box">

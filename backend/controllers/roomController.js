@@ -62,9 +62,9 @@ exports.createRoom = async (req, res) => {
       name,
       price: parseFloat(price),
       image,
-      area: area ? parseInt(area) : null,
-      beds: beds ? parseInt(beds) : null,
-      bathrooms: bathrooms ? parseInt(bathrooms) : null,
+      area: area || null,
+      beds: beds || null,
+      bathrooms: bathrooms || null,
       description
     });
     await room.save();
@@ -97,9 +97,9 @@ exports.updateRoom = async (req, res) => {
     const updateData = {
       name,
       price: parseFloat(price),
-      area: area ? parseInt(area) : null,
-      beds: beds ? parseInt(beds) : null,
-      bathrooms: bathrooms ? parseInt(bathrooms) : null,
+      area: area || null,
+      beds: beds || null,
+      bathrooms: bathrooms || null,
       description
     };
 
