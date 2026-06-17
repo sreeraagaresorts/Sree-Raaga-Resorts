@@ -212,7 +212,7 @@ exports.sendLoginAlert = async (user) => {
 // 3. User Role Update Alert
 exports.sendRoleUpdatedEmail = async (user) => {
   const content = `
-    <div class="greeting">Profile Update Alert</div>
+    <div class="greeting">Profile Update </div>
     <p>Dear <strong>${user.full_name}</strong>,</p>
     <p>This is to inform you that your account profile privileges have been updated by the system administrator.</p>
     <div class="box">
@@ -316,7 +316,7 @@ exports.sendBookingDeletedEmail = async (booking) => {
   const checkOut = formatDate(booking.check_out);
   
   const content = `
-    <div class="greeting">Booking Cancellation Alert</div>
+    <div class="greeting">Booking Cancellation </div>
     <p>Dear <strong>${booking.guest_name || "Guest"}</strong>,</p>
     <p>This email confirms that reservation <strong>#${booking.id}</strong> has been cancelled and removed from Sree Raaga Resort active logs.</p>
     <div class="box">
