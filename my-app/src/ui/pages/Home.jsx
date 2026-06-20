@@ -628,7 +628,7 @@ export default function Home() {
                 image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=800" 
               }
             ].map((exp, index) => (
-              <div key={index} className="relative h-[650px] group  overflow-hidden shadow-lg">
+              <div key={index} className="relative h-[400px] sm:h-[500px] lg:h-[650px] group overflow-hidden shadow-lg">
                 <WindowReveal 
                   src={exp.image} 
                   alt={exp.title} 
@@ -669,7 +669,7 @@ export default function Home() {
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-4">
                 Sree Raaga Spaces
               </span>
-              <h2 className="text-2xl md:text-3xl font-light leading-snug mb-8 mx-20 ">
+              <h2 className="text-2xl md:text-3xl font-light leading-snug mb-8 mx-4 md:mx-20">
                 A Warm, Expressive, Beautiful And Urban Space
               </h2>
               <Link 

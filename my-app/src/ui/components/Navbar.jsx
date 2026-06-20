@@ -289,12 +289,6 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               {user ? (
                 <>
-                  <button
-                    onClick={handleSignOut}
-                    className="hover:text-red-400 text-white cursor-pointer uppercase tracking-widest text-xs lg:text-sm bg-transparent border-0 font-semibold"
-                  >
-                    Sign Out
-                  </button>
                   <Link
                     to="/dashboard/profile"
                     className="w-10 h-10 rounded-full border border-[#c8a64d] flex items-center justify-center text-[#c8a64d] hover:bg-[#c8a64d] hover:text-black transition duration-300"
@@ -316,7 +310,7 @@ const Navbar = () => {
             {/* Booking Call to Action */}
             <Link
               to="/rooms"
-              className="px-6 py-3  text-white hover:bg-[#b08e3b] transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-bold"
+              className="hidden md:inline-block px-6 py-3 bg-[#c8a64d] text-white hover:bg-[#b08e3b] transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-bold"
             >
               Book Your Stay
             </Link>
@@ -356,7 +350,7 @@ const Navbar = () => {
         )}
 
         {/* LEFT COLUMN: Large Serif Menu Links */}
-        <div className="flex-1 flex flex-col justify-center px-6 md:px-24 py-32 z-10">
+        <div className="flex-1 flex flex-col justify-center px-6 md:px-24 py-32 z-10 overflow-y-auto max-h-screen">
           <div ref={menuLinksRef} className="flex flex-col gap-5 md:gap-7">
             {menuLinks.map((link, idx) => (
               <div key={idx} className="overflow-hidden py-1">
@@ -366,7 +360,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     onMouseEnter={() => setCursorHovered(true)}
                     onMouseLeave={() => setCursorHovered(false)}
-                    className="text-4xl md:text-5xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] transition-colors duration-300 font-serif"
+                    className="text-3xl md:text-5xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] transition-colors duration-300 font-serif"
                   >
                     {link.name}
                     {/* Animated Underline */}
@@ -375,6 +369,36 @@ const Navbar = () => {
                 </span>
               </div>
             ))}
+
+            {/* Mobile Only Quick Actions */}
+            <div className="flex flex-col gap-4 mt-8 md:hidden border-t border-white/10 pt-8 max-w-xs w-full">
+              <Link 
+                to="/rooms"
+                onClick={() => setIsOpen(false)}
+                className="px-6 py-3 bg-[#c8a64d] text-white text-center rounded uppercase tracking-widest text-xs font-bold font-sans hover:bg-[#b08e3b] transition"
+              >
+                Book Your Stay
+              </Link>
+              {user ? (
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleSignOut();
+                  }}
+                  className="px-6 py-3 border border-red-500/35 text-red-400 text-center rounded uppercase tracking-widest text-xs font-bold font-sans hover:bg-red-500/10 transition cursor-pointer"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <Link 
+                  to="/login"
+                  onClick={() => setIsOpen(false)}
+                  className="px-6 py-3 border border-white/20 text-white text-center rounded uppercase tracking-widest text-xs font-bold font-sans hover:bg-white/10 transition"
+                >
+                  Login / Register
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
