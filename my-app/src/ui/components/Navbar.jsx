@@ -366,7 +366,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     onMouseEnter={() => setCursorHovered(true)}
                     onMouseLeave={() => setCursorHovered(false)}
-                    className="text-4xl md:text-6xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] transition-colors duration-300 font-serif"
+                    className="text-4xl md:text-5xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] transition-colors duration-300 font-serif"
                   >
                     {link.name}
                     {/* Animated Underline */}

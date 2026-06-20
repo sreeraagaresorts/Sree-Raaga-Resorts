@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "motion/react";
 import Navbar from "../components/Navbar";
@@ -15,6 +15,7 @@ import {
   Users, 
   ChevronLeft, 
   ChevronRight, 
+  ChevronDown,
   Sparkles 
 } from "lucide-react";
 
@@ -45,10 +46,10 @@ import { API_URL } from "../../config/api";
 // Custom "Window Open" Reveal scroll animation component
 function WindowReveal({ src, alt, className = "", delay = 0 }) {
   return (
-    <div className={`relative overflow-hidden ${className} group rounded-lg`}>
+    <div className={`relative overflow-hidden ${className} group `}>
       <motion.div
         initial={{ clipPath: "inset(15% 15% 15% 15% round 24px)" }}
-        whileInView={{ clipPath: "inset(0% 0% 0% 0% round 8px)" }}
+        whileInView={{ clipPath: "inset(0% 0% 0% 0% round 0px)" }}
         viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
         transition={{ duration: 1.4, ease: [0.25, 1, 0.35, 1], delay }}
         className="w-full h-full"
@@ -81,10 +82,16 @@ export default function Home() {
   // Gastronomy & Amenities interactive tab state
   const [activeTab, setActiveTab] = useState("suite");
 
-  // Booking search inputs
+  // Booking search inputs & refs
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState("2");
+  const [roomType, setRoomType] = useState("Rooms");
+  const [guests, setGuests] = useState("Guests");
+
+  const checkInRef = useRef(null);
+  const checkOutRef = useRef(null);
+  const roomRef = useRef(null);
+  const guestsRef = useRef(null);
 
   useEffect(() => {
     fetchRooms();
@@ -114,10 +121,19 @@ export default function Home() {
     return `${API_URL}/uploads/${image}`;
   };
 
+  const handleCheckInChange = (e) => {
+    setCheckIn(e.target.value);
+    setTimeout(() => {
+      if (checkOutRef.current) {
+        checkOutRef.current.showPicker ? checkOutRef.current.showPicker() : checkOutRef.current.click();
+      }
+    }, 150);
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     // Redirect to rooms with search query state
-    navigate("/rooms", { state: { checkIn, checkOut, guests } });
+    navigate("/rooms", { state: { checkIn, checkOut, guests, roomType } });
   };
 
   // Mock rooms for fallback if API is empty or loading fails
@@ -199,47 +215,75 @@ export default function Home() {
             </h1>
           </div>
 
-          {/* Floating Booking Panel */}
+          {/* Sleek Pill-shaped Booking Panel */}
           <div className="absolute bottom-0 translate-y-1/2 w-full z-20 px-4 md:px-10">
             <form 
               onSubmit={handleSearch}
-              className="max-w-6xl mx-auto bg-[#F7F4EC] p-6 lg:p-8 rounded-lg shadow-2xl border border-[#c8a64d]/20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-[#0d2b4e]"
+              className="max-w-4xl mx-auto bg-[#04121a]/65 backdrop-blur-md border border-white/10 rounded-3xl md:rounded-full px-6 py-4 md:py-2.5 flex flex-col md:flex-row items-center justify-between shadow-2xl mb-40"
             >
-              <div className="flex flex-col">
-                <label className="text-[#c8a64d] text-xs uppercase tracking-wider mb-2 font-bold flex items-center gap-2">
-                  <Calendar size={14} /> Check In
-                </label>
-                <input
-                  type="date"
-                  value={checkIn}
-                  onChange={(e) => setCheckIn(e.target.value)}
-                  className="w-full bg-white border border-[#c8a64d]/20 rounded px-3 py-2 outline-none text-sm focus:border-[#c8a64d]"
-                  required
-                />
+              
+              {/* Check In - Check Out Cell */}
+              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
+                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                  {checkIn || checkOut 
+                    ? `${checkIn ? checkIn : "Check In"} · ${checkOut ? checkOut : "Check Out"}` 
+                    : "Check In · Check Out"}
+                </span>
+                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
+                
+                {/* Hidden Native Calendar Inputs over the cell */}
+                <div className="absolute inset-0 flex">
+                  <input 
+                    type="date"
+                    value={checkIn}
+                    onChange={handleCheckInChange}
+                    className="w-1/2 h-full opacity-0 cursor-pointer absolute left-0 top-0 z-10"
+                    required
+                  />
+                  <input 
+                    ref={checkOutRef}
+                    type="date"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                    className="w-1/2 h-full opacity-0 cursor-pointer absolute right-0 top-0 z-10"
+                    required
+                  />
+                </div>
               </div>
 
-              <div className="flex flex-col">
-                <label className="text-[#c8a64d] text-xs uppercase tracking-wider mb-2 font-bold flex items-center gap-2">
-                  <Calendar size={14} /> Check Out
-                </label>
-                <input
-                  type="date"
-                  value={checkOut}
-                  onChange={(e) => setCheckOut(e.target.value)}
-                  className="w-full bg-white border border-[#c8a64d]/20 rounded px-3 py-2 outline-none text-sm focus:border-[#c8a64d]"
-                  required
-                />
+              {/* Rooms Selection Cell */}
+              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
+                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                  {roomType}
+                </span>
+                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
+                
+                <select
+                  value={roomType}
+                  onChange={(e) => setRoomType(e.target.value)}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                >
+                  <option value="Rooms" disabled hidden>Rooms</option>
+                  <option value="Any Suite">Any Suite</option>
+                  <option value="Executive Room">Executive Room</option>
+                  <option value="Private Villa">Private Villa</option>
+                  <option value="Duplex Villa">Duplex Villa</option>
+                </select>
               </div>
 
-              <div className="flex flex-col">
-                <label className="text-[#c8a64d] text-xs uppercase tracking-wider mb-2 font-bold flex items-center gap-2">
-                  <Users size={14} /> Guests
-                </label>
-                <select 
+              {/* Guests Selection Cell */}
+              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 group cursor-pointer">
+                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                  {guests === "Guests" ? "Guests" : (guests === "1" ? "1 Guest" : `${guests} Guests`)}
+                </span>
+                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
+                
+                <select
                   value={guests}
                   onChange={(e) => setGuests(e.target.value)}
-                  className="w-full bg-white border border-[#c8a64d]/20 rounded px-3 py-2 outline-none text-sm focus:border-[#c8a64d]"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                 >
+                  <option value="Guests" disabled hidden>Guests</option>
                   <option value="1">1 Guest</option>
                   <option value="2">2 Guests</option>
                   <option value="3">3 Guests</option>
@@ -247,54 +291,59 @@ export default function Home() {
                 </select>
               </div>
 
-              <div className="flex items-end">
-                <button 
-                  type="submit"
-                  className="w-full py-3 bg-[#c8a64d] text-white hover:bg-[#b08e3b] transition duration-300 font-semibold tracking-wider text-xs uppercase rounded cursor-pointer"
-                >
-                  Check Availability
-                </button>
-              </div>
+              {/* Circular GO Button */}
+              <button
+                type="submit"
+                className="w-11 h-11 rounded-full bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8] flex items-center justify-center font-bold tracking-wider transition-all duration-300 ml-0 md:ml-4 mt-3 md:mt-0 shrink-0 cursor-pointer text-xs font-sans shadow-md"
+              >
+                GO
+              </button>
             </form>
           </div>
         </section>
 
         {/* ================= SHOWCASE / ABOUT SECTION ================= */}
-        <section className="pt-32 pb-24 px-6 bg-white text-[#0d2b4e]">
-          <div className="max-w-6xl mx-auto text-center mb-16">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] text-sm block mb-3 font-semibold">
-              Sree Raaga
-            </span>
-            <h2 className="text-4xl md:text-5xl font-light tracking-[8px] uppercase mb-6">
-              Resorts
-            </h2>
-            <div className="w-16 h-[1px] bg-[#c8a64d] mx-auto mb-6"></div>
-            <p className="max-w-2xl mx-auto text-gray-600 leading-relaxed text-sm">
-              Sree Raaga Resorts offers a sanctuary of peace, where luxury meets nature. Discover our key highlights, private villa suites, and world-class experiences designed to inspire connection and create memories.
-            </p>
+        <section className="relative pt-24 pb-24 px-6 bg-white text-[#0d2b4e] overflow-hidden">
+          
+          {/* Outlined brand text behind the staggered images */}
+          <div 
+            className="absolute top-[8%] lg:top-[5%] left-1/2 -translate-x-1/2 text-[10vw] font-serif uppercase tracking-[15px] font-bold text-transparent select-none pointer-events-none text-center whitespace-nowrap opacity-60 z-0"
+            style={{ WebkitTextStroke: "1px rgba(13, 43, 78, 0.08)" }}
+          >
+            Sree Raaga
           </div>
 
-          {/* 3-Image Stagger Grid */}
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center mb-20 px-4">
+          {/* Staggered Images Grid */}
+          <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 items-center px-4 z-10 mb-12">
             <WindowReveal 
               src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
               alt="Villa Exterior" 
-              className="h-[380px] md:h-[420px]"
+              className="h-[280px] md:h-[350px] lg:h-[390px] rounded-xl"
             />
             
-            {/* Center image is offset upwards to match mockup layout */}
+            {/* Center image is taller and offset upwards, overlapping background text */}
             <WindowReveal 
               src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
               alt="Villa Interior" 
-              className="h-[380px] md:h-[420px] md:-translate-y-12"
+              className="h-[340px] md:h-[430px] lg:h-[480px] md:-translate-y-6 rounded-xl"
             />
             
             <WindowReveal 
               src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
               alt="Luxury Pool" 
-              className="h-[380px] md:h-[420px]"
+              className="h-[280px] md:h-[350px] lg:h-[390px] rounded-xl"
             />
           </div>
+
+          {/* Large Title Below Staggered Images */}
+          <h2 className="text-5xl md:text-8xl font-serif text-[#0d2b4e] tracking-[12px] uppercase text-center relative z-20 -mt-16 md:-mt-28 mb-6">
+            Resorts
+          </h2>
+
+          {/* Centered Curated Description */}
+          <p className="max-w-3xl mx-auto text-gray-500 text-center leading-relaxed text-xs lg:text-sm font-sans px-4 mb-20">
+            Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create lasting memories. Whether you're planning a romantic getaway, a family vacation, or a business trip, we have the perfect offer to suit your needs and elevate your experience.
+          </p>
 
           {/* Stats Bar */}
           <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -399,10 +448,10 @@ export default function Home() {
 
         {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
         <section className="py-24 px-6 bg-[#f4f7fc] text-[#0d2b4e]">
-          <div className="max-w-6xl mx-auto">
+          <div className="">
             
             {/* Icons Row */}
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-6 justify-center items-center py-8 border-b border-[#0d2b4e]/10 mb-20">
+            <div className="max-w-6xl mx-auto grid grid-cols-3 md:grid-cols-6 gap-6 justify-center items-center py-8 border-b border-[#0d2b4e]/10 mb-20">
               {[
                 { icon: <Wifi size={24} />, name: "Free Wi-Fi" },
                 { icon: <Dumbbell size={24} />, name: "Gym Center" },
@@ -430,7 +479,7 @@ export default function Home() {
                 <WindowReveal 
                   src={tabData[activeTab].image} 
                   alt={tabData[activeTab].title}
-                  className="h-[400px] md:h-[480px] rounded-lg shadow-2xl"
+                  className="h-[400px] md:h-[480px]  shadow-2xl"
                 />
                 {/* Custom circular interaction overlay */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center pointer-events-none scale-0 group-hover:scale-100 transition-all duration-500">
@@ -487,17 +536,10 @@ export default function Home() {
         </section>
 
         {/* ================= EXPERIENCES GRID ================= */}
-        <section className="py-24 px-6 bg-white text-[#0d2b4e]">
-          <div className="max-w-6xl mx-auto text-center mb-16">
-            <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
-              Guest Experiences
-            </span>
-            <h2 className="text-3xl md:text-4xl font-light font-serif">
-              Unrivaled Recreation
-            </h2>
-          </div>
+        <section className=" bg-white text-[#0d2b4e]">
+          
 
-          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
+          <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  ">
             {[
               { 
                 title: "Yoga Classes", 
@@ -516,7 +558,7 @@ export default function Home() {
                 image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=800" 
               }
             ].map((exp, index) => (
-              <div key={index} className="relative h-[400px] group rounded-lg overflow-hidden shadow-lg">
+              <div key={index} className="relative h-[650px] group  overflow-hidden shadow-lg">
                 <WindowReveal 
                   src={exp.image} 
                   alt={exp.title} 
@@ -524,8 +566,8 @@ export default function Home() {
                   delay={index * 0.15}
                 />
                 
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent z-10"></div>
+                {/* Gradient overlay
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent z-10"></div> */}
                 
                 {/* Content Overlay */}
                 <div className="absolute bottom-6 left-6 right-6 z-20 text-white text-center">
@@ -541,23 +583,23 @@ export default function Home() {
 
         {/* ================= A WARM, EXPRESSIVE URBAN SPACE ================= */}
         <section className="py-24 px-6 bg-[#fcfaf2] text-[#0d2b4e]">
-          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12">
+          <div className=" flex flex-col lg:flex-row items-center ">
             
             {/* Left Image */}
-            <div className="w-full lg:w-1/3">
+            <div className="w-full lg:w-1/4">
               <WindowReveal 
-                src="https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=800" 
+                src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
                 alt="Courtyard" 
                 className="h-[300px] lg:h-[400px] rounded-lg shadow-xl"
               />
             </div>
 
             {/* Central Box */}
-            <div className="w-full lg:w-1/3 text-center bg-[#F7F4EC] p-8 md:p-12 rounded-lg border border-[#c8a64d]/10 shadow-lg">
+            <div className="w-full lg:w-1/2 text-center  p-8 md:p-12 ">
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-4">
                 Sree Raaga Spaces
               </span>
-              <h2 className="text-2xl md:text-3xl font-light leading-snug mb-8 font-serif">
+              <h2 className="text-2xl md:text-3xl font-light leading-snug mb-8 mx-20 font-serif">
                 A Warm, Expressive, Beautiful And Urban Space
               </h2>
               <Link 
@@ -569,7 +611,7 @@ export default function Home() {
             </div>
 
             {/* Right Image */}
-            <div className="w-full lg:w-1/3">
+            <div className="w-full lg:w-1/4">
               <WindowReveal 
                 src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
                 alt="Lounge Lobby" 
