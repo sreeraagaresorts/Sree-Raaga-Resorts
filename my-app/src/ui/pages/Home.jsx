@@ -1,569 +1,736 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "motion/react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { 
+  Wifi, 
+  Dumbbell, 
+  Waves, 
+  Compass, 
+  Utensils, 
+  Car, 
+  ArrowRight, 
+  Calendar, 
+  Users, 
+  ChevronLeft, 
+  ChevronRight, 
+  Sparkles 
+} from "lucide-react";
 
+// Inline Instagram SVG component to avoid lucide-react version compatibility issues
+function InstagramIcon({ size = 20, className = "" }) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      className={className}
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
 
 import { API_URL } from "../../config/api";
 
+// Custom "Window Open" Reveal scroll animation component
+function WindowReveal({ src, alt, className = "", delay = 0 }) {
+  return (
+    <div className={`relative overflow-hidden ${className} group rounded-lg`}>
+      <motion.div
+        initial={{ clipPath: "inset(15% 15% 15% 15% round 24px)" }}
+        whileInView={{ clipPath: "inset(0% 0% 0% 0% round 8px)" }}
+        viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+        transition={{ duration: 1.4, ease: [0.25, 1, 0.35, 1], delay }}
+        className="w-full h-full"
+      >
+        <motion.img 
+          src={src} 
+          alt={alt} 
+          className="w-full h-full object-cover"
+          initial={{ scale: 1.15 }}
+          whileInView={{ scale: 1.0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.6, ease: [0.25, 1, 0.35, 1], delay }}
+        />
+      </motion.div>
+    </div>
+  );
+}
+
 export default function Home() {
-
-      const { scrollY } = useScroll();
-
+  const { scrollY } = useScroll();
+  const navigate = useNavigate();
+  
+  // Parallax effects
   const heroY = useTransform(scrollY, [0, 1000], [0, 300]);
-  const imageY = useTransform(scrollY, [0, 1000], [0, -100]);
-const [rooms, setRooms] = useState([]);
-const [loadingRooms, setLoadingRooms] = useState(true);
+  
+  // API states
+  const [rooms, setRooms] = useState([]);
+  const [loadingRooms, setLoadingRooms] = useState(true);
+  
+  // Gastronomy & Amenities interactive tab state
+  const [activeTab, setActiveTab] = useState("suite");
 
-useEffect(() => {
-  fetchRooms();
-}, []);
+  // Booking search inputs
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [guests, setGuests] = useState("2");
 
-const fetchRooms = async () => {
-  try {
-    const response = await fetch(
-      `${API_URL}/api/rooms`
-    );
+  useEffect(() => {
+    fetchRooms();
+  }, []);
 
-    const data = await response.json();
-
-    if (data.success) {
-      setRooms(data.data);
+  const fetchRooms = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/rooms`);
+      const data = await response.json();
+      if (data.success) {
+        setRooms(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    } finally {
+      setLoadingRooms(false);
     }
-  } catch (error) {
-    console.log(error);
-  } finally {
-    setLoadingRooms(false);
-  }
-};
+  };
 
-const getImageUrl = (image) => {
-  if (!image) {
-    return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
-  }
+  const getImageUrl = (image) => {
+    if (!image) {
+      return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
+    }
+    if (image.startsWith("http")) {
+      return image;
+    }
+    return `${API_URL}/uploads/${image}`;
+  };
 
-  if (image.startsWith("http")) {
-    return image;
-  }
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Redirect to rooms with search query state
+    navigate("/rooms", { state: { checkIn, checkOut, guests } });
+  };
 
-  return `${API_URL}/uploads/${image}`;
-};
+  // Mock rooms for fallback if API is empty or loading fails
+  const mockRooms = [
+    {
+      id: "executive-room",
+      name: "Executive Suite Room",
+      price: 5000,
+      area: "35 sq m",
+      beds: "1 Double Bed",
+      bathrooms: "1 Bathroom",
+      description: "A masterfully designed luxury room combining modern amenities with breathtaking resort views.",
+      image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1200"
+    },
+    {
+      id: "private-villa",
+      name: "Luxury Private Villa",
+      price: 8500,
+      area: "55 sq m",
+      beds: "1 King Bed",
+      bathrooms: "1 Bathroom",
+      description: "Unwind in your private sanctuary featuring elegant decor, a cozy lounge, and premium amenities.",
+      image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200"
+    }
+  ];
+
+  // Display rooms from DB or fall back to mock rooms
+  const displayRooms = rooms.length > 0 ? rooms.slice(0, 2) : mockRooms;
+
+  // Gastronomy Tab details
+  const tabData = {
+    suite: {
+      title: "Suite Room",
+      description: "Indulge in spacious elegance. Our suite rooms offer beautifully tailored interiors, premium luxury bedding, and private balconies that blend indoor comfort with the serene nature outdoors.",
+      image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1200"
+    },
+    restaurant: {
+      title: "Premium Restaurant",
+      description: "Savor gourmet dining crafted by expert chefs. Combining fresh local farm ingredients with global culinary techniques, our dining experiences are set in beautifully designed spaces overlooking the pools.",
+      image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200"
+    },
+    spa: {
+      title: "Wellness Spa",
+      description: "Rejuvenate your senses at our wellness retreat. From specialized massages to full-body treatments, our professional therapists utilize natural botanical oils to heal and refresh your body and mind.",
+      image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1200"
+    }
+  };
 
   return (
-<>
-  <Navbar/>
-    <div className="bg-black text-white">
-      {/* HERO SECTION */}
-      <section className="relative h-screen overflow-hidden flex items-center justify-center">
-      <motion.div
-  style={{ y: heroY }}
-  className="absolute inset-0 bg-cover bg-center"
->
-  <div
-    className="absolute inset-0 bg-cover bg-center"
-    style={{
-      backgroundImage:
-        "url('https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2000')",
-    }}
-  />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60"></div>
-        </motion.div>
+    <>
+      <Navbar />
+      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden font-serif">
+        
+        {/* ================= HERO SECTION ================= */}
+        <section className="relative h-screen overflow-hidden flex items-center justify-center">
+          <motion.div
+            style={{ y: heroY }}
+            className="absolute inset-0 bg-cover bg-center"
+          >
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2000')",
+              }}
+            />
+            <div className="absolute inset-0 bg-black/40"></div>
+          </motion.div>
 
-        <div className="relative z-10 text-center px-5 max-w-5xl">
-          <span className="text-yellow-500 uppercase tracking-[5px] block mb-6">
-            Sree Raaga Resorts
-          </span>
-
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light leading-tight mb-8">
-            A Symphony of <br />
-            <span className="italic text-yellow-500">
-              Nature & Luxury
+          <div className="relative z-10 text-center px-5 max-w-5xl text-white">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-sm font-semibold">
+              Sree Raaga Resorts
             </span>
-          </h1>
-
-          <div className="flex justify-center gap-5 flex-wrap">
-            <button className="px-8 py-3 bg-yellow-500 text-black font-medium hover:bg-yellow-400 transition">
-              Discover Rooms
-            </button>
-
-            <button className="px-8 py-3 border border-white hover:bg-white hover:text-black transition">
-              Our Story
-            </button>
+            <h1 className="text-4xl md:text-7xl lg:text-8xl font-light leading-tight mb-8 drop-shadow-md">
+              Experience Unparalleled <br />
+              <span className="italic font-normal text-[#D8BF72]">
+                Comfort
+              </span>
+            </h1>
           </div>
-        </div>
 
-        {/* Booking Card */}
-        <div className="absolute bottom-0 translate-y-1/2 w-full hidden lg:block px-10">
-          <div className="max-w-6xl mx-auto bg-zinc-900 p-8 shadow-2xl border border-yellow-500/20">
-            <div className="grid grid-cols-4 gap-6">
-              <div>
-                <label className="text-yellow-500 text-xs uppercase">
-                  Check In
+          {/* Floating Booking Panel */}
+          <div className="absolute bottom-0 translate-y-1/2 w-full z-20 px-4 md:px-10">
+            <form 
+              onSubmit={handleSearch}
+              className="max-w-6xl mx-auto bg-[#F7F4EC] p-6 lg:p-8 rounded-lg shadow-2xl border border-[#c8a64d]/20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-[#0d2b4e]"
+            >
+              <div className="flex flex-col">
+                <label className="text-[#c8a64d] text-xs uppercase tracking-wider mb-2 font-bold flex items-center gap-2">
+                  <Calendar size={14} /> Check In
                 </label>
                 <input
                   type="date"
-                  className="w-full bg-transparent border-b border-gray-500 py-2 outline-none"
+                  value={checkIn}
+                  onChange={(e) => setCheckIn(e.target.value)}
+                  className="w-full bg-white border border-[#c8a64d]/20 rounded px-3 py-2 outline-none text-sm focus:border-[#c8a64d]"
+                  required
                 />
               </div>
 
-              <div>
-                <label className="text-yellow-500 text-xs uppercase">
-                  Check Out
+              <div className="flex flex-col">
+                <label className="text-[#c8a64d] text-xs uppercase tracking-wider mb-2 font-bold flex items-center gap-2">
+                  <Calendar size={14} /> Check Out
                 </label>
                 <input
                   type="date"
-                  className="w-full bg-transparent border-b border-gray-500 py-2 outline-none"
+                  value={checkOut}
+                  onChange={(e) => setCheckOut(e.target.value)}
+                  className="w-full bg-white border border-[#c8a64d]/20 rounded px-3 py-2 outline-none text-sm focus:border-[#c8a64d]"
+                  required
                 />
               </div>
 
-              <div>
-                <label className="text-yellow-500 text-xs uppercase">
-                  Guests
+              <div className="flex flex-col">
+                <label className="text-[#c8a64d] text-xs uppercase tracking-wider mb-2 font-bold flex items-center gap-2">
+                  <Users size={14} /> Guests
                 </label>
-                <select className="w-full bg-transparent border-b border-gray-500 py-2 outline-none">
-                  <option className="text-black">
-                    2 Adults
-                  </option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-yellow-500 text-xs uppercase">
-                  Room
-                </label>
-                <select className="w-full bg-transparent border-b border-gray-500 py-2 outline-none">
-                  <option className="text-black">
-                    Any Suite
-                  </option>
-                </select>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <button className="px-8 py-3 bg-yellow-500 text-black font-semibold">
-                Book Stay
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* WELCOME & POSITIONING SECTION */}
-      <section className="py-24 px-6 bg-zinc-950/30">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs font-semibold">
-              A Destination for Work, Leisure, Celebrations & Community
-            </p>
-
-            <h2 className="text-4xl md:text-5xl font-light mb-8 leading-tight">
-              A Premier Destination for Getaways, Celebrations & Grand Events <br />
-              <span className="italic text-yellow-500">Near Bangalore</span>
-            </h2>
-
-            <p className="text-gray-300 leading-relaxed mb-8 text-base">
-              More than a resort, Sree Raaga is a vibrant destination where luxury stays, productive workspaces, memorable celebrations, corporate retreats, and family experiences come together. Whether you're planning a weekend getaway, a wedding, a team outing, or a productive workcation, every experience is designed to inspire connection and create lasting memories.
-            </p>
-
-            {/* Core Services Badges */}
-            <div className="flex flex-wrap gap-2 mb-8">
-              {[
-                "Luxury Stays",
-                "Day Outs",
-                "Co-Working",
-                "Weddings",
-                "Corporate Retreats",
-                "Grand Events"
-              ].map((service, index) => (
-                <span
-                  key={index}
-                  className="px-4 py-1.5 bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 text-xs tracking-wider uppercase font-medium rounded-full"
+                <select 
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
+                  className="w-full bg-white border border-[#c8a64d]/20 rounded px-3 py-2 outline-none text-sm focus:border-[#c8a64d]"
                 >
-                  {service}
-                </span>
-              ))}
-            </div>
+                  <option value="1">1 Guest</option>
+                  <option value="2">2 Guests</option>
+                  <option value="3">3 Guests</option>
+                  <option value="4">4+ Guests</option>
+                </select>
+              </div>
 
-            <button className="border border-yellow-500 px-8 py-3 text-sm tracking-widest uppercase hover:bg-yellow-500 hover:text-black transition duration-300">
-              Explore Resort
-            </button>
+              <div className="flex items-end">
+                <button 
+                  type="submit"
+                  className="w-full py-3 bg-[#c8a64d] text-white hover:bg-[#b08e3b] transition duration-300 font-semibold tracking-wider text-xs uppercase rounded cursor-pointer"
+                >
+                  Check Availability
+                </button>
+              </div>
+            </form>
           </div>
+        </section>
 
-          <div className="grid grid-cols-2 gap-6">
-            <img
-              src="https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=800"
-              alt="Resort Poolside"
-              className="h-[420px] w-full object-cover mt-12 rounded shadow-2xl border border-white/5"
-            />
-
-            <img
-              src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800"
-              alt="Luxury Stay Villa"
-              className="h-[420px] w-full object-cover rounded shadow-2xl border border-white/5"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* FACILITIES & CAPACITY SECTION */}
-      <section className="py-20 px-6 border-t border-yellow-500/10 bg-zinc-950">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs">
-              World-Class Infrastructure
-            </p>
-            <h2 className="text-4xl md:text-5xl font-light">
-              Spaces Designed for Impact
+        {/* ================= SHOWCASE / ABOUT SECTION ================= */}
+        <section className="pt-32 pb-24 px-6 bg-white text-[#0d2b4e]">
+          <div className="max-w-6xl mx-auto text-center mb-16">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] text-sm block mb-3 font-semibold">
+              Sree Raaga
+            </span>
+            <h2 className="text-4xl md:text-5xl font-light tracking-[8px] uppercase mb-6">
+              Resorts
             </h2>
+            <div className="w-16 h-[1px] bg-[#c8a64d] mx-auto mb-6"></div>
+            <p className="max-w-2xl mx-auto text-gray-600 leading-relaxed text-sm">
+              Sree Raaga Resorts offers a sanctuary of peace, where luxury meets nature. Discover our key highlights, private villa suites, and world-class experiences designed to inspire connection and create memories.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* 3-Image Stagger Grid */}
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center mb-20 px-4">
+            <WindowReveal 
+              src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
+              alt="Villa Exterior" 
+              className="h-[380px] md:h-[420px]"
+            />
+            
+            {/* Center image is offset upwards to match mockup layout */}
+            <WindowReveal 
+              src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
+              alt="Villa Interior" 
+              className="h-[380px] md:h-[420px] md:-translate-y-12"
+            />
+            
+            <WindowReveal 
+              src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
+              alt="Luxury Pool" 
+              className="h-[380px] md:h-[420px]"
+            />
+          </div>
+
+          {/* Stats Bar */}
+          <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              {
-                title: "800-Capacity Banquet Hall",
-                description: "Perfect for grand weddings, receptions, conferences, and massive celebrations.",
-                icon: "🏛️"
-              },
-              {
-                title: "500-Capacity Lawn",
-                description: "Vibrant open-air lawn space, ideal for scenic outdoor gatherings, cocktail dinners, and corporate team events.",
-                icon: "🌿"
-              },
-              {
-                title: "Mini Banquet Hall",
-                description: "Specially tailored for intimate parties, boardroom discussions, private meetings, and community gatherings.",
-                icon: "🚪"
-              },
-              {
-                title: "Villas, Pool & Recreation",
-                description: "Luxury villas for cozy stays, a sparkling swimming pool, and multiple indoor/outdoor sports & recreational spaces.",
-                icon: "🏊"
-              }
-            ].map((facility, index) => (
-              <div
-                key={index}
-                className="bg-zinc-900/50 border border-yellow-500/10 hover:border-yellow-500/30 p-8 rounded transition duration-300 hover:-translate-y-1"
-              >
-                <div className="text-4xl mb-5">{facility.icon}</div>
-                <h3 className="text-xl text-yellow-500 font-light mb-3">
-                  {facility.title}
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed font-light">
-                  {facility.description}
-                </p>
+              { number: "1,200+", label: "Guest Reviews" },
+              { number: "24/7", label: "Front Desk" },
+              { number: "15+", label: "Villa Suites" },
+              { number: "17+", label: "Amenities" }
+            ].map((stat, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <span className="text-3xl md:text-4xl font-light text-[#c8a64d] mb-1">{stat.number}</span>
+                <span className="text-xs uppercase tracking-widest text-gray-500 font-semibold">{stat.label}</span>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-{/* ROOMS SECTION */}
-<section className="py-24 px-6 bg-zinc-950">
-  <div className="max-w-7xl mx-auto">
+        {/* ================= ROOMS & SUITES SECTION ================= */}
+        <section className="py-24 px-6 bg-[#07162c] text-white">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex justify-between items-end mb-16 border-b border-white/10 pb-6">
+              <div>
+                <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
+                  Accommodation
+                </span>
+                <h2 className="text-3xl md:text-5xl font-light font-serif">
+                  Rooms & Suites
+                </h2>
+              </div>
+              <Link 
+                to="/rooms" 
+                className="text-[#c8a64d] hover:text-[#d8bf72] text-sm uppercase tracking-widest flex items-center gap-2 group transition"
+              >
+                View all <ArrowRight size={16} className="group-hover:translate-x-1 transition" />
+              </Link>
+            </div>
 
-    <div className="text-center mb-16">
-      <p className="text-yellow-500 uppercase tracking-[4px] mb-4">
-        Accommodation
-      </p>
+            {loadingRooms ? (
+              <div className="text-center py-12 text-[#c8a64d] tracking-widest">
+                Loading Rooms...
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-x-12 gap-y-16">
+                {displayRooms.map((room, idx) => (
+                  <motion.div
+                    key={room.id}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: idx * 0.2 }}
+                    className="group"
+                  >
+                    <Link to={`/rooms/${room.id}`} className="block">
+                      <div className="relative mb-6 aspect-[4/3] rounded-lg overflow-hidden">
+                        {/* Custom Window Open Reveal for Room Images */}
+                        <WindowReveal 
+                          src={getImageUrl(room.image)} 
+                          alt={room.name} 
+                          className="w-full h-full"
+                        />
+                        <div className="absolute bottom-6 left-6 z-20 bg-black/75 backdrop-blur-sm px-4 py-2 border border-[#c8a64d]/30 text-white rounded">
+                          <span className="text-xs uppercase tracking-widest font-semibold text-[#D8BF72]">
+                            Starts at ₹{Number(room.price).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
 
-      <h2 className="text-5xl font-light">
-        Rooms & Suites
-      </h2>
-    </div>
+                      <h3 className="text-2xl md:text-3xl font-light mb-2 group-hover:text-[#c8a64d] transition duration-300">
+                        {room.name}
+                      </h3>
 
-    {loadingRooms ? (
-      <div className="text-center py-10 text-yellow-500">
-        Loading Rooms...
-      </div>
-    ) : (
-      <div className="grid md:grid-cols-2 gap-x-12 gap-y-20">
+                      <div className="flex flex-wrap items-center gap-3 text-[#D8C8A5] text-xs uppercase tracking-widest mb-4">
+                        <span>{room.area}</span>
+                        <span>•</span>
+                        <span>{room.beds}</span>
+                        <span>•</span>
+                        <span>{room.bathrooms}</span>
+                      </div>
 
-        {rooms.slice(0, 4).map((room, idx) => (
-          <motion.div
-            key={room.id}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.6,
-              delay: idx * 0.1,
-            }}
-            className="group"
-          >
-            <Link
-              to={`/rooms/${room.id}`}
-              className="block"
-            >
-              <div className="relative overflow-hidden mb-6 aspect-[4/3]">
+                      <p className="text-gray-400 mb-6 text-sm leading-relaxed max-w-xl font-sans">
+                        {room.description}
+                      </p>
 
-                <div className="absolute inset-0 bg-black/20 z-10 group-hover:bg-transparent transition duration-500"></div>
+                      <div className="text-[#c8a64d] uppercase text-xs tracking-widest flex items-center gap-3 font-semibold group-hover:text-white transition">
+                        Room Details
+                        <span className="w-8 h-[1px] bg-[#c8a64d] group-hover:bg-white group-hover:w-12 transition-all duration-300"></span>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            )}
 
-                <img
-                  src={getImageUrl(room.image)}
-                  alt={room.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition duration-1000"
-                />
+            {/* Slider Dots Indicator */}
+            <div className="flex justify-center gap-2 mt-12">
+              <span className="w-8 h-1 bg-[#c8a64d] rounded-full"></span>
+              <span className="w-2 h-1 bg-white/30 rounded-full"></span>
+              <span className="w-2 h-1 bg-white/30 rounded-full"></span>
+            </div>
+          </div>
+        </section>
 
-                <div className="absolute bottom-6 left-6 z-20 bg-black/80 backdrop-blur px-4 py-2 border border-yellow-500/30">
-                  <span className="text-xs uppercase tracking-widest">
-                    Starts at ₹
-                    {Number(room.price).toLocaleString()}
+        {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
+        <section className="py-24 px-6 bg-[#f4f7fc] text-[#0d2b4e]">
+          <div className="max-w-6xl mx-auto">
+            
+            {/* Icons Row */}
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-6 justify-center items-center py-8 border-b border-[#0d2b4e]/10 mb-20">
+              {[
+                { icon: <Wifi size={24} />, name: "Free Wi-Fi" },
+                { icon: <Dumbbell size={24} />, name: "Gym Center" },
+                { icon: <Waves size={24} />, name: "Poolside" },
+                { icon: <Sparkles size={24} />, name: "Wellness Spa" },
+                { icon: <Utensils size={24} />, name: "Restaurant" },
+                { icon: <Car size={24} />, name: "Valet Parking" }
+              ].map((item, idx) => (
+                <div key={idx} className="flex flex-col items-center text-center group cursor-default">
+                  <div className="w-12 h-12 rounded-full border border-[#0d2b4e]/10 flex items-center justify-center mb-3 text-gray-500 group-hover:text-[#c8a64d] group-hover:border-[#c8a64d] transition-all duration-300">
+                    {item.icon}
+                  </div>
+                  <span className="text-[10px] md:text-xs uppercase tracking-wider font-semibold text-gray-500 group-hover:text-[#0d2b4e] transition">
+                    {item.name}
                   </span>
                 </div>
+              ))}
+            </div>
 
+            {/* Gastronomy Interactive Split */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              
+              {/* Left: Dynamic tab image */}
+              <div className="relative group">
+                <WindowReveal 
+                  src={tabData[activeTab].image} 
+                  alt={tabData[activeTab].title}
+                  className="h-[400px] md:h-[480px] rounded-lg shadow-2xl"
+                />
+                {/* Custom circular interaction overlay */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center pointer-events-none scale-0 group-hover:scale-100 transition-all duration-500">
+                  <span className="text-[10px] text-white uppercase tracking-widest font-semibold font-sans">View</span>
+                </div>
               </div>
 
-              <h3 className="text-3xl mb-3 group-hover:text-yellow-500 transition">
-                {room.name}
-              </h3>
+              {/* Right: Interactive Tabs List */}
+              <div>
+                <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-3">
+                  Hotel Facilities
+                </span>
+                <h2 className="text-3xl md:text-4xl font-light leading-tight mb-8 font-serif">
+                  Exceptional Gastronomy, <br />in Beautiful Spaces
+                </h2>
 
-              <div className="flex flex-wrap gap-3 text-yellow-500 text-xs uppercase mb-4">
-                <span>{room.area}</span>
-                <span>•</span>
-                <span>{room.beds}</span>
-                <span>•</span>
-                <span>{room.bathrooms}</span>
+                <div className="space-y-6">
+                  {Object.keys(tabData).map((key, idx) => {
+                    const isActive = activeTab === key;
+                    return (
+                      <div 
+                        key={key}
+                        onClick={() => setActiveTab(key)}
+                        className={`p-6 border-l-2 transition-all duration-300 cursor-pointer ${
+                          isActive 
+                            ? "border-[#c8a64d] bg-white shadow-md" 
+                            : "border-gray-200 hover:border-[#c8a64d]/40 hover:bg-white/50"
+                        }`}
+                      >
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className={`text-lg font-light tracking-wide transition ${isActive ? "text-[#c8a64d]" : "text-gray-500"}`}>
+                            0{idx + 1}. {tabData[key].title}
+                          </h3>
+                          {isActive && <ArrowRight size={18} className="text-[#c8a64d]" />}
+                        </div>
+                        {isActive && (
+                          <motion.p 
+                            initial={{ opacity: 0, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-gray-500 text-sm leading-relaxed font-sans"
+                          >
+                            {tabData[key].description}
+                          </motion.p>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
-              <p className="text-gray-400 mb-5 leading-relaxed">
-                {room.description}
-              </p>
+            </div>
 
-              <div className="text-yellow-500 uppercase text-xs tracking-widest flex items-center gap-3">
-                Room Details
+          </div>
+        </section>
 
-                <span className="w-8 h-[1px] bg-yellow-500 group-hover:w-12 transition-all duration-300"></span>
-              </div>
-            </Link>
-          </motion.div>
-        ))}
-
-      </div>
-    )}
-
-    <div className="text-center mt-16">
-      <Link
-        to="/rooms"
-        className="inline-block px-10 py-4 border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black transition duration-300"
-      >
-        View All Rooms
-      </Link>
-    </div>
-
-  </div>
-</section>
-
-      {/* EXPERIENCES FOR EVERY OCCASION */}
-      <section className="py-24 px-6 bg-zinc-950 border-t border-yellow-500/10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs font-semibold">
-              Customized Packages
-            </p>
-            <h2 className="text-4xl md:text-5xl font-light">
-              Experiences for Every Occasion
+        {/* ================= EXPERIENCES GRID ================= */}
+        <section className="py-24 px-6 bg-white text-[#0d2b4e]">
+          <div className="max-w-6xl mx-auto text-center mb-16">
+            <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
+              Guest Experiences
+            </span>
+            <h2 className="text-3xl md:text-4xl font-light font-serif">
+              Unrivaled Recreation
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
             {[
-              {
-                title: "Stay",
-                items: ["Executive Rooms", "Private Villas", "Duplex Villa"],
-                icon: "🏨",
-                desc: "Comfortable accommodations designed for families, couples, and groups."
+              { 
+                title: "Yoga Classes", 
+                image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800" 
               },
-              {
-                title: "Work",
-                items: ["Dedicated Co-Working Space", "Corporate Retreat Facilities", "Meeting & Networking Areas", "High-Speed Connectivity"],
-                icon: "💻",
-                desc: "A productive, high-speed workspace surrounded by tranquil nature."
+              { 
+                title: "Water Sports", 
+                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800" 
               },
-              {
-                title: "Play",
-                items: ["Swimming Pool", "Rain Dance", "Adventure Activities", "Indoor Games", "Outdoor Recreation"],
-                icon: "🎮",
-                desc: "Exciting recreational activities, water fun, and adventure challenges."
+              { 
+                title: "Scuba Diving", 
+                image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800" 
               },
-              {
-                title: "Celebrate",
-                items: ["Grand Banquet Hall", "Landscaped Event Lawn", "Mini Banquet Hall", "Wedding & Reception Venues"],
-                icon: "🎉",
-                desc: "Spectacular venues for grand weddings and corporate celebrations."
-              },
-              {
-                title: "Dine",
-                items: ["Multi-Cuisine Dining", "Coffee Shop", "Bar & Restaurant", "Sports Bar"],
-                icon: "🍽️",
-                desc: "Delicious culinary experiences crafted by our expert chefs."
+              { 
+                title: "Other Activities", 
+                image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=800" 
               }
             ].map((exp, index) => (
-              <div key={index} className="bg-zinc-900 border border-yellow-500/10 hover:border-yellow-500/30 p-6 rounded transition duration-300 flex flex-col justify-between hover:-translate-y-1">
-                <div>
-                  <div className="text-3xl mb-4">{exp.icon}</div>
-                  <h3 className="text-sm text-yellow-500 uppercase tracking-widest font-bold mb-3">{exp.title}</h3>
-                  <p className="text-xs text-white/50 mb-5 leading-relaxed">{exp.desc}</p>
-                  <ul className="space-y-2">
-                    {exp.items.map((item, idx) => (
-                      <li key={idx} className="text-xs text-white/80 flex items-center gap-2">
-                        <span className="w-1 h-1 bg-yellow-500 rounded-full shrink-0"></span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+              <div key={index} className="relative h-[400px] group rounded-lg overflow-hidden shadow-lg">
+                <WindowReveal 
+                  src={exp.image} 
+                  alt={exp.title} 
+                  className="w-full h-full"
+                  delay={index * 0.15}
+                />
+                
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent z-10"></div>
+                
+                {/* Content Overlay */}
+                <div className="absolute bottom-6 left-6 right-6 z-20 text-white text-center">
+                  <h3 className="text-xl font-light tracking-wide uppercase font-serif drop-shadow mb-1">
+                    {exp.title}
+                  </h3>
+                  <div className="w-8 h-[1px] bg-[#c8a64d] mx-auto scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* DAY OUT PACKAGE SECTION */}
-      <section className="py-24 px-6 bg-black relative overflow-hidden border-t border-yellow-500/10">
-        <div className="absolute right-0 top-0 w-96 h-96 bg-yellow-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
+        {/* ================= A WARM, EXPRESSIVE URBAN SPACE ================= */}
+        <section className="py-24 px-6 bg-[#fcfaf2] text-[#0d2b4e]">
+          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12">
             
-            <div className="lg:col-span-7">
-              <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs font-semibold">
-                Day Out
-              </p>
-              <h2 className="text-4xl md:text-5xl font-light mb-6 leading-tight">
-                A Premium Day-Out & <br />
-                <span className="italic text-yellow-500">Staycation Destination</span>
+            {/* Left Image */}
+            <div className="w-full lg:w-1/3">
+              <WindowReveal 
+                src="https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=800" 
+                alt="Courtyard" 
+                className="h-[300px] lg:h-[400px] rounded-lg shadow-xl"
+              />
+            </div>
+
+            {/* Central Box */}
+            <div className="w-full lg:w-1/3 text-center bg-[#F7F4EC] p-8 md:p-12 rounded-lg border border-[#c8a64d]/10 shadow-lg">
+              <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-4">
+                Sree Raaga Spaces
+              </span>
+              <h2 className="text-2xl md:text-3xl font-light leading-snug mb-8 font-serif">
+                A Warm, Expressive, Beautiful And Urban Space
               </h2>
-              <p className="text-gray-300 leading-relaxed mb-8">
-                Escape the city's hustle and enjoy a perfect blend of relaxation, adventure, dining, and family entertainment at Sree Raaga Resort. Spend a memorable day with family, friends, colleagues, or corporate teams amidst lush surroundings.
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-8 mb-8">
-                <div>
-                  <h4 className="text-yellow-500 font-medium uppercase tracking-wider text-xs mb-3">Package Includes</h4>
-                  <ul className="space-y-2 text-sm text-gray-400">
-                    <li className="flex items-center gap-2">✓ Welcome Drink</li>
-                    <li className="flex items-center gap-2">✓ Delicious Veg & Non-Veg Lunch Buffet</li>
-                    <li className="flex items-center gap-2">✓ Evening High Tea</li>
-                    <li className="flex items-center gap-2">✓ Access to Resort Amenities</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="text-yellow-500 font-medium uppercase tracking-wider text-xs mb-3">Activities Included</h4>
-                  <ul className="space-y-2 text-sm text-gray-400">
-                    <li className="flex items-center gap-2">✓ Rain Dance & Swimming Pool</li>
-                    <li className="flex items-center gap-2">✓ Adventure Activities & Team Challenges</li>
-                    <li className="flex items-center gap-2">✓ Indoor & Outdoor Games</li>
-                    <li className="flex items-center gap-2">✓ Dedicated Children's Play Area</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 bg-zinc-900 border border-yellow-500/20 p-8 rounded-xl text-center relative">
-              <div className="absolute top-0 right-10 translate-y-[-50%] bg-yellow-500 text-black px-4 py-1 text-[10px] font-bold uppercase tracking-widest rounded">
-                Best Value
-              </div>
-              <h3 className="text-xl font-light text-white mb-2">Day Out Package</h3>
-              <p className="text-gray-400 text-xs mb-6">Perfect for corporate teams and family gatherings</p>
-              
-              <div className="mb-8">
-                <span className="text-5xl font-bold text-yellow-500">₹1,800</span>
-                <span className="text-gray-400 text-xs ml-1">+ 18% GST / person</span>
-              </div>
-
               <Link 
-                to="/contact" 
-                className="w-full block py-4 bg-yellow-500 text-black font-bold uppercase tracking-widest text-xs hover:bg-yellow-400 transition"
+                to="/about"
+                className="inline-block px-8 py-3 bg-[#0d2b4e] text-white hover:bg-[#153a66] transition duration-300 text-xs uppercase tracking-widest font-semibold rounded"
               >
-                Book Your Day of Fun & Relaxation
+                Explore Space
               </Link>
-              <p className="text-[10px] text-gray-500 mt-4">Prior reservation is mandatory for day-out packages.</p>
+            </div>
+
+            {/* Right Image */}
+            <div className="w-full lg:w-1/3">
+              <WindowReveal 
+                src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
+                alt="Lounge Lobby" 
+                className="h-[300px] lg:h-[400px] rounded-lg shadow-xl"
+              />
             </div>
 
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CORPORATE OUTINGS SECTION */}
-      <section className="py-24 px-6 bg-zinc-950 border-t border-yellow-500/10">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          
-          <div className="order-2 lg:order-1">
-            <img 
-              src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800" 
-              alt="Corporate Outing" 
-              className="w-full h-[400px] object-cover rounded shadow-2xl border border-white/5"
-            />
-          </div>
+        {/* ================= UNIQUE EXPERIENCES ================= */}
+        <section className="py-24 px-6 bg-white text-[#0d2b4e]">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
+                Curated Packages
+              </span>
+              <h2 className="text-3xl md:text-4xl font-light font-serif">
+                Unique Experiences
+              </h2>
+            </div>
 
-          <div className="order-1 lg:order-2">
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs font-semibold">
-              Corporate Retreats
-            </p>
-            <h2 className="text-4xl md:text-5xl font-light mb-6 leading-tight">
-              Corporate Team Outings & <br />
-              <span className="italic text-yellow-500">Team Building</span>
-            </h2>
-            <p className="text-gray-300 leading-relaxed mb-8">
-              Sree Raaga Resort is the ideal destination for organizational growth and rejuvenation. Large event spaces combined with recreational activities make the resort suitable for companies of all sizes.
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                "Team Building Activities",
-                "Employee Engagement",
-                "Annual Day Celebrations",
-                "Leadership Retreats",
-                "Corporate Picnics",
-                "Training Programs"
-              ].map((activity, index) => (
-                <div key={index} className="flex items-center gap-2.5 text-sm text-gray-400">
-                  <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full shrink-0"></span>
-                  {activity}
+                {
+                  title: "Poolside Gathering & Retreats",
+                  desc: "Celebrate moments together with private dinners, corporate team outings, and pool activities.",
+                  image: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=800"
+                },
+                {
+                  title: "Hot Air Balloon Rides",
+                  desc: "Experience scenic early morning hot air balloon rides over the lush surrounding landscapes.",
+                  image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800"
+                },
+                {
+                  title: "Guided Nature Cycling Trails",
+                  desc: "Traverse offroad cycling tracks and forest paths accompanied by our expert instructors.",
+                  image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=800"
+                }
+              ].map((item, idx) => (
+                <div key={idx} className="group cursor-default">
+                  <div className="overflow-hidden mb-6 h-[260px] rounded-lg">
+                    <WindowReveal 
+                      src={item.image} 
+                      alt={item.title} 
+                      className="w-full h-full"
+                    />
+                  </div>
+                  <h3 className="text-xl font-light text-[#0d2b4e] mb-2 font-serif group-hover:text-[#c8a64d] transition duration-300">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm leading-relaxed font-sans">
+                    {item.desc}
+                  </p>
                 </div>
               ))}
             </div>
+          </div>
+        </section>
 
-            <Link 
-              to="/contact" 
-              className="inline-block border border-yellow-500 px-8 py-3 uppercase tracking-widest text-xs font-medium hover:bg-yellow-500 hover:text-black transition duration-300"
+        {/* ================= BOOK YOUR STAY NOW BANNER ================= */}
+        <section 
+          className="relative py-32 bg-fixed bg-cover bg-center flex items-center justify-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000')",
+          }}
+        >
+          <div className="absolute inset-0 bg-black/60"></div>
+          
+          <div className="relative z-10 max-w-4xl mx-auto text-center px-6 text-white">
+            <span className="text-[#D8BF72] uppercase tracking-[4px] text-xs font-semibold block mb-4">
+              Instant Booking
+            </span>
+            <h2 className="text-4xl md:text-5xl font-light mb-8 font-serif leading-tight">
+              Book Your Stay Now
+            </h2>
+            
+            {/* Mini Booking Form */}
+            <form 
+              onSubmit={handleSearch}
+              className="bg-[#F7F4EC] p-6 rounded-lg shadow-2xl flex flex-col md:flex-row gap-4 items-center justify-between text-[#0d2b4e] max-w-3xl mx-auto"
             >
-              Plan Corporate Event
-            </Link>
+              <div className="w-full text-left">
+                <label className="text-gray-400 text-[10px] uppercase font-bold tracking-wider">Check In</label>
+                <input 
+                  type="date" 
+                  value={checkIn}
+                  onChange={(e) => setCheckIn(e.target.value)}
+                  className="w-full bg-transparent border-b border-gray-300 py-1.5 outline-none text-xs focus:border-[#c8a64d]"
+                  required
+                />
+              </div>
+              <div className="w-full text-left">
+                <label className="text-gray-400 text-[10px] uppercase font-bold tracking-wider">Check Out</label>
+                <input 
+                  type="date" 
+                  value={checkOut}
+                  onChange={(e) => setCheckOut(e.target.value)}
+                  className="w-full bg-transparent border-b border-gray-300 py-1.5 outline-none text-xs focus:border-[#c8a64d]"
+                  required
+                />
+              </div>
+              <div className="w-full text-left">
+                <label className="text-gray-400 text-[10px] uppercase font-bold tracking-wider">Guests</label>
+                <select 
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
+                  className="w-full bg-transparent border-b border-gray-300 py-1.5 outline-none text-xs focus:border-[#c8a64d]"
+                >
+                  <option value="1">1 Guest</option>
+                  <option value="2">2 Guests</option>
+                  <option value="3">3 Guests</option>
+                  <option value="4">4+ Guests</option>
+                </select>
+              </div>
+              <button 
+                type="submit" 
+                className="w-full md:w-auto px-8 py-3 bg-[#c8a64d] text-white hover:bg-[#b08e3b] font-semibold text-xs uppercase tracking-widest rounded whitespace-nowrap cursor-pointer transition duration-300"
+              >
+                Book Now
+              </button>
+            </form>
+          </div>
+        </section>
+
+        {/* ================= FOLLOW US ON INSTAGRAM ================= */}
+        <section className="py-24 px-6 bg-white text-[#0d2b4e]">
+          <div className="max-w-6xl mx-auto text-center mb-12">
+            <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
+              Social Media
+            </span>
+            <h2 className="text-3xl font-light font-serif flex items-center justify-center gap-2">
+              Follow us on Instagram <InstagramIcon size={20} className="text-[#c8a64d]" />
+            </h2>
           </div>
 
-        </div>
-      </section>
+          <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
+            {[
+              "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=600",
+              "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600",
+              "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
+              "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=600"
+            ].map((img, i) => (
+              <div key={i} className="relative aspect-square overflow-hidden group rounded-md shadow-sm">
+                <img 
+                  src={img} 
+                  alt={`Instagram Showcase ${i}`} 
+                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+                />
+                <div className="absolute inset-0 bg-[#0d2b4e]/60 opacity-0 group-hover:opacity-100 transition duration-300 z-10 flex items-center justify-center">
+                  <InstagramIcon size={28} className="text-white" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      {/* PARALLAX QUOTE SECTION */}
-      <section
-        className="relative py-32 bg-fixed bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=2000')",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/70"></div>
-
-        <div className="relative z-10 max-w-4xl mx-auto text-center px-6">
-          <div className="text-6xl text-yellow-500 mb-6">"</div>
-
-          <p className="text-3xl italic leading-relaxed mb-10">
-            Their talented team of passionate chefs masterfully crafts each
-            dish, combining the finest ingredients with innovative techniques.
-          </p>
-
-          <h4 className="text-yellow-500 uppercase tracking-[4px]">
-            Steven K. Roberts
-          </h4>
-
-          <p className="text-gray-400 mt-2">
-            From USA
-          </p>
-        </div>
-      </section>
-    </div>
-        <Footer/>
-</>
+      </div>
+      <Footer />
+    </>
   );
 }
