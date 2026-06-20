@@ -185,7 +185,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden font-serif">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden ">
         
         {/* ================= HERO SECTION ================= */}
         <section className="relative h-screen overflow-hidden flex items-center justify-center">
@@ -307,36 +307,35 @@ export default function Home() {
           
           {/* Outlined brand text behind the staggered images */}
           <div 
-            className="absolute top-[8%] lg:top-[5%] left-1/2 -translate-x-1/2 text-[10vw] font-serif uppercase tracking-[15px] font-bold text-transparent select-none pointer-events-none text-center whitespace-nowrap opacity-60 z-0"
-            style={{ WebkitTextStroke: "1px rgba(13, 43, 78, 0.08)" }}
+            className="absolute top-[8%] lg:top-[-1%] left-1/2 -translate-x-1/2 text-[7vw]  uppercase tracking-[10px] font-medium text-[#c8a64d]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
           >
             Sree Raaga
           </div>
 
           {/* Staggered Images Grid */}
-          <div className="relative max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 items-center px-4 z-10 mb-12">
+          <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-14 items-center px-4 z-10 mb-12">
             <WindowReveal 
               src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
               alt="Villa Exterior" 
-              className="h-[280px] md:h-[350px] lg:h-[390px] rounded-xl"
+              className="h-[280px] md:h-[350px] lg:h-[400px] rounded-xl"
             />
             
             {/* Center image is taller and offset upwards, overlapping background text */}
             <WindowReveal 
               src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
               alt="Villa Interior" 
-              className="h-[340px] md:h-[430px] lg:h-[480px] md:-translate-y-6 rounded-xl"
+              className="h-[340px] md:h-[430px] lg:h-[550px] md:-translate-y-6 rounded-xl"
             />
             
             <WindowReveal 
               src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
               alt="Luxury Pool" 
-              className="h-[280px] md:h-[350px] lg:h-[390px] rounded-xl"
+              className="h-[280px] md:h-[350px] lg:h-[400px] rounded-xl"
             />
           </div>
 
           {/* Large Title Below Staggered Images */}
-          <h2 className="text-5xl md:text-8xl font-serif text-[#0d2b4e] tracking-[12px] uppercase text-center relative z-20 -mt-16 md:-mt-28 mb-6">
+          <h2 className="text-5xl md:text-8xl  text-[#0d2b4e] tracking-[12px] uppercase text-center relative z-20 -mt-16 md:-mt-28 mb-6">
             Resorts
           </h2>
 
@@ -369,7 +368,7 @@ export default function Home() {
                 <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
                   Accommodation
                 </span>
-                <h2 className="text-3xl md:text-5xl font-light font-serif">
+                <h2 className="text-3xl md:text-5xl font-light ">
                   Rooms & Suites
                 </h2>
               </div>
@@ -492,7 +491,7 @@ export default function Home() {
                 <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-3">
                   Hotel Facilities
                 </span>
-                <h2 className="text-3xl md:text-4xl font-light leading-tight mb-8 font-serif">
+                <h2 className="text-3xl md:text-4xl font-light leading-tight mb-8 ">
                   Exceptional Gastronomy, <br />in Beautiful Spaces
                 </h2>
 
@@ -571,7 +570,7 @@ export default function Home() {
                 
                 {/* Content Overlay */}
                 <div className="absolute bottom-6 left-6 right-6 z-20 text-white text-center">
-                  <h3 className="text-xl font-light tracking-wide uppercase font-serif drop-shadow mb-1">
+                  <h3 className="text-xl font-light tracking-wide uppercase  drop-shadow mb-1">
                     {exp.title}
                   </h3>
                   <div className="w-8 h-[1px] bg-[#c8a64d] mx-auto scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
@@ -590,7 +589,7 @@ export default function Home() {
               <WindowReveal 
                 src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
                 alt="Courtyard" 
-                className="h-[300px] lg:h-[400px]  shadow-xl"
+                className="h-[300px] lg:h-[600px]  shadow-xl"
               />
             </div>
 
@@ -599,7 +598,7 @@ export default function Home() {
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-4">
                 Sree Raaga Spaces
               </span>
-              <h2 className="text-2xl md:text-3xl font-light leading-snug mb-8 mx-20 font-serif">
+              <h2 className="text-2xl md:text-3xl font-light leading-snug mb-8 mx-20 ">
                 A Warm, Expressive, Beautiful And Urban Space
               </h2>
               <Link 
@@ -615,7 +614,7 @@ export default function Home() {
               <WindowReveal 
                 src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
                 alt="Lounge Lobby" 
-                className="h-[300px] lg:h-[400px]  shadow-xl"
+                className="h-[300px] lg:h-[600px]  shadow-xl"
               />
             </div>
 
@@ -623,51 +622,72 @@ export default function Home() {
         </section>
 
         {/* ================= UNIQUE EXPERIENCES ================= */}
-        <section className="py-24 px-6 bg-white text-[#0d2b4e]">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
-                Curated Packages
+        <section className="py-24  bg-[#f0e6d2] text-[#0d2b4e]">
+          <div className="">
+            <div className="max-w-6xl mx-auto text-center mb-16">
+              <span className="text-gray-500 uppercase tracking-[4px] text-xs font-semibold block mb-2 font-sans">
+                There's so much to discover
               </span>
-              <h2 className="text-3xl md:text-4xl font-light font-serif">
+              <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
                 Unique Experiences
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "Poolside Gathering & Retreats",
-                  desc: "Celebrate moments together with private dinners, corporate team outings, and pool activities.",
-                  image: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=800"
-                },
-                {
-                  title: "Hot Air Balloon Rides",
-                  desc: "Experience scenic early morning hot air balloon rides over the lush surrounding landscapes.",
-                  image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800"
-                },
-                {
-                  title: "Guided Nature Cycling Trails",
-                  desc: "Traverse offroad cycling tracks and forest paths accompanied by our expert instructors.",
-                  image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=800"
-                }
-              ].map((item, idx) => (
-                <div key={idx} className="group cursor-default">
-                  <div className="overflow-hidden mb-6 h-[260px] rounded-lg">
-                    <WindowReveal 
-                      src={item.image} 
-                      alt={item.title} 
-                      className="w-full h-full"
-                    />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12  ">
+              
+              {/* Card 1: Poolside/Beach Retreat */}
+              <div className="group cursor-default flex flex-col relative">
+                <div className="relative overflow-hidden mb-6 h-[280px] lg:h-[420px] ">
+                  <WindowReveal 
+                    src="https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=800" 
+                    alt="Poolside Retreat" 
+                    className="w-full h-full"
+                  />
+                  {/* Left Circle Arrow Overlay */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#c8a64d] text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer transition duration-300 shadow-lg">
+                    <ChevronLeft size={20} />
                   </div>
-                  <h3 className="text-xl font-light text-[#0d2b4e] mb-2 font-serif group-hover:text-[#c8a64d] transition duration-300">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-500 text-sm leading-relaxed font-sans">
-                    {item.desc}
-                  </p>
                 </div>
-              ))}
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-sans font-bold mb-2">03</span>
+                <h3 className="text-2xl font-light text-[#0d2b4e]  hover:text-[#c8a64d] transition duration-300">
+                  Poolside Retreats
+                </h3>
+              </div>
+
+              {/* Card 2: Hot Air Balloon (Active/Center) */}
+              <div className="group cursor-default flex flex-col relative md:-translate-y-10">
+                <div className="relative overflow-hidden mb-6 h-[280px] lg:h-[350px] ">
+                  <WindowReveal 
+                    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800" 
+                    alt="Balloon Rides" 
+                    className="w-full h-full"
+                  />
+                </div>
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-sans font-bold mb-2">01</span>
+                <h3 className="text-2xl font-light text-[#0d2b4e]  hover:text-[#c8a64d] transition duration-300">
+                  Balloon Rides
+                </h3>
+              </div>
+
+              {/* Card 3: Cycling Nature Trails */}
+              <div className="group cursor-default flex flex-col relative">
+                <div className="relative overflow-hidden mb-6 h-[280px] lg:h-[420px] ">
+                  <WindowReveal 
+                    src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=800" 
+                    alt="Bike Rides" 
+                    className="w-full h-full"
+                  />
+                  {/* Right Circle Arrow Overlay */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#c8a64d] text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer transition duration-300 shadow-lg">
+                    <ChevronRight size={20} />
+                  </div>
+                </div>
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-sans font-bold mb-2">02</span>
+                <h3 className="text-2xl font-light text-[#0d2b4e]  hover:text-[#c8a64d] transition duration-300">
+                  Bike Rides
+                </h3>
+              </div>
+
             </div>
           </div>
         </section>
@@ -686,70 +706,107 @@ export default function Home() {
             <span className="text-[#D8BF72] uppercase tracking-[4px] text-xs font-semibold block mb-4">
               Instant Booking
             </span>
-            <h2 className="text-4xl md:text-5xl font-light mb-8 font-serif leading-tight">
+            <h2 className="text-4xl md:text-5xl font-light mb-8  leading-tight">
               Book Your Stay Now
             </h2>
             
-            {/* Mini Booking Form */}
+            {/* Sleek Pill-shaped Booking Panel */}
             <form 
               onSubmit={handleSearch}
-              className="bg-[#F7F4EC] p-6 rounded-lg shadow-2xl flex flex-col md:flex-row gap-4 items-center justify-between text-[#0d2b4e] max-w-3xl mx-auto"
+              className="max-w-4xl mx-auto bg-[#04121a]/65 backdrop-blur-md border border-white/10 rounded-3xl md:rounded-full px-18 py-4 md:py-2.5 flex flex-col md:flex-row items-center justify-between shadow-2xl text-left"
             >
-              <div className="w-full text-left">
-                <label className="text-gray-400 text-[10px] uppercase font-bold tracking-wider">Check In</label>
-                <input 
-                  type="date" 
-                  value={checkIn}
-                  onChange={(e) => setCheckIn(e.target.value)}
-                  className="w-full bg-transparent border-b border-gray-300 py-1.5 outline-none text-xs focus:border-[#c8a64d]"
-                  required
-                />
+              
+              {/* Check In - Check Out Cell */}
+              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
+                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                  {checkIn || checkOut 
+                    ? `${checkIn ? checkIn : "Check In"} · ${checkOut ? checkOut : "Check Out"}` 
+                    : "Check In · Check Out"}
+                </span>
+                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
+                
+                {/* Hidden Native Calendar Inputs over the cell */}
+                <div className="absolute inset-0 flex">
+                  <input 
+                    type="date"
+                    value={checkIn}
+                    onChange={handleCheckInChange}
+                    className="w-1/2 h-full opacity-0 cursor-pointer absolute left-0 top-0 z-10"
+                    required
+                  />
+                  <input 
+                    type="date"
+                    value={checkOut}
+                    onChange={(e) => setCheckOut(e.target.value)}
+                    className="w-1/2 h-full opacity-0 cursor-pointer absolute right-0 top-0 z-10"
+                    required
+                  />
+                </div>
               </div>
-              <div className="w-full text-left">
-                <label className="text-gray-400 text-[10px] uppercase font-bold tracking-wider">Check Out</label>
-                <input 
-                  type="date" 
-                  value={checkOut}
-                  onChange={(e) => setCheckOut(e.target.value)}
-                  className="w-full bg-transparent border-b border-gray-300 py-1.5 outline-none text-xs focus:border-[#c8a64d]"
-                  required
-                />
+
+              {/* Rooms Selection Cell */}
+              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
+                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                  {roomType}
+                </span>
+                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
+                
+                <select
+                  value={roomType}
+                  onChange={(e) => setRoomType(e.target.value)}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                >
+                  <option value="Rooms" disabled hidden>Rooms</option>
+                  <option value="Any Suite">Any Suite</option>
+                  <option value="Executive Room">Executive Room</option>
+                  <option value="Private Villa">Private Villa</option>
+                  <option value="Duplex Villa">Duplex Villa</option>
+                </select>
               </div>
-              <div className="w-full text-left">
-                <label className="text-gray-400 text-[10px] uppercase font-bold tracking-wider">Guests</label>
-                <select 
+
+              {/* Guests Selection Cell */}
+              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 group cursor-pointer">
+                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                  {guests === "Guests" ? "Guests" : (guests === "1" ? "1 Guest" : `${guests} Guests`)}
+                </span>
+                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
+                
+                <select
                   value={guests}
                   onChange={(e) => setGuests(e.target.value)}
-                  className="w-full bg-transparent border-b border-gray-300 py-1.5 outline-none text-xs focus:border-[#c8a64d]"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                 >
+                  <option value="Guests" disabled hidden>Guests</option>
                   <option value="1">1 Guest</option>
                   <option value="2">2 Guests</option>
                   <option value="3">3 Guests</option>
                   <option value="4">4+ Guests</option>
                 </select>
               </div>
-              <button 
-                type="submit" 
-                className="w-full md:w-auto px-8 py-3 bg-[#c8a64d] text-white hover:bg-[#b08e3b] font-semibold text-xs uppercase tracking-widest rounded whitespace-nowrap cursor-pointer transition duration-300"
+
+              {/* Circular GO Button */}
+              <button
+                type="submit"
+                className="w-11 h-11 rounded-full bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8] flex items-center justify-center font-bold tracking-wider transition-all duration-300 ml-0 md:ml-4 mt-3 md:mt-0 shrink-0 cursor-pointer text-xs font-sans shadow-md"
               >
-                Book Now
+                GO
               </button>
             </form>
           </div>
         </section>
 
         {/* ================= FOLLOW US ON INSTAGRAM ================= */}
-        <section className="py-24 px-6 bg-white text-[#0d2b4e]">
-          <div className="max-w-6xl mx-auto text-center mb-12">
+        <section className="  bg-white text-[#0d2b4e]">
+          <div className="py-12 text-center mb-12">
             <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
               Social Media
             </span>
-            <h2 className="text-3xl font-light font-serif flex items-center justify-center gap-2">
+            <h2 className="text-5xl font-light  flex items-center justify-center gap-2">
               Follow us on Instagram <InstagramIcon size={20} className="text-[#c8a64d]" />
             </h2>
           </div>
 
-          <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
+          <div className=" grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5  ">
             {[
               "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=600",
               "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
@@ -757,7 +814,7 @@ export default function Home() {
               "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
               "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=600"
             ].map((img, i) => (
-              <div key={i} className="relative aspect-square overflow-hidden group rounded-md shadow-sm">
+              <div key={i} className="relative aspect-square overflow-hidden group  shadow-sm">
                 <img 
                   src={img} 
                   alt={`Instagram Showcase ${i}`} 
