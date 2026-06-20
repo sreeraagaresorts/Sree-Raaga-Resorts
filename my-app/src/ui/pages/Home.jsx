@@ -590,7 +590,7 @@ export default function Home() {
               <WindowReveal 
                 src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
                 alt="Courtyard" 
-                className="h-[300px] lg:h-[400px] rounded-lg shadow-xl"
+                className="h-[300px] lg:h-[400px]  shadow-xl"
               />
             </div>
 
@@ -615,7 +615,7 @@ export default function Home() {
               <WindowReveal 
                 src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
                 alt="Lounge Lobby" 
-                className="h-[300px] lg:h-[400px] rounded-lg shadow-xl"
+                className="h-[300px] lg:h-[400px]  shadow-xl"
               />
             </div>
 
