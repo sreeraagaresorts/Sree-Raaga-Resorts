@@ -74,10 +74,85 @@ export default function Home() {
   
   // Parallax effects
   const heroY = useTransform(scrollY, [0, 1000], [0, 300]);
-  
+
   // API states
   const [rooms, setRooms] = useState([]);
   const [loadingRooms, setLoadingRooms] = useState(true);
+
+  // Mock rooms for fallback if API is empty or loading fails
+  const mockRooms = [
+    {
+      id: "executive-room",
+      name: "Executive Suite Room",
+      price: 5000,
+      area: "35 sq m",
+      beds: "1 Double Bed",
+      bathrooms: "1 Bathroom",
+      description: "A masterfully designed luxury room combining modern amenities with breathtaking resort views.",
+      image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1200"
+    },
+    {
+      id: "private-villa",
+      name: "Luxury Private Villa",
+      price: 8500,
+      area: "55 sq m",
+      beds: "1 King Bed",
+      bathrooms: "1 Bathroom",
+      description: "Unwind in your private sanctuary featuring elegant decor, a cozy lounge, and premium amenities.",
+      image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200"
+    },
+    {
+      id: "duplex-villa",
+      name: "Duplex Royal Villa",
+      price: 12000,
+      area: "75 sq m",
+      beds: "2 King Beds",
+      bathrooms: "2 Bathrooms",
+      description: "Experience absolute grandeur with two spacious stories, private deck, and bespoke royal butler service.",
+      image: "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=1200"
+    }
+  ];
+
+  // Display rooms from DB or fall back to mock rooms
+  const displayRooms = rooms.length > 0 ? rooms.slice(0, 4) : mockRooms;
+
+  // Auto-playing Infinite Loop Carousel for Rooms & Suites Section
+  const N = displayRooms.length;
+  const [currentIndex, setCurrentIndex] = useState(N); // start at the middle copy
+  const [animate, setAnimate] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Cloned array for infinite looping
+  const allSlides = [...displayRooms, ...displayRooms, ...displayRooms];
+
+  // Auto scroll effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setAnimate(true);
+      setCurrentIndex((prev) => prev + 1);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Snap back silently after sliding beyond the middle set
+  useEffect(() => {
+    if (currentIndex >= 2 * N) {
+      const snapTimer = setTimeout(() => {
+        setAnimate(false);
+        setCurrentIndex(N);
+      }, 800); // matches transition duration (0.8s)
+      return () => clearTimeout(snapTimer);
+    }
+  }, [currentIndex, N]);
   
   // Gastronomy & Amenities interactive tab state
   const [activeTab, setActiveTab] = useState("suite");
@@ -136,32 +211,7 @@ export default function Home() {
     navigate("/rooms", { state: { checkIn, checkOut, guests, roomType } });
   };
 
-  // Mock rooms for fallback if API is empty or loading fails
-  const mockRooms = [
-    {
-      id: "executive-room",
-      name: "Executive Suite Room",
-      price: 5000,
-      area: "35 sq m",
-      beds: "1 Double Bed",
-      bathrooms: "1 Bathroom",
-      description: "A masterfully designed luxury room combining modern amenities with breathtaking resort views.",
-      image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1200"
-    },
-    {
-      id: "private-villa",
-      name: "Luxury Private Villa",
-      price: 8500,
-      area: "55 sq m",
-      beds: "1 King Bed",
-      bathrooms: "1 Bathroom",
-      description: "Unwind in your private sanctuary featuring elegant decor, a cozy lounge, and premium amenities.",
-      image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200"
-    }
-  ];
 
-  // Display rooms from DB or fall back to mock rooms
-  const displayRooms = rooms.length > 0 ? rooms.slice(0, 2) : mockRooms;
 
   // Gastronomy Tab details
   const tabData = {
@@ -303,7 +353,7 @@ export default function Home() {
         </section>
 
         {/* ================= SHOWCASE / ABOUT SECTION ================= */}
-        <section className="relative pt-24 pb-24 px-6 bg-white text-[#0d2b4e] overflow-hidden">
+        <section className="relative pt-24 pb-24 px-6 bg-[#f7faff] text-[#0d2b4e] overflow-hidden">
           
           {/* Outlined brand text behind the staggered images */}
           <div 
@@ -361,14 +411,16 @@ export default function Home() {
         </section>
 
         {/* ================= ROOMS & SUITES SECTION ================= */}
-        <section className="py-24 px-6 bg-[#07162c] text-white">
-          <div className="max-w-6xl mx-auto">
+        <section className="py-24 px-6 bg-[#011b3c] text-white relative overflow-hidden">
+          <div className="max-w-[180vh] mx-auto w-full">
+            
+            {/* Header */}
             <div className="flex justify-between items-end mb-16 border-b border-white/10 pb-6">
               <div>
                 <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
                   Accommodation
                 </span>
-                <h2 className="text-3xl md:text-5xl font-light ">
+                <h2 className="text-3xl md:text-5xl font-light">
                   Rooms & Suites
                 </h2>
               </div>
@@ -385,68 +437,87 @@ export default function Home() {
                 Loading Rooms...
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 gap-x-12 gap-y-16">
-                {displayRooms.map((room, idx) => (
-                  <motion.div
-                    key={room.id}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: idx * 0.2 }}
-                    className="group"
-                  >
-                    <Link to={`/rooms/${room.id}`} className="block">
-                      <div className="relative mb-6 aspect-[4/3] rounded-lg overflow-hidden">
-                        {/* Custom Window Open Reveal for Room Images */}
-                        <WindowReveal 
-                          src={getImageUrl(room.image)} 
-                          alt={room.name} 
-                          className="w-full h-full"
-                        />
-                        <div className="absolute bottom-6 left-6 z-20 bg-black/75 backdrop-blur-sm px-4 py-2 border border-[#c8a64d]/30 text-white rounded">
-                          <span className="text-xs uppercase tracking-widest font-semibold text-[#D8BF72]">
-                            Starts at ₹{Number(room.price).toLocaleString()}
-                          </span>
+              <div className="w-full overflow-hidden">
+                <motion.div 
+                  animate={{ x: `-${currentIndex * (100 / allSlides.length)}%` }}
+                  transition={{ duration: animate ? 0.8 : 0, ease: [0.25, 1, 0.35, 1] }}
+                  style={{ width: isMobile ? `${allSlides.length * 100}%` : `${allSlides.length * 50}%` }}
+                  className="flex"
+                >
+                  {allSlides.map((room, idx) => (
+                    <div
+                      key={`${room.id}-${idx}`}
+                      style={{ width: `${100 / allSlides.length}%` }}
+                      className="shrink-0 px-4 group"
+                    >
+                      <Link to={`/rooms/${room.id}`} className="block">
+                        <div className="relative mb-6 aspect-[4/3] overflow-hidden rounded-lg">
+                          {/* Custom Window Open Reveal for Room Images */}
+                          <WindowReveal 
+                            src={getImageUrl(room.image)} 
+                            alt={room.name} 
+                            className="w-full h-full"
+                          />
+                          <div className="absolute bottom-6 left-6 z-20 bg-black/75 backdrop-blur-sm px-4 py-2 border border-[#c8a64d]/30 text-white rounded">
+                            <span className="text-xs uppercase tracking-widest font-semibold text-[#D8BF72]">
+                              Starts at ₹{Number(room.price).toLocaleString()}
+                            </span>
+                          </div>
                         </div>
-                      </div>
 
-                      <h3 className="text-2xl md:text-3xl font-light mb-2 group-hover:text-[#c8a64d] transition duration-300">
-                        {room.name}
-                      </h3>
+                        <h3 className="text-2xl md:text-3xl font-light mb-2 group-hover:text-[#c8a64d] transition duration-300">
+                          {room.name}
+                        </h3>
 
-                      <div className="flex flex-wrap items-center gap-3 text-[#D8C8A5] text-xs uppercase tracking-widest mb-4">
-                        <span>{room.area}</span>
-                        <span>•</span>
-                        <span>{room.beds}</span>
-                        <span>•</span>
-                        <span>{room.bathrooms}</span>
-                      </div>
+                        <div className="flex flex-wrap items-center gap-3 text-[#D8C8A5] text-xs uppercase tracking-widest mb-4">
+                          <span>{room.area}</span>
+                          <span>•</span>
+                          <span>{room.beds}</span>
+                          <span>•</span>
+                          <span>{room.bathrooms}</span>
+                        </div>
 
-                      <p className="text-gray-400 mb-6 text-sm leading-relaxed max-w-xl font-sans">
-                        {room.description}
-                      </p>
+                        <p className="text-gray-400 mb-6 text-sm leading-relaxed max-w-xl font-sans">
+                          {room.description}
+                        </p>
 
-                      <div className="text-[#c8a64d] uppercase text-xs tracking-widest flex items-center gap-3 font-semibold group-hover:text-white transition">
-                        Room Details
-                        <span className="w-8 h-[1px] bg-[#c8a64d] group-hover:bg-white group-hover:w-12 transition-all duration-300"></span>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
+                        <div className="text-[#c8a64d] uppercase text-xs tracking-widest flex items-center gap-3 font-semibold group-hover:text-white transition">
+                          Room Details
+                          <span className="w-8 h-[1px] bg-[#c8a64d] group-hover:bg-white group-hover:w-12 transition-all duration-300"></span>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </motion.div>
               </div>
             )}
 
             {/* Slider Dots Indicator */}
-            <div className="flex justify-center gap-2 mt-12">
-              <span className="w-8 h-1 bg-[#c8a64d] rounded-full"></span>
-              <span className="w-2 h-1 bg-white/30 rounded-full"></span>
-              <span className="w-2 h-1 bg-white/30 rounded-full"></span>
+            <div className="flex justify-center gap-3 mt-12 items-center">
+              {displayRooms.map((_, idx) => {
+                const isDotActive = (currentIndex % N) === idx;
+
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setAnimate(true);
+                      setCurrentIndex(N + idx);
+                    }}
+                    className={`h-1 rounded-full transition-all duration-500 cursor-pointer ${
+                      isDotActive 
+                        ? "w-8 bg-[#c8a64d] opacity-100" 
+                        : "w-2 bg-white/40 opacity-40 hover:bg-white/60 hover:opacity-60"
+                    }`}
+                  />
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
-        <section className="py-24 px-6 bg-[#f4f7fc] text-[#0d2b4e]">
+        <section className="py-24 px-6 bg-[#f7faff] text-[#0d2b4e]">
           <div className="">
             
             {/* Icons Row */}
@@ -581,7 +652,7 @@ export default function Home() {
         </section>
 
         {/* ================= A WARM, EXPRESSIVE URBAN SPACE ================= */}
-        <section className="py-24 px-6 bg-[#fcfaf2] text-[#0d2b4e]">
+        <section className="py-24 px-6 bg-[#f7faff] text-[#0d2b4e]">
           <div className=" flex flex-col lg:flex-row items-center ">
             
             {/* Left Image */}
@@ -622,7 +693,7 @@ export default function Home() {
         </section>
 
         {/* ================= UNIQUE EXPERIENCES ================= */}
-        <section className="py-24  bg-[#f0e6d2] text-[#0d2b4e]">
+        <section className="py-24  bg-[#f7faff] text-[#0d2b4e]">
           <div className="">
             <div className="max-w-6xl mx-auto text-center mb-16">
               <span className="text-gray-500 uppercase tracking-[4px] text-xs font-semibold block mb-2 font-sans">
@@ -796,13 +867,13 @@ export default function Home() {
         </section>
 
         {/* ================= FOLLOW US ON INSTAGRAM ================= */}
-        <section className="  bg-white text-[#0d2b4e]">
+        <section className="  bg-[#f7faff] text-[#0d2b4e]">
           <div className="py-12 text-center mb-12">
             <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
               Social Media
             </span>
             <h2 className="text-5xl font-light  flex items-center justify-center gap-2">
-              Follow us on Instagram <InstagramIcon size={20} className="text-[#c8a64d]" />
+              Follow us on Instagram <InstagramIcon size={26} className="text-[#c8a64d] mt-2" />
             </h2>
           </div>
 

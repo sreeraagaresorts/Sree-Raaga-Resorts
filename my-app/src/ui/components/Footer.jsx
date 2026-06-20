@@ -98,7 +98,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#030e21] pt-24 pb-10 relative border-t border-white/5 text-white ">
+    <footer className="bg-[#011b3c] pt-24 pb-10 relative border-t border-white/5 text-white ">
       
       {/* Scroll Top Button */}
       <div className="absolute top-0 right-10 -translate-y-1/2">
@@ -106,7 +106,7 @@ const Footer = () => {
           whileHover={{ scale: 1.1, backgroundColor: "#c8a64d", color: "#030e21", borderColor: "#c8a64d" }}
           whileTap={{ scale: 0.95 }}
           onClick={scrollToTop}
-          className="w-12 h-12 rounded-full border border-white/10 bg-[#030e21] text-white/70 flex items-center justify-center cursor-pointer transition-all duration-300"
+          className="w-12 h-12 rounded-full border border-white/10 bg-[#011b3c]text-white/70 flex items-center justify-center cursor-pointer transition-all duration-300"
         >
           <ArrowUp size={18} />
         </motion.button>
