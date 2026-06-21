@@ -1,323 +1,344 @@
-import React from "react";
-import { motion } from "motion/react";
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "motion/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-const galleryData = [
-  "https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=1000",
-  "https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1000",
-  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1000",
-  "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=1000",
+// Custom "Window Open" Reveal scroll animation component
+function WindowReveal({ src, alt, className = "", delay = 0 }) {
+  return (
+    <div className={`relative overflow-hidden ${className} group `}>
+      <motion.div
+        initial={{ clipPath: "inset(15% 15% 15% 15% round 24px)" }}
+        whileInView={{ clipPath: "inset(0% 0% 0% 0% round 0px)" }}
+        viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+        transition={{ duration: 1.4, ease: [0.25, 1, 0.35, 1], delay }}
+        className="w-full h-full"
+      >
+        <motion.img 
+          src={src} 
+          alt={alt} 
+          className="w-full h-full object-cover"
+          initial={{ scale: 1.15 }}
+          whileInView={{ scale: 1.0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.6, ease: [0.25, 1, 0.35, 1], delay }}
+        />
+      </motion.div>
+    </div>
+  );
+}
+
+const testimonials = [
+  {
+    quote: "Some places are so good to visit but you don't want to leave at end, in short The Swiss Resort descriptions leads to same choice. Good!",
+    author: "Maria Silva"
+  },
+  {
+    quote: "The culinary experiences at the restaurant were absolutely spectacular. Every meal felt like a masterpiece. Highly recommended!",
+    author: "James Miller"
+  },
+  {
+    quote: "A perfect escape from reality. The spa treatment was rejuvenating, and the staff was extremely professional and attentive.",
+    author: "Sophia Chen"
+  }
 ];
 
 const About = () => {
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+
   return (
-  <>
-  <Navbar/>
-    <div className="bg-black text-white">
-
-      {/* Hero Banner */}
-      <section
-        className="relative h-[60vh] flex items-center justify-center bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2000')",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/60"></div>
-
-        <div className="relative z-10 text-center">
-          <h1 className="text-5xl md:text-7xl font-light mb-4">
-            About Us
-          </h1>
-
-          <p className="text-yellow-500 uppercase tracking-[4px]">
-            Home / About Us
-          </p>
-        </div>
-      </section>
-
-      {/* About Content */}
-      <section className="py-24 max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-
-          <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4">
-              Welcome
-            </p>
-
-            <h2 className="text-5xl font-light mb-8 leading-tight">
-              Experience the Pinnacle
-              <br />
-              of Luxury at
-              <span className="text-yellow-500">
-                {" "}Sree Raaga
-              </span>
-            </h2>
-
-            <p className="text-gray-400 leading-relaxed mb-6">
-              Welcome to our resort, where culinary artistry meets exceptional
-              dining experiences. We strive to create a gastronomic haven that
-              tantalizes your taste buds and leaves you with unforgettable
-              memories.
-            </p>
-
-            <p className="text-gray-400 leading-relaxed mb-8">
-              Discover a world where luxury, comfort, and natural beauty come
-              together to create unforgettable experiences for every guest.
-            </p>
-
-            <h4 className="text-3xl italic text-yellow-500">
-              Sree Raaga Hotel
-            </h4>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <img
-              src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800"
-              alt="Luxury Resort"
-              className="w-full h-[350px] sm:h-[450px] md:h-[600px] object-cover"
-            />
-          </motion.div>
-
-        </div>
-      </section>
-
-      {/* Statistics */}
-      <section className="py-20 bg-zinc-950 border-y border-yellow-500/10">
-        <div className="max-w-7xl mx-auto px-6">
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
-
-            {[
-              { num: "55", label: "Luxury Rooms & Villas" },
-              { num: "5", label: "Banquet & Dining Spaces" },
-              { num: "800+", label: "Event Guest Capacity" },
-              { num: "60 ft", label: "Recreational Pool" },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-5xl md:text-6xl text-yellow-500 mb-3">
-                  {item.num}
-                </h2>
-
-                <p className="text-gray-400 italic">
-                  {item.label}
-                </p>
-              </motion.div>
-            ))}
-
+    <>
+      <Navbar />
+      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden font-serif">
+        
+        {/* ================= HERO SECTION ================= */}
+        <section
+          className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2000')",
+          }}
+        >
+          <div className="absolute inset-0 bg-[#04121a]/55"></div>
+          <div className="relative z-10 text-center text-white select-none">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+              Swiss Resort
+            </span>
+            <h1 className="text-4xl md:text-6xl font-light font-serif leading-tight">
+              About Swiss Resort
+            </h1>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* PROPERTY OVERVIEW & INFRASTRUCTURE */}
-      <section className="py-24 max-w-7xl mx-auto px-6 border-b border-yellow-500/10">
-        <div className="text-center mb-16">
-          <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs font-semibold">
-            Property Overview
-          </p>
-          <h2 className="text-4xl md:text-5xl font-light">
-            Resort Facilities & Infrastructure
-          </h2>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
+        {/* ================= WELCOME & STATS SECTION ================= */}
+          {/* ================= SHOWCASE / ABOUT SECTION ================= */}
+        <section className="relative pt-24 pb-24 px-6 bg-[#f7faff] text-[#0d2b4e] overflow-hidden">
           
-          {/* Rooms Inventory Card */}
-          <div className="bg-zinc-900/40 border border-yellow-500/10 p-8 rounded hover:border-yellow-500/30 transition duration-300">
-            <h3 className="text-2xl font-light text-yellow-500 mb-6 uppercase tracking-wider">Rooms Inventory</h3>
-            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-              Total 55 well-appointed rooms and luxury villas designed for couples, families, and groups.
-            </p>
-            <ul className="space-y-3.5 text-sm text-gray-300">
-              <li className="flex justify-between border-b border-white/5 pb-2">
-                <span>Executive Rooms</span>
-                <span className="font-bold text-yellow-500">35 units</span>
-              </li>
-              <li className="text-xs text-white/50 pl-4 space-y-1">
-                <p>• High-end Executive: 24 rooms</p>
-                <p>• Executive with Balcony: 9 rooms</p>
-                <p>• Executive without Balcony: 3 rooms</p>
-              </li>
-              <li className="flex justify-between border-b border-white/5 pb-2 pt-2">
-                <span>Luxury 1 BHK Villas</span>
-                <span className="font-bold text-yellow-500">9 units</span>
-              </li>
-              <li className="flex justify-between border-b border-white/5 pb-2">
-                <span>Compact Villas (Row-House Style)</span>
-                <span className="font-bold text-yellow-500">5 units</span>
-              </li>
-              <li className="flex justify-between pb-1">
-                <span>Premium Duplex Villa (with private pool)</span>
-                <span className="font-bold text-yellow-500">1 unit</span>
-              </li>
-              <p className="text-[10px] text-yellow-500/70 pt-2 italic leading-relaxed">
-                * Note: All units are double occupancy, except the Duplex Villa which accommodates 4.
-              </p>
-            </ul>
+          {/* Outlined brand text behind the staggered images */}
+          <div 
+            className="absolute top-[8%] lg:top-[-1%] left-1/2 -translate-x-1/2 text-[7vw]  uppercase tracking-[10px] font-medium text-[#c8a64d]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
+          >
+            Sree Raaga
           </div>
 
-          {/* Banquet & Dining Card */}
-          <div className="bg-zinc-900/40 border border-yellow-500/10 p-8 rounded hover:border-yellow-500/30 transition duration-300">
-            <h3 className="text-2xl font-light text-yellow-500 mb-6 uppercase tracking-wider">Banquet & Dining</h3>
-            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-              Equipped with 5 elegant banquet and culinary venues to support celebrations and conferences of all sizes.
-            </p>
-            <ul className="space-y-4 text-sm text-gray-300">
-              <li className="border-b border-white/5 pb-3">
-                <span className="font-bold text-yellow-500 block">Big Banquet Hall & Dining Hall</span>
-                <span className="text-xs text-gray-400">Hall: 500 seated, 800-900 floating. Attached Dining: 300 seated, 500-600 floating.</span>
-              </li>
-              <li className="border-b border-white/5 pb-3">
-                <span className="font-bold text-yellow-500 block">Mini Banquet Hall</span>
-                <span className="text-xs text-gray-400">Capacity: 300 seated, 400-500 floating. Intimate meetings & gatherings.</span>
-              </li>
-              <li className="border-b border-white/5 pb-3">
-                <span className="font-bold text-yellow-500 block">Restaurant & Bar</span>
-                <span className="text-xs text-gray-400">Indoor seating capacity for 150 members with multi-cuisine menu options.</span>
-              </li>
-              <li>
-                <span className="font-bold text-yellow-500 block">Sports Bar & Club</span>
-                <span className="text-xs text-gray-400">Features Snooker, Table Tennis, Carrom, Chess, Ludo, DJ setup. Perfect as a pub/night club.</span>
-              </li>
-            </ul>
+          {/* Staggered Images Grid */}
+          <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-14 items-center px-4 z-10 mb-12">
+            <WindowReveal 
+              src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
+              alt="Villa Exterior" 
+              className="h-[280px] md:h-[350px] lg:h-[400px] rounded-xl"
+            />
+            
+            {/* Center image is taller and offset upwards, overlapping background text */}
+            <WindowReveal 
+              src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
+              alt="Villa Interior" 
+              className="h-[340px] md:h-[430px] lg:h-[550px] md:-translate-y-6 rounded-xl"
+            />
+            
+            <WindowReveal 
+              src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
+              alt="Luxury Pool" 
+              className="h-[280px] md:h-[350px] lg:h-[400px] rounded-xl"
+            />
           </div>
 
-          {/* Recreation & Common Areas Card */}
-          <div className="bg-zinc-900/40 border border-yellow-500/10 p-8 rounded hover:border-yellow-500/30 transition duration-300">
-            <h3 className="text-2xl font-light text-yellow-500 mb-6 uppercase tracking-wider">Recreation & Outdoors</h3>
-            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-              Unwind and bond with various leisure spaces, water amenities, and outdoor event venues.
-            </p>
-            <ul className="space-y-4 text-sm text-gray-300">
-              <li className="border-b border-white/5 pb-3">
-                <span className="font-bold text-yellow-500 block">Luxury Swimming Pool</span>
-                <span className="text-xs text-gray-400">Size: 60 ft x 30 ft. Adult pool depth 5 ft. Kids splash pool depth 2.5 ft.</span>
-              </li>
-              <li className="border-b border-white/5 pb-3">
-                <span className="font-bold text-yellow-500 block">Poolside Facilities</span>
-                <span className="text-xs text-gray-400">Attached common washrooms, changing rooms, and open showers for convenience.</span>
-              </li>
-              <li className="border-b border-white/5 pb-3">
-                <span className="font-bold text-yellow-500 block">Large Landscaped Lawn</span>
-                <span className="text-xs text-gray-400">Spacious multi-utility outdoor lawn for open-air functions, corporate dinners, and team play.</span>
-              </li>
-              <li>
-                <span className="font-bold text-yellow-500 block">Big Outdoor Kitchen</span>
-                <span className="text-xs text-gray-400">Fully equipped separate outdoor kitchen for custom large scale catering events.</span>
-              </li>
-            </ul>
-          </div>
+          {/* Large Title Below Staggered Images */}
+          <h2 className="text-5xl md:text-8xl  text-[#0d2b4e] tracking-[12px] uppercase text-center relative z-20 -mt-16 md:-mt-28 mb-6">
+            Resorts
+          </h2>
 
-        </div>
-      </section>
-
-      {/* Story Section */}
-      <section className="py-24 max-w-7xl mx-auto px-6">
-
-        <div className="mb-16">
-          <p className="text-yellow-500 uppercase tracking-[4px] mb-4">
-            Welcome
+          {/* Centered Curated Description */}
+          <p className="max-w-3xl mx-auto text-gray-500 text-center leading-relaxed text-xs lg:text-sm font-sans px-4 mb-20">
+            Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create lasting memories. Whether you're planning a romantic getaway, a family vacation, or a business trip, we have the perfect offer to suit your needs and elevate your experience.
           </p>
 
-          <h2 className="text-5xl font-light">
-            Our Story Behind The
-            <br />
-            Scene
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-12 gap-8">
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="md:col-span-5"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=800"
-              alt=""
-              className="w-full h-[300px] md:h-full object-cover"
-            />
-          </motion.div>
-
-          <div className="md:col-span-7 flex flex-col gap-8">
-
-            <motion.img
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=800"
-              alt=""
-              className="h-[300px] object-cover"
-            />
-
-            <motion.img
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800"
-              alt=""
-              className="h-[300px] object-cover"
-            />
-
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery */}
-      <section className="py-24 bg-zinc-950 border-t border-yellow-500/10">
-
-        <div className="max-w-7xl mx-auto px-6">
-
-          <div className="text-center mb-14">
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4">
-              Gallery
-            </p>
-
-            <h2 className="text-5xl font-light">
-              Our Gallery
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-
-            {galleryData.map((image, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05 }}
-                className="overflow-hidden h-64"
-              >
-                <img
-                  src={image}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
+          {/* Stats Bar */}
+          <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { number: "1,200+", label: "Guest Reviews" },
+              { number: "24/7", label: "Front Desk" },
+              { number: "15+", label: "Villa Suites" },
+              { number: "17+", label: "Amenities" }
+            ].map((stat, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <span className="text-3xl md:text-4xl font-light text-[#c8a64d] mb-1">{stat.number}</span>
+                <span className="text-xs uppercase tracking-widest text-gray-500 font-semibold">{stat.label}</span>
+              </div>
             ))}
+          </div>
+        </section>
+        {/* ================= SPLIT FEATURE ROWS ================= */}
+        <section className="py-24 px-6 bg-white">
+          <div className=" space-y-32">
+            
+            {/* Row 1: Sophisticated Comfort */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="w-full h-[400px] md:h-[480px]">
+                <WindowReveal 
+                  src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=800"
+                  alt="Sophisticated Comfort"
+                  className="w-full h-full  shadow-xl"
+                />
+              </div>
+              <div className="flex flex-col items-start select-none">
+                <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
+                  Swiss Resort
+                </span>
+                <h2 className="text-3xl md:text-4xl font-light font-serif text-[#0d2b4e] mb-6">
+                  Sophisticated Comfort
+                </h2>
+                <p className="text-gray-500 text-sm leading-relaxed font-sans mb-8">
+                  Every element of our rooms has been carefully curated to provide the
+                  highest standard of comfort. From the fine linens and custom furnishings
+                  to the stunning views of the surrounding natural landscape, we ensure
+                  your stay is peaceful and relaxing.
+                </p>
+              </div>
+            </div>
+
+            {/* Row 2: A Unique Experience */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+              <div className="flex flex-col items-start select-none">
+                <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
+                  Our Experience
+                </span>
+                <h2 className="text-3xl md:text-4xl font-light font-serif text-[#0d2b4e] mb-6">
+                  A Unique Experience
+                </h2>
+                <p className="text-gray-500 text-sm leading-relaxed font-sans mb-8">
+                  Immerse yourself in unique experiences tailored to your lifestyle.
+                  Whether you choose to unwind by the pool, indulge in luxury dining,
+                  or explore nature trails, our resort offers a perfect balance of leisure
+                  and adventure.
+                </p>
+              </div>
+                <div className="w-full h-[400px] md:h-[480px]">
+                <WindowReveal 
+                  src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800"
+                  alt="A Unique Experience"
+                  className="w-full h-full rounded-lg shadow-xl"
+                />
+              </div>
+            </div>
 
           </div>
-        </div>
-      </section>
+        </section>
 
-    </div>
-    <Footer/>
+        {/* ================= AMENITIES ICONS ROW ================= */}
+        <section className="py-20 px-6 bg-[#f7f5ee]">
+          <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 justify-center items-center">
+            {[
+              { 
+                icon: (
+                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12a10 10 0 0 1 14 0" />
+                    <path d="M8.5 15a5 5 0 0 1 7 0" />
+                    <circle cx="12" cy="18" r="1" fill="currentColor" />
+                    <path d="M15 10v2.5c0 1.2.8 2.2 2 2.5 1.2-.3 2-1.3 2-2.5V10l-2-1-2 1z" />
+                    <path d="M16.5 12l0.7 0.7 1.3-1.3" />
+                  </svg>
+                ), 
+                name: "Wifi & Internet" 
+              },
+              { 
+                icon: (
+                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    {/* Golf cart / buggy wheels */}
+                    <circle cx="6" cy="18" r="2" />
+                    <circle cx="18" cy="18" r="2" />
+                    {/* Frame and canopy */}
+                    <path d="M3 18h18" />
+                    <path d="M8 18V8h7v10" />
+                    <path d="M5 8h12v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1z" />
+                    {/* Steering wheel */}
+                    <line x1="8" y1="12" x2="11" y2="10" />
+                    <circle cx="11" cy="10" r="1" />
+                  </svg>
+                ), 
+                name: "Buggy services" 
+              },
+              { 
+                icon: (
+                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="6" width="14" height="10" rx="1" />
+                    <path d="M8 16v3h4v-3H8zM6 19h8" />
+                    <rect x="19" y="8" width="2" height="8" rx="0.5" />
+                    <circle cx="20" cy="10" r="0.5" fill="currentColor" />
+                    <line x1="20" y1="12" x2="20" y2="15" strokeWidth="1" />
+                  </svg>
+                ), 
+                name: "Smart TV" 
+              },
+              { 
+                icon: (
+                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 17h18" />
+                    <path d="M6 17a6 6 0 0 1 12 0" />
+                    <circle cx="12" cy="9.5" r="1.5" />
+                    <path d="M2 20h20" />
+                  </svg>
+                ), 
+                name: "Room Service" 
+              },
+              { 
+                icon: (
+                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="5" y="4" width="14" height="16" rx="2" />
+                    <circle cx="12" cy="13" r="5" />
+                    <circle cx="12" cy="13" r="3" strokeDasharray="2 1" />
+                    <circle cx="8" cy="7" r="0.8" fill="currentColor" />
+                    <circle cx="10" cy="7" r="0.8" fill="currentColor" />
+                    <line x1="13" y1="7" x2="16" y2="7" />
+                  </svg>
+                ), 
+                name: "Laundry Services" 
+              },
+              { 
+                icon: (
+                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 12h8l-1 8H5l-1-8z" />
+                    <path d="M4 12a4 4 0 0 1 8 0" />
+                    <line x1="18" y1="4" x2="10" y2="20" />
+                    <path d="M16 4l3 3-1.5 1.5-3-3L16 4z" fill="currentColor" />
+                    <path d="M20 12l0.5 0.5-0.5 0.5-0.5-0.5z" fill="currentColor" />
+                    <path d="M15 18l0.4 0.4-0.4 0.4-0.4-0.4z" fill="currentColor" />
+                  </svg>
+                ), 
+                name: "Housekeeper Services" 
+              }
+            ].map((item, idx) => (
+              <div key={idx} className="flex flex-col items-center text-center group cursor-default">
+                <div className="mb-4 text-[#0d2b4e]/60 group-hover:text-[#c8a64d] transition-colors duration-300">
+                  {item.icon}
+                </div>
+                <span className="text-sm md:text-base font-light text-gray-500 font-serif group-hover:text-[#0d2b4e] transition-colors duration-300">
+                  {item.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ================= THREE COLUMNS ACTIVITIES ================= */}
+        <section className="py-24 px-6 bg-white">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Restaurant & Bars",
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800"
+              },
+              {
+                title: "Spa & Wellness",
+                image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=800"
+              },
+              {
+                title: "Fitness Center",
+                image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800"
+              }
+            ].map((act, idx) => (
+              <div key={idx} className="relative overflow-hidden group  aspect-[3/4] shadow-md">
+                <WindowReveal src={act.image} alt={act.title} className="w-full h-full" delay={idx * 0.1} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10"></div>
+                <div className="absolute bottom-8 left-0 right-0 z-20 text-center">
+                  <h3 className="text-xl md:text-2xl font-serif font-light text-white uppercase tracking-wide">
+                    {act.title}
+                  </h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ================= TESTIMONIALS SLIDER ================= */}
+    
+        {/* ================= CALL TO ACTION (CTA) ================= */}
+        <section
+          className="relative py-28 px-6 bg-cover bg-center flex flex-col items-center justify-center text-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=2000')",
+          }}
+        >
+          <div className="absolute inset-0 bg-[#04121a]/60"></div>
+          <div className="relative z-10 text-white select-none max-w-3xl">
+            <h2 className="text-3xl md:text-5xl font-light font-serif leading-snug mb-8">
+              Luxury Awaits, <br /> Book Your Stay Today!
+            </h2>
+            <Link
+              to="/rooms"
+              className="inline-block px-10 py-4 bg-[#c8a64d] text-[#0d2b4e] hover:bg-[#b08e3d] hover:text-white transition duration-300 text-xs uppercase tracking-widest font-semibold font-sans rounded"
+            >
+              Book Now
+            </Link>
+          </div>
+        </section>
+
+      </div>
+      <Footer />
     </>
   );
 };

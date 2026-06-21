@@ -75,9 +75,11 @@ function MagneticLink({ to, children, className = "", onClick, onMouseEnter, onM
 
 const menuLinks = [
   { name: "Home", path: "/" },
-  { name: "Rooms", path: "/rooms" },
-  { name: "Booking", path: "/rooms" },
   { name: "About Us", path: "/about" },
+  { name: "Rooms", path: "/rooms" },
+  { name: "Amenities", path: "/amenities" },
+  { name: "Dine", path: "/dine" },
+  
   { name: "Resort Menu", path: "/menu" },
   { name: "Events", path: "/events" },
   { name: "Contact", path: "/contact" }
@@ -360,7 +362,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     onMouseEnter={() => setCursorHovered(true)}
                     onMouseLeave={() => setCursorHovered(false)}
-                    className="text-3xl md:text-5xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] transition-colors duration-300 font-serif"
+                    className="text-3xl md:text-4xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] transition-colors duration-300 font-serif"
                   >
                     {link.name}
                     {/* Animated Underline */}

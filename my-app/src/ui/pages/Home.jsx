@@ -663,7 +663,12 @@ export default function Home() {
         {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
         <section className="py-24  bg-[#f7faff] text-[#0d2b4e]">
           <div className="">
-            
+               <div className="max-w-6xl mx-auto text-center mb-16">
+          
+              <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
+                Resort Facilities
+              </h2>
+            </div>
         
 
             {/* Icons Row */}
@@ -684,16 +689,19 @@ export default function Home() {
                 { 
                   icon: (
                     <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="5" y="8" width="14" height="11" rx="2" />
-                      <rect x="7" y="10" width="10" height="4" rx="0.5" />
-                      <circle cx="8" cy="16" r="1" fill="currentColor" />
-                      <circle cx="16" cy="16" r="1" fill="currentColor" />
-                      <path d="M7 19v2h2v-2H7zM15 19v2h2v-2h-2z" fill="currentColor" />
-                      <circle cx="18" cy="6" r="3" />
-                      <path d="M18 4.5v3M16.5 6h3" />
+                      {/* Golf cart / buggy wheels */}
+                      <circle cx="6" cy="18" r="2" />
+                      <circle cx="18" cy="18" r="2" />
+                      {/* Frame and canopy */}
+                      <path d="M3 18h18" />
+                      <path d="M8 18V8h7v10" />
+                      <path d="M5 8h12v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1z" />
+                      {/* Steering wheel */}
+                      <line x1="8" y1="12" x2="11" y2="10" />
+                      <circle cx="11" cy="10" r="1" />
                     </svg>
                   ), 
-                  name: "Airport Transfer" 
+                  name: "Buggy services" 
                 },
                 { 
                   icon: (
@@ -710,14 +718,13 @@ export default function Home() {
                 { 
                   icon: (
                     <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M2 18V8h2v8h16V8h2v10" />
-                      <rect x="5" y="10" width="6" height="4" rx="1" />
-                      <rect x="13" y="10" width="6" height="4" rx="1" />
-                      <path d="M4 14h16" />
-                      <path d="M12 5.5c.5-.8 1.2-.8 1.5 0 .2.8-.8 1.5-1.5 2.2-.7-.7-1.7-1.4-1.5-2.2.3-.8 1-.8 1.5 0z" fill="currentColor" />
+                      <path d="M3 17h18" />
+                      <path d="M6 17a6 6 0 0 1 12 0" />
+                      <circle cx="12" cy="9.5" r="1.5" />
+                      <path d="M2 20h20" />
                     </svg>
                   ), 
-                  name: "Breakfast in Bed" 
+                  name: "Room Service" 
                 },
                 { 
                   icon: (
