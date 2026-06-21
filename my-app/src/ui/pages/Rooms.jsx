@@ -135,7 +135,7 @@ const Rooms = () => {
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white px-4 mt-20 select-none">
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
-              Swiss Resort Accommodation
+              Sree Raaga Resorts Accommodation
             </span>
             <h1 className="text-5xl md:text-7xl font-light font-serif leading-tight">
               Rooms & Suites

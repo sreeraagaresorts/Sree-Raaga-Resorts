@@ -148,11 +148,14 @@ const Navbar = () => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -352,7 +355,7 @@ const Navbar = () => {
         )}
 
         {/* LEFT COLUMN: Large Serif Menu Links */}
-        <div className="flex-1 flex flex-col justify-center px-6 md:px-24 py-32 z-10 overflow-y-auto max-h-screen">
+        <div className="flex-1 flex flex-col justify-center px-6 md:px-24 py-32 z-10 overflow-y-auto max-h-screen [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <div ref={menuLinksRef} className="flex flex-col gap-5 md:gap-7">
             {menuLinks.map((link, idx) => (
               <div key={idx} className="overflow-hidden py-1">

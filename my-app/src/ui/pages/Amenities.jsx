@@ -140,7 +140,7 @@ const Amenities = () => {
           {/* Main Hero Text */}
           <div className="relative z-10 text-center text-white px-4 max-w-4xl select-none my-auto">
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
-              Swiss Resort Amenities
+              Sree Raaga Resorts Amenities
             </span>
             <h1 className="text-5xl md:text-7xl font-light font-serif leading-tight mb-6">
               Kayak Surfing

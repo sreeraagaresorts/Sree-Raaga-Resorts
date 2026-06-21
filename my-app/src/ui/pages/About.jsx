@@ -32,7 +32,7 @@ function WindowReveal({ src, alt, className = "", delay = 0 }) {
 
 const testimonials = [
   {
-    quote: "Some places are so good to visit but you don't want to leave at end, in short The Swiss Resort descriptions leads to same choice. Good!",
+    quote: "Some places are so good to visit but you don't want to leave at end, in short The Sree Raaga Resorts descriptions leads to same choice. Good!",
     author: "Maria Silva"
   },
   {
@@ -64,10 +64,10 @@ const About = () => {
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white select-none">
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
-              Swiss Resort
+              Sree Raaga Resorts
             </span>
             <h1 className="text-4xl md:text-6xl font-light font-serif leading-tight">
-              About Swiss Resort
+              About Sree Raaga Resorts
             </h1>
           </div>
         </section>
@@ -145,7 +145,7 @@ const About = () => {
               </div>
               <div className="flex flex-col items-start select-none">
                 <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
-                  Swiss Resort
+                  Sree Raaga Resorts
                 </span>
                 <h2 className="text-3xl md:text-4xl font-light font-serif text-[#0d2b4e] mb-6">
                   Sophisticated Comfort

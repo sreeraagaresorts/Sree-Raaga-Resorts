@@ -767,7 +767,7 @@ export default function Home() {
             {/* Exceptional Gastronomy Header */}
             <div className="text-center mb-20 select-none">
               <span className="text-gray-400 uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
-                Swiss Resort Luxury Hotel
+                Sree Raaga Resorts Luxury Hotel
               </span>
               <h2 className="text-3xl md:text-5xl font-light font-serif text-[#0d2b4e] leading-snug">
                 Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
