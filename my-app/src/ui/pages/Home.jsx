@@ -68,6 +68,92 @@ function WindowReveal({ src, alt, className = "", delay = 0 }) {
   );
 }
 
+// Custom Icons for Gastronomy to match screenshot exactly
+function RestaurantIcon({ className = "" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      <path d="M18 8a3 3 0 0 0-3-3H9" />
+    </svg>
+  );
+}
+
+function MartiniIcon({ className = "" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 22h8" />
+      <path d="M12 11v11" />
+      <path d="M19 3H5l7 8z" />
+      <circle cx="11" cy="7" r="1.5" fill="currentColor" />
+    </svg>
+  );
+}
+
+function FishIcon({ className = "" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 12c.5-2.5 2.5-4.5 5.5-5.5 5-1.5 11 .5 14.5 5.5-3.5 5-9.5 7-14.5 5.5-3-1-5-3-5.5-5.5z" />
+      <path d="M22 12H18" />
+      <circle cx="15" cy="10" r="1" fill="currentColor" />
+      <path d="M6.5 16.5c-1-1.5-1-3.5 0-5" />
+    </svg>
+  );
+}
+
+function GolfIcon({ className = "" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2v20" />
+      <path d="M12 2l7 4-7 4" />
+      <circle cx="8" cy="20" r="2" />
+    </svg>
+  );
+}
+
+function SunsetIcon({ className = "" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 18a5 5 0 0 0-10 0" />
+      <path d="M12 2v4M4.22 10.22l2.83-2.83M2 18h2M20 18h2M16.95 7.39l2.83 2.83" />
+      <path d="M2 22h20" />
+    </svg>
+  );
+}
+
+// Gastronomy Tab details (Static Constant)
+const tabData = {
+  dining: {
+    title: "Signature Restaurant",
+    description: "A wonderful little place that serves up tasty food at affordable prices.",
+    image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200",
+    icon: <RestaurantIcon className="w-6 h-6 mb-3" />
+  },
+  poolbar: {
+    title: "Pool Bar",
+    description: "A wonderful little place that serves up tasty food at affordable prices.",
+    image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=1200",
+    icon: <MartiniIcon className="w-6 h-6 mb-3" />
+  },
+  zumafish: {
+    title: "Zuma Fish",
+    description: "A wonderful little place that serves up tasty food at affordable prices.",
+    image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1200", // Matches the bedroom image from screenshot!
+    icon: <FishIcon className="w-6 h-6 mb-3" />
+  },
+  golf: {
+    title: "Golf",
+    description: "A wonderful little place that serves up tasty food at affordable prices.",
+    image: "https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?q=80&w=1200",
+    icon: <GolfIcon className="w-6 h-6 mb-3" />
+  },
+  lounge: {
+    title: "Sunset Lounge",
+    description: "A wonderful little place that serves up tasty food at affordable prices.",
+    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1200",
+    icon: <SunsetIcon className="w-6 h-6 mb-3" />
+  }
+};
+
 export default function Home() {
   const { scrollY } = useScroll();
   const navigate = useNavigate();
@@ -155,7 +241,82 @@ export default function Home() {
   }, [currentIndex, N]);
   
   // Gastronomy & Amenities interactive tab state
-  const [activeTab, setActiveTab] = useState("suite");
+  const [activeTab, setActiveTab] = useState("zumafish");
+  const gastronomyRefs = useRef({});
+  const scrollContainerRef = useRef(null);
+  const activeTabRef = useRef("zumafish");
+
+  useEffect(() => {
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const isLargeScreen = window.innerWidth >= 1024;
+      if (!isLargeScreen) return;
+
+      const containerCenter = container.scrollTop + container.clientHeight / 2;
+      
+      let closestKey = "";
+      let minDistance = Infinity;
+
+      Object.keys(tabData).forEach((key) => {
+        const el = gastronomyRefs.current[key];
+        if (el) {
+          const elCenter = el.offsetTop + el.clientHeight / 2;
+          const distance = Math.abs(containerCenter - elCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestKey = key;
+          }
+        }
+      });
+
+      if (closestKey && closestKey !== activeTabRef.current) {
+        setActiveTab(closestKey);
+      }
+    };
+
+    // Run once on mount to align state
+    handleScroll();
+
+    container.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
+
+  // Smooth click-to-scroll handler centering the item inside the container
+  const handleTabClick = (key) => {
+    const container = scrollContainerRef.current;
+    const target = gastronomyRefs.current[key];
+    if (container && target) {
+      const containerHeight = container.clientHeight;
+      const targetHeight = target.clientHeight;
+      const targetTop = target.offsetTop;
+      
+      const scrollToPosition = targetTop - containerHeight / 2 + targetHeight / 2;
+      
+      container.scrollTo({
+        top: scrollToPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Scroll to the default active tab (zumafish) on mount
+    const timer = setTimeout(() => {
+      handleTabClick("zumafish");
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Booking search inputs & refs
   const [checkIn, setCheckIn] = useState("");
@@ -213,24 +374,7 @@ export default function Home() {
 
 
 
-  // Gastronomy Tab details
-  const tabData = {
-    suite: {
-      title: "Suite Room",
-      description: "Indulge in spacious elegance. Our suite rooms offer beautifully tailored interiors, premium luxury bedding, and private balconies that blend indoor comfort with the serene nature outdoors.",
-      image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1200"
-    },
-    restaurant: {
-      title: "Premium Restaurant",
-      description: "Savor gourmet dining crafted by expert chefs. Combining fresh local farm ingredients with global culinary techniques, our dining experiences are set in beautifully designed spaces overlooking the pools.",
-      image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200"
-    },
-    spa: {
-      title: "Wellness Spa",
-      description: "Rejuvenate your senses at our wellness retreat. From specialized massages to full-body treatments, our professional therapists utilize natural botanical oils to heal and refresh your body and mind.",
-      image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1200"
-    }
-  };
+  // tabData is statically defined outside the component
 
   return (
     <>
@@ -451,7 +595,7 @@ export default function Home() {
                       className="shrink-0 px-4 group"
                     >
                       <Link to={`/rooms/${room.id}`} className="block">
-                        <div className="relative mb-6 aspect-[4/3] overflow-hidden rounded-lg">
+                        <div className="relative mb-6 aspect-[4/3] overflow-hidden ">
                           {/* Custom Window Open Reveal for Room Images */}
                           <WindowReveal 
                             src={getImageUrl(room.image)} 
@@ -517,87 +661,199 @@ export default function Home() {
         </section>
 
         {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
-        <section className="py-24 px-6 bg-[#f7faff] text-[#0d2b4e]">
+        <section className="py-24  bg-[#f7faff] text-[#0d2b4e]">
           <div className="">
             
+        
+
             {/* Icons Row */}
-            <div className="max-w-6xl mx-auto grid grid-cols-3 md:grid-cols-6 gap-6 justify-center items-center py-8 border-b border-[#0d2b4e]/10 mb-20">
+            <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 justify-center items-center py-4 mb-20">
               {[
-                { icon: <Wifi size={24} />, name: "Free Wi-Fi" },
-                { icon: <Dumbbell size={24} />, name: "Gym Center" },
-                { icon: <Waves size={24} />, name: "Poolside" },
-                { icon: <Sparkles size={24} />, name: "Wellness Spa" },
-                { icon: <Utensils size={24} />, name: "Restaurant" },
-                { icon: <Car size={24} />, name: "Valet Parking" }
+                { 
+                  icon: (
+                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12a10 10 0 0 1 14 0" />
+                      <path d="M8.5 15a5 5 0 0 1 7 0" />
+                      <circle cx="12" cy="18" r="1" fill="currentColor" />
+                      <path d="M15 10v2.5c0 1.2.8 2.2 2 2.5 1.2-.3 2-1.3 2-2.5V10l-2-1-2 1z" />
+                      <path d="M16.5 12l0.7 0.7 1.3-1.3" />
+                    </svg>
+                  ), 
+                  name: "Wifi & Internet" 
+                },
+                { 
+                  icon: (
+                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="5" y="8" width="14" height="11" rx="2" />
+                      <rect x="7" y="10" width="10" height="4" rx="0.5" />
+                      <circle cx="8" cy="16" r="1" fill="currentColor" />
+                      <circle cx="16" cy="16" r="1" fill="currentColor" />
+                      <path d="M7 19v2h2v-2H7zM15 19v2h2v-2h-2z" fill="currentColor" />
+                      <circle cx="18" cy="6" r="3" />
+                      <path d="M18 4.5v3M16.5 6h3" />
+                    </svg>
+                  ), 
+                  name: "Airport Transfer" 
+                },
+                { 
+                  icon: (
+                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="6" width="14" height="10" rx="1" />
+                      <path d="M8 16v3h4v-3H8zM6 19h8" />
+                      <rect x="19" y="8" width="2" height="8" rx="0.5" />
+                      <circle cx="20" cy="10" r="0.5" fill="currentColor" />
+                      <line x1="20" y1="12" x2="20" y2="15" strokeWidth="1" />
+                    </svg>
+                  ), 
+                  name: "Smart TV" 
+                },
+                { 
+                  icon: (
+                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M2 18V8h2v8h16V8h2v10" />
+                      <rect x="5" y="10" width="6" height="4" rx="1" />
+                      <rect x="13" y="10" width="6" height="4" rx="1" />
+                      <path d="M4 14h16" />
+                      <path d="M12 5.5c.5-.8 1.2-.8 1.5 0 .2.8-.8 1.5-1.5 2.2-.7-.7-1.7-1.4-1.5-2.2.3-.8 1-.8 1.5 0z" fill="currentColor" />
+                    </svg>
+                  ), 
+                  name: "Breakfast in Bed" 
+                },
+                { 
+                  icon: (
+                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="5" y="4" width="14" height="16" rx="2" />
+                      <circle cx="12" cy="13" r="5" />
+                      <circle cx="12" cy="13" r="3" strokeDasharray="2 1" />
+                      <circle cx="8" cy="7" r="0.8" fill="currentColor" />
+                      <circle cx="10" cy="7" r="0.8" fill="currentColor" />
+                      <line x1="13" y1="7" x2="16" y2="7" />
+                    </svg>
+                  ), 
+                  name: "Laundry Services" 
+                },
+                { 
+                  icon: (
+                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 12h8l-1 8H5l-1-8z" />
+                      <path d="M4 12a4 4 0 0 1 8 0" />
+                      <line x1="18" y1="4" x2="10" y2="20" />
+                      <path d="M16 4l3 3-1.5 1.5-3-3L16 4z" fill="currentColor" />
+                      <path d="M20 12l0.5 0.5-0.5 0.5-0.5-0.5z" fill="currentColor" />
+                      <path d="M15 18l0.4 0.4-0.4 0.4-0.4-0.4z" fill="currentColor" />
+                    </svg>
+                  ), 
+                  name: "Housekeeper Services" 
+                }
               ].map((item, idx) => (
                 <div key={idx} className="flex flex-col items-center text-center group cursor-default">
-                  <div className="w-12 h-12 rounded-full border border-[#0d2b4e]/10 flex items-center justify-center mb-3 text-gray-500 group-hover:text-[#c8a64d] group-hover:border-[#c8a64d] transition-all duration-300">
+                  <div className="mb-4 text-[#0d2b4e]/60 group-hover:text-[#c8a64d] transition-colors duration-300">
                     {item.icon}
                   </div>
-                  <span className="text-[10px] md:text-xs uppercase tracking-wider font-semibold text-gray-500 group-hover:text-[#0d2b4e] transition">
+                  <span className="text-sm md:text-base font-light text-gray-500 font-serif group-hover:text-[#0d2b4e] transition-colors duration-300">
                     {item.name}
                   </span>
                 </div>
               ))}
             </div>
 
+            {/* Exceptional Gastronomy Header */}
+            <div className="text-center mb-20 select-none">
+              <span className="text-gray-400 uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
+                Swiss Resort Luxury Hotel
+              </span>
+              <h2 className="text-3xl md:text-5xl font-light font-serif text-[#0d2b4e] leading-snug">
+                Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
+              </h2>
+            </div>
+            
+
             {/* Gastronomy Interactive Split */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
               
               {/* Left: Dynamic tab image */}
-              <div className="relative group">
+              <div className="lg:col-span-6 relative group w-full h-[450px] md:h-[620px]">
                 <WindowReveal 
                   src={tabData[activeTab].image} 
                   alt={tabData[activeTab].title}
-                  className="h-[400px] md:h-[480px]  shadow-2xl"
+                  className="h-full w-full"
                 />
-                {/* Custom circular interaction overlay */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center pointer-events-none scale-0 group-hover:scale-100 transition-all duration-500">
-                  <span className="text-[10px] text-white uppercase tracking-widest font-semibold font-sans">View</span>
-                </div>
+                {/* Custom circular interaction overlay: BOOK NOW */}
+                <Link 
+                  to="/rooms"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
+                >
+                  <span className="text-[11px] font-sans font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
+                    Book Now
+                  </span>
+                </Link>
               </div>
 
-              {/* Right: Interactive Tabs List */}
-              <div>
-                <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-3">
-                  Hotel Facilities
-                </span>
-                <h2 className="text-3xl md:text-4xl font-light leading-tight mb-8 ">
-                  Exceptional Gastronomy, <br />in Beautiful Spaces
-                </h2>
-
-                <div className="space-y-6">
+              {/* Right: Interactive Tabs List & Side Pagination */}
+              <div className="lg:col-span-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-[450px] md:h-[620px] overflow-hidden">
+                
+                {/* Tabs Column (Internally Scrollable) */}
+                <div 
+                  ref={scrollContainerRef}
+                  className="lg:col-span-10 flex flex-col h-full overflow-y-auto pr-4 scroll-smooth relative pt-[145px] pb-[145px] md:pt-[230px] md:pb-[230px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                >
                   {Object.keys(tabData).map((key, idx) => {
                     const isActive = activeTab === key;
+                    const tabColor = isActive 
+                      ? "text-[#0d2b4e]" 
+                      : "text-[#0d2b4e]/35 hover:text-[#0d2b4e]/60";
+                    
                     return (
                       <div 
                         key={key}
-                        onClick={() => setActiveTab(key)}
-                        className={`p-6 border-l-2 transition-all duration-300 cursor-pointer ${
-                          isActive 
-                            ? "border-[#c8a64d] bg-white shadow-md" 
-                            : "border-gray-200 hover:border-[#c8a64d]/40 hover:bg-white/50"
-                        }`}
+                        ref={(el) => (gastronomyRefs.current[key] = el)}
+                        data-key={key}
+                        onClick={() => handleTabClick(key)}
+                        className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 min-h-[160px] py-4"
                       >
-                        <div className="flex justify-between items-center mb-2">
-                          <h3 className={`text-lg font-light tracking-wide transition ${isActive ? "text-[#c8a64d]" : "text-gray-500"}`}>
-                            0{idx + 1}. {tabData[key].title}
-                          </h3>
-                          {isActive && <ArrowRight size={18} className="text-[#c8a64d]" />}
+                        <div className={`transition-colors duration-300 ${tabColor}`}>
+                          {tabData[key].icon}
                         </div>
-                        {isActive && (
-                          <motion.p 
-                            initial={{ opacity: 0, y: 5 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="text-gray-500 text-sm leading-relaxed font-sans"
-                          >
-                            {tabData[key].description}
-                          </motion.p>
-                        )}
+                        <h3 className={`text-xl md:text-2xl font-light tracking-wide font-serif mb-2 transition-colors duration-300 ${tabColor}`}>
+                          {tabData[key].title}
+                        </h3>
+                        <p className={`text-xs md:text-sm leading-relaxed font-sans transition-colors duration-300 ${
+                          isActive ? "text-gray-500" : "text-[#0d2b4e]/20"
+                        }`}>
+                          {tabData[key].description}
+                        </p>
                       </div>
                     );
                   })}
                 </div>
+
+                {/* Side Pagination Column (Static Indicator aligned on the right) */}
+                <div className="hidden lg:col-span-2 lg:flex lg:flex-col lg:items-end lg:justify-center lg:h-full select-none pr-2">
+                  <div className="flex flex-col space-y-8">
+                    {Object.keys(tabData).map((key, idx) => {
+                      const isActive = activeTab === key;
+                      return (
+                        <div 
+                          key={key} 
+                          onClick={() => handleTabClick(key)}
+                          className="flex items-center gap-3 cursor-pointer group justify-end"
+                        >
+                          <span className={`h-[1px] transition-all duration-500 ${
+                            isActive 
+                              ? "w-10 bg-[#0d2b4e]" 
+                              : "w-4 bg-[#0d2b4e]/30 group-hover:w-8 group-hover:bg-[#0d2b4e]/50"
+                          }`} />
+                          <span className={`text-xs font-sans font-bold tracking-widest transition-colors duration-300 ${
+                            isActive ? "text-[#0d2b4e]" : "text-[#0d2b4e]/30"
+                          }`}>
+                            0{idx + 1}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
               </div>
 
             </div>
@@ -652,7 +908,7 @@ export default function Home() {
         </section>
 
         {/* ================= A WARM, EXPRESSIVE URBAN SPACE ================= */}
-        <section className="py-24 px-6 bg-[#f7faff] text-[#0d2b4e]">
+        <section className="py-24  bg-[#f7faff] text-[#0d2b4e]">
           <div className=" flex flex-col lg:flex-row items-center ">
             
             {/* Left Image */}
@@ -660,7 +916,7 @@ export default function Home() {
               <WindowReveal 
                 src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
                 alt="Courtyard" 
-                className="h-[300px] lg:h-[600px]  shadow-xl"
+                className="h-[300px] lg:h-[600px]  "
               />
             </div>
 

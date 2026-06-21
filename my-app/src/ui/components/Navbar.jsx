@@ -310,7 +310,7 @@ const Navbar = () => {
             {/* Booking Call to Action */}
             <Link
               to="/rooms"
-              className="hidden md:inline-block px-6 py-3 bg-[#c8a64d] text-white hover:bg-[#b08e3b] transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-bold"
+              className="hidden md:inline-block px-6 py-3  text-white hover:bg-[#b08e3b] transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-bold"
             >
               Book Your Stay
             </Link>
