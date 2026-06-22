@@ -156,7 +156,7 @@ const Rooms = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden font-serif min-h-screen">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden  min-h-screen">
         
         {/* ================= HERO BANNER ================= */}
         <section
@@ -171,7 +171,7 @@ const Rooms = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
               Sree Raaga Resorts Accommodation
             </span>
-            <h1 className="text-5xl md:text-7xl font-light font-serif leading-tight">
+            <h1 className="text-5xl md:text-7xl font-light  leading-tight">
               {getCategoryTitle()}
             </h1>
           </div>
@@ -186,7 +186,7 @@ const Rooms = () => {
               <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
                 Our Accommodations
               </span>
-              <h2 className="text-4xl md:text-6xl font-light font-serif text-[#0d2b4e] leading-tight mb-6">
+              <h2 className="text-4xl md:text-6xl font-light  text-[#0d2b4e] leading-tight mb-6">
                 Discover Our Rooms & Suites and Villas
               </h2>
               <p className="text-gray-500 text-sm md:text-base leading-relaxed font-sans max-w-2xl mx-auto">
@@ -234,7 +234,7 @@ const Rooms = () => {
                 <div className="flex flex-col flex-grow select-none">
                   <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                     <div>
-                      <h3 className="text-2xl md:text-3xl font-light font-serif text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                      <h3 className="text-2xl md:text-3xl font-light  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
                         {room.name}
                       </h3>
                       {room.category && (
@@ -311,7 +311,7 @@ const Rooms = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
               Our Services
             </span>
-            <h2 className="text-4xl md:text-5xl font-light font-serif text-[#0d2b4e]">
+            <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
               Hotel Facilities
             </h2>
           </div>
@@ -412,7 +412,7 @@ const Rooms = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
               Our Socials
             </span>
-            <h2 className="text-4xl md:text-5xl font-light font-serif text-[#0d2b4e]">
+            <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
               Follow us on Instagram
             </h2>
           </div>

@@ -42,7 +42,7 @@ const TermsConditions = () => {
             <span className="text-[#c8a64d] text-xs uppercase tracking-[6px] font-semibold">
               Legal
             </span>
-            <h1 className="text-4xl md:text-6xl font-light font-serif text-white tracking-wide">
+            <h1 className="text-4xl md:text-6xl font-light  text-white tracking-wide">
               Terms & Conditions
             </h1>
           </div>
@@ -70,7 +70,7 @@ const TermsConditions = () => {
 
           {/* Terms Detail Pane */}
           <div className="lg:col-span-9 bg-white border border-gray-100 p-8 md:p-12 shadow-sm rounded-sm">
-            <h2 className="text-3xl font-serif font-light mb-8 text-[#0d2b4e] pb-4 border-b border-[#0d2b4e]/10">
+            <h2 className="text-3xl  font-light mb-8 text-[#0d2b4e] pb-4 border-b border-[#0d2b4e]/10">
               {activeTitle}
             </h2>
             <div className="font-sans text-xs md:text-sm text-gray-500 leading-relaxed font-light">

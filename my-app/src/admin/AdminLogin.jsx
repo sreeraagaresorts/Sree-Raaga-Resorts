@@ -79,7 +79,7 @@ const AdminLogin = () => {
           <p className="text-yellow-500 text-[10px] uppercase tracking-[4px] mb-1 font-semibold">
             Control Panel
           </p>
-          <h2 className="text-3xl font-serif text-white font-light">
+          <h2 className="text-3xl  text-white font-light">
             Admin Portal
           </h2>
         </div>

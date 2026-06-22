@@ -22,10 +22,10 @@ const NotFound = () => {
 
           {/* Centered Content */}
           <div className="relative z-10 text-center px-6 max-w-2xl space-y-6">
-            <h1 className="text-8xl md:text-[12rem] font-light font-serif leading-none tracking-wider text-white">
+            <h1 className="text-8xl md:text-[12rem] font-light  leading-none tracking-wider text-white">
               404
             </h1>
-            <h2 className="text-3xl md:text-5xl font-light font-serif text-white tracking-wide">
+            <h2 className="text-3xl md:text-5xl font-light  text-white tracking-wide">
               Page Not Found
             </h2>
             <p className="text-white/70 font-sans text-xs md:text-sm max-w-md mx-auto leading-relaxed">

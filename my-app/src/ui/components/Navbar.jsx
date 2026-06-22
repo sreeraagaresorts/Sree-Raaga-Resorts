@@ -277,7 +277,7 @@ const Navbar = () => {
               isOpen ? "opacity-0 pointer-events-none blur-sm scale-95" : ""
             }`}
           >
-            <h1 className="text-3xl lg:text-4xl font-serif text-[#c8a64d] tracking-wide leading-none">
+            <h1 className="text-3xl lg:text-4xl  text-[#c8a64d] tracking-wide leading-none">
               Sree Raaga
             </h1>
             <span className="text-[10px] lg:text-[11px] tracking-[6px] uppercase text-white font-sans mt-1">
@@ -381,7 +381,7 @@ const Navbar = () => {
                       <MagneticLink 
                         to={link.path}
                         onClick={() => setIsOpen(false)}
-                        className="text-3xl md:text-3xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 font-serif"
+                        className="text-3xl md:text-3xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 "
                       >
                         {link.name}
                         <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100" />
@@ -406,21 +406,21 @@ const Navbar = () => {
                       <Link 
                         to="/rooms?category=executive-rooms"
                         onClick={() => setIsOpen(false)}
-                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300 font-serif py-1 whitespace-nowrap"
+                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300  py-1 whitespace-nowrap"
                       >
                         • Executive Rooms
                       </Link>
                       <Link 
                         to="/rooms?category=private-villas"
                         onClick={() => setIsOpen(false)}
-                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300 font-serif py-1 whitespace-nowrap"
+                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300  py-1 whitespace-nowrap"
                       >
                         • Private Villas
                       </Link>
                       <Link 
                         to="/rooms?category=duplex-villa"
                         onClick={() => setIsOpen(false)}
-                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300 font-serif py-1 whitespace-nowrap"
+                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300  py-1 whitespace-nowrap"
                       >
                         • Duplex Villa
                       </Link>
@@ -437,7 +437,7 @@ const Navbar = () => {
                       onClick={() => setIsOpen(false)}
                       onMouseEnter={() => setCursorHovered(true)}
                       onMouseLeave={() => setCursorHovered(false)}
-                      className="text-3xl md:text-3xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 font-serif"
+                      className="text-3xl md:text-3xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 "
                     >
                       {link.name}
                       {/* Animated Underline */}
@@ -487,7 +487,7 @@ const Navbar = () => {
             className="flex flex-col items-center text-center space-y-10 max-w-sm w-full"
           >
             {/* Top Logo / Brand */}
-            <div className="flex flex-col items-center font-serif">
+            <div className="flex flex-col items-center ">
               <span className="text-[#0d2b4e] uppercase tracking-[6px] text-xs font-semibold block">
                 Sree Raaga
               </span>
@@ -497,7 +497,7 @@ const Navbar = () => {
             </div>
 
             {/* Elegant Tagline / Heading */}
-            <h2 className="text-3xl font-light italic font-serif text-[#0d2b4e] leading-tight">
+            <h2 className="text-3xl font-light italic  text-[#0d2b4e] leading-tight">
               Resort & Spa Sree Raaga
             </h2>
 
@@ -505,7 +505,7 @@ const Navbar = () => {
             <div className="w-12 h-[1px] bg-[#0d2b4e]/20" />
 
             {/* Info Sections */}
-            <div className="space-y-8 w-full font-serif">
+            <div className="space-y-8 w-full ">
               {/* Location */}
               <div className="flex flex-col items-center">
                 <span className="text-xs uppercase tracking-[3px] font-bold text-[#0d2b4e] mb-2">

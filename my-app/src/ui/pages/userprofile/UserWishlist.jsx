@@ -19,7 +19,7 @@ const UserWishlist = () => {
   const toast = useToast();
   return (
     <div className="max-w-4xl mx-auto space-y-6 text-[#0d2b4e]">
-      <h1 className="text-3xl font-serif font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Wishlist</h1>
+      <h1 className="text-3xl  font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Wishlist</h1>
 
       {mockWishlist.length === 0 ? (
         <div className="bg-white border border-gray-200/50 rounded-none p-12 text-center text-gray-500 font-light shadow-sm">
@@ -47,7 +47,7 @@ const UserWishlist = () => {
                 </div>
 
                 <div className="p-5 space-y-2">
-                  <h2 className="text-xl font-serif font-light text-[#0d2b4e]">{item.name}</h2>
+                  <h2 className="text-xl  font-light text-[#0d2b4e]">{item.name}</h2>
                   <p className="text-[#c8a64d] font-bold text-sm">₹{item.price.toLocaleString()} <span className="text-gray-500 font-normal text-xs">/ night</span></p>
                   <p className="text-gray-500 text-xs line-clamp-2 mt-1 leading-relaxed font-light">{item.description}</p>
                   

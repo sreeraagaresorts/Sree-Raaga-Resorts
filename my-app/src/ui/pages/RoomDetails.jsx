@@ -369,7 +369,7 @@ const RoomDetails = () => {
     return (
       <>
         <Navbar />
-        <div className="bg-[#fcfaf2] text-[#0d2b4e] min-h-screen flex items-center justify-center font-serif">
+        <div className="bg-[#fcfaf2] text-[#0d2b4e] min-h-screen flex items-center justify-center ">
           <p className="text-[#c8a64d] text-2xl font-light">Loading room details...</p>
         </div>
         <Footer />
@@ -381,7 +381,7 @@ const RoomDetails = () => {
     return (
       <>
         <Navbar />
-        <div className="bg-[#fcfaf2] text-[#0d2b4e] min-h-screen flex items-center justify-center font-serif">
+        <div className="bg-[#fcfaf2] text-[#0d2b4e] min-h-screen flex items-center justify-center ">
           <p className="text-red-500 text-2xl font-light">Error: {error}</p>
         </div>
         <Footer />
@@ -409,12 +409,12 @@ const RoomDetails = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
               Sree Raaga Resorts
             </span>
-            <h1 className="text-4xl md:text-6xl font-light font-serif leading-tight">
+            <h1 className="text-4xl md:text-6xl font-light  leading-tight">
               Rooms
             </h1>
           </div>
         </section>
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden font-serif min-h-screen pt-24 md:pt-32">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden  min-h-screen pt-24 md:pt-32">
         
         {/* ================= TOP HORIZONTAL GALLERY SLIDER ================= */}
         <section className="relative px-4 pb-12 max-w-7xl mx-auto select-none">
@@ -472,7 +472,7 @@ const RoomDetails = () => {
                 <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold font-sans">
                   Sree Raaga Resort
                 </span>
-                <h1 className="text-4xl md:text-5xl font-light font-serif text-[#0d2b4e] leading-tight mb-6">
+                <h1 className="text-4xl md:text-5xl font-light  text-[#0d2b4e] leading-tight mb-6">
                   {room.name}
                 </h1>
                 
@@ -501,7 +501,7 @@ const RoomDetails = () => {
 
               {/* About accommodation */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-light font-serif text-[#0d2b4e]">
+                <h3 className="text-2xl font-light  text-[#0d2b4e]">
                   About accommodation
                 </h3>
                 <p className="text-gray-500 text-xs md:text-sm leading-relaxed font-sans">
@@ -516,7 +516,7 @@ const RoomDetails = () => {
 
               {/* Room Amenities (12 items) */}
               <div className="space-y-6">
-                <h3 className="text-2xl font-light font-serif text-[#0d2b4e] select-none">
+                <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
                   Room Amenities
                 </h3>
                 
@@ -630,7 +630,7 @@ const RoomDetails = () => {
 
               {/* What's included in this suite? */}
               <div className="space-y-6">
-                <h3 className="text-2xl font-light font-serif text-[#0d2b4e] select-none">
+                <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
                   What's included in this suite?
                 </h3>
                 
@@ -671,7 +671,7 @@ const RoomDetails = () => {
 
               {/* Room Rules */}
               <div className="space-y-6">
-                <h3 className="text-2xl font-light font-serif text-[#0d2b4e] select-none">
+                <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
                   Room Rules
                 </h3>
                 
@@ -690,7 +690,7 @@ const RoomDetails = () => {
             <div className="lg:col-span-4 lg:sticky lg:top-28">
               <div className="bg-white border border-gray-100 rounded-sm p-8 shadow-xl space-y-6 font-sans">
                 
-                <h3 className="text-2xl font-light font-serif text-[#0d2b4e] select-none">
+                <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
                   Book Your Room
                 </h3>
 
@@ -807,7 +807,7 @@ const RoomDetails = () => {
                 <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold font-sans">
                   Similar
                 </span>
-                <h2 className="text-3xl md:text-4xl font-light font-serif text-[#0d2b4e]">
+                <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e]">
                   Similar Rooms
                 </h2>
               </div>
@@ -844,7 +844,7 @@ const RoomDetails = () => {
                   <div className="flex flex-col select-none">
                     <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                       <div>
-                        <h4 className="text-xl font-light font-serif text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                        <h4 className="text-xl font-light  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
                           {item.name}
                         </h4>
                         {item.category && (

@@ -51,7 +51,7 @@ const About = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden font-serif">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden ">
         
         {/* ================= HERO SECTION ================= */}
         <section
@@ -66,7 +66,7 @@ const About = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
               Sree Raaga Resorts
             </span>
-            <h1 className="text-4xl md:text-6xl font-light font-serif leading-tight">
+            <h1 className="text-4xl md:text-6xl font-light  leading-tight">
               About Sree Raaga Resorts
             </h1>
           </div>
@@ -147,7 +147,7 @@ const About = () => {
                 <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
                   Sree Raaga Resorts
                 </span>
-                <h2 className="text-3xl md:text-4xl font-light font-serif text-[#0d2b4e] mb-6">
+                <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e] mb-6">
                   Sophisticated Comfort
                 </h2>
                 <p className="text-gray-500 text-sm leading-relaxed font-sans mb-8">
@@ -166,7 +166,7 @@ const About = () => {
                 <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
                   Our Experience
                 </span>
-                <h2 className="text-3xl md:text-4xl font-light font-serif text-[#0d2b4e] mb-6">
+                <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e] mb-6">
                   A Unique Experience
                 </h2>
                 <p className="text-gray-500 text-sm leading-relaxed font-sans mb-8">
@@ -275,7 +275,7 @@ const About = () => {
                 <div className="mb-4 text-[#0d2b4e]/60 group-hover:text-[#c8a64d] transition-colors duration-300">
                   {item.icon}
                 </div>
-                <span className="text-sm md:text-base font-light text-gray-500 font-serif group-hover:text-[#0d2b4e] transition-colors duration-300">
+                <span className="text-sm md:text-base font-light text-gray-500  group-hover:text-[#0d2b4e] transition-colors duration-300">
                   {item.name}
                 </span>
               </div>
@@ -304,7 +304,7 @@ const About = () => {
                 <WindowReveal src={act.image} alt={act.title} className="w-full h-full" delay={idx * 0.1} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10"></div>
                 <div className="absolute bottom-8 left-0 right-0 z-20 text-center">
-                  <h3 className="text-xl md:text-2xl font-serif font-light text-white uppercase tracking-wide">
+                  <h3 className="text-xl md:text-2xl  font-light text-white uppercase tracking-wide">
                     {act.title}
                   </h3>
                 </div>
@@ -325,7 +325,7 @@ const About = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
           <div className="relative z-10 text-white select-none max-w-3xl">
-            <h2 className="text-3xl md:text-5xl font-light font-serif leading-snug mb-8">
+            <h2 className="text-3xl md:text-5xl font-light  leading-snug mb-8">
               Luxury Awaits, <br /> Book Your Stay Today!
             </h2>
             <Link

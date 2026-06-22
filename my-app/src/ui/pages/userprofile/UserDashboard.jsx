@@ -72,7 +72,7 @@ const UserDashboard = () => {
       <div className="bg-white border border-[#0d2b4e]/10 p-8 rounded-none flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm relative">
         <div className="space-y-2">
           <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-medium block">Guest Privileges</span>
-          <h1 className="text-3xl md:text-4xl font-serif font-light text-[#0d2b4e]">
+          <h1 className="text-3xl md:text-4xl  font-light text-[#0d2b4e]">
             Welcome Back, <span className="italic text-[#c8a64d] font-normal">{user ? user.full_name : "Guest"}</span>
           </h1>
           <p className="text-gray-500 text-sm max-w-2xl font-light leading-relaxed">
@@ -94,7 +94,7 @@ const UserDashboard = () => {
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Total Stays</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 font-serif">{bookings.length}</h2>
+            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">{bookings.length}</h2>
           </div>
           <div className="w-10 h-10 bg-[#fcfaf2] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Calendar className="w-5 h-5 text-[#c8a64d]" />
@@ -104,7 +104,7 @@ const UserDashboard = () => {
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Active Bookings</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 font-serif">{activeBookings}</h2>
+            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">{activeBookings}</h2>
           </div>
           <div className="w-10 h-10 bg-[#fcfaf2] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Shield className="w-5 h-5 text-[#c8a64d]" />
@@ -114,7 +114,7 @@ const UserDashboard = () => {
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Pending Approvals</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 font-serif">{pendingBookings}</h2>
+            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">{pendingBookings}</h2>
           </div>
           <div className="w-10 h-10 bg-[#fcfaf2] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Clock className="w-5 h-5 text-[#c8a64d]" />
@@ -124,7 +124,7 @@ const UserDashboard = () => {
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Saved Rooms</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 font-serif">1</h2>
+            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">1</h2>
           </div>
           <div className="w-10 h-10 bg-[#fcfaf2] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Heart className="w-5 h-5 text-[#c8a64d]" />
@@ -138,7 +138,7 @@ const UserDashboard = () => {
         {/* PRIVILEGES SECTION */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white border border-gray-200/50 p-6 rounded-none space-y-6 shadow-sm">
-            <h3 className="text-xl font-serif font-light text-[#0d2b4e] flex items-center gap-2">
+            <h3 className="text-xl  font-light text-[#0d2b4e] flex items-center gap-2">
               <span className="w-1.5 h-6 bg-[#c8a64d] inline-block"></span> Guest Privileges & Amenities
             </h3>
             
@@ -163,7 +163,7 @@ const UserDashboard = () => {
 
           {/* QUICK LINKS */}
           <div className="bg-white border border-gray-200/50 p-6 rounded-none shadow-sm">
-            <h3 className="text-xl font-serif font-light text-[#0d2b4e] mb-6 flex items-center gap-2">
+            <h3 className="text-xl  font-light text-[#0d2b4e] mb-6 flex items-center gap-2">
               <span className="w-1.5 h-6 bg-[#c8a64d] inline-block"></span> Quick Actions
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -193,7 +193,7 @@ const UserDashboard = () => {
         {/* RIGHT COLUMN: RECENT ACTIVITY */}
         <div className="bg-white border border-gray-200/50 p-6 rounded-none flex flex-col justify-between shadow-sm">
           <div className="space-y-4">
-            <h3 className="text-xl font-serif font-light text-[#0d2b4e] flex items-center gap-2">
+            <h3 className="text-xl  font-light text-[#0d2b4e] flex items-center gap-2">
               <span className="w-1.5 h-6 bg-[#c8a64d] inline-block"></span> Recent Stays
             </h3>
             

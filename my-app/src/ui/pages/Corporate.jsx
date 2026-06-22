@@ -22,7 +22,7 @@ const Corporate = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold">
               Sree Raaga Resorts Professional
             </span>
-            <h1 className="text-4xl md:text-7xl font-light font-serif leading-tight">
+            <h1 className="text-4xl md:text-7xl font-light  leading-tight">
               Corporate Outings
             </h1>
           </div>
@@ -37,7 +37,7 @@ const Corporate = () => {
               <span className="text-[#c8a64d] text-xs uppercase tracking-[4px] font-bold block">
                 Work & Play
               </span>
-              <h2 className="text-3xl md:text-5xl font-serif font-light text-[#0d2b4e] leading-snug">
+              <h2 className="text-3xl md:text-5xl  font-light text-[#0d2b4e] leading-snug">
                 Corporate Team Outings & Team Building
               </h2>
               <p className="text-gray-500 text-sm md:text-base leading-relaxed font-light">
@@ -66,7 +66,7 @@ const Corporate = () => {
               <div className="w-12 h-12 rounded-full bg-[#c8a64d]/10 flex items-center justify-center text-[#c8a64d] mb-6">
                 <Briefcase className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-serif font-light text-[#0d2b4e] mb-6">
+              <h3 className="text-2xl  font-light text-[#0d2b4e] mb-6">
                 Resort Capabilities
               </h3>
               

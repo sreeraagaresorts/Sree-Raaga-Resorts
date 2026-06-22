@@ -22,7 +22,7 @@ const DayOut = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold">
               Sree Raaga Resorts Packages
             </span>
-            <h1 className="text-4xl md:text-7xl font-light font-serif leading-tight">
+            <h1 className="text-4xl md:text-7xl font-light  leading-tight">
               Day Out Experience
             </h1>
           </div>
@@ -37,7 +37,7 @@ const DayOut = () => {
               <span className="text-[#c8a64d] text-xs uppercase tracking-[4px] font-bold block">
                 Staycation & Fun
               </span>
-              <h2 className="text-3xl md:text-5xl font-serif font-light text-[#0d2b4e] leading-snug">
+              <h2 className="text-3xl md:text-5xl  font-light text-[#0d2b4e] leading-snug">
                 A Premium Day-Out & Staycation Destination Near Bangalore
               </h2>
               <p className="text-gray-500 text-sm md:text-base leading-relaxed font-light">
@@ -53,10 +53,10 @@ const DayOut = () => {
               <div className="w-12 h-12 rounded-full bg-[#c8a64d]/10 flex items-center justify-center text-[#c8a64d] mb-6">
                 <Ticket className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-serif font-light text-[#0d2b4e] mb-2">
+              <h3 className="text-2xl  font-light text-[#0d2b4e] mb-2">
                 Day Out Package
               </h3>
-              <div className="text-3xl font-serif text-[#c8a64d] font-semibold mb-2">
+              <div className="text-3xl  text-[#c8a64d] font-semibold mb-2">
                 ₹1,800 <span className="text-sm font-sans text-gray-400 font-light">+ 18% GST / person</span>
               </div>
               <p className="text-gray-500 text-xs font-sans mb-8">
@@ -81,7 +81,7 @@ const DayOut = () => {
             
             {/* Inclusions */}
             <div className="bg-white p-8 md:p-12 shadow-sm border border-gray-100 rounded-sm">
-              <h3 className="text-2xl font-serif font-light mb-8 text-[#0d2b4e] flex items-center gap-3">
+              <h3 className="text-2xl  font-light mb-8 text-[#0d2b4e] flex items-center gap-3">
                 <span className="w-2 h-8 bg-[#c8a64d]"></span> Package Includes
               </h3>
               <ul className="space-y-4">
@@ -103,7 +103,7 @@ const DayOut = () => {
 
             {/* Activities Included */}
             <div className="bg-white p-8 md:p-12 shadow-sm border border-gray-100 rounded-sm">
-              <h3 className="text-2xl font-serif font-light mb-8 text-[#0d2b4e] flex items-center gap-3">
+              <h3 className="text-2xl  font-light mb-8 text-[#0d2b4e] flex items-center gap-3">
                 <span className="w-2 h-8 bg-[#c8a64d]"></span> Activities Included
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

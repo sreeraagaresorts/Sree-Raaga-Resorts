@@ -125,7 +125,7 @@ const Amenities = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden font-serif">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden ">
         
         {/* ================= HERO SECTION ================= */}
         <section
@@ -142,7 +142,7 @@ const Amenities = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
               Sree Raaga Resorts Amenities
             </span>
-            <h1 className="text-5xl md:text-7xl font-light font-serif leading-tight mb-6">
+            <h1 className="text-5xl md:text-7xl font-light  leading-tight mb-6">
               Experiences For Every Occasion
             </h1>
             {/* Details Row */}
@@ -213,7 +213,7 @@ const Amenities = () => {
               <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
                 Experiences For Every Occasion
               </span>
-              <h2 className="text-4xl md:text-6xl font-light font-serif text-[#0d2b4e]">
+              <h2 className="text-4xl md:text-6xl font-light  text-[#0d2b4e]">
                 Resort Amenities & Offerings
               </h2>
             </div>
@@ -270,7 +270,7 @@ const Amenities = () => {
                 }
               ].map((group, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 p-8 shadow-md rounded-sm flex flex-col">
-                  <h3 className="text-xl font-serif text-[#0d2b4e] border-b border-[#c8a64d]/30 pb-3 mb-4 uppercase tracking-[2px] font-semibold text-center">
+                  <h3 className="text-xl  text-[#0d2b4e] border-b border-[#c8a64d]/30 pb-3 mb-4 uppercase tracking-[2px] font-semibold text-center">
                     {group.category}
                   </h3>
                   <ul className="space-y-3 font-sans text-xs text-gray-500 leading-relaxed font-light flex-grow">

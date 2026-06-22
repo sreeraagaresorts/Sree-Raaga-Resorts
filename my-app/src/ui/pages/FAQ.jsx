@@ -86,7 +86,7 @@ const FAQ = () => {
             <span className="text-[#c8a64d] text-xs uppercase tracking-[6px] font-semibold">
               FAQ
             </span>
-            <h1 className="text-4xl md:text-6xl font-light font-serif text-white tracking-wide leading-tight">
+            <h1 className="text-4xl md:text-6xl font-light  text-white tracking-wide leading-tight">
               Frequently Asked Questions
             </h1>
           </div>
@@ -96,7 +96,7 @@ const FAQ = () => {
         <section className="py-24 px-6 max-w-4xl mx-auto">
           {Object.entries(faqData).map(([catKey, category]) => (
             <div key={catKey} className="mb-20">
-              <h2 className="text-3xl font-serif font-light mb-10 pb-4 border-b border-[#0d2b4e]/10">
+              <h2 className="text-3xl  font-light mb-10 pb-4 border-b border-[#0d2b4e]/10">
                 {category.title}
               </h2>
 
@@ -114,7 +114,7 @@ const FAQ = () => {
                         onClick={() => toggleAccordion(itemKey)}
                         className="w-full px-6 py-5 text-left flex justify-between items-center hover:bg-[#ebd0b0]/20 transition cursor-pointer"
                       >
-                        <span className="font-serif text-[#0d2b4e] text-sm md:text-base font-light">
+                        <span className=" text-[#0d2b4e] text-sm md:text-base font-light">
                           {item.question}
                         </span>
                         <ChevronDown 

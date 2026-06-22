@@ -757,7 +757,7 @@ export default function Home() {
                   <div className="mb-4 text-[#0d2b4e]/60 group-hover:text-[#c8a64d] transition-colors duration-300">
                     {item.icon}
                   </div>
-                  <span className="text-sm md:text-base font-light text-gray-500 font-serif group-hover:text-[#0d2b4e] transition-colors duration-300">
+                  <span className="text-sm md:text-base font-light text-gray-500  group-hover:text-[#0d2b4e] transition-colors duration-300">
                     {item.name}
                   </span>
                 </div>
@@ -769,7 +769,7 @@ export default function Home() {
               <span className="text-gray-400 uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
                 Sree Raaga Resorts Luxury Hotel
               </span>
-              <h2 className="text-3xl md:text-5xl font-light font-serif text-[#0d2b4e] leading-snug">
+              <h2 className="text-3xl md:text-5xl font-light  text-[#0d2b4e] leading-snug">
                 Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
               </h2>
             </div>
@@ -821,7 +821,7 @@ export default function Home() {
                         <div className={`transition-colors duration-300 ${tabColor}`}>
                           {tabData[key].icon}
                         </div>
-                        <h3 className={`text-xl md:text-2xl font-light tracking-wide font-serif mb-2 transition-colors duration-300 ${tabColor}`}>
+                        <h3 className={`text-xl md:text-2xl font-light tracking-wide  mb-2 transition-colors duration-300 ${tabColor}`}>
                           {tabData[key].title}
                         </h3>
                         <p className={`text-xs md:text-sm leading-relaxed font-sans transition-colors duration-300 ${

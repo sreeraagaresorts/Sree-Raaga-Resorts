@@ -104,7 +104,7 @@ const UserSettings = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 text-[#0d2b4e]">
-      <h1 className="text-3xl font-serif font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">Account Settings</h1>
+      <h1 className="text-3xl  font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">Account Settings</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         

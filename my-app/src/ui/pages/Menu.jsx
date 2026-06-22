@@ -138,7 +138,7 @@ const Menu = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] font-serif min-h-screen ">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen ">
         
         {/* ================= HERO BANNER ================= */}
         <section
@@ -152,7 +152,7 @@ const Menu = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold font-sans">
               Restaurant
             </span>
-            <h1 className="text-4xl md:text-6xl font-light font-serif leading-tight mb-8">
+            <h1 className="text-4xl md:text-6xl font-light  leading-tight mb-8">
               Restaurent Menu
             </h1>
             
@@ -216,7 +216,7 @@ const Menu = () => {
             <span className="text-[#c8a64d] uppercase tracking-[4px] mb-3 text-xs font-semibold font-sans block">
               Our Menu
             </span>
-            <h2 className="text-3xl md:text-4xl font-light font-serif text-[#0d2b4e]">
+            <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e]">
               Menu Highlights
             </h2>
           </div>
@@ -307,7 +307,7 @@ const Menu = () => {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-end gap-2 mb-1">
-                      <h4 className="font-serif text-lg text-[#0d2b4e] group-hover:text-[#c8a64d] transition truncate">
+                      <h4 className=" text-lg text-[#0d2b4e] group-hover:text-[#c8a64d] transition truncate">
                         {dish.name}
                       </h4>
                       {/* Dotted connector */}

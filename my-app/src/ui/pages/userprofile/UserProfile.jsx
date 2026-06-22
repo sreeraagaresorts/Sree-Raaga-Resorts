@@ -49,7 +49,7 @@ const UserProfile = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 text-[#0d2b4e]">
-      <h1 className="text-3xl font-serif font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Profile</h1>
+      <h1 className="text-3xl  font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Profile</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
@@ -58,7 +58,7 @@ const UserProfile = () => {
           <div className="w-24 h-24 rounded-full bg-[#c8a64d] text-white flex items-center justify-center font-bold text-3xl shadow-md mb-4">
             {user.full_name.charAt(0).toUpperCase()}
           </div>
-          <h2 className="text-xl font-serif font-light text-[#0d2b4e] truncate max-w-full">{user.full_name}</h2>
+          <h2 className="text-xl  font-light text-[#0d2b4e] truncate max-w-full">{user.full_name}</h2>
           <p className="text-[#c8a64d] text-[10px] uppercase tracking-widest mt-2 font-medium">
             {user.role === "admin" ? "Resort Admin" : "Gold Guest Member"}
           </p>
@@ -70,7 +70,7 @@ const UserProfile = () => {
 
         {/* DETAILS LIST CARD */}
         <div className="lg:col-span-2 bg-white border border-gray-200/50 p-6 rounded-none shadow-sm space-y-6">
-          <h3 className="text-lg font-serif font-light text-[#0d2b4e] border-b border-gray-200/50 pb-2">Profile Details</h3>
+          <h3 className="text-lg  font-light text-[#0d2b4e] border-b border-gray-200/50 pb-2">Profile Details</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             

@@ -70,7 +70,7 @@ const UserLayout = () => {
         {/* BRANDING */}
         <div className="p-6">
           <Link to="/" className="block">
-            <h1 className="text-2xl font-serif text-[#c8a64d] tracking-wide">
+            <h1 className="text-2xl  text-[#c8a64d] tracking-wide">
               Sree Raaga
             </h1>
             <span className="text-[9px] tracking-[3px] uppercase text-gray-500 block mt-0.5">
@@ -142,7 +142,7 @@ const UserLayout = () => {
               {/* BRANDING / HEADER */}
               <div className="p-6 flex items-center justify-between border-b border-gray-200/50">
                 <Link to="/" className="block">
-                  <h1 className="text-2xl font-serif text-[#c8a64d] tracking-wide">
+                  <h1 className="text-2xl  text-[#c8a64d] tracking-wide">
                     Sree Raaga
                   </h1>
                   <span className="text-[9px] tracking-[3px] uppercase text-gray-500 block mt-0.5">

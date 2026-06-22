@@ -68,7 +68,7 @@ const Contact = () => {
           <div className="absolute inset-0 bg-black/60"></div>
 
           <div className="relative z-10 text-center px-4 max-w-3xl space-y-4">
-            <h1 className="text-5xl md:text-7xl font-light font-serif text-white tracking-wide">
+            <h1 className="text-5xl md:text-7xl font-light  text-white tracking-wide">
               Contact
             </h1>
             <p className="text-white/80 font-light text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
@@ -88,7 +88,7 @@ const Contact = () => {
               <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold mb-2 block">
                 GET IN TOUCH
               </span>
-              <h2 className="text-3xl md:text-5xl font-serif text-[#0d2b4e] font-light">
+              <h2 className="text-3xl md:text-5xl  text-[#0d2b4e] font-light">
                 Leave Us Your Info
               </h2>
               <p className="text-gray-500 text-xs md:text-sm max-w-xl leading-relaxed mt-4 font-light">
@@ -176,12 +176,12 @@ const Contact = () => {
               <span className="text-[#c8a64d] text-[10px] tracking-[4px] font-semibold uppercase block mb-2">
                 CONTACT
               </span>
-              <h2 className="text-4xl font-serif font-light tracking-wide">
+              <h2 className="text-4xl  font-light tracking-wide">
                 Location
               </h2>
             </div>
 
-            <div className="space-y-4 font-serif text-sm font-light text-white/80 leading-relaxed border-t border-white/5 pt-6">
+            <div className="space-y-4  text-sm font-light text-white/80 leading-relaxed border-t border-white/5 pt-6">
               <p>
                 No. 1246, Budigere Bypass Road,<br />
                 Devanahalli Hobli,<br />
@@ -212,7 +212,7 @@ const Contact = () => {
               <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold mb-2 block">
                 INSTAGRAM
               </span>
-              <h2 className="text-3xl md:text-5xl font-serif text-[#0d2b4e] font-light">
+              <h2 className="text-3xl md:text-5xl  text-[#0d2b4e] font-light">
                 Follow us on Instagram
               </h2>
             </div>

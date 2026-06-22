@@ -55,7 +55,7 @@ const Events = () => {
             <span className="text-[#c8a64d] text-xs uppercase tracking-[6px] font-semibold block mb-2">
               MEET & CELEBRATE
             </span>
-            <h1 className="text-4xl md:text-7xl font-light font-serif leading-tight">
+            <h1 className="text-4xl md:text-7xl font-light  leading-tight">
               Meet & Celebrate
             </h1>
             <p className="text-white/80 font-light text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
@@ -69,7 +69,7 @@ const Events = () => {
           <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold block">
             OUR VENUES & CELEBRATIONS
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-light text-[#0d2b4e] leading-relaxed max-w-3xl mx-auto">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl  font-light text-[#0d2b4e] leading-relaxed max-w-3xl mx-auto">
             Elevate your events to new heights at Sree Raaga Resorts. With custom catering, beautiful venues, and unparalleled service, our expert team ensures your event is a grand success.
           </h2>
 
@@ -103,7 +103,7 @@ const Events = () => {
             ) : events.length === 0 ? (
               <div className="bg-white border border-[#0d2b4e]/5 p-12 text-center rounded-sm max-w-lg mx-auto shadow-sm space-y-4">
                 <Sparkles className="mx-auto text-[#c8a64d]" size={28} />
-                <h4 className="text-lg font-serif font-medium text-[#0d2b4e]">No Custom Packages Uploaded Yet</h4>
+                <h4 className="text-lg  font-medium text-[#0d2b4e]">No Custom Packages Uploaded Yet</h4>
                 <p className="text-xs md:text-sm text-gray-500 font-sans font-light">
                   We are currently custom-designing premium event templates. Contact us to design a bespoke event tailor-made for your celebration.
                 </p>
@@ -144,7 +144,7 @@ const Events = () => {
 
                       {/* Event Body */}
                       <div className="p-6 space-y-4">
-                        <h3 className="text-xl font-serif font-light text-[#0d2b4e]">
+                        <h3 className="text-xl  font-light text-[#0d2b4e]">
                           {event.name}
                         </h3>
 

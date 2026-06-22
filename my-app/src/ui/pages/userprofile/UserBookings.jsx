@@ -71,7 +71,7 @@ const UserBookings = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-[#0d2b4e]">
-      <h1 className="text-3xl font-serif font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Bookings</h1>
+      <h1 className="text-3xl  font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Bookings</h1>
 
       {bookings.length === 0 ? (
         <div className="bg-white border border-gray-200/50 rounded-none p-12 text-center text-gray-500 font-light shadow-sm">
@@ -96,7 +96,7 @@ const UserBookings = () => {
               <div className="flex-1 p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
-                    <h2 className="text-2xl font-serif font-light text-[#0d2b4e]">{booking.room_name}</h2>
+                    <h2 className="text-2xl  font-light text-[#0d2b4e]">{booking.room_name}</h2>
                     <span className={`px-2.5 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded border w-fit ${getStatusBadgeClass(booking.status)}`}>
                       {booking.status}
                     </span>
