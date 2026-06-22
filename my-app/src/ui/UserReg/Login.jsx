@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
+import { Eye, EyeOff } from "lucide-react";
 import { useToast } from "../components/Toast";
 import { API_URL } from "../../config/api";
 
@@ -11,6 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -120,15 +122,24 @@ const Login = () => {
                   Password
                 </label>
 
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) =>
-                    setPassword(e.target.value)
-                  }
-                  className="w-full bg-transparent border-b border-yellow-500/20 py-3 outline-none focus:border-yellow-500 transition"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) =>
+                      setPassword(e.target.value)
+                    }
+                    className="w-full bg-transparent border-b border-yellow-500/20 py-3 pr-10 outline-none focus:border-yellow-500 transition"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-yellow-500 cursor-pointer"
+                  >
+                    {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
+                  </button>
+                </div>
               </div>
 
               <button

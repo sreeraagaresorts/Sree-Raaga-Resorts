@@ -8,7 +8,9 @@ const {
   getProfile,
   getAllUsers,
   updateUserRole,
-  deleteUser
+  deleteUser,
+  changePassword,
+  deleteOwnAccount
 } = require("../controllers/authController");
 
 const verifyToken = require("../middleware/authMiddleware");
@@ -22,6 +24,18 @@ router.get(
   "/profile",
   verifyToken,
   getProfile
+);
+
+router.put(
+  "/change-password",
+  verifyToken,
+  changePassword
+);
+
+router.delete(
+  "/delete-account",
+  verifyToken,
+  deleteOwnAccount
 );
 
 // Admin-only User Management

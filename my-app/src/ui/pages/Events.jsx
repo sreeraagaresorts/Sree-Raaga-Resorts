@@ -1,35 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Phone, Mail, ArrowRight } from "lucide-react";
+import { Phone, Mail, ArrowRight, Calendar, AlertCircle, Sparkles } from "lucide-react";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-
-// Custom "Window Open" Reveal scroll animation component
-function WindowReveal({ src, alt, className = "", delay = 0 }) {
-  return (
-    <div className={`relative overflow-hidden ${className} group `}>
-      <motion.div
-        initial={{ clipPath: "inset(15% 15% 15% 15% round 24px)" }}
-        whileInView={{ clipPath: "inset(0% 0% 0% 0% round 0px)" }}
-        viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
-        transition={{ duration: 1.4, ease: [0.25, 1, 0.35, 1], delay }}
-        className="w-full h-full"
-      >
-        <motion.img 
-          src={src} 
-          alt={alt} 
-          className="w-full h-full object-cover"
-          initial={{ scale: 1.15 }}
-          whileInView={{ scale: 1.0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.6, ease: [0.25, 1, 0.35, 1], delay }}
-        />
-      </motion.div>
-    </div>
-  );
-}
+import { API_URL } from "../../config/api";
 
 const Events = () => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/events`);
+        const data = await response.json();
+        if (data.success) {
+          setEvents(data.data);
+        } else {
+          throw new Error(data.message || "Failed to load events.");
+        }
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  const getImageUrl = (image) => {
+    if (!image) return "https://images.unsplash.com/photo-1511795409834-ef04bbd61622";
+    if (image.startsWith("http")) return image;
+    return `${API_URL}/uploads/${image}`;
+  };
+
   return (
     <>
       <Navbar />
@@ -53,18 +59,18 @@ const Events = () => {
               Meet & Celebrate
             </h1>
             <p className="text-white/80 font-light text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
-              At the Sree Raaga Resorts, we can host anything from a business meeting to a wedding, a banquet, a private celebration.
+              At Sree Raaga Resorts, we host custom weddings, corporate conferences, and private celebrations tailored to your expectations.
             </p>
           </div>
         </section>
 
         {/* INTRODUCTION BLOCK */}
-        <section className="py-24 px-6 bg-[#fcfaf2] text-center max-w-4xl mx-auto space-y-8">
+        <section className="py-20 px-6 bg-[#fcfaf2] text-center max-w-4xl mx-auto space-y-8">
           <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold block">
-            MEET & CELEBRATE
+            OUR VENUES & CELEBRATIONS
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-light text-[#0d2b4e] leading-relaxed max-w-3xl mx-auto">
-            Elevate your events to new heights at the Sree Raaga Resorts. With state-of-the-art technology, luxurious facilities, and unparalleled service, our expert team will ensure your event is a success. Plus, our prime location near Bangalore offers a breathtaking backdrop for your attendees to enjoy.
+            Elevate your events to new heights at Sree Raaga Resorts. With custom catering, beautiful venues, and unparalleled service, our expert team ensures your event is a grand success.
           </h2>
 
           {/* Quick Contact links under introduction */}
@@ -80,106 +86,97 @@ const Events = () => {
           </div>
         </section>
 
-        {/* ALTERNATING EVENTS SECTIONS */}
-        <section className="pb-24 px-6 max-w-7xl mx-auto space-y-24 md:space-y-32">
-          
-          {/* Section 1: Meetings (Image Left, Text Right) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-            <div className="lg:col-span-6">
-              <WindowReveal 
-                src="https://images.unsplash.com/photo-1431540015161-0bf868a2d407?q=80&w=800" 
-                alt="Meetings" 
-                className="aspect-[4/3] rounded-sm shadow-md"
-              />
-            </div>
-            <div className="lg:col-span-6 space-y-6">
-              <h3 className="text-3xl md:text-4xl font-serif font-light text-[#0d2b4e]">
-                Meetings
-              </h3>
-              <p className="text-gray-500 font-sans text-xs md:text-sm leading-relaxed font-light">
-                The resort features state-of-the-art conference rooms and co-working facilities ideal for corporate events, annual meetings, and leadership seminars. Complete with high-speed internet, audiovisual setups, and dedicated dining halls.
-              </p>
-              <p className="text-gray-500 font-sans text-xs md:text-sm leading-relaxed font-light">
-                We offer tailored delegate packages, team outings, and a massive outdoor kitchen setup suitable for hosting large groups and custom retreats.
-              </p>
-              <div className="pt-4">
-                <a
-                  href="https://wa.me/918904561155?text=I%20am%20interested%20in%20booking%20a%20meeting%20venue%20at%20Sree%20Raaga%20Resorts."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-8 py-3.5 border border-[#c8a64d] text-[#0d2b4e] hover:bg-[#c8a64d] hover:text-white text-xs font-semibold uppercase tracking-[2px] transition duration-300 rounded-sm"
-                >
-                  Enquire Now <ArrowRight size={14} />
-                </a>
+        {/* DYNAMIC UPLOADED EVENTS SECTION */}
+        <section className="py-12 pb-24 px-6 bg-[#fcfaf2]">
+          <div className="max-w-7xl mx-auto space-y-12">
+            
+            {loading ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#c8a64d]"></div>
               </div>
-            </div>
-          </div>
-
-          {/* Section 2: Weddings (Text Left, Image Right) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-            {/* Text on Mobile goes first, but on Desktop goes left */}
-            <div className="lg:col-span-6 order-2 lg:order-1 space-y-6">
-              <h3 className="text-3xl md:text-4xl font-serif font-light text-[#0d2b4e]">
-                Weddings
-              </h3>
-              <p className="text-gray-500 font-sans text-xs md:text-sm leading-relaxed font-light">
-                Celebrate the most special day of your life at Sree Raaga Resorts. With our 800-capacity Grand Banquet Hall and 500-capacity landscaped event lawn, we ensure your wedding is a spectacular and memorable affair.
-              </p>
-              <p className="text-gray-500 font-sans text-xs md:text-sm leading-relaxed font-light">
-                Our culinary team will craft a customized veg & non-veg buffet while our events team takes care of all setup, decor, and guest accommodation needs.
-              </p>
-              <div className="pt-4">
-                <a
-                  href="https://wa.me/918904561155?text=I%20am%20interested%20in%20hosting%20a%20wedding%20at%20Sree%20Raaga%20Resorts."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-8 py-3.5 border border-[#c8a64d] text-[#0d2b4e] hover:bg-[#c8a64d] hover:text-white text-xs font-semibold uppercase tracking-[2px] transition duration-300 rounded-sm"
-                >
-                  Enquire Now <ArrowRight size={14} />
-                </a>
+            ) : error ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center text-red-500 space-y-2 bg-white/50 rounded p-6 max-w-md mx-auto shadow-xs">
+                <AlertCircle size={32} />
+                <p className="text-sm font-semibold">Failed to fetch uploaded events</p>
+                <p className="text-xs text-gray-400">{error}</p>
               </div>
-            </div>
-            <div className="lg:col-span-6 order-1 lg:order-2">
-              <WindowReveal 
-                src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800" 
-                alt="Weddings" 
-                className="aspect-[4/3] rounded-sm shadow-md"
-              />
-            </div>
-          </div>
-
-          {/* Section 3: Private Events (Image Left, Text Right) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-            <div className="lg:col-span-6">
-              <WindowReveal 
-                src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=800" 
-                alt="Private Events" 
-                className="aspect-[4/3] rounded-sm shadow-md"
-              />
-            </div>
-            <div className="lg:col-span-6 space-y-6">
-              <h3 className="text-3xl md:text-4xl font-serif font-light text-[#0d2b4e]">
-                Private Events
-              </h3>
-              <p className="text-gray-500 font-sans text-xs md:text-sm leading-relaxed font-light">
-                Looking to celebrate a special occasion? The resort is an ideal choice for birthdays, family gatherings, corporate team picnics, and reunions.
-              </p>
-              <p className="text-gray-500 font-sans text-xs md:text-sm leading-relaxed font-light">
-                Our Sports Bar (snooker, TT, Carrom) and private club setup with DJ equipment provide options to entertain guests of all age groups. Enjoy customized catering and recreational activities like the rain dance and pool.
-              </p>
-              <div className="pt-4">
-                <a
-                  href="https://wa.me/918904561155?text=I%20am%20interested%20in%20booking%20a%20private%20event%20at%20Sree%20Raaga%20Resorts."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-8 py-3.5 border border-[#c8a64d] text-[#0d2b4e] hover:bg-[#c8a64d] hover:text-white text-xs font-semibold uppercase tracking-[2px] transition duration-300 rounded-sm"
-                >
-                  Enquire Now <ArrowRight size={14} />
-                </a>
+            ) : events.length === 0 ? (
+              <div className="bg-white border border-[#0d2b4e]/5 p-12 text-center rounded-sm max-w-lg mx-auto shadow-sm space-y-4">
+                <Sparkles className="mx-auto text-[#c8a64d]" size={28} />
+                <h4 className="text-lg font-serif font-medium text-[#0d2b4e]">No Custom Packages Uploaded Yet</h4>
+                <p className="text-xs md:text-sm text-gray-500 font-sans font-light">
+                  We are currently custom-designing premium event templates. Contact us to design a bespoke event tailor-made for your celebration.
+                </p>
+                <div className="pt-2">
+                  <a
+                    href="https://wa.me/918904561155?text=I%20want%20to%20plan%20a%20custom%20event%20at%20Sree%20Raaga%20Resorts."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#c8a64d] text-white hover:bg-[#b09141] text-xs font-semibold uppercase tracking-[1px] transition rounded-sm"
+                  >
+                    Custom Planning
+                  </a>
+                </div>
               </div>
-            </div>
-          </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {events.map((event, idx) => (
+                  <motion.div
+                    key={event.id || idx}
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                    className="bg-white border border-[#0d2b4e]/5 rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* Event Image */}
+                      <div className="relative h-56 overflow-hidden bg-gray-100">
+                        <img
+                          src={getImageUrl(event.image)}
+                          alt={event.name}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        />
+                        <span className="absolute top-4 left-4 bg-white/95 backdrop-blur-xs text-[#0d2b4e] text-[9px] uppercase tracking-widest font-bold px-3 py-1 rounded-sm border border-[#c8a64d]/30">
+                          {event.category || "Celebration"}
+                        </span>
+                      </div>
 
+                      {/* Event Body */}
+                      <div className="p-6 space-y-4">
+                        <h3 className="text-xl font-serif font-light text-[#0d2b4e]">
+                          {event.name}
+                        </h3>
+
+                        {event.event_date && (
+                          <div className="flex items-center gap-1.5 text-xs text-gray-500 font-sans">
+                            <Calendar size={13} className="text-[#c8a64d]" />
+                            <span>{event.event_date}</span>
+                          </div>
+                        )}
+
+                        <p className="text-gray-500 text-xs md:text-sm font-sans font-light leading-relaxed line-clamp-4">
+                          {event.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* WhatsApp Action Button */}
+                    <div className="p-6 pt-0">
+                      <a
+                        href={`https://wa.me/918904561155?text=I%20am%20interested%20in%20booking%20the%20event%20package%20called%20"${encodeURIComponent(event.name)}"%20at%20Sree%20Raaga%20Resorts.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full flex items-center justify-center gap-2 py-3 border border-[#c8a64d] text-[#0d2b4e] hover:bg-[#c8a64d] hover:text-white text-xs font-semibold uppercase tracking-[1px] transition duration-300 rounded-sm"
+                      >
+                        Enquire Package <ArrowRight size={12} />
+                      </a>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
         </section>
 
       </div>

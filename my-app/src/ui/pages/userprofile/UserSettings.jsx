@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Lock, Bell, AlertTriangle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Lock, Bell, AlertTriangle, RefreshCw, Eye, EyeOff } from "lucide-react";
 import { useToast } from "../../components/Toast";
+import { API_URL } from "../../../config/api";
 
 const UserSettings = () => {
   const toast = useToast();
+  const navigate = useNavigate();
   const [emailAlerts, setEmailAlerts] = useState(true);
   const [smsAlerts, setSmsAlerts] = useState(false);
 
@@ -13,14 +16,90 @@ const UserSettings = () => {
     confirm: ""
   });
 
-  const handlePasswordChange = (e) => {
+  const [updatingPassword, setUpdatingPassword] = useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
+
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handlePasswordChange = async (e) => {
     e.preventDefault();
     if (passwordData.new !== passwordData.confirm) {
       toast.error("New passwords do not match!");
       return;
     }
-    toast.success("Password updated successfully! (UI Demo only)");
-    setPasswordData({ current: "", new: "", confirm: "" });
+
+    setUpdatingPassword(true);
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/change-password`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          currentPassword: passwordData.current,
+          newPassword: passwordData.new
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update password.");
+      }
+
+      toast.success("Password updated successfully!");
+      setPasswordData({ current: "", new: "", confirm: "" });
+    } catch (err) {
+      toast.error(err.message || "Something went wrong.");
+    } finally {
+      setUpdatingPassword(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to permanently delete your account? This action is irreversible, and your profile and bookings will be deleted."
+    );
+
+    if (!confirmDelete) return;
+
+    setDeletingAccount(true);
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/delete-account`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete account.");
+      }
+
+      toast.success("Your account has been deleted successfully.");
+      
+      // Clean up local auth state
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      
+      // Redirect to home page
+      navigate("/");
+      // Force page reload to update navbar/app state
+      window.location.reload();
+    } catch (err) {
+      toast.error(err.message || "Failed to delete account.");
+    } finally {
+      setDeletingAccount(false);
+    }
   };
 
   return (
@@ -52,43 +131,80 @@ const UserSettings = () => {
               
               <div>
                 <label className="block text-gray-500 mb-2 uppercase tracking-wider text-[10px]">Current Password</label>
-                <input 
-                  type="password" 
-                  required
-                  placeholder="••••••••"
-                  value={passwordData.current}
-                  onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })}
-                  className="w-full bg-[#fcfaf2] border border-gray-300 rounded-none p-3 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
-                />
+                <div className="relative">
+                  <input 
+                    type={showCurrent ? "text" : "password"} 
+                    required
+                    placeholder="••••••••"
+                    value={passwordData.current}
+                    onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })}
+                    className="w-full bg-[#fcfaf2] border border-gray-300 rounded-none p-3 pr-10 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrent(!showCurrent)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#c8a64d] cursor-pointer"
+                  >
+                    {showCurrent ? <Eye size={14} /> : <EyeOff size={14} />}
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label className="block text-gray-500 mb-2 uppercase tracking-wider text-[10px]">New Password</label>
-                <input 
-                  type="password" 
-                  required
-                  placeholder="••••••••"
-                  value={passwordData.new}
-                  onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
-                  className="w-full bg-[#fcfaf2] border border-gray-300 rounded-none p-3 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
-                />
+                <div className="relative">
+                  <input 
+                    type={showNew ? "text" : "password"} 
+                    required
+                    placeholder="••••••••"
+                    value={passwordData.new}
+                    onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
+                    className="w-full bg-[#fcfaf2] border border-gray-300 rounded-none p-3 pr-10 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNew(!showNew)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#c8a64d] cursor-pointer"
+                  >
+                    {showNew ? <Eye size={14} /> : <EyeOff size={14} />}
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label className="block text-gray-500 mb-2 uppercase tracking-wider text-[10px]">Confirm New Password</label>
-                <input 
-                  type="password" 
-                  required
-                  placeholder="••••••••"
-                  value={passwordData.confirm}
-                  onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
-                  className="w-full bg-[#fcfaf2] border border-gray-300 rounded-none p-3 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
-                />
+                <div className="relative">
+                  <input 
+                    type={showConfirm ? "text" : "password"} 
+                    required
+                    placeholder="••••••••"
+                    value={passwordData.confirm}
+                    onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
+                    className="w-full bg-[#fcfaf2] border border-gray-300 rounded-none p-3 pr-10 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirm(!showConfirm)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#c8a64d] cursor-pointer"
+                  >
+                    {showConfirm ? <Eye size={14} /> : <EyeOff size={14} />}
+                  </button>
+                </div>
               </div>
 
               <div className="pt-2">
-                <button type="submit" className="bg-[#c8a64d] text-white px-6 py-3 rounded-none font-semibold uppercase tracking-widest text-[10px] hover:bg-[#b09141] transition cursor-pointer shadow-sm">
-                  Update Password
+                <button 
+                  type="submit" 
+                  disabled={updatingPassword}
+                  className="bg-[#c8a64d] text-white px-6 py-3 rounded-none font-semibold uppercase tracking-widest text-[10px] hover:bg-[#b09141] transition cursor-pointer shadow-sm flex items-center gap-2 disabled:bg-[#c8a64d]/60"
+                >
+                  {updatingPassword ? (
+                    <>
+                      <RefreshCw size={12} className="animate-spin" /> Updating...
+                    </>
+                  ) : (
+                    "Update Password"
+                  )}
                 </button>
               </div>
 
@@ -141,10 +257,17 @@ const UserSettings = () => {
                 <p className="text-gray-500 text-[10px]">Permanently remove your profile details and archive booking logs.</p>
               </div>
               <button 
-                onClick={() => toast.info("Please contact resort admin at info@sreeraagaresorts.in for account deletion.")}
-                className="bg-red-600 text-white px-5 py-2.5 rounded-none font-bold uppercase tracking-widest text-[10px] hover:bg-red-700 transition cursor-pointer shadow-sm"
+                onClick={handleDeleteAccount}
+                disabled={deletingAccount}
+                className="bg-red-600 text-white px-5 py-2.5 rounded-none font-bold uppercase tracking-widest text-[10px] hover:bg-red-700 transition cursor-pointer shadow-sm flex items-center gap-2 disabled:bg-red-600/60"
               >
-                Delete Account
+                {deletingAccount ? (
+                  <>
+                    <RefreshCw size={12} className="animate-spin" /> Deleting...
+                  </>
+                ) : (
+                  "Delete Account"
+                )}
               </button>
             </div>
           </div>

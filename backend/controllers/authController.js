@@ -246,3 +246,82 @@ exports.deleteUser = async (req, res) => {
     });
   }
 };
+
+exports.changePassword = async (req, res) => {
+  console.log("[Change Password] req.user:", req.user);
+  console.log("[Change Password] req.body:", req.body);
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      console.log("[Change Password] Missing fields");
+      return res.status(400).json({
+        success: false,
+        message: "Current password and new password are required"
+      });
+    }
+
+    const user = await User.findOne({ id: Number(req.user.id) });
+    if (!user) {
+      console.log("[Change Password] User not found for id:", req.user.id);
+      return res.status(404).json({
+        success: false,
+        message: "User Not Found"
+      });
+    }
+
+    const validPassword = await bcrypt.compare(currentPassword, user.password);
+    if (!validPassword) {
+      console.log("[Change Password] Password mismatch");
+      return res.status(400).json({
+        success: false,
+        message: "Invalid current password"
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    console.log("[Change Password] Password saved successfully");
+    res.json({
+      success: true,
+      message: "Password updated successfully"
+    });
+  } catch (error) {
+    console.error("Change password error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update password"
+    });
+  }
+};
+
+exports.deleteOwnAccount = async (req, res) => {
+  try {
+    const user = await User.findOneAndDelete({ id: Number(req.user.id) });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    // Send account deleted email in background
+    const { sendAccountDeletedEmail } = require("../utils/email");
+    sendAccountDeletedEmail(user.toObject()).catch(err => {
+      console.error("[Email Error] Failed to send account deleted email:", err);
+    });
+
+    res.json({
+      success: true,
+      message: "Account deleted successfully"
+    });
+  } catch (error) {
+    console.error("Delete account error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete account"
+    });
+  }
+};
