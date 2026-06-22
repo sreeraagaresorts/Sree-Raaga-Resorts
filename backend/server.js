@@ -11,52 +11,87 @@ connectDB();
 
 const app = express();
 
-// Secure HTTP headers - Allow cross-origin resources so frontend can load upload images
+// Security headers
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
   })
 );
 
-// Prevent NoSQL Injection by sanitizing user-supplied data
+// Prevent NoSQL Injection
 app.use(mongoSanitize);
 
+// Allowed frontend domains
 const allowedOrigins = [
   process.env.FRONTEND_URL,
-  "http://localhost:5173",
-  "http://localhost:5174"
+  "https://sreeraagaresorts.in",
+  "https://www.sreeraagaresorts.in",
 ].filter(Boolean);
 
+// CORS Configuration
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Allow server-to-server requests and allowed frontend origins
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+        return callback(null, true);
       }
+
+      console.log("Blocked Origin:", origin);
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+      "Origin",
+    ],
   })
 );
 
-
-
+// Body Parsers
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// Static Uploads
 app.use("/uploads", express.static("uploads"));
 
+// Routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/rooms", require("./routes/roomRoutes"));
+app.use("/api/bookings", require("./routes/bookingRoutes"));
 app.use("/api/events", require("./routes/eventRoutes"));
 app.use("/api/contact", require("./routes/contactRoutes"));
-app.use("/api/bookings", require("./routes/bookingRoutes"));
 app.use("/api/settings", require("./routes/settingsRoutes"));
 app.use("/api/dishes", require("./routes/dishRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 
+// Add your remaining routes here
 
+// Health Check
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Sree Raaga Resorts API Running",
+  });
+});
 
-app.listen(process.env.PORT, () => {
-  console.log("Server Running On Port 5000");
+// Error Handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
+});
+
+// Start Server
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
