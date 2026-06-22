@@ -278,7 +278,7 @@ const Navbar = () => {
             }`}
           >
             <h1 className="text-3xl lg:text-4xl font-serif text-[#c8a64d] tracking-wide leading-none">
-              Sree Raagaaass
+              Sree Raaga
             </h1>
             <span className="text-[10px] lg:text-[11px] tracking-[6px] uppercase text-white font-sans mt-1">
               Resorts
