@@ -62,22 +62,22 @@ const UserLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex text-white font-sans">
+    <div className="min-h-screen bg-[#fcfaf2] flex text-[#0d2b4e] font-sans">
       
       {/* SIDEBAR (Desktop) */}
-      <aside className="w-64 border-r border-yellow-500/10 hidden md:flex flex-col bg-zinc-950 min-h-screen sticky top-0">
+      <aside className="w-64 border-r border-gray-200/50 hidden lg:flex flex-col bg-white min-h-screen sticky top-0">
         
         {/* BRANDING */}
         <div className="p-6">
           <Link to="/" className="block">
-            <h1 className="text-2xl font-serif text-yellow-500 tracking-wide">
+            <h1 className="text-2xl font-serif text-[#c8a64d] tracking-wide">
               Sree Raaga
             </h1>
-            <span className="text-[9px] tracking-[3px] uppercase text-white/60 block mt-0.5">
+            <span className="text-[9px] tracking-[3px] uppercase text-gray-500 block mt-0.5">
               Resorts
             </span>
           </Link>
-          <p className="text-[10px] text-yellow-500/60 uppercase tracking-[2px] mt-4 font-light">Guest Portal</p>
+          <p className="text-[10px] text-[#c8a64d] uppercase tracking-[2px] mt-4 font-light">Guest Portal</p>
         </div>
 
         {/* NAVIGATION */}
@@ -88,8 +88,8 @@ const UserLayout = () => {
               to={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded text-sm transition tracking-wider uppercase text-xs ${
                 isActive(item.path)
-                  ? "bg-yellow-500 text-black font-semibold shadow-lg"
-                  : "text-gray-400 hover:text-yellow-500 hover:bg-zinc-900"
+                  ? "bg-[#c8a64d] text-white font-semibold shadow-md"
+                  : "text-gray-500 hover:text-[#c8a64d] hover:bg-gray-50"
               }`}
             >
               <item.icon className="w-4 h-4" />
@@ -99,10 +99,10 @@ const UserLayout = () => {
         </nav>
 
         {/* SIDEBAR FOOTER */}
-        <div className="border-t border-yellow-500/10 p-4 space-y-2">
+        <div className="border-t border-gray-200/50 p-4 space-y-2">
           <button 
             onClick={() => navigate("/")}
-            className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-gray-400 hover:text-yellow-500 hover:bg-zinc-900 rounded transition cursor-pointer uppercase tracking-wider"
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-gray-500 hover:text-[#c8a64d] hover:bg-gray-50 rounded transition cursor-pointer uppercase tracking-wider"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Home
@@ -110,7 +110,7 @@ const UserLayout = () => {
 
           <button 
             onClick={handleSignOut}
-            className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition cursor-pointer uppercase tracking-wider"
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-gray-500 hover:text-red-600 hover:bg-red-50/10 rounded transition cursor-pointer uppercase tracking-wider"
           >
             <LogOut className="w-3.5 h-3.5" />
             Sign Out
@@ -126,10 +126,10 @@ const UserLayout = () => {
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
+              animate={{ opacity: 0.3 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black z-40 md:hidden"
+              className="fixed inset-0 bg-black z-40 lg:hidden"
             />
             {/* Drawer */}
             <motion.aside
@@ -137,21 +137,21 @@ const UserLayout = () => {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="fixed inset-y-0 left-0 w-64 bg-zinc-950 border-r border-yellow-500/10 z-50 md:hidden flex flex-col min-h-screen"
+              className="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200/50 z-50 lg:hidden flex flex-col min-h-screen"
             >
               {/* BRANDING / HEADER */}
-              <div className="p-6 flex items-center justify-between border-b border-yellow-500/10">
+              <div className="p-6 flex items-center justify-between border-b border-gray-200/50">
                 <Link to="/" className="block">
-                  <h1 className="text-2xl font-serif text-yellow-500 tracking-wide">
+                  <h1 className="text-2xl font-serif text-[#c8a64d] tracking-wide">
                     Sree Raaga
                   </h1>
-                  <span className="text-[9px] tracking-[3px] uppercase text-white/60 block mt-0.5">
+                  <span className="text-[9px] tracking-[3px] uppercase text-gray-500 block mt-0.5">
                     Resorts
                   </span>
                 </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-white hover:text-yellow-500"
+                  className="text-[#0d2b4e] hover:text-[#c8a64d]"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -165,8 +165,8 @@ const UserLayout = () => {
                     to={item.path}
                     className={`flex items-center gap-3 px-4 py-3 rounded text-sm transition tracking-wider uppercase text-[10px] ${
                       isActive(item.path)
-                        ? "bg-yellow-500 text-black font-semibold shadow-lg"
-                        : "text-gray-400 hover:text-yellow-500 hover:bg-zinc-900"
+                        ? "bg-[#c8a64d] text-white font-semibold shadow-md"
+                        : "text-gray-400 hover:text-[#c8a64d] hover:bg-gray-50"
                     }`}
                   >
                     <item.icon className="w-4 h-4" />
@@ -176,10 +176,10 @@ const UserLayout = () => {
               </nav>
 
               {/* FOOTER */}
-              <div className="border-t border-yellow-500/10 p-4 space-y-2">
+              <div className="border-t border-gray-200/50 p-4 space-y-2">
                 <button
                   onClick={() => navigate("/")}
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-gray-400 hover:text-yellow-500 hover:bg-zinc-900 rounded transition cursor-pointer uppercase tracking-wider"
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-gray-500 hover:text-[#c8a64d] hover:bg-gray-50 rounded transition cursor-pointer uppercase tracking-wider"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   Back to Home
@@ -187,7 +187,7 @@ const UserLayout = () => {
 
                 <button
                   onClick={handleSignOut}
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition cursor-pointer uppercase tracking-wider"
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-gray-500 hover:text-red-600 hover:bg-red-50/10 rounded transition cursor-pointer uppercase tracking-wider"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   Sign Out
@@ -202,27 +202,27 @@ const UserLayout = () => {
       <main className="flex-1 flex flex-col min-h-screen">
         
         {/* HEADER */}
-        <header className="h-16 border-b border-yellow-500/10 flex items-center justify-between px-4 sm:px-6 bg-zinc-950 sticky top-0 z-30">
+        <header className="h-16 border-b border-gray-200/50 flex items-center justify-between px-4 sm:px-6 bg-white sticky top-0 z-30">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="md:hidden text-white hover:text-yellow-500 p-1 rounded hover:bg-zinc-900 transition"
+              className="lg:hidden text-[#0d2b4e] hover:text-[#c8a64d] p-1 rounded hover:bg-gray-100 transition"
               title="Open Navigation"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <div className="text-sm text-gray-400 tracking-wide font-light hidden sm:block">
-              Welcome back, <span className="text-yellow-500 font-medium">{user ? user.full_name : "Valued Guest"}</span>
+            <div className="text-sm text-gray-500 tracking-wide font-light hidden sm:block">
+              Welcome back, <span className="text-[#c8a64d] font-medium">{user ? user.full_name : "Valued Guest"}</span>
             </div>
-            <div className="text-sm text-gray-400 tracking-wide font-light sm:hidden">
-              Welcome, <span className="text-yellow-500 font-medium">{user ? user.full_name.split(" ")[0] : "Guest"}</span>
+            <div className="text-sm text-gray-500 tracking-wide font-light sm:hidden">
+              Welcome, <span className="text-[#c8a64d] font-medium">{user ? user.full_name.split(" ")[0] : "Guest"}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <Link 
               to="/dashboard/profile"
-              className="w-9 h-9 rounded-full bg-yellow-500 text-black flex items-center justify-center font-bold text-sm hover:bg-yellow-400 transition"
+              className="w-9 h-9 rounded-full bg-[#c8a64d] text-white flex items-center justify-center font-bold text-sm hover:bg-[#b09141] transition"
               title="View Profile"
             >
               {user ? user.full_name.charAt(0).toUpperCase() : "G"}
@@ -231,7 +231,7 @@ const UserLayout = () => {
         </header>
 
         {/* PAGE OUTLET */}
-        <div className="p-4 sm:p-6 flex-1 bg-black overflow-y-auto">
+        <div className="p-4 sm:p-6 flex-1 bg-[#fcfaf2] overflow-y-auto">
           <Outlet />
         </div>
 

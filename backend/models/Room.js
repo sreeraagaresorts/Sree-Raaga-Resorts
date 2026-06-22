@@ -7,10 +7,12 @@ const roomSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   image: { type: String },
+  images: { type: [String], default: [] },
   category: { type: String, default: "Executive Rooms" },
   area: { type: String },
   beds: { type: String },
   bathrooms: { type: String },
+  guests: { type: String },
   description: { type: String },
   created_at: { type: Date, default: Date.now }
 });

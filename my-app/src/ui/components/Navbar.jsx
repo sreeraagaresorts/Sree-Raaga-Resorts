@@ -77,9 +77,10 @@ const menuLinks = [
   { name: "Home", path: "/" },
   { name: "About Us", path: "/about" },
   { name: "Rooms", path: "/rooms" },
+  { name: "Day Out", path: "/day-out" },
+  { name: "Corporate Outings", path: "/corporate" },
   { name: "Amenities", path: "/amenities" },
   { name: "Dine", path: "/dine" },
-  
   { name: "Resort Menu", path: "/menu" },
   { name: "Events", path: "/events" },
   { name: "Contact", path: "/contact" }
@@ -96,6 +97,7 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
   const [cursorHovered, setCursorHovered] = useState(false);
+  const [showRoomsSubmenu, setShowRoomsSubmenu] = useState(false);
 
   // Animation Refs
   const overlayRef = useRef(null);
@@ -264,7 +266,7 @@ const Navbar = () => {
             {/* Telephone Line */}
             <div className={`hidden md:flex items-center gap-2.5 text-white/80 hover:text-white transition-all duration-500 ${isOpen ? "opacity-0 pointer-events-none blur-sm" : ""}`}>
               <Phone size={14} className="text-[#c8a64d] shrink-0" />
-              <span className="text-xs lg:text-sm tracking-widest font-semibold font-sans">+41-96567-7854</span>
+              <span className="text-xs lg:text-sm tracking-widest font-semibold font-sans">089045 61155</span>
             </div>
           </div>
 
@@ -333,11 +335,14 @@ const Navbar = () => {
         {/* Parallax Background Image */}
         <div 
           ref={bgImageRef}
-          className="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none"
+          className="absolute left-0 top-0 w-full lg:w-[60%] h-full bg-cover bg-center pointer-events-none"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2000')"
+            backgroundImage: "url('https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2000')",
+            opacity: 0.5
           }}
         />
+        {/* Dark overlay for readability */}
+        <div className="absolute left-0 top-0 w-full lg:w-[60%] h-full bg-black/60 pointer-events-none" />
 
         {/* Custom Follower Cursor */}
         {isOpen && (
@@ -355,25 +360,93 @@ const Navbar = () => {
         )}
 
         {/* LEFT COLUMN: Large Serif Menu Links */}
-        <div className="flex-1 flex flex-col justify-center px-6 md:px-24 py-32 z-10 overflow-y-auto max-h-screen [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <div ref={menuLinksRef} className="flex flex-col gap-5 md:gap-7">
-            {menuLinks.map((link, idx) => (
-              <div key={idx} className="overflow-hidden py-1">
-                <span className="menu-link-wrapper block">
-                  <MagneticLink 
-                    to={link.path}
-                    onClick={() => setIsOpen(false)}
-                    onMouseEnter={() => setCursorHovered(true)}
-                    onMouseLeave={() => setCursorHovered(false)}
-                    className="text-3xl md:text-4xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] transition-colors duration-300 font-serif"
+        <div className="relative flex-1 lg:flex-[0_0_60%] flex flex-col justify-center px-6 md:px-24 py-32 z-10 overflow-y-auto max-h-screen [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div ref={menuLinksRef} className="flex flex-col mt-24 gap-5 md:gap-7">
+            {menuLinks.map((link, idx) => {
+              if (link.name === "Rooms") {
+                return (
+                  <div 
+                    key={idx} 
+                    className="relative overflow-visible py-1 flex flex-col lg:flex-row lg:items-center gap-4 group/rooms-item"
+                    onMouseEnter={() => {
+                      setCursorHovered(true);
+                      setShowRoomsSubmenu(true);
+                    }}
+                    onMouseLeave={() => {
+                      setCursorHovered(false);
+                      setShowRoomsSubmenu(false);
+                    }}
                   >
-                    {link.name}
-                    {/* Animated Underline */}
-                    <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100" />
-                  </MagneticLink>
-                </span>
-              </div>
-            ))}
+                    <div className="menu-link-wrapper flex items-center">
+                      <MagneticLink 
+                        to={link.path}
+                        onClick={() => setIsOpen(false)}
+                        className="text-3xl md:text-3xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 font-serif"
+                      >
+                        {link.name}
+                        <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100" />
+                      </MagneticLink>
+                      
+                      <ChevronDown 
+                        size={18} 
+                        className={`text-white/60 ml-2 transform lg:-rotate-90 transition-transform duration-300 group-hover/rooms-item:text-[#c8a64d] ${
+                          showRoomsSubmenu ? "rotate-0 text-[#c8a64d]" : ""
+                        }`} 
+                      />
+                    </div>
+
+                    {/* Dropright side submenu */}
+                    <div 
+                      className={`lg:absolute lg:left-1/3 lg:top-1/2 lg:-translate-y-1/2 flex flex-col gap-3 pl-6 lg:pl-10 lg:border-l border-white/10 lg:ml-4 overflow-hidden transition-all duration-500 ease-in-out ${
+                        showRoomsSubmenu 
+                          ? "max-h-[250px] opacity-100 visible translate-x-0" 
+                          : "max-h-0 lg:max-h-none opacity-0 invisible lg:-translate-x-4 lg:pointer-events-none"
+                      }`}
+                    >
+                      <Link 
+                        to="/rooms?category=executive-rooms"
+                        onClick={() => setIsOpen(false)}
+                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300 font-serif py-1 whitespace-nowrap"
+                      >
+                        • Executive Rooms
+                      </Link>
+                      <Link 
+                        to="/rooms?category=private-villas"
+                        onClick={() => setIsOpen(false)}
+                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300 font-serif py-1 whitespace-nowrap"
+                      >
+                        • Private Villas
+                      </Link>
+                      <Link 
+                        to="/rooms?category=duplex-villa"
+                        onClick={() => setIsOpen(false)}
+                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300 font-serif py-1 whitespace-nowrap"
+                      >
+                        • Duplex Villa
+                      </Link>
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <div key={idx} className="overflow-hidden py-1">
+                  <span className="menu-link-wrapper block">
+                    <MagneticLink 
+                      to={link.path}
+                      onClick={() => setIsOpen(false)}
+                      onMouseEnter={() => setCursorHovered(true)}
+                      onMouseLeave={() => setCursorHovered(false)}
+                      className="text-3xl md:text-3xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 font-serif"
+                    >
+                      {link.name}
+                      {/* Animated Underline */}
+                      <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100" />
+                    </MagneticLink>
+                  </span>
+                </div>
+              );
+            })}
 
             {/* Mobile Only Quick Actions */}
             <div className="flex flex-col gap-4 mt-8 md:hidden border-t border-white/10 pt-8 max-w-xs w-full">
@@ -407,53 +480,80 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Luxury Beige Card Layout (resort info) */}
-        <div className="hidden lg:flex w-[40%] items-center justify-center z-10 px-16 border-l border-white/5">
+        {/* RIGHT COLUMN: Luxury Beige Panel (Resort Info) */}
+        <div className="hidden lg:flex lg:w-[40%] bg-[#f5dec2] text-[#0d2b4e] flex-col justify-center items-center px-12 py-16 relative z-10 overflow-y-auto">
           <div 
             ref={infoPanelRef}
-            className="bg-[#f5f1e6] text-[#0d2b4e] rounded-xl p-10 shadow-2xl flex flex-col justify-between border border-[#c8a64d]/10 h-[80%] max-w-sm ml-auto mr-12"
+            className="flex flex-col items-center text-center space-y-10 max-w-sm w-full"
           >
-            <div>
-              <span className="text-[#c8a64d] uppercase tracking-[6px] text-xs font-semibold block mb-2">
+            {/* Top Logo / Brand */}
+            <div className="flex flex-col items-center font-serif">
+              <span className="text-[#0d2b4e] uppercase tracking-[6px] text-xs font-semibold block">
                 Sree Raaga
               </span>
-              <h3 className="text-2xl font-light uppercase tracking-widest font-serif mb-6 border-b border-[#0d2b4e]/10 pb-4">
-                Resorts
-              </h3>
-              <p className="text-gray-600 text-xs leading-relaxed font-sans mb-8">
-                Sree Raaga Resorts offers a sanctuary of peace, where luxury meets nature. Discover private villas, pool gardens, a tranquil wellness spa, and our premium dining facilities near Bangalore.
-              </p>
-            </div>
-            
-            <div className="space-y-4 border-t border-[#0d2b4e]/10 pt-6 font-sans">
-              <div className="text-[10px] uppercase tracking-widest text-[#c8a64d] font-bold">Resort Details</div>
-              
-              <div className="flex items-center gap-3 text-xs text-gray-700">
-                <Phone size={13} className="text-[#c8a64d] shrink-0" />
-                <span>+91 99000 11550</span>
-              </div>
-              
-              <div className="flex items-center gap-3 text-xs text-gray-700">
-                <Mail size={13} className="text-[#c8a64d] shrink-0" />
-                <span>support@sreeraagaresorts.in</span>
-              </div>
-              
-              <div className="flex items-center gap-3 text-xs text-gray-700">
-                <MapPin size={13} className="text-[#c8a64d] shrink-0" />
-                <span>Devanahalli Hobli, Bangalore</span>
-              </div>
+              <span className="text-[#c8a64d] uppercase tracking-[4px] text-[9px] font-bold mt-1">
+                Luxury Resorts
+              </span>
             </div>
 
-            <div className="flex gap-4 border-t border-[#0d2b4e]/10 pt-6 justify-center">
-              <a 
-                href="https://instagram.com" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="text-gray-500 hover:text-[#c8a64d] transition"
-              >
-                <InstagramIcon size={18} />
-              </a>
+            {/* Elegant Tagline / Heading */}
+            <h2 className="text-3xl font-light italic font-serif text-[#0d2b4e] leading-tight">
+              Resort & Spa Sree Raaga
+            </h2>
+
+            {/* Divider line (subtle) */}
+            <div className="w-12 h-[1px] bg-[#0d2b4e]/20" />
+
+            {/* Info Sections */}
+            <div className="space-y-8 w-full font-serif">
+              {/* Location */}
+              <div className="flex flex-col items-center">
+                <span className="text-xs uppercase tracking-[3px] font-bold text-[#0d2b4e] mb-2">
+                  Location
+                </span>
+                <span className="text-xs text-gray-700 font-light leading-relaxed">
+                  Devanahalli Hobli, Taluk Chamarayapatna
+                </span>
+                <span className="text-xs text-gray-700 font-light leading-relaxed mt-0.5">
+                  Karnataka 562129, India
+                </span>
+              </div>
+
+              {/* Phone Support */}
+              <div className="flex flex-col items-center">
+                <span className="text-xs uppercase tracking-[3px] font-bold text-[#0d2b4e] mb-2">
+                  Phone Support
+                </span>
+                <span className="text-xs text-gray-700 font-light">
+                  089045 61155
+                </span>
+                <span className="text-xs text-gray-700 font-light mt-0.5">
+                  info@sreeraagaresorts.in
+                </span>
+              </div>
+
+              {/* Connect With Us */}
+              <div className="flex flex-col items-center">
+                <span className="text-xs uppercase tracking-[3px] font-bold text-[#0d2b4e] mb-2">
+                  Connect With Us
+                </span>
+                <span className="text-xs text-gray-700 font-light">
+                  089045 61155
+                </span>
+                {/* Social icons */}
+                <div className="flex gap-4 mt-3">
+                  <a 
+                    href="https://instagram.com" 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    className="text-[#0d2b4e]/60 hover:text-[#c8a64d] transition"
+                  >
+                    <InstagramIcon size={18} />
+                  </a>
+                </div>
+              </div>
             </div>
+            
           </div>
         </div>
 

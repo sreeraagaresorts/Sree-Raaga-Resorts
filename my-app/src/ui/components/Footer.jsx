@@ -136,23 +136,23 @@ const Footer = () => {
               <p>
                 No. 1246, Budigere Bypass Road,
                 <br />
-                Devanahalli Hobli, Bangalore,
+                Devanahalli Hobli, Taluk Chamarayapatna,
                 <br />
                 Karnataka 562129
               </p>
               
               <a
-                href="mailto:support@sreeraagaresorts.in"
+                href="mailto:info@sreeraagaresorts.in"
                 className="block hover:text-[#c8a64d] transition duration-300"
               >
-                support@sreeraagaresorts.in
+                info@sreeraagaresorts.in
               </a>
 
               <a
-                href="tel:+919900011550"
+                href="tel:08904561155"
                 className="block hover:text-[#c8a64d] transition duration-300"
               >
-                +91 99000 11550
+                089045 61155
               </a>
             </div>
           </div>
@@ -176,13 +176,18 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/menu" className="text-gray-400 hover:text-[#c8a64d] transition">
-                    Restaurant & Bar
+                  <Link to="/day-out" className="text-gray-400 hover:text-[#c8a64d] transition">
+                    Day Out
                   </Link>
                 </li>
                 <li>
-                  <Link to="/about" className="text-gray-400 hover:text-[#c8a64d] transition">
-                    Spa & Wellness
+                  <Link to="/corporate" className="text-gray-400 hover:text-[#c8a64d] transition">
+                    Corporate Outings
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/menu" className="text-gray-400 hover:text-[#c8a64d] transition">
+                    Restaurant & Bar
                   </Link>
                 </li>
                 <li>
@@ -194,12 +199,17 @@ const Footer = () => {
               
               <ul className="space-y-3">
                 <li>
-                  <Link to="/about" className="text-gray-400 hover:text-[#c8a64d] transition">
+                  <Link to="/faq" className="text-gray-400 hover:text-[#c8a64d] transition">
+                    FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/privacy-policy" className="text-gray-400 hover:text-[#c8a64d] transition">
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
-                  <Link to="/about" className="text-gray-400 hover:text-[#c8a64d] transition">
+                  <Link to="/terms-conditions" className="text-gray-400 hover:text-[#c8a64d] transition">
                     Terms & Conditions
                   </Link>
                 </li>

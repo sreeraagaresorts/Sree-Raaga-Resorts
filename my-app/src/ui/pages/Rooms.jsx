@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "motion/react";
 import { Maximize, Users, Bed, Bath, ArrowRight } from "lucide-react";
 import Navbar from "../components/Navbar";
@@ -119,6 +119,40 @@ const Rooms = () => {
 
   const displayRooms = rooms.length > 0 ? rooms : fallbackRooms;
 
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get("category");
+
+  const filteredRooms = React.useMemo(() => {
+    if (!categoryParam) return displayRooms;
+
+    const lowerParam = categoryParam.toLowerCase().trim();
+
+    return displayRooms.filter((room) => {
+      const roomCat = (room.category || "").toLowerCase().trim();
+      
+      if (lowerParam === "executive-rooms" || lowerParam === "executive rooms") {
+        return roomCat.includes("executive");
+      }
+      if (lowerParam === "private-villas" || lowerParam === "private villas") {
+        return (roomCat.includes("villa") || roomCat.includes("cottage")) && !roomCat.includes("duplex");
+      }
+      if (lowerParam === "duplex-villa" || lowerParam === "duplex villa") {
+        return roomCat.includes("duplex");
+      }
+
+      return roomCat.includes(lowerParam) || lowerParam.includes(roomCat);
+    });
+  }, [displayRooms, categoryParam]);
+
+  const getCategoryTitle = () => {
+    if (!categoryParam) return "Rooms & Suites";
+    const lowerParam = categoryParam.toLowerCase().trim();
+    if (lowerParam === "executive-rooms" || lowerParam === "executive rooms") return "Executive Rooms";
+    if (lowerParam === "private-villas" || lowerParam === "private villas") return "Private Villas";
+    if (lowerParam === "duplex-villa" || lowerParam === "duplex villa") return "Duplex Villa";
+    return categoryParam;
+  };
+
   return (
     <>
       <Navbar />
@@ -138,7 +172,7 @@ const Rooms = () => {
               Sree Raaga Resorts Accommodation
             </span>
             <h1 className="text-5xl md:text-7xl font-light font-serif leading-tight">
-              Rooms & Suites
+              {getCategoryTitle()}
             </h1>
           </div>
         </section>
@@ -163,7 +197,7 @@ const Rooms = () => {
 
           {/* Rooms Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
-            {displayRooms.map((room, idx) => (
+            {filteredRooms.map((room, idx) => (
               <motion.div
                 key={room.id || room._id}
                 initial={{ opacity: 0, y: 40 }}

@@ -29,6 +29,12 @@ exports.sendMessage = async (req, res) => {
     });
     await contact.save();
 
+    // Trigger email notification to support desk in background
+    const { sendContactSubmissionEmail } = require("../utils/email");
+    sendContactSubmissionEmail(contact.toObject()).catch(err => {
+      console.error("[Email Error] Failed to send contact submission email:", err);
+    });
+
     res.status(201).json({
       success: true,
       message: "Message Sent Successfully",

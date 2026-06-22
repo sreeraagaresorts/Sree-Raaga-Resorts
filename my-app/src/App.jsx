@@ -9,10 +9,29 @@ import Amenities from "./ui/pages/Amenities";
 import Rooms from "./ui/pages/Rooms";
 import RoomDetails from "./ui/pages/RoomDetails";
 import Events from "./ui/pages/Events";
+import Dine from "./ui/pages/Dine";
 import Contact from "./ui/pages/Contact";
 import Menu from "./ui/pages/Menu";
 import Login from "./ui/UserReg/Login";
 import Register from "./ui/UserReg/Register";
+import FAQ from "./ui/pages/FAQ";
+import PrivacyPolicy from "./ui/pages/PrivacyPolicy";
+import TermsConditions from "./ui/pages/TermsConditions";
+import NotFound from "./ui/pages/NotFound";
+import DayOut from "./ui/pages/DayOut";
+import Corporate from "./ui/pages/Corporate";
+
+// PRIVACY SUBPAGES
+import PrivacyGeneral from "./ui/pages/privacy/General";
+import PrivacyPayments from "./ui/pages/privacy/Payments";
+import PrivacyOrders from "./ui/pages/privacy/Orders";
+import PrivacyRefunds from "./ui/pages/privacy/Refunds";
+
+// TERMS SUBPAGES
+import TermsGeneral from "./ui/pages/terms/General";
+import TermsPayments from "./ui/pages/terms/Payments";
+import TermsOrders from "./ui/pages/terms/Orders";
+import TermsRefunds from "./ui/pages/terms/Refunds";
 
 // USER DASHBOARD
 import UserDashboard from "./ui/pages/userprofile/UserDashboard";
@@ -51,8 +70,27 @@ const App = () => {
         <Route path="/rooms" element={<Rooms />} />
         <Route path="/rooms/:id" element={<RoomDetails />} />
         <Route path="/menu" element={<Menu />} />
+        <Route path="/dine" element={<Dine />} />
         <Route path="/events" element={<Events />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/day-out" element={<DayOut />} />
+        <Route path="/corporate" element={<Corporate />} />
+        <Route path="/faq" element={<FAQ />} />
+        {/* PRIVACY POLICY PAGES */}
+        <Route path="/privacy-policy" element={<PrivacyPolicy />}>
+          <Route index element={<PrivacyGeneral />} />
+          <Route path="payments" element={<PrivacyPayments />} />
+          <Route path="orders" element={<PrivacyOrders />} />
+          <Route path="refunds" element={<PrivacyRefunds />} />
+        </Route>
+
+        {/* TERMS & CONDITIONS PAGES */}
+        <Route path="/terms-conditions" element={<TermsConditions />}>
+          <Route index element={<TermsGeneral />} />
+          <Route path="payments" element={<TermsPayments />} />
+          <Route path="orders" element={<TermsOrders />} />
+          <Route path="refunds" element={<TermsRefunds />} />
+        </Route>
 
         {/* AUTH */}
         <Route path="/login" element={<Login />} />
@@ -98,6 +136,9 @@ const App = () => {
         <Route path="settings" element={<AdminSettings />} />
         <Route path="content" element={<AdminContent />} />
       </Route>
+      
+      {/* CATCH ALL 404 */}
+      <Route path="*" element={<NotFound />} />
 
       </Routes>
 

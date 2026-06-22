@@ -21,7 +21,12 @@ function formatDate(dateStr) {
  * Attempts real delivery via SMTP if configured. Otherwise, logs simulated emails.
  * Always catches errors gracefully to prevent crashing main HTTP workflows.
  */
-async function sendMail({ to, subject, html, text }) {
+async function sendMail({ to, subject, html, text, allowAdminDesk = false }) {
+  if (to === "support@sreeraagaresorts.in" && !allowAdminDesk) {
+    console.log(`[Email Skip] Skipping customer action email to support desk: ${to}`);
+    return true;
+  }
+
   const smtpHost = process.env.SMTP_HOST;
   const smtpPort = process.env.SMTP_PORT;
   const smtpUser = process.env.SMTP_USER;
@@ -406,5 +411,31 @@ exports.sendFoodOrderStatusUpdatedEmail = async (order) => {
     subject: `Food Order Update - #${order.id} - ${order.status.toUpperCase()}`,
     html: getEmailShell("Food Order Update", content),
     text: `Your food order status has been updated to ${order.status}.`
+  });
+};
+
+// 10. Contact Form Submission Notification to Support Team
+exports.sendContactSubmissionEmail = async (contact) => {
+  const content = `
+    <div class="greeting">New Contact Form Submission</div>
+    <p>A user has submitted a new inquiry via the resort contact form:</p>
+    <div class="box">
+      <strong>Inquiry Details:</strong><br>
+      • Name: <strong>${contact.name}</strong><br>
+      • Email: <strong>${contact.email}</strong><br>
+      • Subject: ${contact.subject || "N/A"}<br>
+      • Date/Time: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+    </div>
+    <div class="box" style="background-color: #04101e; border-left: 3px solid #c8a64d;">
+      <strong>Message:</strong><br>
+      <p style="white-space: pre-wrap; font-style: italic; margin-top: 10px;">"${contact.message}"</p>
+    </div>
+  `;
+  return sendMail({
+    to: "support@sreeraagaresorts.in",
+    subject: `New Contact Inquiry: ${contact.subject || "No Subject"}`,
+    html: getEmailShell("New Contact Submission", content),
+    text: `New contact form submission from ${contact.name} (${contact.email}): ${contact.message}`,
+    allowAdminDesk: true
   });
 };

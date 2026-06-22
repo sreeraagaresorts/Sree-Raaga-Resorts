@@ -132,7 +132,7 @@ const Amenities = () => {
           className="relative h-[85vh] flex flex-col justify-between items-center bg-cover bg-center pt-32 pb-12"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2000')",
+              "url('https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=2000')",
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/45"></div>
@@ -143,79 +143,47 @@ const Amenities = () => {
               Sree Raaga Resorts Amenities
             </span>
             <h1 className="text-5xl md:text-7xl font-light font-serif leading-tight mb-6">
-              Kayak Surfing
+              Experiences For Every Occasion
             </h1>
-             {/* Quick Info Bar Overlay */}
-          <div className="relative z-10 w-full ">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4 text-center items-center  pt-8">
-              {/* Phone */}
-              <div className="flex flex-col items-center justify-center text-white">
-                <Phone className="w-5 h-5 text-white/90 mb-3 rotate-[10deg]" strokeWidth={1.2} />
-                <a href="tel:+41965677854" className="text-xs md:text-sm font-sans font-light tracking-wider hover:text-[#c8a64d] transition-colors">
-                  +41-96567-7854
-                </a>
+            {/* Details Row */}
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-4 pt-8 border-t border-white/20 font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/80">
+              <div className="flex items-center gap-2">
+                <Phone size={13} className="text-[#c8a64d]" />
+                <span>+91 89045 61155</span>
               </div>
-
-              {/* Email */}
-              <div className="flex flex-col items-center justify-center text-white">
-                <Mail className="w-5 h-5 text-white/90 mb-3" strokeWidth={1.2} />
-                <a href="mailto:restaurant@swiss-resort.com" className="w-50 text-xs md:text-sm font-sans font-light tracking-wider hover:text-[#c8a64d] transition-colors break-all">
-                  support@sreeraagaresorts.in
-                </a>
+              <div className="flex items-center gap-2">
+                <Mail size={13} className="text-[#c8a64d]" />
+                <span>info@sreeraagaresorts.in</span>
               </div>
-
-              {/* Days */}
-              <div className="flex flex-col items-center justify-center text-white">
-                <Phone className="w-5 h-5 text-white/90 mb-3 -rotate-[10deg]" strokeWidth={1.2} />
-                <span className="text-xs md:text-sm font-sans font-light tracking-wider">
-                  Monday - Sunday
-                </span>
+              <div className="flex items-center gap-2">
+                <span>📅 Mon - Sun</span>
               </div>
-
-              {/* Hours */}
-              <div className="flex flex-col items-center justify-center text-white">
-                <Phone className="w-5 h-5 text-white/90 mb-3 rotate-[35deg]" strokeWidth={1.2} />
-                <span className="text-xs md:text-sm font-sans font-light tracking-wider">
-                  06:00 am - 22:30 pm
-                </span>
-              </div>
-
-              {/* Price */}
-              <div className="flex flex-col items-center justify-center text-white col-span-2 md:col-span-1">
-                <Phone className="w-5 h-5 text-white/90 mb-3 -rotate-[35deg]" strokeWidth={1.2} />
-                <span className="text-xs md:text-sm font-sans font-light tracking-wider">
-                  $50 - $450
-                </span>
+              <div className="flex items-center gap-2">
+                <span>🕒 24/7 Front Desk</span>
               </div>
             </div>
           </div>
-          </div>
-
-       
         </section>
 
-  
         {/* ================= EXPERIENCES GRID ================= */}
-        <section className=" bg-white text-[#0d2b4e]">
-          
-
-          <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  ">
+        <section className="bg-white text-[#0d2b4e]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { 
-                title: "Yoga Classes", 
-                image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800" 
+                title: "Luxury Stay", 
+                image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=800" 
               },
               { 
-                title: "Water Sports", 
-                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800" 
+                title: "Grand Celebrations", 
+                image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800" 
               },
               { 
-                title: "Scuba Diving", 
-                image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800" 
+                title: "Day Out & Play", 
+                image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=800" 
               },
               { 
-                title: "Other Activities", 
-                image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=800" 
+                title: "Multi-Cuisine Dining", 
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800" 
               }
             ].map((exp, index) => (
               <div key={index} className="relative h-[400px] sm:h-[500px] lg:h-[650px] group overflow-hidden shadow-lg">
@@ -226,12 +194,9 @@ const Amenities = () => {
                   delay={index * 0.15}
                 />
                 
-                {/* Gradient overlay
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent z-10"></div> */}
-                
                 {/* Content Overlay */}
                 <div className="absolute bottom-6 left-6 right-6 z-20 text-white text-center">
-                  <h3 className="text-xl font-light tracking-wide uppercase  drop-shadow mb-1">
+                  <h3 className="text-xl font-light tracking-wide uppercase drop-shadow mb-1">
                     {exp.title}
                   </h3>
                   <div className="w-8 h-[1px] bg-[#c8a64d] mx-auto scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
@@ -241,42 +206,84 @@ const Amenities = () => {
           </div>
         </section>
 
-
-        {/* ================= TWO COLUMN DETAILED TEXT ================= */}
-        <section className="py-24 px-6 bg-white border-t border-gray-100">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            
-            {/* Left Big Typography Column */}
-            <div className="lg:col-span-5 select-none">
-              <h3 className="text-2xl md:text-3xl font-light font-serif leading-relaxed text-[#0d2b4e] lg:border-l-2 lg:border-[#c8a64d] lg:pl-8">
-                We have some great surfing locations all around the British Isles. The Atlantic 
-                coastline of Cornwall, Devon, Wales, Ireland and Scotland together with the 
-                North Sea coastline of England and Northern Ireland.
-              </h3>
+        {/* ================= DETAILED AMENITIES LIST SECTION ================= */}
+        <section className="py-24 px-6 bg-[#fcfaf2]">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16 select-none">
+              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+                Experiences For Every Occasion
+              </span>
+              <h2 className="text-4xl md:text-6xl font-light font-serif text-[#0d2b4e]">
+                Resort Amenities & Offerings
+              </h2>
             </div>
 
-            {/* Right Standard Narrative Column */}
-            <div className="lg:col-span-7 space-y-6 text-gray-500 font-sans text-xs md:text-sm leading-relaxed">
-              <p>
-                If you are completely new to surfing and kayaking then taking a lesson from one of the 
-                many British Surfing Association coaches and centers around the UK is highly recommended. 
-                Plan as much as possible before you head out into the water, educate yourself or get 
-                some training on how to surf safely, how to recognize dangerous situations and the 
-                etiquette of surfing with others.
-              </p>
-              <p>
-                There are books, web sites, newsletters, and safety notices that outline guidelines 
-                and warnings that can help. Everyone surfs for fun, lots of people do this with friends 
-                and club members and often enjoy doing this in competition.
-              </p>
-              <p>
-                Competitions are run at every level, from introductory local events right up to World 
-                Championships. The best thing about competition is that you'll meet and learn from 
-                others, and improve many of the key skills that you need in everyday surfing and water 
-                adventures.
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+              {[
+                {
+                  category: "Stay",
+                  items: [
+                    "Executive Rooms (35 Well-appointed)",
+                    "1 BHK Villas (9 suitable for couples/groups)",
+                    "Compact Villas (5 Row-house style)",
+                    "Duplex Villa (1 Unique unit with Private Pool)"
+                  ]
+                },
+                {
+                  category: "Work",
+                  items: [
+                    "Dedicated Co-Working Space",
+                    "Corporate Retreat Facilities",
+                    "Meeting & Networking Areas",
+                    "High-Speed Connectivity"
+                  ]
+                },
+                {
+                  category: "Play",
+                  items: [
+                    "60ft x 30ft Swimming Pool",
+                    "Rain Dance Arena",
+                    "Indoor Games & TT",
+                    "Outdoor Games (Cricket, Volleyball)",
+                    "Adventure Activities",
+                    "Children's Play Area"
+                  ]
+                },
+                {
+                  category: "Celebrate",
+                  items: [
+                    "Grand Banquet Hall (800 Capacity)",
+                    "Landscaped Event Lawn (500 Capacity)",
+                    "Mini Banquet Hall (150 Capacity)",
+                    "Wedding & Reception Venues",
+                    "Community & Cultural Events"
+                  ]
+                },
+                {
+                  category: "Dine",
+                  items: [
+                    "Multi-Cuisine Dining Hall",
+                    "Coffee Shop",
+                    "Bar & Restaurant (150 Seating)",
+                    "Sports Bar (Snooker, TT, DJ setup)"
+                  ]
+                }
+              ].map((group, idx) => (
+                <div key={idx} className="bg-white border border-gray-100 p-8 shadow-md rounded-sm flex flex-col">
+                  <h3 className="text-xl font-serif text-[#0d2b4e] border-b border-[#c8a64d]/30 pb-3 mb-4 uppercase tracking-[2px] font-semibold text-center">
+                    {group.category}
+                  </h3>
+                  <ul className="space-y-3 font-sans text-xs text-gray-500 leading-relaxed font-light flex-grow">
+                    {group.items.map((item, itemIdx) => (
+                      <li key={itemIdx} className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-[#c8a64d] rounded-full shrink-0 mt-1.5"></span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
-            
           </div>
         </section>
 

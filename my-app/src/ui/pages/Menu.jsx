@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Search, RefreshCw, Leaf, X } from "lucide-react";
+import { Search, RefreshCw, Leaf, X, Phone, Mail } from "lucide-react";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useToast } from "../components/Toast";
@@ -138,135 +138,138 @@ const Menu = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-black text-white min-h-screen">
-        {/* Hero Banner */}
+      <div className="bg-[#fcfaf2] text-[#0d2b4e] font-serif min-h-screen ">
+        
+        {/* ================= HERO BANNER ================= */}
         <section
-          className="relative h-[55vh] flex items-center justify-center bg-cover bg-center"
+          className="relative h-[55vh] flex items-center justify-center bg-cover bg-center select-none"
           style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2000')",
+            backgroundImage: "url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2000')"
           }}
         >
-          <div className="absolute inset-0 bg-black/60"></div>
-          <div className="relative z-10 text-center pt-24">
-            <h1 className="text-5xl md:text-7xl font-light mb-4">
-              Fine Dining Menu
+          <div className="absolute inset-0 bg-[#04121a]/60"></div>
+          <div className="relative z-10 text-center text-white px-6 w-full max-w-5xl">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold font-sans">
+              Restaurant
+            </span>
+            <h1 className="text-4xl md:text-6xl font-light font-serif leading-tight mb-8">
+              Restaurent Menu
             </h1>
-            <p className="text-yellow-500 uppercase tracking-[4px] text-sm">
-              Home / Restaurant Menu
-            </p>
+            
+            {/* Details Row */}
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 pt-8 border-t border-white/20 font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/80">
+              <div className="flex items-center gap-2">
+                <Phone size={13} className="text-[#c8a64d]" />
+                <span>+91 99000 11550</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail size={13} className="text-[#c8a64d]" />
+                <span>support@sreeraagaresorts.in</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>📅 Mon - Sun</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>🕒 08:00 AM - 10:30 PM</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>🍽️ Poolside Lounge</span>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* DINING VENUES SECTION */}
-        <section className="py-16 px-6 max-w-7xl mx-auto border-b border-yellow-500/10 bg-zinc-950/20">
-          <div className="text-center mb-12">
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4 text-xs font-semibold">
-              Our Culinary Spaces
-            </p>
-            <h2 className="text-4xl md:text-5xl font-light">
-              Delicious Culinary Experiences
-            </h2>
-            <p className="text-white/40 mt-4 max-w-2xl mx-auto font-light text-sm">
-              Enjoy a variety of authentic vegetarian and non-vegetarian dishes prepared by our experienced culinary team across four unique venues.
-            </p>
-          </div>
+        {/* ================= INTRO DESCRIPTION SECTION ================= */}
+        <section className="py-20 max-w-4xl mx-auto px-6 text-center select-none">
+          <h2 className="text-3xl font-light text-[#0d2b4e] leading-relaxed mb-6">
+            An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.
+          </h2>
+          <p className="text-gray-500 font-light text-xs md:text-sm leading-relaxed max-w-2xl mx-auto font-sans">
+            Our commitment to quality starts with the selection of the finest ingredients from organic farms. Each dish is a masterpiece designed to delight your taste buds and create memorable dining experiences for our guests.
+          </p>
+        </section>
 
-          <div className="grid md:grid-cols-4 gap-6 text-center">
+        {/* ================= RESORT GALLERY IMAGES ================= */}
+        <section className="pb-16 select-none">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto px-6">
             {[
-              {
-                title: "Dining Hall",
-                desc: "Spacious multi-cuisine dining hall offering fresh local specialties and buffet options.",
-                icon: "🍽️"
-              },
-              {
-                title: "Coffee Shop",
-                desc: "Charming space for freshly brewed coffee, light refreshments, and quick bites.",
-                icon: "☕"
-              },
-              {
-                title: "Bar & Restaurant",
-                desc: "Comfortable seating capacity for 150 members serving curated drinks and authentic dishes.",
-                icon: "🍷"
-              },
-              {
-                title: "Sports Bar & Club",
-                desc: "Features TT, Snooker, DJ sound, and indoor games. Ready to transform into a lively pub/nightclub.",
-                icon: "🎱"
-              }
-            ].map((venue, idx) => (
-              <div key={idx} className="border border-yellow-500/10 p-6 bg-zinc-900/40 rounded hover:border-yellow-500/30 transition">
-                <div className="text-3xl mb-4">{venue.icon}</div>
-                <h3 className="text-lg text-yellow-500 font-semibold mb-2">{venue.title}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed font-light">{venue.desc}</p>
+              "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=600", // pool
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600", // resort
+              "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600", // dining
+              "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600"  // table
+            ].map((img, idx) => (
+              <div key={idx} className="aspect-[3/4] overflow-hidden rounded-sm shadow-md">
+                <img 
+                  src={img} 
+                  alt={`Resort gallery ${idx + 1}`} 
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
+                />
               </div>
             ))}
           </div>
         </section>
 
-        {/* Menu Section */}
-        <section className="py-20 max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4">
-              Our Specialties
-            </p>
-            <h2 className="text-4xl md:text-5xl font-light">
-              Restaurant Menu
+        {/* ================= MENU HIGHLIGHTS SECTION ================= */}
+        <section className="py-16 max-w-7xl mx-auto px-6 pb-28">
+          
+          <div className="text-center mb-10 select-none">
+            <span className="text-[#c8a64d] uppercase tracking-[4px] mb-3 text-xs font-semibold font-sans block">
+              Our Menu
+            </span>
+            <h2 className="text-3xl md:text-4xl font-light font-serif text-[#0d2b4e]">
+              Menu Highlights
             </h2>
-            <p className="text-white/40 mt-4 max-w-2xl mx-auto font-light text-sm">
-              Delight in our curated selection of fine local and international cuisines. Handcrafted by master chefs using premium local ingredients.
-            </p>
           </div>
 
-          {/* SEARCH & FILTERS BAR */}
-          <div className="bg-zinc-900 border border-yellow-500/10 p-5 mb-12 flex flex-col md:flex-row gap-5 items-center justify-between rounded shadow-xl">
+          {/* Category Tabs */}
+          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center items-center font-sans text-xs uppercase tracking-widest text-gray-400 select-none mb-8">
+            {categories.map((cat, idx) => (
+              <React.Fragment key={cat}>
+                {idx > 0 && <span className="text-[#c8a64d]/60">•</span>}
+                <button
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`hover:text-[#c8a64d] transition font-bold cursor-pointer ${
+                    selectedCategory === cat ? "text-[#c8a64d]" : "text-gray-500"
+                  }`}
+                >
+                  {cat}
+                </button>
+              </React.Fragment>
+            ))}
+          </div>
+
+          {/* Search & Veg filters */}
+          <div className="max-w-xl mx-auto px-6 mb-16 flex flex-col sm:flex-row gap-6 items-center justify-between font-sans text-xs select-none">
             {/* Search Input */}
-            <div className="relative w-full md:w-80">
+            <div className="relative w-full sm:w-64">
               <input
                 type="text"
                 placeholder="Search dishes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-black/55 border border-white/10 rounded p-2.5 pl-10 text-sm text-white focus:outline-none focus:border-yellow-500 transition"
+                className="w-full bg-[#fbfbfb] border border-gray-200 rounded-md py-2 pl-9 pr-3 text-xs text-[#0d2b4e] focus:outline-none focus:border-[#c8a64d] transition shadow-sm"
               />
-              <Search className="absolute left-3 top-3 text-white/40" size={16} />
-            </div>
-
-            {/* Category Filters */}
-            <div className="flex flex-wrap gap-2 justify-center">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 text-xs uppercase tracking-wider transition font-medium cursor-pointer rounded ${
-                    selectedCategory === cat
-                      ? "bg-yellow-500 text-black font-bold"
-                      : "bg-black/30 border border-white/10 text-white hover:border-yellow-500/50"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+              <Search className="absolute left-3 top-2.5 text-gray-400" size={13} />
             </div>
 
             {/* Veg Checkbox Toggle */}
-            <label className="flex items-center gap-3 cursor-pointer select-none shrink-0 border-l border-white/10 pl-5">
+            <label className="flex items-center gap-2 cursor-pointer select-none shrink-0">
               <input
                 type="checkbox"
                 checked={vegetarianOnly}
                 onChange={(e) => setVegetarianOnly(e.target.checked)}
-                className="w-4.5 h-4.5 rounded border-white/10 bg-black text-yellow-500 focus:ring-yellow-500 accent-yellow-500"
+                className="w-4 h-4 rounded border-gray-200 bg-white text-[#c8a64d] focus:ring-[#c8a64d] accent-[#c8a64d]"
               />
-              <span className="text-xs uppercase tracking-wider text-white/80 flex items-center gap-1.5 font-bold">
-                <Leaf size={14} className="text-green-500" /> Veg Only
+              <span className="text-[10px] uppercase tracking-wider text-gray-500 flex items-center gap-1 font-bold">
+                <Leaf size={12} className="text-green-600" /> Veg Only
               </span>
             </label>
           </div>
 
-          {/* DISHES LIST */}
+          {/* LOADING & ERRORS */}
           {loading && (
-            <div className="text-center text-yellow-500 py-16 flex flex-col items-center justify-center gap-4">
-              <RefreshCw className="animate-spin text-yellow-500" size={32} />
+            <div className="text-center text-[#c8a64d] py-16 flex flex-col items-center justify-center gap-4">
+              <RefreshCw className="animate-spin text-[#c8a64d]" size={28} />
               <span>Loading menu items...</span>
             </div>
           )}
@@ -278,72 +281,56 @@ const Menu = () => {
           )}
 
           {!loading && !error && filteredDishes.length === 0 && (
-            <div className="text-center text-white/40 py-16 text-lg font-light">
+            <div className="text-center text-gray-400 py-16 text-lg font-light">
               No dishes found matching your current filters.
             </div>
           )}
 
+          {/* DISHES LIST - 2 COLUMN MINIMALIST LAYOUT */}
           {!loading && !error && filteredDishes.length > 0 && (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredDishes.map((dish, idx) => (
-                <motion.div
-                  key={dish.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-y-12 md:gap-x-16 max-w-6xl mx-auto px-6">
+              {filteredDishes.map((dish) => (
+                <div 
+                  key={dish.id || dish._id} 
                   onClick={() => setSelectedDishForOrder(dish)}
-                  className="group bg-zinc-900 border border-yellow-500/10 hover:border-yellow-500/35 transition-all rounded-[20px] duration-300 flex flex-col justify-between overflow-hidden shadow-2xl relative cursor-pointer"
+                  className="flex gap-4 items-start cursor-pointer group hover:opacity-90 transition"
                 >
-                  <div>
-                    {/* Dish Photo */}
-                    <div className="relative h-56 overflow-hidden aspect-[4/3] w-full">
-                      <div className="absolute inset-0 bg-black/10 z-10 group-hover:bg-transparent transition duration-500"></div>
-                      <img
-                        src={getImageUrl(dish.image)}
-                        alt={dish.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                      />
-                      {/* Price Badge */}
-                      <div className="absolute top-4 right-4 z-20 bg-black/80 backdrop-blur px-3 py-1.5 border border-yellow-500/30 text-[#C8A64D] text-sm font-semibold">
-                        ₹{parseFloat(dish.price).toLocaleString()}
-                      </div>
-
-                      {/* Veg indicator badge */}
-                      <div className="absolute top-4 left-4 z-20 bg-black/85 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-white/5">
-                        <span className={`w-2.5 h-2.5 rounded-full border border-white/10 ${dish.isVegetarian ? "bg-green-600" : "bg-red-700"}`}></span>
-                        <span>{dish.isVegetarian ? "Veg" : "Non-Veg"}</span>
-                      </div>
-                    </div>
-
-                    <div className="p-6">
-                      <h3 className="text-xl font-medium text-white mb-2 group-hover:text-yellow-500 transition">
+                  {/* Thumbnail */}
+                  <div className="w-16 h-16 rounded-full overflow-hidden shrink-0 border border-gray-200 shadow-md">
+                    <img 
+                      src={getImageUrl(dish.image)} 
+                      alt={dish.name} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
+                    />
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-end gap-2 mb-1">
+                      <h4 className="font-serif text-lg text-[#0d2b4e] group-hover:text-[#c8a64d] transition truncate">
                         {dish.name}
-                      </h3>
-                      <p className="text-white/40 text-xs uppercase tracking-wider mb-3">
-                        {dish.category}
-                      </p>
-                      <p className="text-[#D8C8A5] text-sm leading-relaxed font-light line-clamp-3">
-                        {dish.description || "Freshly cooked exquisite dish prepared by our resort specialty chefs."}
-                      </p>
+                      </h4>
+                      {/* Dotted connector */}
+                      <div className="flex-1 border-b border-dotted border-gray-300 mx-2 mb-1.5 min-w-[20px]" />
+                      <span className="font-sans text-sm font-semibold text-[#c8a64d] shrink-0">
+                        ₹{parseFloat(dish.price).toLocaleString()}
+                      </span>
                     </div>
+                    <p className="text-gray-400 text-xs font-light line-clamp-2 leading-relaxed font-sans">
+                      {dish.description || "Freshly cooked exquisite dish prepared by our resort specialty chefs."}
+                    </p>
                   </div>
-
-                  <div className="p-6 pt-0 mt-2">
-                    <div className="border-t border-white/5 pt-4 text-[10px] uppercase tracking-widest text-white/30 group-hover:text-[#C8A64D] text-center font-bold transition">
-                      Click to Order Room Service
-                    </div>
-                  </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           )}
         </section>
+
       </div>
 
-      {/* ORDER MODAL */}
+      {/* ================= ORDER ROOM SERVICE MODAL ================= */}
       {selectedDishForOrder && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4 overflow-y-auto">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4 overflow-y-auto font-sans">
           <div className="bg-[#081A2F] w-full max-w-lg rounded-xl p-6 border border-white/10 my-8 shadow-2xl relative text-white">
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-6">
@@ -367,7 +354,7 @@ const Menu = () => {
               />
               <div>
                 <h3 className="font-bold text-lg">{selectedDishForOrder.name}</h3>
-                <span className="text-[#C8A64D] font-bold">₹{selectedDishForOrder.price}</span>
+                <span className="text-[#c8a64d] font-bold">₹{selectedDishForOrder.price}</span>
                 <span className="text-white/40 text-xs ml-3 capitalize">• {selectedDishForOrder.category}</span>
               </div>
             </div>
@@ -434,7 +421,7 @@ const Menu = () => {
                 >
                   <option value="" className="bg-[#081A2F]">Select Room</option>
                   {rooms.map((room) => (
-                    <option key={room.id} value={room.roomNumber} className="bg-[#081A2F]">
+                    <option key={room.id || room._id} value={room.roomNumber} className="bg-[#081A2F]">
                       Room {room.roomNumber} ({room.name})
                     </option>
                   ))}
@@ -456,7 +443,7 @@ const Menu = () => {
               {/* Total Price display */}
               <div className="border-t border-white/5 pt-4 flex justify-between items-center text-sm">
                 <span className="text-white/50">Total Amount:</span>
-                <span className="text-[#C8A64D] text-xl font-bold">₹{(selectedDishForOrder.price * quantity).toLocaleString()}</span>
+                <span className="text-[#c8a64d] text-xl font-bold">₹{(selectedDishForOrder.price * quantity).toLocaleString()}</span>
               </div>
 
               {/* Action Buttons */}
@@ -471,7 +458,7 @@ const Menu = () => {
                 <button
                   type="submit"
                   disabled={placingOrder}
-                  className="bg-[#C8A64D] text-black px-6 py-2.5 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition disabled:opacity-50 text-sm"
+                  className="bg-[#c8a64d] text-black px-6 py-2.5 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition disabled:opacity-50 text-sm"
                 >
                   {placingOrder ? (
                     <>

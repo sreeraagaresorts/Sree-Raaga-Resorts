@@ -39,7 +39,10 @@ router.post(
   "/",
   verifyToken,
   adminMiddleware,
-  upload.single("image"),
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "extraImages", maxCount: 10 }
+  ]),
   createRoom
 );
 
@@ -47,7 +50,10 @@ router.put(
   "/:id",
   verifyToken,
   adminMiddleware,
-  upload.single("image"),
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "extraImages", maxCount: 10 }
+  ]),
   updateRoom
 );
 

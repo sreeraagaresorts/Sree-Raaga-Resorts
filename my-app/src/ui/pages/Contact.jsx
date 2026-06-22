@@ -10,18 +10,14 @@ import { API_URL } from "../../config/api";
 
 const Contact = () => {
   const toast = useToast();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setStatus("sending");
 
     try {
@@ -30,7 +26,12 @@ const Contact = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: `${firstName} ${lastName}`,
+          email,
+          subject: "Contact Form Submission",
+          message: comment,
+        }),
       });
 
       const data = await response.json();
@@ -39,12 +40,10 @@ const Contact = () => {
       }
 
       toast.success("Thank you! Your message has been sent successfully.");
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setComment("");
       setStatus("");
     } catch (err) {
       console.error(err);
@@ -54,307 +53,192 @@ const Contact = () => {
   };
 
   return (
-  <>
-    <Navbar/>
-    <div className="bg-black text-white">
+    <>
+      <Navbar />
+      <div className="bg-white text-[#0d2b4e] font-sans overflow-x-hidden">
+        
+        {/* HERO BANNER SECTION */}
+        <section
+          className="relative h-[55vh] flex items-center justify-center bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=2000')",
+          }}
+        >
+          <div className="absolute inset-0 bg-black/60"></div>
 
-      {/* Hero Section */}
-      <section
-        className="relative h-[60vh] flex items-center justify-center bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=1200')",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/60"></div>
-
-        <div className="relative z-10 text-center">
-          <h1 className="text-5xl md:text-7xl font-light mb-4">
-            Contact Us
-          </h1>
-
-          <p className="text-yellow-500 uppercase tracking-[4px]">
-            Home / Contact
-          </p>
-        </div>
-      </section>
-
-      {/* Contact Form */}
-      <section className="py-24 max-w-7xl mx-auto px-6">
-
-        <div className="grid lg:grid-cols-2 gap-16">
-
-          {/* Left Side */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4">
-              Get In Touch
+          <div className="relative z-10 text-center px-4 max-w-3xl space-y-4">
+            <h1 className="text-5xl md:text-7xl font-light font-serif text-white tracking-wide">
+              Contact
+            </h1>
+            <p className="text-white/80 font-light text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
+              Would you like to find out how to get to us? Have a question you want to ask? 
+              Tell us you want to say hello? Let us know what you need to know.
             </p>
+          </div>
+        </section>
 
-            <h2 className="text-5xl font-light mb-8">
-              Contact Us
-            </h2>
+        {/* LEAVE US YOUR INFO FORM SECTION */}
+        <section className="py-24 px-6 bg-[#fcfaf2] text-center">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-[#c8a64d]/10 flex items-center justify-center text-[#c8a64d] mb-4">
+                <Mail className="w-5 h-5" />
+              </div>
+              <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold mb-2 block">
+                GET IN TOUCH
+              </span>
+              <h2 className="text-3xl md:text-5xl font-serif text-[#0d2b4e] font-light">
+                Leave Us Your Info
+              </h2>
+              <p className="text-gray-500 text-xs md:text-sm max-w-xl leading-relaxed mt-4 font-light">
+                Please complete the form below. A guest representative from Sree Raaga Resorts 
+                will reach out to you within 24 business hours regarding your inquiry.
+              </p>
+            </div>
 
-            <p className="text-gray-400 leading-relaxed mb-10">
-              We're here to assist you with reservations, events,
-              special requests, and any questions about your stay
-              at Sree Raaga Resorts.
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-
-              <div className="grid md:grid-cols-2 gap-6">
-
-                <input
-                  type="text"
-                  placeholder="Name"
-                  required
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      name: e.target.value,
-                    })
-                  }
-                  className="bg-transparent border border-yellow-500/20 p-4 outline-none focus:border-yellow-500"
-                />
-
-                <input
-                  type="email"
-                  placeholder="Email"
-                  required
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      email: e.target.value,
-                    })
-                  }
-                  className="bg-transparent border border-yellow-500/20 p-4 outline-none focus:border-yellow-500"
-                />
-
+            <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-5 text-left mt-10">
+              <div className="grid md:grid-cols-2 gap-5">
+                <div>
+                  <input
+                    type="text"
+                    required
+                    placeholder="First Name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-sm"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Last Name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-sm"
+                  />
+                </div>
               </div>
 
-              <input
-                type="text"
-                placeholder="Subject"
-                required
-                value={formData.subject}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    subject: e.target.value,
-                  })
-                }
-                className="w-full bg-transparent border border-yellow-500/20 p-4 outline-none focus:border-yellow-500"
-              />
+              <div>
+                <input
+                  type="email"
+                  required
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-sm"
+                />
+              </div>
 
-              <textarea
-                rows="6"
-                placeholder="Message"
-                required
-                value={formData.message}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    message: e.target.value,
-                  })
-                }
-                className="w-full bg-transparent border border-yellow-500/20 p-4 outline-none focus:border-yellow-500 resize-none"
-              />
+              <div>
+                <textarea
+                  rows="6"
+                  required
+                  placeholder="Comment"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-sm resize-none"
+                />
+              </div>
 
               <button
                 type="submit"
-                className="px-10 py-4 bg-yellow-500 text-black hover:bg-yellow-400 transition"
+                disabled={status === "sending"}
+                className="w-full py-4 bg-[#f5dec2] text-[#0d2b4e] hover:bg-[#ebd0b0] font-semibold uppercase tracking-[2px] text-xs transition cursor-pointer shadow-sm disabled:bg-gray-200"
               >
-                {status === "sending"
-                  ? "Sending..."
-                  : "Send Message"}
+                {status === "sending" ? "SENDING MESSAGE..." : "SEND YOUR MESSAGE"}
               </button>
-
             </form>
-          </motion.div>
+          </div>
+        </section>
 
-          {/* Right Side */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="relative min-h-[500px] overflow-hidden border border-yellow-500/20">
-
-              <img
-                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000"
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-
-              <div className="absolute inset-0 bg-black/60"></div>
-
-              <div className="absolute inset-0 flex items-center justify-center">
-
-                <div className="bg-black/80 backdrop-blur border border-yellow-500/30 p-8 text-center">
-
-                  <MapPin
-                    size={35}
-                    className="mx-auto mb-4 text-yellow-500"
-                  />
-
-                  <h3 className="text-2xl mb-4">
-                    Resort Location
-                  </h3>
-
-                  <p className="text-gray-400">
-                    No. 1246, Budigere Bypass Road,
-                    <br />
-                    Devanahalli Hobli,
-                    <br />
-                    Taluk Chamarayapatna,
-                    <br />
-                    Karnataka 562129
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-          </motion.div>
-
-        </div>
-
-      </section>
-
-      {/* Contact Cards */}
-      <section className="py-24 bg-zinc-950 border-t border-yellow-500/10">
-
-        <div className="max-w-7xl mx-auto px-6">
-
-          <div className="text-center mb-16">
-            <p className="text-yellow-500 uppercase tracking-[4px] mb-4">
-              Visit Us
-            </p>
-
-            <h2 className="text-5xl font-light">
-              Nearby Locations
-            </h2>
+        {/* LOCATION MAP SECTION */}
+        <section className="flex flex-col lg:flex-row items-stretch">
+          {/* Map Left */}
+          <div className="w-full lg:w-1/2 min-h-[400px] bg-gray-100 relative">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.3402484643033!2d77.74797071110034!3d13.14102921115858!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1c251f22dfab%3A0xe54d9c79216d7a42!2sBudigere%20Bypass%20Rd%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1719000000000!5m2!1sen!2sin"
+              width="100%"
+              height="100%"
+              style={{ border: 0, minHeight: "450px" }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Sree Raaga Resorts Location Map"
+            />
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Info Right */}
+          <div className="w-full lg:w-1/2 bg-[#071524] text-white p-12 md:p-20 flex flex-col justify-center space-y-6">
+            <div>
+              <span className="text-[#c8a64d] text-[10px] tracking-[4px] font-semibold uppercase block mb-2">
+                CONTACT
+              </span>
+              <h2 className="text-4xl font-serif font-light tracking-wide">
+                Location
+              </h2>
+            </div>
 
-            {[
-              {
-                city: "Kochi Airport",
-                distance: "45 KM",
-                email: "kochi@sreeraaga.com",
-              },
-              {
-                city: "Trivandrum",
-                distance: "120 KM",
-                email: "tvm@sreeraaga.com",
-              },
-              {
-                city: "Munnar",
-                distance: "60 KM",
-                email: "munnar@sreeraaga.com",
-              },
-              {
-                city: "Alleppey",
-                distance: "85 KM",
-                email: "alpy@sreeraaga.com",
-              },
-            ].map((location, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  delay: index * 0.1,
-                }}
-                className="border border-yellow-500/10 p-8 text-center hover:border-yellow-500/40 transition"
-              >
-                <div className="w-14 h-14 rounded-full border border-yellow-500 flex items-center justify-center mx-auto mb-5">
-                  <MapPin
-                    size={20}
-                    className="text-yellow-500"
+            <div className="space-y-4 font-serif text-sm font-light text-white/80 leading-relaxed border-t border-white/5 pt-6">
+              <p>
+                No. 1246, Budigere Bypass Road,<br />
+                Devanahalli Hobli,<br />
+                Taluk Chamarayapatna,<br />
+                Karnataka 562129
+              </p>
+              <p className="font-sans text-xs">
+                <span className="text-[#c8a64d] font-semibold">Email:</span> info@sreeraagaresorts.in<br />
+                <span className="text-[#c8a64d] font-semibold">Phone:</span> 089045 61155
+              </p>
+            </div>
+
+            <a
+              href="https://maps.google.com/?q=Budigere+Bypass+Road+Devanahalli+Karnataka"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-fit border border-[#c8a64d] text-[#c8a64d] hover:bg-[#c8a64d] hover:text-[#071524] px-8 py-3 text-xs uppercase tracking-[2px] font-semibold transition mt-6"
+            >
+              Get Directions
+            </a>
+          </div>
+        </section>
+
+        {/* INSTAGRAM SECTION */}
+        <section className="py-24 bg-white text-center">
+          <div className="max-w-7xl mx-auto space-y-12">
+            <div>
+              <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold mb-2 block">
+                INSTAGRAM
+              </span>
+              <h2 className="text-3xl md:text-5xl font-serif text-[#0d2b4e] font-light">
+                Follow us on Instagram
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 px-6">
+              {[
+                "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=600",
+                "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600",
+                "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
+                "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600"
+              ].map((imgUrl, i) => (
+                <div key={i} className="aspect-square overflow-hidden shadow-sm hover:opacity-90 transition duration-300">
+                  <img
+                    src={imgUrl}
+                    alt={`Resort view ${i + 1}`}
+                    className="w-full h-full object-cover"
                   />
                 </div>
-
-                <h3 className="text-xl text-yellow-500 mb-3">
-                  {location.city}
-                </h3>
-
-                <p className="text-gray-400 mb-3">
-                  {location.distance} from resort
-                </p>
-
-                <a
-                  href={`mailto:${location.email}`}
-                  className="text-sm text-gray-500 hover:text-yellow-500"
-                >
-                  {location.email}
-                </a>
-              </motion.div>
-            ))}
-
+              ))}
+            </div>
           </div>
+        </section>
 
-        </div>
-
-      </section>
-
-      {/* Contact Info */}
-      <section className="py-20 border-t border-yellow-500/10">
-
-        <div className="max-w-5xl mx-auto px-6">
-
-          <div className="grid md:grid-cols-3 gap-10 text-center">
-
-            <div>
-              <Phone
-                size={30}
-                className="mx-auto mb-4 text-yellow-500"
-              />
-              <h3 className="mb-2">Call Us</h3>
-              <p className="text-gray-400">
-                089045 61155
-              </p>
-            </div>
-
-            <div>
-              <Mail
-                size={30}
-                className="mx-auto mb-4 text-yellow-500"
-              />
-              <h3 className="mb-2">Email Us</h3>
-              <p className="text-gray-400">
-                info@sreeraagaresorts.in
-              </p>
-            </div>
-
-            <div>
-              <MapPin
-                size={30}
-                className="mx-auto mb-4 text-yellow-500"
-              />
-              <h3 className="mb-2">Address</h3>
-              <p className="text-gray-400 text-sm">
-                No. 1246, Budigere Bypass Road, Devanahalli Hobli, Taluk Chamarayapatna, Karnataka 562129
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </div>
-        <Footer/>
+      </div>
+      <Footer />
     </>
   );
 };

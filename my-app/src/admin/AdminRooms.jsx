@@ -29,9 +29,15 @@ const AdminRooms = () => {
   const [area, setArea] = useState("");
   const [beds, setBeds] = useState("");
   const [bathrooms, setBathrooms] = useState("");
+  const [guests, setGuests] = useState("");
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+
+  // Extra images states
+  const [existingExtraImages, setExistingExtraImages] = useState([]);
+  const [newExtraImageFiles, setNewExtraImageFiles] = useState([]);
+  const [extraImagePreviews, setExtraImagePreviews] = useState([]);
 
   const [saving, setSaving] = useState(false);
 
@@ -72,9 +78,13 @@ const AdminRooms = () => {
     setArea("");
     setBeds("");
     setBathrooms("");
+    setGuests("");
     setDescription("");
     setImageFile(null);
     setImagePreview("");
+    setExistingExtraImages([]);
+    setNewExtraImageFiles([]);
+    setExtraImagePreviews([]);
     setIsFormOpen(true);
   };
 
@@ -87,9 +97,22 @@ const AdminRooms = () => {
     setArea(room.area);
     setBeds(room.beds);
     setBathrooms(room.bathrooms);
+    setGuests(room.guests || "");
     setDescription(room.description);
     setImageFile(null);
     setImagePreview(room.image ? (room.image.startsWith("http") ? room.image : `${API_URL}/uploads/${room.image}`) : "");
+    
+    const extraImgs = room.images || [];
+    setExistingExtraImages(extraImgs);
+    setNewExtraImageFiles([]);
+    setExtraImagePreviews(
+      extraImgs.map((img) => ({
+        id: img,
+        url: img.startsWith("http") ? img : `${API_URL}/uploads/${img}`,
+        isExisting: true,
+        filename: img
+      }))
+    );
     setIsFormOpen(true);
   };
 
@@ -98,6 +121,32 @@ const AdminRooms = () => {
     if (file) {
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleExtraFilesChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      const newFiles = [...newExtraImageFiles, ...files];
+      setNewExtraImageFiles(newFiles);
+
+      const newPreviews = files.map((file) => ({
+        id: Math.random().toString(36).substr(2, 9),
+        url: URL.createObjectURL(file),
+        isExisting: false,
+        file
+      }));
+
+      setExtraImagePreviews((prev) => [...prev, ...newPreviews]);
+    }
+  };
+
+  const handleRemoveExtraImage = (previewItem) => {
+    setExtraImagePreviews((prev) => prev.filter((item) => item.id !== previewItem.id));
+    if (previewItem.isExisting) {
+      setExistingExtraImages((prev) => prev.filter((img) => img !== previewItem.filename));
+    } else {
+      setNewExtraImageFiles((prev) => prev.filter((file) => file !== previewItem.file));
     }
   };
 
@@ -116,17 +165,22 @@ const AdminRooms = () => {
     formData.append("area", area);
     formData.append("beds", beds);
     formData.append("bathrooms", bathrooms);
+    formData.append("guests", guests);
     formData.append("description", description);
     if (imageFile) {
       formData.append("image", imageFile);
     }
+    formData.append("existingExtraImages", JSON.stringify(existingExtraImages));
+    newExtraImageFiles.forEach((file) => {
+      formData.append("extraImages", file);
+    });
 
     try {
       let url = `${API_URL}/api/rooms`;
       let method = "POST";
 
       if (editingRoom) {
-        url = `${API_URL}/api/rooms/${editingRoom.id}`;
+        url = `${API_URL}/api/rooms/${editingRoom.id || editingRoom._id}`;
         method = "PUT";
       }
 
@@ -290,6 +344,16 @@ const AdminRooms = () => {
                   />
                 </div>
                 <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Guests Capacity</label>
+                  <input 
+                    required 
+                    placeholder="e.g. 2 GUESTS" 
+                    value={guests} 
+                    onChange={(e) => setGuests(e.target.value)} 
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
+                  />
+                </div>
+                <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Category</label>
                   <select
                     value={category}
@@ -317,28 +381,74 @@ const AdminRooms = () => {
               </div>
 
               {/* IMAGE UPLOAD UI */}
-              <div>
-                <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Image</label>
-                <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative">
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleFileChange}
-                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                  />
-                  {imagePreview ? (
-                    <div className="space-y-2">
-                      <img src={imagePreview} className="max-h-40 mx-auto object-cover rounded" alt="Preview" />
-                      <p className="text-[#C8A64D] text-xs">Click or drag another image to change</p>
-                    </div>
-                  ) : (
-                    <>
-                      <Upload className="mx-auto mb-2 text-[#C8A64D]" />
-                      <p className="text-white/60 text-sm">Click or drag image to upload</p>
-                    </>
-                  )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Image</label>
+                  <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative h-[180px] flex flex-col justify-center items-center">
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={handleFileChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    />
+                    {imagePreview ? (
+                      <div className="space-y-2">
+                        <img src={imagePreview} className="max-h-24 mx-auto object-cover rounded" alt="Preview" />
+                        <p className="text-[#C8A64D] text-[10px]">Click/drag to change main image</p>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="mx-auto mb-2 text-[#C8A64D]" />
+                        <p className="text-white/60 text-xs">Click or drag image to upload main image</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+                    Extra Images (Details Gallery)
+                  </label>
+                  <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative h-[180px] flex flex-col justify-center items-center">
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      multiple
+                      onChange={handleExtraFilesChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    />
+                    <Upload className="mx-auto mb-2 text-[#C8A64D]" />
+                    <p className="text-white/60 text-xs">Click or drag multiple images to upload</p>
+                  </div>
                 </div>
               </div>
+
+              {/* EXTRA IMAGES PREVIEW GRID */}
+              {extraImagePreviews.length > 0 && (
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+                    Uploaded Gallery Images ({extraImagePreviews.length})
+                  </label>
+                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-[#071524] border border-white/10 rounded-lg">
+                    {extraImagePreviews.map((previewItem) => (
+                      <div key={previewItem.id} className="relative group aspect-square rounded overflow-hidden bg-black/40 border border-white/10">
+                        <img
+                          src={previewItem.url}
+                          alt="Extra Preview"
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveExtraImage(previewItem)}
+                          className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 cursor-pointer transition shadow z-10"
+                        >
+                          <X size={10} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* ACTIONS */}
               <div className="flex justify-end gap-3 pt-2">
@@ -382,7 +492,7 @@ const AdminRooms = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {rooms.map((room) => (
             <div
-              key={room.id}
+              key={room.id || room._id}
               className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden hover:scale-[1.02] transition duration-300 flex flex-col justify-between"
             >
               {/* IMAGE */}
@@ -430,6 +540,20 @@ const AdminRooms = () => {
                       <Maximize size={14} className="text-[#C8A64D]" />
                       {room.area}
                     </span>
+
+                    {room.guests && (
+                      <span className="flex items-center gap-1">
+                        <Users size={14} className="text-[#C8A64D]" />
+                        {room.guests}
+                      </span>
+                    )}
+
+                    {room.images && room.images.length > 0 && (
+                      <span className="flex items-center gap-1">
+                        <Upload size={14} className="text-[#C8A64D]" />
+                        {room.images.length} Extra
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -444,8 +568,8 @@ const AdminRooms = () => {
                   <Edit size={14} className="mr-1" /> Edit
                 </button>
 
-                <button 
-                  onClick={() => handleDelete(room.id)}
+                 <button 
+                  onClick={() => handleDelete(room.id || room._id)}
                   className="flex-1 bg-red-500/10 text-red-400 py-2 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition cursor-pointer"
                   title="Delete Room"
                 >

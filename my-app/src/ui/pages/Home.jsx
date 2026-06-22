@@ -401,10 +401,10 @@ export default function Home() {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-sm font-semibold">
               Sree Raaga Resorts
             </span>
-            <h1 className="text-4xl md:text-7xl lg:text-8xl font-light leading-tight mb-8 drop-shadow-md">
-              Experience Unparalleled <br />
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-light leading-tight mb-8 drop-shadow-md">
+              A Premier Destination for Getaways, <br />
               <span className="italic font-normal text-[#D8BF72]">
-                Comfort
+                Celebrations & Grand Events
               </span>
             </h1>
           </div>
@@ -535,7 +535,7 @@ export default function Home() {
 
           {/* Centered Curated Description */}
           <p className="max-w-3xl mx-auto text-gray-500 text-center leading-relaxed text-xs lg:text-sm font-sans px-4 mb-20">
-            Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create lasting memories. Whether you're planning a romantic getaway, a family vacation, or a business trip, we have the perfect offer to suit your needs and elevate your experience.
+            More than a resort, Sree Raaga is a vibrant destination where luxury stays, productive workspaces, memorable celebrations, corporate retreats, and family experiences come together. Whether you're planning a weekend getaway, a wedding, a team outing, or a productive workcation, every experience is designed to inspire connection and create lasting memories.
           </p>
 
           {/* Stats Bar */}
@@ -614,11 +614,11 @@ export default function Home() {
                         </h3>
 
                         <div className="flex flex-wrap items-center gap-3 text-[#D8C8A5] text-xs uppercase tracking-widest mb-4">
-                          <span>{room.area}</span>
+                          <span>{room.area} SQM</span>
                           <span>•</span>
                           <span>{room.beds}</span>
                           <span>•</span>
-                          <span>{room.bathrooms}</span>
+                          <span>{room.bathrooms} Bathroom</span>
                         </div>
 
                         <p className="text-gray-400 mb-6 text-sm leading-relaxed max-w-xl font-sans">

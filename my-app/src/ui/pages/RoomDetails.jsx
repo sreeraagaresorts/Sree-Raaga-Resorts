@@ -162,6 +162,9 @@ const RoomDetails = () => {
 
   const getGalleryImages = () => {
     const mainImg = getImageUrl(room?.image);
+    if (room?.images && room.images.length > 0) {
+      return [mainImg, ...room.images.map(img => getImageUrl(img))];
+    }
     return [
       mainImg,
       "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=800",
@@ -477,11 +480,11 @@ const RoomDetails = () => {
                 <div className="flex flex-wrap items-center gap-6 text-xs font-sans text-gray-500">
                   <div className="flex items-center">
                     <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                    <span>{room.area || "30 M²"}</span>
+                    <span>{room.area || "30 M²"} SQM</span>
                   </div>
                   <div className="flex items-center">
                     <Users className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                    <span>{room.guests || "2 Guests"}</span>
+                    <span>{room.guests || "2 Guests"} Guests</span>
                   </div>
                   <div className="flex items-center">
                     <Bed className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
@@ -489,7 +492,7 @@ const RoomDetails = () => {
                   </div>
                   <div className="flex items-center">
                     <Bath className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                    <span>{room.bathrooms || "1 Bath"}</span>
+                    <span>{room.bathrooms || "1 Bath"} Bathroom</span>
                   </div>
                 </div>
               </div>

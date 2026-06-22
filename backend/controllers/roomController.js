@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Room = require("../models/Room");
 
 exports.getRooms = async (req, res) => {
@@ -20,7 +21,14 @@ exports.getRooms = async (req, res) => {
 
 exports.getRoom = async (req, res) => {
   try {
-    const room = await Room.findOne({ id: Number(req.params.id) });
+    const idParam = req.params.id;
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(idParam)) {
+      query = { $or: [{ _id: idParam }, { id: isNaN(Number(idParam)) ? null : Number(idParam) }] };
+    } else {
+      query = { id: isNaN(Number(idParam)) ? null : Number(idParam) };
+    }
+    const room = await Room.findOne(query);
 
     if (!room) {
       return res.status(404).json({
@@ -51,6 +59,7 @@ exports.createRoom = async (req, res) => {
       area,
       beds,
       bathrooms,
+      guests,
       description
     } = req.body;
 
@@ -73,6 +82,13 @@ exports.createRoom = async (req, res) => {
 
     if (req.file) {
       image = req.file.filename;
+    } else if (req.files && req.files['image'] && req.files['image'][0]) {
+      image = req.files['image'][0].filename;
+    }
+
+    let extraImages = [];
+    if (req.files && req.files['extraImages']) {
+      extraImages = req.files['extraImages'].map(f => f.filename);
     }
 
     const room = new Room({
@@ -80,10 +96,12 @@ exports.createRoom = async (req, res) => {
       name,
       price: parseFloat(price),
       image,
+      images: extraImages,
       category: category || "Executive Rooms",
       area: area || null,
       beds: beds || null,
       bathrooms: bathrooms || null,
+      guests: guests || null,
       description
     });
     await room.save();
@@ -112,6 +130,7 @@ exports.updateRoom = async (req, res) => {
       area,
       beds,
       bathrooms,
+      guests,
       description
     } = req.body;
 
@@ -122,7 +141,15 @@ exports.updateRoom = async (req, res) => {
       });
     }
 
-    const existingRoom = await Room.findOne({ roomNumber, id: { $ne: Number(req.params.id) } });
+    const idParam = req.params.id;
+    let existingQuery = { roomNumber };
+    if (mongoose.Types.ObjectId.isValid(idParam)) {
+      existingQuery._id = { $ne: idParam };
+    } else {
+      existingQuery.id = { $ne: Number(idParam) };
+    }
+
+    const existingRoom = await Room.findOne(existingQuery);
     if (existingRoom) {
       return res.status(400).json({
         success: false,
@@ -138,15 +165,45 @@ exports.updateRoom = async (req, res) => {
       area: area || null,
       beds: beds || null,
       bathrooms: bathrooms || null,
+      guests: guests || null,
       description
     };
 
     if (req.file) {
       updateData.image = req.file.filename;
+    } else if (req.files && req.files['image'] && req.files['image'][0]) {
+      updateData.image = req.files['image'][0].filename;
+    }
+
+    let existingImages = [];
+    if (req.body.existingExtraImages) {
+      try {
+        existingImages = JSON.parse(req.body.existingExtraImages);
+      } catch (e) {
+        if (typeof req.body.existingExtraImages === 'string') {
+          existingImages = [req.body.existingExtraImages];
+        }
+      }
+    }
+
+    let newExtraImages = [];
+    if (req.files && req.files['extraImages']) {
+      newExtraImages = req.files['extraImages'].map(f => f.filename);
+    }
+
+    if (req.body.existingExtraImages !== undefined || (req.files && req.files['extraImages'])) {
+      updateData.images = [...existingImages, ...newExtraImages];
+    }
+
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(idParam)) {
+      query = { $or: [{ _id: idParam }, { id: isNaN(Number(idParam)) ? null : Number(idParam) }] };
+    } else {
+      query = { id: isNaN(Number(idParam)) ? null : Number(idParam) };
     }
 
     const room = await Room.findOneAndUpdate(
-      { id: Number(req.params.id) },
+      query,
       updateData,
       { returnDocument: "after" }
     );
@@ -173,7 +230,14 @@ exports.updateRoom = async (req, res) => {
 
 exports.deleteRoom = async (req, res) => {
   try {
-    const room = await Room.findOneAndDelete({ id: Number(req.params.id) });
+    const idParam = req.params.id;
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(idParam)) {
+      query = { $or: [{ _id: idParam }, { id: isNaN(Number(idParam)) ? null : Number(idParam) }] };
+    } else {
+      query = { id: isNaN(Number(idParam)) ? null : Number(idParam) };
+    }
+    const room = await Room.findOneAndDelete(query);
     if (!room) {
       return res.status(404).json({
         success: false,
