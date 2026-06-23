@@ -297,7 +297,7 @@ const Navbar = () => {
               {user ? (
                 <>
                   <Link
-                    to="/dashboard/profile"
+                    to={user.role === "admin" ? "/admin" : "/dashboard/profile"}
                     className="w-10 h-10 rounded-full border border-[#c8a64d] flex items-center justify-center text-[#c8a64d] hover:bg-[#c8a64d] hover:text-black transition duration-300"
                     title={user.full_name}
                   >
