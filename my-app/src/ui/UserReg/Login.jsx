@@ -14,49 +14,50 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    loading || setLoading(true);
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-    try {
-      const response = await fetch(
-        `${API_URL}/api/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
+  if (loading) return;
+  setLoading(true);
 
-      const data = await response.json();
+  try {
+    const response = await fetch(`${API_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
 
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
+    const data = await response.json();
 
-      // Save JWT Token
-      localStorage.setItem("token", data.token);
-
-      // Save User Data
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
-      );
-
-      toast.success("Welcome back! Signed in successfully.");
-      navigate("/");
-
-    } catch (err) {
-      toast.error(err.message || "Login Failed");
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      throw new Error(data.message || "Login Failed");
     }
-  };
+
+    // Restrict admin login
+    if (data.user?.role === "admin") {
+      toast.error("U Cant login here");
+      return;
+    }
+
+    // Save JWT Token
+    localStorage.setItem("token", data.token);
+
+    // Save User Data
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    toast.success("Welcome back! Signed in successfully.");
+    navigate("/");
+  } catch (err) {
+    toast.error(err.message || "Login Failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="bg-black text-white min-h-screen">
