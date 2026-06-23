@@ -8,6 +8,18 @@ import { API_URL } from "../../config/api";
 
 const Menu = () => {
   const toast = useToast();
+
+  const userStr = localStorage.getItem("user");
+  let isAdmin = false;
+  if (userStr) {
+    try {
+      const u = JSON.parse(userStr);
+      if (u && u.role === "admin") {
+        isAdmin = true;
+      }
+    } catch (e) {}
+  }
+
   const [dishes, setDishes] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -59,8 +71,8 @@ const Menu = () => {
       } else {
         throw new Error(data.message || "Failed to load restaurant menu.");
       }
-    } catch (err) {
-      setError(err.message);
+    } catch (e) {
+      setError(e.message);
     } finally {
       setLoading(false);
     }
@@ -72,6 +84,8 @@ const Menu = () => {
       const data = await response.json();
       if (data.success) {
         setRooms(data.data);
+      } else {
+        throw new Error(data.message || "Failed to fetch rooms.");
       }
     } catch (e) {
       console.error("Failed to fetch rooms:", e);
@@ -95,6 +109,11 @@ const Menu = () => {
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
+    if (isAdmin) {
+      toast.error("Administrators cannot place food orders in the user interface.");
+      return;
+    }
+
     if (!roomNumber || !guestName || !guestEmail) {
       toast.error("Please fill in your name, email address, and room number.");
       return;
@@ -455,19 +474,25 @@ const Menu = () => {
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  disabled={placingOrder}
-                  className="bg-[#c8a64d] text-black px-6 py-2.5 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition disabled:opacity-50 text-sm"
-                >
-                  {placingOrder ? (
-                    <>
-                      <RefreshCw className="animate-spin" size={16} /> Ordering...
-                    </>
-                  ) : (
-                    "Place Order"
-                  )}
-                </button>
+                {isAdmin ? (
+                  <div className="text-red-500 text-xs font-semibold self-center">
+                    Admins cannot order food in the user interface.
+                  </div>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={placingOrder}
+                    className="bg-[#c8a64d] text-black px-6 py-2.5 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition disabled:opacity-50 text-sm"
+                  >
+                    {placingOrder ? (
+                      <>
+                        <RefreshCw className="animate-spin" size={16} /> Ordering...
+                      </>
+                    ) : (
+                      "Place Order"
+                    )}
+                  </button>
+                )}
               </div>
             </form>
           </div>

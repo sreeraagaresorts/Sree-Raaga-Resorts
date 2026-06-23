@@ -94,6 +94,16 @@ const Footer = () => {
 
   const handleSubscribe = (e) => {
     e.preventDefault();
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      try {
+        const u = JSON.parse(userStr);
+        if (u && u.role === "admin") {
+          alert("Administrators cannot subscribe to the newsletter in the user interface.");
+          return;
+        }
+      } catch (err) {}
+    }
     alert("Thank you for subscribing to our newsletter!");
   };
 

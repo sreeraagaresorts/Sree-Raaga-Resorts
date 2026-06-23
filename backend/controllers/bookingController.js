@@ -10,6 +10,11 @@ exports.createBooking = async (req, res) => {
 
     if (req.user.role === "admin" && bodyUserId) {
       user_id = bodyUserId;
+    } else if (req.user.role === "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Administrators cannot book rooms "
+      });
     }
 
     if (!room_id || !check_in || !check_out) {
@@ -296,6 +301,13 @@ exports.deleteBooking = async (req, res) => {
 // 6. Create Razorpay Order
 exports.createRazorpayOrder = async (req, res) => {
   try {
+    if (req.user.role === "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Administrators cannot book rooms in the user interface."
+      });
+    }
+
     const { room_id, check_in, check_out } = req.body;
     if (!room_id || !check_in || !check_out) {
       return res.status(400).json({
@@ -363,6 +375,13 @@ exports.createRazorpayOrder = async (req, res) => {
 // 7. Verify Razorpay Payment and create Booking
 exports.verifyRazorpayPayment = async (req, res) => {
   try {
+    if (req.user.role === "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Administrators cannot book rooms in the user interface."
+      });
+    }
+
     const {
       razorpay_payment_id,
       razorpay_order_id,

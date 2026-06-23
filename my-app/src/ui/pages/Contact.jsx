@@ -10,6 +10,18 @@ import { API_URL } from "../../config/api";
 
 const Contact = () => {
   const toast = useToast();
+
+  const userStr = localStorage.getItem("user");
+  let isAdmin = false;
+  if (userStr) {
+    try {
+      const u = JSON.parse(userStr);
+      if (u && u.role === "admin") {
+        isAdmin = true;
+      }
+    } catch (e) {}
+  }
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,6 +30,11 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isAdmin) {
+      toast.error("Administrators cannot submit contact forms in the user interface.");
+      return;
+    }
+
     setStatus("sending");
 
     try {
@@ -143,13 +160,19 @@ const Contact = () => {
                 />
               </div>
 
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                className="w-full py-4 bg-[#f5dec2] text-[#0d2b4e] hover:bg-[#ebd0b0] font-semibold uppercase tracking-[2px] text-xs transition cursor-pointer shadow-sm disabled:bg-gray-200"
-              >
-                {status === "sending" ? "SENDING MESSAGE..." : "SEND YOUR MESSAGE"}
-              </button>
+              {isAdmin ? (
+                <div className="w-full py-4 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-sm text-center">
+                  Administrators cannot submit contact forms in the user interface.
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="w-full py-4 bg-[#f5dec2] text-[#0d2b4e] hover:bg-[#ebd0b0] font-semibold uppercase tracking-[2px] text-xs transition cursor-pointer shadow-sm disabled:bg-gray-200"
+                >
+                  {status === "sending" ? "SENDING MESSAGE..." : "SEND YOUR MESSAGE"}
+                </button>
+              )}
             </form>
           </div>
         </section>

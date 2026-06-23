@@ -99,6 +99,17 @@ const RoomDetails = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
+  const userStr = localStorage.getItem("user");
+  let isAdmin = false;
+  if (userStr) {
+    try {
+      const parsedUser = JSON.parse(userStr);
+      if (parsedUser && parsedUser.role === "admin") {
+        isAdmin = true;
+      }
+    } catch (e) {}
+  }
+
   const [room, setRoom] = useState(null);
   const [similarRooms, setSimilarRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -217,6 +228,11 @@ const RoomDetails = () => {
   };
 
   const handleBooking = async () => {
+    if (isAdmin) {
+      toast.error("Administrators cannot book rooms in the user interface.");
+      return;
+    }
+
     const token = localStorage.getItem("token");
     if (!token) {
       toast.warning("Please sign in to book a room.");
@@ -781,13 +797,19 @@ const RoomDetails = () => {
                   </div>
 
                   {/* Booking Trigger CTA */}
-                  <button
-                    onClick={handleBooking}
-                    disabled={bookingLoading}
-                    className="w-full mt-4 py-4 bg-[#e8dcc4] hover:bg-[#c8a64d] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2px] text-xs rounded-sm shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
-                  >
-                    {bookingLoading ? "Processing..." : `BOOK NOW`}
-                  </button>
+                  {isAdmin ? (
+                    <div className="w-full mt-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-sm text-center">
+                      Administrators cannot book rooms in the user interface.
+                    </div>
+                  ) : (
+                    <button
+                      onClick={handleBooking}
+                      disabled={bookingLoading}
+                      className="w-full mt-4 py-4 bg-[#e8dcc4] hover:bg-[#c8a64d] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2px] text-xs rounded-sm shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
+                    >
+                      {bookingLoading ? "Processing..." : `BOOK NOW`}
+                    </button>
+                  )}
 
                 </div>
 
