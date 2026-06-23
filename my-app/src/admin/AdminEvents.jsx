@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
+import { compressImage } from "../utils/imageCompressor";
 
 const AdminEvents = () => {
   const toast = useToast();
@@ -92,18 +93,24 @@ const AdminEvents = () => {
     setSaving(true);
     setError(null);
 
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("category", category);
-    formData.append("event_date", eventDate);
-    formData.append("description", description);
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
-
     try {
+      const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+
+      // Compress image on the frontend before sending to prevent Nginx 413 Payload Too Large
+      let compressedImage = imageFile;
+      if (imageFile) {
+        compressedImage = await compressImage(imageFile);
+      }
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("category", category);
+      formData.append("event_date", eventDate);
+      formData.append("description", description);
+      if (compressedImage) {
+        formData.append("image", compressedImage);
+      }
+
       let url = `${API_URL}/api/events`;
       let method = "POST";
 

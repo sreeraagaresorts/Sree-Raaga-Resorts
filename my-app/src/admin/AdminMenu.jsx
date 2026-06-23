@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
+import { compressImage } from "../utils/imageCompressor";
 
 const AdminMenu = () => {
   const toast = useToast();
@@ -126,18 +127,24 @@ const AdminMenu = () => {
     setSaving(true);
     setError(null);
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("category", category);
-    formData.append("description", description);
-    formData.append("isVegetarian", isVegetarian);
-    formData.append("isAvailable", isAvailable);
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
-
     try {
+      // Compress image on the frontend before sending to prevent Nginx 413 Payload Too Large
+      let compressedImage = imageFile;
+      if (imageFile) {
+        compressedImage = await compressImage(imageFile);
+      }
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("category", category);
+      formData.append("description", description);
+      formData.append("isVegetarian", isVegetarian);
+      formData.append("isAvailable", isAvailable);
+      if (compressedImage) {
+        formData.append("image", compressedImage);
+      }
+
       let url = `${API_URL}/api/dishes`;
       let method = "POST";
 

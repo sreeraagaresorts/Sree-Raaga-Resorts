@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
+import { compressImage } from "../utils/imageCompressor";
 
 const AdminRooms = () => {
   const toast = useToast();
@@ -155,27 +156,39 @@ const AdminRooms = () => {
     setSaving(true);
     setError(null);
 
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-
-    const formData = new FormData();
-    formData.append("roomNumber", roomNumber);
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("category", category);
-    formData.append("area", area);
-    formData.append("beds", beds);
-    formData.append("bathrooms", bathrooms);
-    formData.append("guests", guests);
-    formData.append("description", description);
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
-    formData.append("existingExtraImages", JSON.stringify(existingExtraImages));
-    newExtraImageFiles.forEach((file) => {
-      formData.append("extraImages", file);
-    });
-
     try {
+      const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+
+      // Compress images on the frontend before sending to prevent Nginx 413 Payload Too Large
+      let compressedMainImage = imageFile;
+      if (imageFile) {
+        compressedMainImage = await compressImage(imageFile);
+      }
+
+      const compressedExtraImages = [];
+      for (const file of newExtraImageFiles) {
+        const compressed = await compressImage(file);
+        compressedExtraImages.push(compressed);
+      }
+
+      const formData = new FormData();
+      formData.append("roomNumber", roomNumber);
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("category", category);
+      formData.append("area", area);
+      formData.append("beds", beds);
+      formData.append("bathrooms", bathrooms);
+      formData.append("guests", guests);
+      formData.append("description", description);
+      if (compressedMainImage) {
+        formData.append("image", compressedMainImage);
+      }
+      formData.append("existingExtraImages", JSON.stringify(existingExtraImages));
+      compressedExtraImages.forEach((file) => {
+        formData.append("extraImages", file);
+      });
+
       let url = `${API_URL}/api/rooms`;
       let method = "POST";
 
