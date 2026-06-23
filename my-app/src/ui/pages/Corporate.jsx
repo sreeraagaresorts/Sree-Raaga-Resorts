@@ -7,7 +7,7 @@ const Corporate = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] font-sans min-h-screen">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen">
         
         {/* Hero Section */}
         <section
@@ -55,7 +55,7 @@ const Corporate = () => {
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3">
                     <span className="w-1.5 h-1.5 bg-[#c8a64d] rounded-full shrink-0"></span>
-                    <span className="text-[#0d2b4e] text-sm font-sans font-light">{item}</span>
+                    <span className="text-[#0d2b4e] text-sm  font-light">{item}</span>
                   </div>
                 ))}
               </div>
@@ -70,7 +70,7 @@ const Corporate = () => {
                 Resort Capabilities
               </h3>
               
-              <div className="space-y-5 font-sans text-xs md:text-sm font-light text-gray-500">
+              <div className="space-y-5  text-xs md:text-sm font-light text-gray-500">
                 <div>
                   <h4 className="text-[#0d2b4e] font-semibold mb-1 uppercase tracking-wider text-[10px]">
                     Grand Event Capacity

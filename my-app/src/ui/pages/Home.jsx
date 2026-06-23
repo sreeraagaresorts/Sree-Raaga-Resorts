@@ -401,7 +401,7 @@ export default function Home() {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-sm font-semibold">
               Sree Raaga Resorts
             </span>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-light leading-tight mb-8 drop-shadow-md">
+            <h1 className="text-4xl font-corm md:text-6xl lg:text-7xl font-light leading-tight mb-8 drop-shadow-md">
               A Premier Destination for Getaways, <br />
               <span className="italic font-normal text-[#D8BF72]">
                 Celebrations & Grand Events
@@ -418,7 +418,7 @@ export default function Home() {
               
               {/* Check In - Check Out Cell */}
               <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
                   {checkIn || checkOut 
                     ? `${checkIn ? checkIn : "Check In"} · ${checkOut ? checkOut : "Check Out"}` 
                     : "Check In · Check Out"}
@@ -447,7 +447,7 @@ export default function Home() {
 
               {/* Rooms Selection Cell */}
               <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
                   {roomType}
                 </span>
                 <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
@@ -467,7 +467,7 @@ export default function Home() {
 
               {/* Guests Selection Cell */}
               <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
                   {guests === "Guests" ? "Guests" : (guests === "1" ? "1 Guest" : `${guests} Guests`)}
                 </span>
                 <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
@@ -488,7 +488,7 @@ export default function Home() {
               {/* Circular GO Button */}
               <button
                 type="submit"
-                className="w-11 h-11 rounded-full bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8] flex items-center justify-center font-bold tracking-wider transition-all duration-300 ml-0 md:ml-4 mt-3 md:mt-0 shrink-0 cursor-pointer text-xs font-sans shadow-md"
+                className="w-11 h-11 rounded-full bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8] flex items-center justify-center font-bold tracking-wider transition-all duration-300 ml-0 md:ml-4 mt-3 md:mt-0 shrink-0 cursor-pointer text-xs  shadow-md"
               >
                 GO
               </button>
@@ -497,11 +497,11 @@ export default function Home() {
         </section>
 
         {/* ================= SHOWCASE / ABOUT SECTION ================= */}
-        <section className="relative pt-24 pb-24 px-6 bg-[#f7faff] text-[#0d2b4e] overflow-hidden">
+        <section className="relative py-48 px-6 bg-[#f7faff] text-[#0d2b4e] overflow-hidden">
           
           {/* Outlined brand text behind the staggered images */}
           <div 
-            className="absolute top-[8%] lg:top-[-1%] left-1/2 -translate-x-1/2 text-[7vw]  uppercase tracking-[10px] font-medium text-[#c8a64d]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
+            className="absolute top-[8%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[9vw] font-corm  uppercase tracking-[5px] font-medium text-[#c8a64d]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
           >
             Sree Raaga
           </div>
@@ -511,7 +511,7 @@ export default function Home() {
             <WindowReveal 
               src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
               alt="Villa Exterior" 
-              className="h-[280px] md:h-[350px] lg:h-[400px] rounded-xl"
+              className="h-[280px] md:h-[350px] lg:h-[440px] rounded-xl"
             />
             
             {/* Center image is taller and offset upwards, overlapping background text */}
@@ -524,31 +524,59 @@ export default function Home() {
             <WindowReveal 
               src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
               alt="Luxury Pool" 
-              className="h-[280px] md:h-[350px] lg:h-[400px] rounded-xl"
+              className="h-[280px] md:h-[350px] lg:h-[440px] rounded-xl"
             />
           </div>
 
           {/* Large Title Below Staggered Images */}
-          <h2 className="text-5xl md:text-8xl  text-[#0d2b4e] tracking-[12px] uppercase text-center relative z-20 -mt-16 md:-mt-28 mb-6">
+          <h2 className="text-5xl md:text-[120px]  text-[#0d2b4e] tracking-[12px] font-corm uppercase text-center relative z-20 -mt-16 md:-mt-30 mb-6">
             Resorts
           </h2>
 
           {/* Centered Curated Description */}
-          <p className="max-w-3xl mx-auto text-gray-500 text-center leading-relaxed text-xs lg:text-sm font-sans px-4 mb-20">
-            More than a resort, Sree Raaga is a vibrant destination where luxury stays, productive workspaces, memorable celebrations, corporate retreats, and family experiences come together. Whether you're planning a weekend getaway, a wedding, a team outing, or a productive workcation, every experience is designed to inspire connection and create lasting memories.
-          </p>
+          <p className="max-w-3xl mx-auto text-gray-500 text-center font-jost leading-relaxed text-xs lg:text-[17px]   mb-20">
+Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create
+lasting memories. Whether you’re planning a romantic getaway, a family vacation, or a business trip, we have the perfect
+offer to suit your needs and elevate your experience.          </p>
+
+
+<div className="flex justify-center mb-20">
+  <button className="group flex items-center gap-4 uppercase tracking-wide text-sm font-medium text-black">
+    <span className="w-9 h-9 rounded-full border border-black flex items-center justify-center transition-all duration-300 group-hover:bg-black group-hover:text-white">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-4 h-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M5 12h14m-5-5 5 5-5 5"
+        />
+      </svg>
+    </span>
+
+    <span className="relative">
+      DISCOVER MORE
+      <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full"></span>
+    </span>
+  </button>
+</div>
 
           {/* Stats Bar */}
-          <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-10 grid grid-cols-2 md:grid-cols-4 gap-80 text-center">
             {[
               { number: "1,200+", label: "Guest Reviews" },
               { number: "24/7", label: "Front Desk" },
-              { number: "15+", label: "Villa Suites" },
+              { number: "15", label: "Villa Suites" },
               { number: "17+", label: "Amenities" }
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center">
-                <span className="text-3xl md:text-4xl font-light text-[#c8a64d] mb-1">{stat.number}</span>
-                <span className="text-xs uppercase tracking-widest text-gray-500 font-semibold">{stat.label}</span>
+                <span className="text-3xl md:text-[92px] font-medium font-corm text-[#c8a64d] mb-1">{stat.number}</span>
+                <span className="text-sm uppercase tracking-widest  w-50 text-gray-500 font-medium">{stat.label}</span>
               </div>
             ))}
           </div>
@@ -561,19 +589,38 @@ export default function Home() {
             {/* Header */}
             <div className="flex justify-between items-end mb-16 border-b border-white/10 pb-6">
               <div>
-                <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
-                  Accommodation
+                <span className="text-[#c8a64d] uppercase font-jost tracking-[4px] text-sm font-semibold block mb-4">
+                  Explore
                 </span>
-                <h2 className="text-3xl md:text-5xl font-light">
+                <h2 className="text-3xl md:text-6xl font-corm font-medium">
                   Rooms & Suites
                 </h2>
               </div>
-              <Link 
-                to="/rooms" 
-                className="text-[#c8a64d] hover:text-[#d8bf72] text-sm uppercase tracking-widest flex items-center gap-2 group transition"
-              >
-                View all <ArrowRight size={16} className="group-hover:translate-x-1 transition" />
-              </Link>
+             <div className="flex justify-center mb-20">
+  <button className="group flex items-center gap-4 uppercase tracking-wide text-sm font-medium text-white">
+    <span className="w-9 h-9 rounded-full border border-white flex items-center justify-center transition-all duration-300 group-hover:bg-[#c8a64d] group-hover:text-white">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-4 h-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M5 12h14m-5-5 5 5-5 5"
+        />
+      </svg>
+    </span>
+
+    <span className="relative">
+      DISCOVER MORE
+      <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+    </span>
+  </button>
+</div>
             </div>
 
             {loadingRooms ? (
@@ -595,25 +642,33 @@ export default function Home() {
                       className="shrink-0 px-4 group"
                     >
                       <Link to={`/rooms/${room.id}`} className="block">
-                        <div className="relative mb-6 aspect-[4/3] overflow-hidden ">
-                          {/* Custom Window Open Reveal for Room Images */}
-                          <WindowReveal 
-                            src={getImageUrl(room.image)} 
-                            alt={room.name} 
-                            className="w-full h-full"
-                          />
-                          <div className="absolute bottom-6 left-6 z-20 bg-black/75 backdrop-blur-sm px-4 py-2 border border-[#c8a64d]/30 text-white rounded">
-                            <span className="text-xs uppercase tracking-widest font-semibold text-[#D8BF72]">
-                              Starts at ₹{Number(room.price).toLocaleString()}
-                            </span>
-                          </div>
-                        </div>
+                       <div className="relative mb-6 aspect-[4/3] overflow-hidden group">
+  <WindowReveal
+    src={getImageUrl(room.image)}
+    alt={room.name}
+    className="w-full h-full"
+  />
 
-                        <h3 className="text-2xl md:text-3xl font-light mb-2 group-hover:text-[#c8a64d] transition duration-300">
+  {/* Price Tag */}
+  <div className="absolute bottom-6 left-6 z-20 bg-black/75 backdrop-blur-sm px-4 py-2 border border-[#c8a64d]/30 text-white rounded">
+    <span className="text-xs uppercase tracking-widest font-jost font-semibold text-[#D8BF72]">
+      Starts at ₹{Number(room.price).toLocaleString()}
+    </span>
+  </div>
+
+  {/* Hover Overlay */}
+  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center z-20">
+    <button className="px-5 py-14 rounded-full bg-[#D8BF72] text-black font-jost uppercase tracking-widest text-sm font-semibold hover:bg-white transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+      Book Now
+    </button>
+  </div>
+</div>
+
+                        <h3 className="text-2xl md:text-3xl font-light mb-2 font-corm group-hover:text-[#c8a64d] transition duration-300">
                           {room.name}
                         </h3>
 
-                        <div className="flex flex-wrap items-center gap-3 text-[#D8C8A5] text-xs uppercase tracking-widest mb-4">
+                        <div className="flex flex-wrap items-center gap-3 text-[#D8C8A5] text-sm font-medium font-jost uppercase tracking-widest mb-4">
                           <span>{room.area} SQM</span>
                           <span>•</span>
                           <span>{room.beds}</span>
@@ -621,14 +676,14 @@ export default function Home() {
                           <span>{room.bathrooms} Bathroom</span>
                         </div>
 
-                        <p className="text-gray-400 mb-6 text-sm leading-relaxed max-w-xl font-sans">
+                        {/* <p className="text-gray-400 mb-6 text-sm leading-relaxed max-w-xl ">
                           {room.description}
-                        </p>
-
+                        </p> */}
+{/* 
                         <div className="text-[#c8a64d] uppercase text-xs tracking-widest flex items-center gap-3 font-semibold group-hover:text-white transition">
                           Room Details
                           <span className="w-8 h-[1px] bg-[#c8a64d] group-hover:bg-white group-hover:w-12 transition-all duration-300"></span>
-                        </div>
+                        </div> */}
                       </Link>
                     </div>
                   ))}
@@ -661,22 +716,22 @@ export default function Home() {
         </section>
 
         {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
-        <section className="py-24  bg-[#f7faff] text-[#0d2b4e]">
+        <section className="pt-24  bg-[#f7faff] text-[#0d2b4e]">
           <div className="">
                <div className="max-w-6xl mx-auto text-center mb-16">
           
-              <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
+              <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
                 Resort Facilities
               </h2>
             </div>
         
 
             {/* Icons Row */}
-            <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 justify-center items-center py-4 mb-20">
+            <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 justify-center items-center py-4 mb-32">
               {[
                 { 
                   icon: (
-                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-15 h-15 text-[#0d2b4e]/70  group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M5 12a10 10 0 0 1 14 0" />
                       <path d="M8.5 15a5 5 0 0 1 7 0" />
                       <circle cx="12" cy="18" r="1" fill="currentColor" />
@@ -688,7 +743,7 @@ export default function Home() {
                 },
                 { 
                   icon: (
-                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-15 h-15 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                       {/* Golf cart / buggy wheels */}
                       <circle cx="6" cy="18" r="2" />
                       <circle cx="18" cy="18" r="2" />
@@ -705,7 +760,7 @@ export default function Home() {
                 },
                 { 
                   icon: (
-                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-15 h-15 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="3" y="6" width="14" height="10" rx="1" />
                       <path d="M8 16v3h4v-3H8zM6 19h8" />
                       <rect x="19" y="8" width="2" height="8" rx="0.5" />
@@ -717,7 +772,7 @@ export default function Home() {
                 },
                 { 
                   icon: (
-                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-15 h-15 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M3 17h18" />
                       <path d="M6 17a6 6 0 0 1 12 0" />
                       <circle cx="12" cy="9.5" r="1.5" />
@@ -728,7 +783,7 @@ export default function Home() {
                 },
                 { 
                   icon: (
-                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-15 h-15 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="5" y="4" width="14" height="16" rx="2" />
                       <circle cx="12" cy="13" r="5" />
                       <circle cx="12" cy="13" r="3" strokeDasharray="2 1" />
@@ -741,7 +796,7 @@ export default function Home() {
                 },
                 { 
                   icon: (
-                    <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-15 h-15 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M4 12h8l-1 8H5l-1-8z" />
                       <path d="M4 12a4 4 0 0 1 8 0" />
                       <line x1="18" y1="4" x2="10" y2="20" />
@@ -754,10 +809,10 @@ export default function Home() {
                 }
               ].map((item, idx) => (
                 <div key={idx} className="flex flex-col items-center text-center group cursor-default">
-                  <div className="mb-4 text-[#0d2b4e]/60 group-hover:text-[#c8a64d] transition-colors duration-300">
+                  <div className="mb-4 text-[#0d2b4e]/60  group-hover:text-[#c8a64d] transition-colors duration-300">
                     {item.icon}
                   </div>
-                  <span className="text-sm md:text-base font-light text-gray-500  group-hover:text-[#0d2b4e] transition-colors duration-300">
+                  <span className="text-sm md:text-xl font-semibold text-gray-500 font-corm  group-hover:text-[#0d2b4e] transition-colors duration-300">
                     {item.name}
                   </span>
                 </div>
@@ -766,7 +821,7 @@ export default function Home() {
 
             {/* Exceptional Gastronomy Header */}
             <div className="text-center mb-20 select-none">
-              <span className="text-gray-400 uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
+              <span className="text-gray-400 uppercase tracking-[4px] text-[10px]  font-bold block mb-4">
                 Sree Raaga Resorts Luxury Hotel
               </span>
               <h2 className="text-3xl md:text-5xl font-light  text-[#0d2b4e] leading-snug">
@@ -790,7 +845,7 @@ export default function Home() {
                   to="/rooms"
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
                 >
-                  <span className="text-[11px] font-sans font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
+                  <span className="text-[11px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
                     Book Now
                   </span>
                 </Link>
@@ -818,13 +873,13 @@ export default function Home() {
                         onClick={() => handleTabClick(key)}
                         className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 min-h-[160px] py-4"
                       >
-                        <div className={`transition-colors duration-300 ${tabColor}`}>
+                        <div className={`transition-colors  duration-300 ${tabColor}`}>
                           {tabData[key].icon}
                         </div>
-                        <h3 className={`text-xl md:text-2xl font-light tracking-wide  mb-2 transition-colors duration-300 ${tabColor}`}>
+                        <h3 className={`text-xl md:text-4xl font-medium tracking-wide font-corm  mb-2 transition-colors duration-300 ${tabColor}`}>
                           {tabData[key].title}
                         </h3>
-                        <p className={`text-xs md:text-sm leading-relaxed font-sans transition-colors duration-300 ${
+                        <p className={`text-sm md:text-sm leading-relaxed  transition-colors duration-300 ${
                           isActive ? "text-gray-500" : "text-[#0d2b4e]/20"
                         }`}>
                           {tabData[key].description}
@@ -850,7 +905,7 @@ export default function Home() {
                               ? "w-10 bg-[#0d2b4e]" 
                               : "w-4 bg-[#0d2b4e]/30 group-hover:w-8 group-hover:bg-[#0d2b4e]/50"
                           }`} />
-                          <span className={`text-xs font-sans font-bold tracking-widest transition-colors duration-300 ${
+                          <span className={`text-xs  font-bold tracking-widest transition-colors duration-300 ${
                             isActive ? "text-[#0d2b4e]" : "text-[#0d2b4e]/30"
                           }`}>
                             0{idx + 1}
@@ -869,97 +924,156 @@ export default function Home() {
         </section>
 
         {/* ================= EXPERIENCES GRID ================= */}
-        <section className=" bg-white text-[#0d2b4e]">
-          
+      <section className="bg-white">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    {[
+      {
+        title: "Yoga On Beach",
+        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200",
+      },
+      {
+        title: "Water Sports",
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200",
+      },
+      {
+        title: "Scuba Diving",
+        image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200",
+      },
+      {
+        title: "Island Activities",
+        image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1200",
+      },
+    ].map((exp, index) => (
+      <div
+        key={index}
+        className="relative h-[500px] lg:h-[850px] overflow-hidden group"
+      >
+        {/* Background Image */}
+        <img
+          src={exp.image}
+          alt={exp.title}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
 
-          <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  ">
-            {[
-              { 
-                title: "Yoga Classes", 
-                image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800" 
-              },
-              { 
-                title: "Water Sports", 
-                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800" 
-              },
-              { 
-                title: "Scuba Diving", 
-                image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800" 
-              },
-              { 
-                title: "Other Activities", 
-                image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=800" 
-              }
-            ].map((exp, index) => (
-              <div key={index} className="relative h-[400px] sm:h-[500px] lg:h-[650px] group overflow-hidden shadow-lg">
-                <WindowReveal 
-                  src={exp.image} 
-                  alt={exp.title} 
-                  className="w-full h-full"
-                  delay={index * 0.15}
-                />
-                
-                {/* Gradient overlay
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent z-10"></div> */}
-                
-                {/* Content Overlay */}
-                <div className="absolute bottom-6 left-6 right-6 z-20 text-white text-center">
-                  <h3 className="text-xl font-light tracking-wide uppercase  drop-shadow mb-1">
-                    {exp.title}
-                  </h3>
-                  <div className="w-8 h-[1px] bg-[#c8a64d] mx-auto scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/35"></div>
+
+        {/* Content */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8 text-white">
+          
+          <span className="uppercase tracking-widest text-sm font-jost mb-10">
+            Experiences
+          </span>
+
+          <h3 className="font-corm text-4xl lg:text-6xl font-light leading-tight mb-8">
+            {exp.title}
+          </h3>
+
+          <p className="max-w-xs text-sm lg:text-base text-white/90 mb-12">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+
+        <button
+  className="
+    px-12 py-4
+    border border-white
+    rounded-full
+    uppercase
+    tracking-widest
+    text-sm
+    font-semibold
+    opacity-0
+    translate-y-4
+    group-hover:opacity-100
+    group-hover:translate-y-0
+    hover:bg-white
+    hover:text-black
+    transition-all
+    duration-500
+  "
+>
+  Discover More
+</button>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
 
         {/* ================= A WARM, EXPRESSIVE URBAN SPACE ================= */}
-        <section className="py-24  bg-[#f7faff] text-[#0d2b4e]">
-          <div className=" flex flex-col lg:flex-row items-center ">
-            
-            {/* Left Image */}
-            <div className="w-full lg:w-1/4">
-              <WindowReveal 
-                src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
-                alt="Courtyard" 
-                className="h-[300px] lg:h-[600px]  "
-              />
-            </div>
+   <section className="py-24 bg-[#f7f7f7] overflow-hidden">
+  <div className=" relative">
 
-            {/* Central Box */}
-            <div className="w-full lg:w-1/2 text-center  p-8 md:p-12 ">
-              <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-4">
-                Sree Raaga Spaces
-              </span>
-              <h2 className="text-2xl md:text-3xl font-light leading-snug mb-8 mx-4 md:mx-20">
-                A Warm, Expressive, Beautiful And Urban Space
-              </h2>
-              <Link 
-                to="/about"
-                className="inline-block px-8 py-3 bg-[#0d2b4e] text-white hover:bg-[#153a66] transition duration-300 text-xs uppercase tracking-widest font-semibold rounded"
-              >
-                Explore Space
-              </Link>
-            </div>
+    {/* Main Center Box */}
+    <div className="bg-[#f3f1ec] min-h-[700px] flex items-center justify-center px-8">
+      <div className="max-w-3xl text-center">
 
-            {/* Right Image */}
-            <div className="w-full lg:w-1/4">
-              <WindowReveal 
-                src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800" 
-                alt="Lounge Lobby" 
-                className="h-[300px] lg:h-[600px]  shadow-xl"
-              />
-            </div>
+        <span className="uppercase tracking-[3px] text-sm font-jost text-[#0d2b4e]">
+          Sree Raaga Resorts
+        </span>
 
-          </div>
-        </section>
+        <h2 className="font-corm text-[#0d2b4e] text-5xl md:text-7xl  leading-[1.15] font-medium mt-6 mb-10">
+          Exceptional Gastronomy
+          <br />
+          In Beautiful Spaces
+        </h2>
+
+        <p className="text-gray-600 text-lg leading-relaxed max-w-2xl  mx-auto mb-12">
+          Experience extraordinary dining, elegant ambience and unforgettable
+          moments designed to elevate every stay.
+        </p>
+
+        <Link
+          to="/about"
+          className="inline-flex items-center gap-4 px-10 py-5 rounded-full bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+        >
+          <span>—</span>
+          Discover More
+        </Link>
+
+      </div>
+    </div>
+
+    {/* Left Floating Image */}
+    <div className="hidden lg:block absolute left-12 top-16">
+      <div className="flex items-center gap-3 mb-8">
+        <span className="text-3xl">🍽</span>
+        <span className="font-corm text-4xl text-[#0d2b4e]">
+          Restaurant
+        </span>
+      </div>
+
+      <img
+        src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200"
+        alt=""
+        className="w-[500px] h-[520px] object-cover shadow-xl"
+      />
+    </div>
+
+    {/* Right Floating Image */}
+    <div className="hidden lg:block absolute right-12 top-16">
+      <img
+        src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=1200"
+        alt=""
+        className="w-[500px] h-[520px] object-cover shadow-xl"
+      />
+
+      <div className="flex items-center gap-3 mt-8">
+        <span className="text-3xl ">🍹</span>
+        <span className="font-corm text-4xl text-[#0d2b4e]">
+          Pool Bar
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
         {/* ================= UNIQUE EXPERIENCES ================= */}
         <section className="py-24  bg-[#f7faff] text-[#0d2b4e]">
           <div className="">
             <div className="max-w-6xl mx-auto text-center mb-16">
-              <span className="text-gray-500 uppercase tracking-[4px] text-xs font-semibold block mb-2 font-sans">
+              <span className="text-gray-500 uppercase tracking-[4px] text-xs font-semibold block mb-2 ">
                 There's so much to discover
               </span>
               <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
@@ -982,7 +1096,7 @@ export default function Home() {
                     <ChevronLeft size={20} />
                   </div>
                 </div>
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-sans font-bold mb-2">03</span>
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">03</span>
                 <h3 className="text-2xl font-light text-[#0d2b4e]  hover:text-[#c8a64d] transition duration-300">
                   Poolside Retreats
                 </h3>
@@ -997,7 +1111,7 @@ export default function Home() {
                     className="w-full h-full"
                   />
                 </div>
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-sans font-bold mb-2">01</span>
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">01</span>
                 <h3 className="text-2xl font-light text-[#0d2b4e]  hover:text-[#c8a64d] transition duration-300">
                   Balloon Rides
                 </h3>
@@ -1016,7 +1130,7 @@ export default function Home() {
                     <ChevronRight size={20} />
                   </div>
                 </div>
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-sans font-bold mb-2">02</span>
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">02</span>
                 <h3 className="text-2xl font-light text-[#0d2b4e]  hover:text-[#c8a64d] transition duration-300">
                   Bike Rides
                 </h3>
@@ -1052,7 +1166,7 @@ export default function Home() {
               
               {/* Check In - Check Out Cell */}
               <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
                   {checkIn || checkOut 
                     ? `${checkIn ? checkIn : "Check In"} · ${checkOut ? checkOut : "Check Out"}` 
                     : "Check In · Check Out"}
@@ -1080,7 +1194,7 @@ export default function Home() {
 
               {/* Rooms Selection Cell */}
               <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
                   {roomType}
                 </span>
                 <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
@@ -1100,7 +1214,7 @@ export default function Home() {
 
               {/* Guests Selection Cell */}
               <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm font-sans font-light tracking-wide">
+                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
                   {guests === "Guests" ? "Guests" : (guests === "1" ? "1 Guest" : `${guests} Guests`)}
                 </span>
                 <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
@@ -1121,7 +1235,7 @@ export default function Home() {
               {/* Circular GO Button */}
               <button
                 type="submit"
-                className="w-11 h-11 rounded-full bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8] flex items-center justify-center font-bold tracking-wider transition-all duration-300 ml-0 md:ml-4 mt-3 md:mt-0 shrink-0 cursor-pointer text-xs font-sans shadow-md"
+                className="w-11 h-11 rounded-full bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8] flex items-center justify-center font-bold tracking-wider transition-all duration-300 ml-0 md:ml-4 mt-3 md:mt-0 shrink-0 cursor-pointer text-xs  shadow-md"
               >
                 GO
               </button>

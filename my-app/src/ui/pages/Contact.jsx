@@ -55,7 +55,7 @@ const Contact = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-white text-[#0d2b4e] font-sans overflow-x-hidden">
+      <div className="bg-white text-[#0d2b4e]  overflow-x-hidden">
         
         {/* HERO BANNER SECTION */}
         <section
@@ -188,7 +188,7 @@ const Contact = () => {
                 Taluk Chamarayapatna,<br />
                 Karnataka 562129
               </p>
-              <p className="font-sans text-xs">
+              <p className=" text-xs">
                 <span className="text-[#c8a64d] font-semibold">Email:</span> info@sreeraagaresorts.in<br />
                 <span className="text-[#c8a64d] font-semibold">Phone:</span> 089045 61155
               </p>

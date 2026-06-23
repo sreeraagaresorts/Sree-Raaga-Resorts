@@ -28,14 +28,14 @@ const NotFound = () => {
             <h2 className="text-3xl md:text-5xl font-light  text-white tracking-wide">
               Page Not Found
             </h2>
-            <p className="text-white/70 font-sans text-xs md:text-sm max-w-md mx-auto leading-relaxed">
+            <p className="text-white/70  text-xs md:text-sm max-w-md mx-auto leading-relaxed">
               Sorry, but we couldn't find the page you are looking for. It might have been moved or deleted.
             </p>
 
             <div className="pt-6">
               <Link
                 to="/"
-                className="inline-block px-10 py-4 bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8] font-sans text-xs font-semibold uppercase tracking-[2px] rounded-sm transition-all duration-300 shadow-lg"
+                className="inline-block px-10 py-4 bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8]  text-xs font-semibold uppercase tracking-[2px] rounded-sm transition-all duration-300 shadow-lg"
               >
                 — Back to Homepage
               </Link>

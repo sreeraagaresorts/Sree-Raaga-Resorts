@@ -250,7 +250,7 @@ const  AdminLayout=()=> {
     (path !== "/admin" && location.pathname.startsWith(path));
 
   return (
-    <div className="min-h-screen bg-[#071524] flex text-white font-sans">
+    <div className="min-h-screen bg-[#071524] flex text-white ">
 
       {/* SIDEBAR */}
       <aside className="w-64 border-r border-white/5 hidden md:flex flex-col bg-[#071524] min-h-screen sticky top-0">

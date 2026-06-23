@@ -27,7 +27,7 @@ const TermsConditions = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] font-sans min-h-screen">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen">
         
         {/* Hero Section */}
         <section
@@ -57,7 +57,7 @@ const TermsConditions = () => {
               <Link
                 key={tab.key}
                 to={tab.path}
-                className={`block w-full text-left px-5 py-4 text-xs md:text-sm font-sans uppercase tracking-[2px] font-semibold rounded-sm transition-all duration-300 ${
+                className={`block w-full text-left px-5 py-4 text-xs md:text-sm  uppercase tracking-[2px] font-semibold rounded-sm transition-all duration-300 ${
                   activeTab === tab.key
                     ? "bg-[#c8a64d] text-white shadow-sm"
                     : "bg-[#f7f5ee] text-[#0d2b4e]/70 hover:bg-[#ebd0b0]/20 hover:text-[#0d2b4e]"
@@ -73,7 +73,7 @@ const TermsConditions = () => {
             <h2 className="text-3xl  font-light mb-8 text-[#0d2b4e] pb-4 border-b border-[#0d2b4e]/10">
               {activeTitle}
             </h2>
-            <div className="font-sans text-xs md:text-sm text-gray-500 leading-relaxed font-light">
+            <div className=" text-xs md:text-sm text-gray-500 leading-relaxed font-light">
               <Outlet />
             </div>
           </div>

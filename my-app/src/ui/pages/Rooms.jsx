@@ -168,7 +168,7 @@ const Rooms = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white px-4 mt-20 select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
               Sree Raaga Resorts Accommodation
             </span>
             <h1 className="text-5xl md:text-7xl font-light  leading-tight">
@@ -183,13 +183,13 @@ const Rooms = () => {
           {/* Header Introduction */}
           <div className="row justify-center text-center mb-20 select-none">
             <div className="max-w-3xl mx-auto">
-              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
                 Our Accommodations
               </span>
               <h2 className="text-4xl md:text-6xl font-light  text-[#0d2b4e] leading-tight mb-6">
                 Discover Our Rooms & Suites and Villas
               </h2>
-              <p className="text-gray-500 text-sm md:text-base leading-relaxed font-sans max-w-2xl mx-auto">
+              <p className="text-gray-500 text-sm md:text-base leading-relaxed  max-w-2xl mx-auto">
                 Come in, take your shoes off and let yourself sink into the mattress.
               </p>
             </div>
@@ -220,7 +220,7 @@ const Rooms = () => {
                   
                   {/* Hover centered circular gold button */}
                   <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
-                    <span className="text-xs font-semibold font-sans tracking-[3px]">BOOK NOW</span>
+                    <span className="text-xs font-semibold  tracking-[3px]">BOOK NOW</span>
                   </div>
 
                   <img
@@ -238,23 +238,23 @@ const Rooms = () => {
                         {room.name}
                       </h3>
                       {room.category && (
-                        <span className="text-[10px] text-[#c8a64d] font-sans font-bold tracking-[2px] block mt-1 uppercase">
+                        <span className="text-[10px] text-[#c8a64d]  font-bold tracking-[2px] block mt-1 uppercase">
                           {room.category}
                         </span>
                       )}
                     </div>
                     <div className="text-right">
-                      <span className="text-sm md:text-base font-sans font-semibold text-[#c8a64d]">
+                      <span className="text-sm md:text-base  font-semibold text-[#c8a64d]">
                         ₹{parseFloat(room.price).toLocaleString()}
                       </span>
-                      <span className="text-[10px] text-gray-400 font-sans block tracking-wider uppercase font-semibold">
+                      <span className="text-[10px] text-gray-400  block tracking-wider uppercase font-semibold">
                         / NIGHT
                       </span>
                     </div>
                   </div>
 
                   {/* Room Specs Row */}
-                  <div className="flex flex-wrap items-center gap-6 pb-6 text-[11px] md:text-xs font-sans text-gray-500 border-b border-gray-100">
+                  <div className="flex flex-wrap items-center gap-6 pb-6 text-[11px] md:text-xs  text-gray-500 border-b border-gray-100">
                     <div className="flex items-center">
                       <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                       <span>{room.area || "30 M²"}</span>
@@ -274,7 +274,7 @@ const Rooms = () => {
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-500 text-xs md:text-sm leading-relaxed font-sans mt-6 mb-8 flex-grow">
+                  <p className="text-gray-500 text-xs md:text-sm leading-relaxed  mt-6 mb-8 flex-grow">
                     {room.description}
                   </p>
 
@@ -282,7 +282,7 @@ const Rooms = () => {
                   <div>
                     <Link
                       to={`/rooms/${room.id || room._id}`}
-                      className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d] font-sans text-xs font-bold uppercase tracking-[2px] transition-colors group/btn"
+                      className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d]  text-xs font-bold uppercase tracking-[2px] transition-colors group/btn"
                     >
                       <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
                         Book now
@@ -308,7 +308,7 @@ const Rooms = () => {
         {/* ================= HOTEL FACILITIES SECTION ================= */}
         <section className="py-24 px-6 bg-[#f7f5ee]">
           <div className="max-w-6xl mx-auto text-center mb-16 select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
               Our Services
             </span>
             <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
@@ -398,7 +398,7 @@ const Rooms = () => {
                 <div className="mb-4 text-[#0d2b4e]/60 group-hover:text-[#c8a64d] transition-colors duration-300">
                   {item.icon}
                 </div>
-                <span className="text-xs md:text-sm font-semibold tracking-wider text-gray-500 font-sans group-hover:text-[#0d2b4e] transition-colors duration-300 uppercase">
+                <span className="text-xs md:text-sm font-semibold tracking-wider text-gray-500  group-hover:text-[#0d2b4e] transition-colors duration-300 uppercase">
                   {item.name}
                 </span>
               </div>
@@ -409,7 +409,7 @@ const Rooms = () => {
         {/* ================= FOLLOW US ON INSTAGRAM SECTION ================= */}
         <section className=" bg-white">
           <div className="py-10 text-center mb-16 select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
               Our Socials
             </span>
             <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">

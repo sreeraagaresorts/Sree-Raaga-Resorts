@@ -39,7 +39,7 @@ const Events = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] font-sans min-h-screen overflow-x-hidden">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen overflow-x-hidden">
 
         {/* HERO SECTION */}
         <section
@@ -74,7 +74,7 @@ const Events = () => {
           </h2>
 
           {/* Quick Contact links under introduction */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-8 md:gap-12 pt-6 font-sans text-xs uppercase tracking-widest text-[#0d2b4e]/80">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-8 md:gap-12 pt-6  text-xs uppercase tracking-widest text-[#0d2b4e]/80">
             <a href="tel:08904561155" className="flex items-center gap-3 hover:text-[#c8a64d] transition-colors">
               <Phone size={14} className="text-[#c8a64d]" />
               <span>089045 61155</span>
@@ -104,7 +104,7 @@ const Events = () => {
               <div className="bg-white border border-[#0d2b4e]/5 p-12 text-center rounded-sm max-w-lg mx-auto shadow-sm space-y-4">
                 <Sparkles className="mx-auto text-[#c8a64d]" size={28} />
                 <h4 className="text-lg  font-medium text-[#0d2b4e]">No Custom Packages Uploaded Yet</h4>
-                <p className="text-xs md:text-sm text-gray-500 font-sans font-light">
+                <p className="text-xs md:text-sm text-gray-500  font-light">
                   We are currently custom-designing premium event templates. Contact us to design a bespoke event tailor-made for your celebration.
                 </p>
                 <div className="pt-2">
@@ -149,13 +149,13 @@ const Events = () => {
                         </h3>
 
                         {event.event_date && (
-                          <div className="flex items-center gap-1.5 text-xs text-gray-500 font-sans">
+                          <div className="flex items-center gap-1.5 text-xs text-gray-500 ">
                             <Calendar size={13} className="text-[#c8a64d]" />
                             <span>{event.event_date}</span>
                           </div>
                         )}
 
-                        <p className="text-gray-500 text-xs md:text-sm font-sans font-light leading-relaxed line-clamp-4">
+                        <p className="text-gray-500 text-xs md:text-sm  font-light leading-relaxed line-clamp-4">
                           {event.description}
                         </p>
                       </div>

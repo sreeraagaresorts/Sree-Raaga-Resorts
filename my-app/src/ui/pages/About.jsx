@@ -63,7 +63,7 @@ const About = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
               Sree Raaga Resorts
             </span>
             <h1 className="text-4xl md:text-6xl font-light  leading-tight">
@@ -111,7 +111,7 @@ const About = () => {
           </h2>
 
           {/* Centered Curated Description */}
-          <p className="max-w-3xl mx-auto text-gray-500 text-center leading-relaxed text-xs lg:text-sm font-sans px-4 mb-20">
+          <p className="max-w-3xl mx-auto text-gray-500 text-center leading-relaxed text-xs lg:text-sm  px-4 mb-20">
             Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create lasting memories. Whether you're planning a romantic getaway, a family vacation, or a business trip, we have the perfect offer to suit your needs and elevate your experience.
           </p>
 
@@ -144,13 +144,13 @@ const About = () => {
                 />
               </div>
               <div className="flex flex-col items-start select-none">
-                <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
+                <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px]  font-bold block mb-4">
                   Sree Raaga Resorts
                 </span>
                 <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e] mb-6">
                   Sophisticated Comfort
                 </h2>
-                <p className="text-gray-500 text-sm leading-relaxed font-sans mb-8">
+                <p className="text-gray-500 text-sm leading-relaxed  mb-8">
                   Every element of our rooms has been carefully curated to provide the
                   highest standard of comfort. From the fine linens and custom furnishings
                   to the stunning views of the surrounding natural landscape, we ensure
@@ -163,13 +163,13 @@ const About = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
               <div className="flex flex-col items-start select-none">
-                <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px] font-sans font-bold block mb-4">
+                <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px]  font-bold block mb-4">
                   Our Experience
                 </span>
                 <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e] mb-6">
                   A Unique Experience
                 </h2>
-                <p className="text-gray-500 text-sm leading-relaxed font-sans mb-8">
+                <p className="text-gray-500 text-sm leading-relaxed  mb-8">
                   Immerse yourself in unique experiences tailored to your lifestyle.
                   Whether you choose to unwind by the pool, indulge in luxury dining,
                   or explore nature trails, our resort offers a perfect balance of leisure
@@ -330,7 +330,7 @@ const About = () => {
             </h2>
             <Link
               to="/rooms"
-              className="inline-block px-10 py-4 bg-[#c8a64d] text-[#0d2b4e] hover:bg-[#b08e3d] hover:text-white transition duration-300 text-xs uppercase tracking-widest font-semibold font-sans rounded"
+              className="inline-block px-10 py-4 bg-[#c8a64d] text-[#0d2b4e] hover:bg-[#b08e3d] hover:text-white transition duration-300 text-xs uppercase tracking-widest font-semibold  rounded"
             >
               Book Now
             </Link>

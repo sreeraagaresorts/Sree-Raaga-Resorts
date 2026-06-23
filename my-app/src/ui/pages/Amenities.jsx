@@ -139,14 +139,14 @@ const Amenities = () => {
           
           {/* Main Hero Text */}
           <div className="relative z-10 text-center text-white px-4 max-w-4xl select-none my-auto">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
               Sree Raaga Resorts Amenities
             </span>
             <h1 className="text-5xl md:text-7xl font-light  leading-tight mb-6">
               Experiences For Every Occasion
             </h1>
             {/* Details Row */}
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-4 pt-8 border-t border-white/20 font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/80">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-4 pt-8 border-t border-white/20  text-[10px] md:text-xs uppercase tracking-widest text-white/80">
               <div className="flex items-center gap-2">
                 <Phone size={13} className="text-[#c8a64d]" />
                 <span>+91 89045 61155</span>
@@ -210,7 +210,7 @@ const Amenities = () => {
         <section className="py-24 px-6 bg-[#fcfaf2]">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16 select-none">
-              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
                 Experiences For Every Occasion
               </span>
               <h2 className="text-4xl md:text-6xl font-light  text-[#0d2b4e]">
@@ -273,7 +273,7 @@ const Amenities = () => {
                   <h3 className="text-xl  text-[#0d2b4e] border-b border-[#c8a64d]/30 pb-3 mb-4 uppercase tracking-[2px] font-semibold text-center">
                     {group.category}
                   </h3>
-                  <ul className="space-y-3 font-sans text-xs text-gray-500 leading-relaxed font-light flex-grow">
+                  <ul className="space-y-3  text-xs text-gray-500 leading-relaxed font-light flex-grow">
                     {group.items.map((item, itemIdx) => (
                       <li key={itemIdx} className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 bg-[#c8a64d] rounded-full shrink-0 mt-1.5"></span>

@@ -258,7 +258,7 @@ const Navbar = () => {
                 <span className={`w-5 h-[1.5px] bg-white transition-opacity duration-300 ${isOpen ? "opacity-0" : "group-hover:w-7"}`} />
                 <span className={`w-7 h-[1.5px] bg-white transition-all duration-500 origin-center ${isOpen ? "-rotate-45 -translate-y-[9px]" : ""}`} />
               </div>
-              <span className="text-xs lg:text-sm uppercase tracking-[5px] font-semibold text-white select-none font-sans">
+              <span className="text-xs lg:text-sm uppercase tracking-[5px] font-semibold text-white select-none ">
                 {isOpen ? "Close" : "Menu"}
               </span>
             </div>
@@ -266,7 +266,7 @@ const Navbar = () => {
             {/* Telephone Line */}
             <div className={`hidden md:flex items-center gap-2.5 text-white/80 hover:text-white transition-all duration-500 ${isOpen ? "opacity-0 pointer-events-none blur-sm" : ""}`}>
               <Phone size={14} className="text-[#c8a64d] shrink-0" />
-              <span className="text-xs lg:text-sm tracking-widest font-semibold font-sans">089045 61155</span>
+              <span className="text-xs lg:text-sm tracking-widest  font-jost ">089045 61155</span>
             </div>
           </div>
 
@@ -277,10 +277,10 @@ const Navbar = () => {
               isOpen ? "opacity-0 pointer-events-none blur-sm scale-95" : ""
             }`}
           >
-            <h1 className="text-3xl lg:text-4xl  text-[#c8a64d] tracking-wide leading-none">
+            <h1 className="text-3xl lg:text-4xl  text-[#c8a64d] tracking-wide font-jost leading-none">
               Sree Raaga
             </h1>
-            <span className="text-[10px] lg:text-[11px] tracking-[6px] uppercase text-white font-sans mt-1">
+            <span className="text-[10px] lg:text-[11px] tracking-[6px] uppercase font-jost text-white  mt-1">
               Resorts
             </span>
           </Link>
@@ -317,7 +317,7 @@ const Navbar = () => {
             {/* Booking Call to Action */}
             <Link
               to="/rooms"
-              className="hidden md:inline-block px-6 py-3  text-white hover:bg-[#b08e3b] transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-bold"
+              className="hidden md:inline-block px-6 py-3  text-white hover:bg-[#b08e3b] font-jost transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-medium"
             >
               Book Your Stay
             </Link>
@@ -453,7 +453,7 @@ const Navbar = () => {
               <Link 
                 to="/rooms"
                 onClick={() => setIsOpen(false)}
-                className="px-6 py-3 bg-[#c8a64d] text-white text-center rounded uppercase tracking-widest text-xs font-bold font-sans hover:bg-[#b08e3b] transition"
+                className="px-6 py-3 bg-[#c8a64d] text-white text-center rounded uppercase tracking-widest text-xs font-bold  hover:bg-[#b08e3b] transition"
               >
                 Book Your Stay
               </Link>
@@ -463,7 +463,7 @@ const Navbar = () => {
                     setIsOpen(false);
                     handleSignOut();
                   }}
-                  className="px-6 py-3 border border-red-500/35 text-red-400 text-center rounded uppercase tracking-widest text-xs font-bold font-sans hover:bg-red-500/10 transition cursor-pointer"
+                  className="px-6 py-3 border border-red-500/35 text-red-400 text-center rounded uppercase tracking-widest text-xs font-bold  hover:bg-red-500/10 transition cursor-pointer"
                 >
                   Sign Out
                 </button>
@@ -471,7 +471,7 @@ const Navbar = () => {
                 <Link 
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="px-6 py-3 border border-white/20 text-white text-center rounded uppercase tracking-widest text-xs font-bold font-sans hover:bg-white/10 transition"
+                  className="px-6 py-3 border border-white/20 text-white text-center rounded uppercase tracking-widest text-xs font-bold  hover:bg-white/10 transition"
                 >
                   Login / Register
                 </Link>

@@ -406,7 +406,7 @@ const RoomDetails = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold font-sans">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
               Sree Raaga Resorts
             </span>
             <h1 className="text-4xl md:text-6xl font-light  leading-tight">
@@ -469,7 +469,7 @@ const RoomDetails = () => {
               
               {/* Header Titles */}
               <div className="select-none">
-                <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold font-sans">
+                <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold ">
                   Sree Raaga Resort
                 </span>
                 <h1 className="text-4xl md:text-5xl font-light  text-[#0d2b4e] leading-tight mb-6">
@@ -477,7 +477,7 @@ const RoomDetails = () => {
                 </h1>
                 
                 {/* Specs Row */}
-                <div className="flex flex-wrap items-center gap-6 text-xs font-sans text-gray-500">
+                <div className="flex flex-wrap items-center gap-6 text-xs  text-gray-500">
                   <div className="flex items-center">
                     <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                     <span>{room.area || "30 M²"} SQM</span>
@@ -504,10 +504,10 @@ const RoomDetails = () => {
                 <h3 className="text-2xl font-light  text-[#0d2b4e]">
                   About accommodation
                 </h3>
-                <p className="text-gray-500 text-xs md:text-sm leading-relaxed font-sans">
+                <p className="text-gray-500 text-xs md:text-sm leading-relaxed ">
                   {room.description}
                 </p>
-                <p className="text-gray-500 text-xs md:text-sm leading-relaxed font-sans">
+                <p className="text-gray-500 text-xs md:text-sm leading-relaxed ">
                   Experience premium resort living with custom services tailored specifically for you. Sree Raaga Resorts prioritizes design excellence and clean spaces to make your vacation peaceful and relaxing.
                 </p>
               </div>
@@ -615,7 +615,7 @@ const RoomDetails = () => {
                       name: "Air conditioning" 
                     }
                   ].map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-3 text-xs font-sans text-gray-700">
+                    <div key={idx} className="flex items-center gap-3 text-xs  text-gray-700">
                       {item.icon}
                       <span>{item.name}</span>
                     </div>
@@ -634,7 +634,7 @@ const RoomDetails = () => {
                   What's included in this suite?
                 </h3>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 select-none font-sans text-xs md:text-sm text-gray-600">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 select-none  text-xs md:text-sm text-gray-600">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
@@ -675,7 +675,7 @@ const RoomDetails = () => {
                   Room Rules
                 </h3>
                 
-                <ul className="space-y-4 font-sans text-xs md:text-sm text-gray-500 list-disc pl-5 select-none">
+                <ul className="space-y-4  text-xs md:text-sm text-gray-500 list-disc pl-5 select-none">
                   <li>Check-in: From 15:00 PM - anytime</li>
                   <li>Check-out: 12:00 PM</li>
                   <li>Pets are not allowed</li>
@@ -688,7 +688,7 @@ const RoomDetails = () => {
 
             {/* RIGHT COLUMN (BOOKING SIDEBAR CARD) */}
             <div className="lg:col-span-4 lg:sticky lg:top-28">
-              <div className="bg-white border border-gray-100 rounded-sm p-8 shadow-xl space-y-6 font-sans">
+              <div className="bg-white border border-gray-100 rounded-sm p-8 shadow-xl space-y-6 ">
                 
                 <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
                   Book Your Room
@@ -804,7 +804,7 @@ const RoomDetails = () => {
             {/* Header Titles */}
             <div className="flex flex-col sm:flex-row justify-between items-end mb-16 select-none">
               <div>
-                <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold font-sans">
+                <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold ">
                   Similar
                 </span>
                 <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e]">
@@ -813,7 +813,7 @@ const RoomDetails = () => {
               </div>
               <Link 
                 to="/rooms" 
-                className="group inline-flex items-center text-xs font-bold font-sans uppercase tracking-[2px] text-[#0d2b4e] hover:text-[#c8a64d] transition-colors mt-4 sm:mt-0"
+                className="group inline-flex items-center text-xs font-bold  uppercase tracking-[2px] text-[#0d2b4e] hover:text-[#c8a64d] transition-colors mt-4 sm:mt-0"
               >
                 <span className="mr-2 border-b border-transparent group-hover:border-[#c8a64d] pb-0.5">View All Rooms</span>
                 <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
@@ -831,7 +831,7 @@ const RoomDetails = () => {
                   >
                     <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
-                      <span className="text-[10px] font-semibold font-sans tracking-[3px]">BOOK NOW</span>
+                      <span className="text-[10px] font-semibold  tracking-[3px]">BOOK NOW</span>
                     </div>
                     <img
                       src={getImageUrl(item.image)}
@@ -848,23 +848,23 @@ const RoomDetails = () => {
                           {item.name}
                         </h4>
                         {item.category && (
-                          <span className="text-[10px] text-[#c8a64d] font-sans font-bold tracking-[2px] block mt-1 uppercase">
+                          <span className="text-[10px] text-[#c8a64d]  font-bold tracking-[2px] block mt-1 uppercase">
                             {item.category}
                           </span>
                         )}
                       </div>
                       <div className="text-right">
-                        <span className="text-xs md:text-sm font-sans font-semibold text-[#c8a64d]">
+                        <span className="text-xs md:text-sm  font-semibold text-[#c8a64d]">
                           ₹{parseFloat(item.price).toLocaleString()}
                         </span>
-                        <span className="text-[9px] text-gray-400 font-sans block tracking-wider uppercase font-semibold">
+                        <span className="text-[9px] text-gray-400  block tracking-wider uppercase font-semibold">
                           / NIGHT
                         </span>
                       </div>
                     </div>
 
                     {/* Specs Row */}
-                    <div className="flex flex-wrap items-center gap-4 pb-6 text-[10px] font-sans text-gray-400">
+                    <div className="flex flex-wrap items-center gap-4 pb-6 text-[10px]  text-gray-400">
                       <div className="flex items-center">
                         <Maximize className="w-3.5 h-3.5 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
                         <span>{item.area || "30 M²"}</span>

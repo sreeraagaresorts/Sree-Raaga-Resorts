@@ -55,7 +55,7 @@ const ToastCard = ({ id, type, message, duration = 3000, onClose }) => {
       textColor: "text-[#5e1818]",
       descColor: "text-[#792626]",
       titleText: "Error",
-      icon: <span className="text-[#5e1818] font-bold text-xl leading-none font-sans">!</span>,
+      icon: <span className="text-[#5e1818] font-bold text-xl leading-none ">!</span>,
       closeColor: "text-[#5e1818]/40 hover:text-[#5e1818]/80",
     },
     warning: {
@@ -128,11 +128,11 @@ const ToastCard = ({ id, type, message, duration = 3000, onClose }) => {
         </div>
 
         <div className="flex-1 min-w-0">
-          <span className="text-sm font-bold block leading-tight font-sans">
+          <span className="text-sm font-bold block leading-tight ">
             {title}
           </span>
           {description && (
-            <p className={`text-xs ${config.descColor} font-normal mt-1 leading-snug font-sans`}>
+            <p className={`text-xs ${config.descColor} font-normal mt-1 leading-snug `}>
               {description}
             </p>
           )}

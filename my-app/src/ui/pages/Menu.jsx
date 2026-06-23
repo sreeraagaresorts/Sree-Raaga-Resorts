@@ -149,7 +149,7 @@ const Menu = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
           <div className="relative z-10 text-center text-white px-6 w-full max-w-5xl">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold font-sans">
+            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold ">
               Restaurant
             </span>
             <h1 className="text-4xl md:text-6xl font-light  leading-tight mb-8">
@@ -157,7 +157,7 @@ const Menu = () => {
             </h1>
             
             {/* Details Row */}
-            <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 pt-8 border-t border-white/20 font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/80">
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 pt-8 border-t border-white/20  text-[10px] md:text-xs uppercase tracking-widest text-white/80">
               <div className="flex items-center gap-2">
                 <Phone size={13} className="text-[#c8a64d]" />
                 <span>+91 99000 11550</span>
@@ -184,7 +184,7 @@ const Menu = () => {
           <h2 className="text-3xl font-light text-[#0d2b4e] leading-relaxed mb-6">
             An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.
           </h2>
-          <p className="text-gray-500 font-light text-xs md:text-sm leading-relaxed max-w-2xl mx-auto font-sans">
+          <p className="text-gray-500 font-light text-xs md:text-sm leading-relaxed max-w-2xl mx-auto ">
             Our commitment to quality starts with the selection of the finest ingredients from organic farms. Each dish is a masterpiece designed to delight your taste buds and create memorable dining experiences for our guests.
           </p>
         </section>
@@ -213,7 +213,7 @@ const Menu = () => {
         <section className="py-16 max-w-7xl mx-auto px-6 pb-28">
           
           <div className="text-center mb-10 select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[4px] mb-3 text-xs font-semibold font-sans block">
+            <span className="text-[#c8a64d] uppercase tracking-[4px] mb-3 text-xs font-semibold  block">
               Our Menu
             </span>
             <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e]">
@@ -222,7 +222,7 @@ const Menu = () => {
           </div>
 
           {/* Category Tabs */}
-          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center items-center font-sans text-xs uppercase tracking-widest text-gray-400 select-none mb-8">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center items-center  text-xs uppercase tracking-widest text-gray-400 select-none mb-8">
             {categories.map((cat, idx) => (
               <React.Fragment key={cat}>
                 {idx > 0 && <span className="text-[#c8a64d]/60">•</span>}
@@ -239,7 +239,7 @@ const Menu = () => {
           </div>
 
           {/* Search & Veg filters */}
-          <div className="max-w-xl mx-auto px-6 mb-16 flex flex-col sm:flex-row gap-6 items-center justify-between font-sans text-xs select-none">
+          <div className="max-w-xl mx-auto px-6 mb-16 flex flex-col sm:flex-row gap-6 items-center justify-between  text-xs select-none">
             {/* Search Input */}
             <div className="relative w-full sm:w-64">
               <input
@@ -312,11 +312,11 @@ const Menu = () => {
                       </h4>
                       {/* Dotted connector */}
                       <div className="flex-1 border-b border-dotted border-gray-300 mx-2 mb-1.5 min-w-[20px]" />
-                      <span className="font-sans text-sm font-semibold text-[#c8a64d] shrink-0">
+                      <span className=" text-sm font-semibold text-[#c8a64d] shrink-0">
                         ₹{parseFloat(dish.price).toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-gray-400 text-xs font-light line-clamp-2 leading-relaxed font-sans">
+                    <p className="text-gray-400 text-xs font-light line-clamp-2 leading-relaxed ">
                       {dish.description || "Freshly cooked exquisite dish prepared by our resort specialty chefs."}
                     </p>
                   </div>
@@ -330,7 +330,7 @@ const Menu = () => {
 
       {/* ================= ORDER ROOM SERVICE MODAL ================= */}
       {selectedDishForOrder && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4 overflow-y-auto font-sans">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4 overflow-y-auto ">
           <div className="bg-[#081A2F] w-full max-w-lg rounded-xl p-6 border border-white/10 my-8 shadow-2xl relative text-white">
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-6">

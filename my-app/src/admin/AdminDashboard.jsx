@@ -344,7 +344,7 @@ const AdminDashboard = () => {
                     x={x}
                     y="192"
                     textAnchor="middle"
-                    className={`text-[10px] font-sans font-semibold tracking-wider transition-colors duration-200 ${
+                    className={`text-[10px]  font-semibold tracking-wider transition-colors duration-200 ${
                       hoveredIndex === i ? "fill-[#C8A64D]" : "fill-white/40"
                     }`}
                   >
@@ -387,7 +387,7 @@ const AdminDashboard = () => {
                 <p className="text-yellow-500 font-bold uppercase tracking-wider text-[9px] mb-1.5 border-b border-white/5 pb-1">
                   {chartData[hoveredIndex].label} Summary
                 </p>
-                <div className="space-y-1 text-white/70 font-sans">
+                <div className="space-y-1 text-white/70 ">
                   <p className="flex justify-between gap-5">
                     <span>Confirmed:</span>
                     <span className="font-semibold text-white">₹{chartData[hoveredIndex].revenue.toLocaleString()}</span>

@@ -4,16 +4,29 @@
 @import "tailwindcss";
 
 @theme {
-  --color-black: #0D2B4E;                /* Royal Blue */
-  --color-zinc-950: #0D2B4E;             /* Royal Blue */
-  --color-zinc-900: #1E3A6D;             /* Deep Blue */
-  --color-zinc-800: #2D5B8A;             /* Ocean Blue */
-  --color-yellow-500: #C8A64D;           /* Luxury Gold */
-  --color-yellow-400: #D8BF72;           /* Champagne Gold */
-  --color-white: #F7F4EC;                /* Soft Cream */
-  --color-gray-400: #D8C8A5;             /* Earth Beige */
-  --color-gray-300: #D8C8A5;             /* Earth Beige */
-  --color-gray-500: #2D5B8A;             /* Ocean Blue */
+  --color-black: #0D2B4E;
+  --color-zinc-950: #0D2B4E;
+  --color-zinc-900: #1E3A6D;
+  --color-zinc-800: #2D5B8A;
+  --color-yellow-500: #C8A64D;
+  --color-yellow-400: #D8BF72;
+  --color-white: #F7F4EC;
+  --color-gray-400: #D8C8A5;
+  --color-gray-300: #D8C8A5;
+  --color-gray-500: #2D5B8A;
+}
+
+/* Font Classes */
+.font-jost {
+  font-family: "Jost", sans-serif;
+}
+
+.font-corm {
+  font-family: "Cormorant Garamond", serif;
+}
+
+.font-playfair {
+  font-family: "Playfair Display", serif;
 }
 
 body {

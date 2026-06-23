@@ -70,7 +70,7 @@ const FAQ = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] font-sans min-h-screen">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen">
         
         {/* Hero Section */}
         <section
@@ -131,7 +131,7 @@ const FAQ = () => {
                           isOpen ? "max-h-[300px] border-t border-gray-200/35" : "max-h-0"
                         }`}
                       >
-                        <div className="px-6 py-5 text-[#0d2b4e]/85 text-xs md:text-sm leading-relaxed font-sans font-light">
+                        <div className="px-6 py-5 text-[#0d2b4e]/85 text-xs md:text-sm leading-relaxed  font-light">
                           {item.answer}
                         </div>
                       </div>

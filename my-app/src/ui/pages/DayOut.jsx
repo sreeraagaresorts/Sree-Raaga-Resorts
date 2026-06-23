@@ -7,7 +7,7 @@ const DayOut = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] font-sans min-h-screen">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen">
         
         {/* Hero Section */}
         <section
@@ -57,9 +57,9 @@ const DayOut = () => {
                 Day Out Package
               </h3>
               <div className="text-3xl  text-[#c8a64d] font-semibold mb-2">
-                ₹1,800 <span className="text-sm font-sans text-gray-400 font-light">+ 18% GST / person</span>
+                ₹1,800 <span className="text-sm  text-gray-400 font-light">+ 18% GST / person</span>
               </div>
-              <p className="text-gray-500 text-xs font-sans mb-8">
+              <p className="text-gray-500 text-xs  mb-8">
                 Perfect for large groups, families, and corporate outings looking to enjoy our premier facilities for a single day.
               </p>
               <a

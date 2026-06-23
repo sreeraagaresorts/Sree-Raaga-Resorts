@@ -62,7 +62,7 @@ const UserLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfaf2] flex text-[#0d2b4e] font-sans">
+    <div className="min-h-screen bg-[#fcfaf2] flex text-[#0d2b4e] ">
       
       {/* SIDEBAR (Desktop) */}
       <aside className="w-64 border-r border-gray-200/50 hidden lg:flex flex-col bg-white min-h-screen sticky top-0">
