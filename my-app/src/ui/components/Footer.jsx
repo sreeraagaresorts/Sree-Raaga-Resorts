@@ -98,7 +98,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#011b3c] pt-24 pb-10 relative border-t border-white/5 text-white ">
+    <footer className="bg-[#011b3c] pt-34 pb-8 relative border-t border-white/5 text-white ">
       
       {/* Scroll Top Button */}
       <div className="absolute top-0 right-10 -translate-y-1/2">
@@ -119,20 +119,20 @@ const Footer = () => {
 
           {/* About Us Column */}
           <div>
-            <h3 className="text-lg md:text-xl font-light tracking-wide mb-6">
+            <h3 className="text-lg md:text-2xl font-medium font-corm tracking-wide mb-6">
               About Us
             </h3>
-            <p className="text-gray-400  text-xs md:text-sm leading-relaxed max-w-xs">
+            <p className="text-gray-400  text-xs md:text-[15px] leading-relaxed max-w-xs">
               Sree Raaga Resorts offers a sanctuary of peace, where luxury meets nature. Escape the city's hustle and enjoy a perfect blend of stays, corporate events, weddings, and family recreation.
             </p>
           </div>
 
           {/* Contact Column */}
           <div>
-            <h3 className="text-lg md:text-xl font-light tracking-wide mb-6">
+            <h3 className="text-lg md:text-2xl font-medium font-corm tracking-wide mb-6">
               Contact
             </h3>
-            <div className="space-y-4 text-gray-400  text-xs md:text-sm leading-relaxed">
+            <div className="space-y-4 text-gray-400  text-xs md:text-[15px] leading-relaxed">
               <p>
                 No. 1246, Budigere Bypass Road,
                 <br />
@@ -159,11 +159,11 @@ const Footer = () => {
 
           {/* Double column Links */}
           <div>
-            <h3 className="text-lg md:text-xl font-light tracking-wide mb-6">
+            <h3 className="text-lg md:text-2xl font-medium font-corm tracking-wide mb-6">
               Links
             </h3>
             
-            <div className="grid grid-cols-2 gap-4  text-xs md:text-sm">
+            <div className="grid grid-cols-2 gap-4  text-xs md:text-[15px]">
               <ul className="space-y-3">
                 <li>
                   <Link to="/about" className="text-gray-400 hover:text-[#c8a64d] transition">
@@ -224,10 +224,10 @@ const Footer = () => {
 
           {/* Newsletter Column */}
           <div>
-            <h3 className="text-lg md:text-xl font-light tracking-wide mb-6">
+            <h3 className="text-lg md:text-2xl font-medium font-corm tracking-wide mb-6">
               Newsletter Sign Up
             </h3>
-            <p className="text-gray-400  text-xs md:text-sm mb-5 leading-relaxed">
+            <p className="text-gray-400  text-xs md:text-[15px] mb-5 leading-relaxed">
               Sign up for our news, deals and special offers.
             </p>
 
@@ -236,7 +236,7 @@ const Footer = () => {
                 type="email"
                 placeholder="Your email address"
                 required
-                className="w-full bg-transparent border border-white/10 rounded px-4 py-3 text-white placeholder-gray-500 text-xs outline-none focus:border-white/30 transition pr-10 "
+                className="w-full bg-transparent border border-white/10  px-5 py-5 text-white placeholder-gray-500 text-xs outline-none focus:border-white/30 transition pr-10 "
               />
 
               <button
@@ -260,10 +260,10 @@ const Footer = () => {
 
           {/* Center: Brand Typography */}
           <div className="text-center order-1 md:order-2 flex flex-col items-center">
-            <h3 className="text-xl  text-[#c8a64d] tracking-wide leading-none uppercase">
+            <h3 className="text-2xl  text-[#c8a64d] tracking-wide font-corm leading-none uppercase">
               Sree Raaga
             </h3>
-            <span className="text-[8px] tracking-[4px] uppercase text-white/60  mt-1 block">
+            <span className="text-xs tracking-[4px] uppercase font-corm text-white/60  mt-1 block">
               Luxury Hotel
             </span>
           </div>
@@ -277,7 +277,7 @@ const Footer = () => {
               <TwitterIcon size={16} />
             </a>
             <a href="#" className="hover:text-white transition duration-300">
-              <InstagramIcon size={16} />
+              <InstagramIcon size={16}  />
             </a>
             <a href="#" className="hover:text-white transition duration-300">
               <LinkedinIcon size={16} />

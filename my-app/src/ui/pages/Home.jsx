@@ -1073,10 +1073,10 @@ offer to suit your needs and elevate your experience.          </p>
         <section className="py-24  bg-[#f7faff] text-[#0d2b4e]">
           <div className="">
             <div className="max-w-6xl mx-auto text-center mb-16">
-              <span className="text-gray-500 uppercase tracking-[4px] text-xs font-semibold block mb-2 ">
+              <span className="text-gray-500 uppercase tracking-[4px] text-xs font-jost font-semibold block mb-2 ">
                 There's so much to discover
               </span>
-              <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
+              <h2 className="text-4xl md:text-5xl font-medium font-corm  text-[#0d2b4e]">
                 Unique Experiences
               </h2>
             </div>
@@ -1096,10 +1096,12 @@ offer to suit your needs and elevate your experience.          </p>
                     <ChevronLeft size={20} />
                   </div>
                 </div>
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">03</span>
-                <h3 className="text-2xl font-light text-[#0d2b4e]  hover:text-[#c8a64d] transition duration-300">
+               <div className="px-2">
+                 <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">03</span>
+                <h3 className="text-2xl font-light text-[#0d2b4e] font-jost  hover:text-[#c8a64d] transition duration-300">
                   Poolside Retreats
                 </h3>
+               </div>
               </div>
 
               {/* Card 2: Hot Air Balloon (Active/Center) */}
@@ -1111,10 +1113,12 @@ offer to suit your needs and elevate your experience.          </p>
                     className="w-full h-full"
                   />
                 </div>
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">01</span>
-                <h3 className="text-2xl font-light text-[#0d2b4e]  hover:text-[#c8a64d] transition duration-300">
+              <div className="px-2">
+                  <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">01</span>
+                <h3 className="text-2xl font-light text-[#0d2b4e] font-jost hover:text-[#c8a64d] transition duration-300">
                   Balloon Rides
                 </h3>
+              </div>
               </div>
 
               {/* Card 3: Cycling Nature Trails */}
@@ -1130,10 +1134,12 @@ offer to suit your needs and elevate your experience.          </p>
                     <ChevronRight size={20} />
                   </div>
                 </div>
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">02</span>
-                <h3 className="text-2xl font-light text-[#0d2b4e]  hover:text-[#c8a64d] transition duration-300">
+               <div className="px-2">
+                 <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">02</span>
+                <h3 className="text-2xl font-light text-[#0d2b4e] font-jost hover:text-[#c8a64d] transition duration-300">
                   Bike Rides
                 </h3>
+               </div>
               </div>
 
             </div>
@@ -1154,7 +1160,7 @@ offer to suit your needs and elevate your experience.          </p>
             <span className="text-[#D8BF72] uppercase tracking-[4px] text-xs font-semibold block mb-4">
               Instant Booking
             </span>
-            <h2 className="text-4xl md:text-5xl font-light mb-8  leading-tight">
+            <h2 className="text-4xl md:text-5xl font-medium mb-8  font-corm leading-tight">
               Book Your Stay Now
             </h2>
             
@@ -1246,10 +1252,10 @@ offer to suit your needs and elevate your experience.          </p>
         {/* ================= FOLLOW US ON INSTAGRAM ================= */}
         <section className="  bg-[#f7faff] text-[#0d2b4e]">
           <div className="py-12 text-center mb-12">
-            <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold block mb-2">
+            <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-jost font-semibold block mb-2">
               Social Media
             </span>
-            <h2 className="text-5xl font-light  flex items-center justify-center gap-2">
+            <h2 className="text-5xl font-medium font-corm  flex items-center justify-center gap-2">
               Follow us on Instagram <InstagramIcon size={26} className="text-[#c8a64d] mt-2" />
             </h2>
           </div>
