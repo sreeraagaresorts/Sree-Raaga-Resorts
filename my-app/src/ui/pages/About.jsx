@@ -193,11 +193,11 @@ const About = () => {
              </section>
      
         {/* ================= SPLIT FEATURE ROWS ================= */}
-        <section className="py-24 px-6 bg-white">
+        <section className="py-24 px-6 bg-[#f7faff]">
           <div className=" space-y-32">
             
             {/* Row 1: Sophisticated Comfort */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className=" max-w-[150vh]  mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div className="w-full h-[400px] md:h-[480px]">
                 <WindowReveal 
                   src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=800"
@@ -206,13 +206,13 @@ const About = () => {
                 />
               </div>
               <div className="flex flex-col items-start select-none">
-                <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px]  font-bold block mb-4">
+                {/* <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px]  font-bold block mb-4">
                   Sree Raaga Resorts
-                </span>
-                <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e] mb-6">
+                </span> */}
+                <h2 className="text-3xl md:text-5xl font-medium font-corm  text-[#0d2b4e] mb-6">
                   Sophisticated Comfort
                 </h2>
-                <p className="text-gray-500 text-sm leading-relaxed  mb-8">
+                <p className="text-gray-500 text-[17px] leading-relaxed  mb-8  text-start ">
                   Every element of our rooms has been carefully curated to provide the
                   highest standard of comfort. From the fine linens and custom furnishings
                   to the stunning views of the surrounding natural landscape, we ensure
@@ -222,16 +222,16 @@ const About = () => {
             </div>
 
             {/* Row 2: A Unique Experience */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className=" max-w-[150vh]  mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
               <div className="flex flex-col items-start select-none">
-                <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px]  font-bold block mb-4">
+                {/* <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px]  font-bold block mb-4">
                   Our Experience
-                </span>
-                <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e] mb-6">
+                </span> */}
+                <h2 className="text-3xl md:text-5xl font-medium font-corm  text-[#0d2b4e] mb-6">
                   A Unique Experience
                 </h2>
-                <p className="text-gray-500 text-sm leading-relaxed  mb-8">
+                <p className="text-gray-500 text-[17px] leading-relaxed  mb-8 text-start">
                   Immerse yourself in unique experiences tailored to your lifestyle.
                   Whether you choose to unwind by the pool, indulge in luxury dining,
                   or explore nature trails, our resort offers a perfect balance of leisure
@@ -251,7 +251,7 @@ const About = () => {
         </section>
 
             {/* Icons Row */}
-            <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6  justify-center items-center py-4 mb-32">
+            <div className="max-w-[160vh] bg-[#f7faff] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6  justify-center items-center ">
   {amenities.map((item, idx) => (
     <div
       key={idx}
@@ -273,8 +273,8 @@ const About = () => {
 </div>
 
         {/* ================= THREE COLUMNS ACTIVITIES ================= */}
-        <section className="py-24 px-6 bg-white">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        <section className="py-24 px-6 bg-[#f7faff]">
+          <div className="max-w-[150vh] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 title: "Restaurant & Bars",
@@ -293,7 +293,7 @@ const About = () => {
                 <WindowReveal src={act.image} alt={act.title} className="w-full h-full" delay={idx * 0.1} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10"></div>
                 <div className="absolute bottom-8 left-0 right-0 z-20 text-center">
-                  <h3 className="text-xl md:text-2xl  font-light text-white uppercase tracking-wide">
+                  <h3 className="text-xl md:text-3xl  font-medium font-corm text-white uppercase tracking-wide">
                     {act.title}
                   </h3>
                 </div>
@@ -314,12 +314,12 @@ const About = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
           <div className="relative z-10 text-white select-none max-w-3xl">
-            <h2 className="text-3xl md:text-5xl font-light  leading-snug mb-8">
+            <h2 className="text-3xl md:text-6xl font-medium font-corm  leading-snug mb-8">
               Luxury Awaits, <br /> Book Your Stay Today!
             </h2>
             <Link
               to="/rooms"
-              className="inline-block px-10 py-4 bg-[#c8a64d] text-[#0d2b4e] hover:bg-[#b08e3d] hover:text-white transition duration-300 text-xs uppercase tracking-widest font-semibold  rounded"
+              className="inline-block px-10 py-4 border border-white text-white hover:bg-white  hover:text-black transition duration-300 text-xs uppercase tracking-widest font-semibold  "
             >
               Book Now
             </Link>
