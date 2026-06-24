@@ -238,12 +238,13 @@ const Navbar = () => {
     <>
       {/* ================= DESKTOP & MOBILE HEADER ================= */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 py-6 lg:py-8 transition-all duration-500 border-b border-white/35 ${
+        className={`fixed top-0 left-0 right-0 z-50 py-6 lg:py-6 transition-all duration-500 border-b border-white/35 ${
           isScrolled
             ? "bg-black/90 backdrop-blur-md py-4 lg:py-5 shadow-lg"
             : "bg-transparent"
         }`}
       >
+    <div className="mx-24 w-px h-full bg-white/10"></div>
         <div className=" mx-[20px] px-6 flex items-center justify-between">
           
           {/* LEFT PANEL: Menu Toggle & Phone Number */}
@@ -305,6 +306,7 @@ const Navbar = () => {
                   </Link>
                 </>
               ) : (
+                
                 <Link
                   to="/login"
                   className="hover:text-[#c8a64d] text-white uppercase tracking-widest text-xs lg:text-sm font-semibold"
@@ -314,10 +316,11 @@ const Navbar = () => {
               )}
             </div>
 
+<div className="absolute hidden md:block mx-47 w-px h-26 bg-white/20"></div>
             {/* Booking Call to Action */}
             <Link
               to="/rooms"
-              className="hidden md:inline-block px-6 py-3  text-white hover:bg-[#b08e3b] font-jost transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-medium"
+              className="hidden md:inline-block px-6 py-3  text-white hover:text-[#c8a64d]  font-jost transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-medium"
             >
               Book Your Stay
             </Link>
