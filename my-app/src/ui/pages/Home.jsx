@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "motion/react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { 
   Wifi, 
   Dumbbell, 
@@ -13,9 +15,11 @@ import {
   ArrowRight, 
   Calendar, 
   Users, 
+  BedDouble ,
   ChevronLeft, 
   ChevronRight, 
   ChevronDown,
+  CalendarDays,
   Sparkles 
 } from "lucide-react";
 
@@ -372,7 +376,8 @@ export default function Home() {
     navigate("/rooms", { state: { checkIn, checkOut, guests, roomType } });
   };
 
-
+// const checkInRef = useRef(null);
+// const checkOutRef = useRef(null);
 
   // tabData is statically defined outside the component
 
@@ -411,88 +416,163 @@ export default function Home() {
 
           {/* Sleek Pill-shaped Booking Panel */}
           <div className="absolute bottom-0 translate-y-1/2 w-full z-20 px-4 md:px-10">
-            <form 
-              onSubmit={handleSearch}
-              className="max-w-4xl mx-auto bg-[#04121a]/65 backdrop-blur-md border border-white/10 rounded-3xl md:rounded-full px-6 py-4 md:py-2.5 flex flex-col md:flex-row items-center justify-between shadow-2xl mb-40"
-            >
-              
-              {/* Check In - Check Out Cell */}
-              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
-                  {checkIn || checkOut 
-                    ? `${checkIn ? checkIn : "Check In"} · ${checkOut ? checkOut : "Check Out"}` 
-                    : "Check In · Check Out"}
-                </span>
-                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
-                
-                {/* Hidden Native Calendar Inputs over the cell */}
-                <div className="absolute inset-0 flex">
-                  <input 
-                    type="date"
-                    value={checkIn}
-                    onChange={handleCheckInChange}
-                    className="w-1/2 h-full opacity-0 cursor-pointer absolute left-0 top-0 z-10"
-                    required
-                  />
-                  <input 
-                    ref={checkOutRef}
-                    type="date"
-                    value={checkOut}
-                    onChange={(e) => setCheckOut(e.target.value)}
-                    className="w-1/2 h-full opacity-0 cursor-pointer absolute right-0 top-0 z-10"
-                    required
-                  />
-                </div>
-              </div>
+      <form
+  onSubmit={handleSearch}
+  className="max-w-5xl mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl mb-40 overflow-hidden"
+>
+  {/* DATE */}
+<div
+  onClick={() => checkInRef.current?.showPicker?.()}
+  className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group  transition-all duration-300"
+>
+  {/* Calendar Icon
+  <CalendarDays
+    size={18}
+    className="text-[#c8a64d] shrink-0"
+  /> */}
 
-              {/* Rooms Selection Cell */}
-              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
-                  {roomType}
-                </span>
-                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
-                
-                <select
-                  value={roomType}
-                  onChange={(e) => setRoomType(e.target.value)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                >
-                  <option value="Rooms" disabled hidden>Rooms</option>
-                  <option value="Any Suite">Any Suite</option>
-                  <option value="Executive Room">Executive Room</option>
-                  <option value="Private Villa">Private Villa</option>
-                  <option value="Duplex Villa">Duplex Villa</option>
-                </select>
-              </div>
+  {/* Date Display */}
+  <div className="flex-1">
+    <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
 
-              {/* Guests Selection Cell */}
-              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
-                  {guests === "Guests" ? "Guests" : (guests === "1" ? "1 Guest" : `${guests} Guests`)}
-                </span>
-                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
-                
-                <select
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                >
-                  <option value="Guests" disabled hidden>Guests</option>
-                  <option value="1">1 Guest</option>
-                  <option value="2">2 Guests</option>
-                  <option value="3">3 Guests</option>
-                  <option value="4">4+ Guests</option>
-                </select>
-              </div>
+    </p>
 
-              {/* Circular GO Button */}
-              <button
-                type="submit"
-                className="w-11 h-11 rounded-full bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8] flex items-center justify-center font-bold tracking-wider transition-all duration-300 ml-0 md:ml-4 mt-3 md:mt-0 shrink-0 cursor-pointer text-xs  shadow-md"
-              >
-                GO
-              </button>
-            </form>
+    <span className="text-white text-xs lg:text-sm">
+      {checkIn
+        ? new Date(checkIn).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+          })
+        : "Check In"}
+
+      {" - "}
+
+      {checkOut
+        ? new Date(checkOut).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+          })
+        : "Check Out"}
+    </span>
+  </div>
+
+  {/* Arrow */}
+  <ChevronDown
+    size={14}
+    className="text-white/60 group-hover:text-white transition"
+  />
+
+  {/* Hidden Inputs */}
+  <input
+    ref={checkInRef}
+    type="date"
+    value={checkIn}
+    onChange={handleCheckInChange}
+    className="absolute inset-0 opacity-0 pointer-events-none"
+    required
+  />
+
+  <input
+    ref={checkOutRef}
+    type="date"
+    value={checkOut}
+    onChange={(e) => setCheckOut(e.target.value)}
+    className="hidden"
+    required
+  />
+</div>
+
+  {/* ROOM */}
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10">
+
+    {/* <BedDouble
+      size={18}
+      className="text-[#c8a64d] shrink-0"
+    /> */}
+
+    <div className="flex-1">
+      <p className="text-[10px] uppercase tracking-[3px] text-white/40">
+        
+      </p>
+
+      <span className="text-white text-xs lg:text-sm">
+        {roomType}
+      </span>
+    </div>
+
+    <ChevronDown
+      size={14}
+      className="text-white/60"
+    />
+
+    <select
+      value={roomType}
+      onChange={(e) => setRoomType(e.target.value)}
+      className="absolute inset-0 opacity-0 cursor-pointer"
+    >
+      <option value="Rooms" disabled hidden>
+        Rooms
+      </option>
+      <option value="Any Suite">Any Suite</option>
+      <option value="Executive Room">Executive Room</option>
+      <option value="Private Villa">Private Villa</option>
+      <option value="Duplex Villa">Duplex Villa</option>
+    </select>
+  </div>
+
+  {/* GUESTS */}
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3">
+
+    {/* <Users
+      size={18}
+      className="text-[#c8a64d] shrink-0"
+    /> */}
+
+    <div className="flex-1">
+      <p className="text-[10px] uppercase tracking-[3px] text-white/40">
+        
+      </p>
+
+      <span className="text-white text-xs lg:text-sm">
+        {guests === "Guests"
+          ? "Guests"
+          : guests === "1"
+          ? "1 Guest"
+          : `${guests} Guests`}
+      </span>
+    </div>
+
+    <ChevronDown
+      size={14}
+      className="text-white/60"
+    />
+
+    <select
+      value={guests}
+      onChange={(e) => setGuests(e.target.value)}
+      className="absolute inset-0 opacity-0 cursor-pointer"
+    >
+      <option value="Guests" disabled hidden>
+        Guests
+      </option>
+      <option value="1">1 Guest</option>
+      <option value="2">2 Guests</option>
+      <option value="3">3 Guests</option>
+      <option value="4">4+ Guests</option>
+    </select>
+  </div>
+
+  {/* SEARCH BUTTON */}
+  <button
+    type="submit"
+    className="group mt-4 md:mt-0 md:ml-4 h-12 w-12 rounded-full bg-[#c8a64d] text-[#04121a] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shrink-0"
+  >
+    <ArrowRight
+      size={18}
+      className="transition-transform duration-300 group-hover:translate-x-1"
+    />
+  </button>
+</form>
           </div>
         </section>
 
