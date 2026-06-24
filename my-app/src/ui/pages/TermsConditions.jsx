@@ -31,14 +31,19 @@ const TermsConditions = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen">
+      <div 
+        className="text-[#0d2b4e] min-h-screen bg-cover bg-center bg-no-repeat bg-fixed relative"
+        style={{
+          backgroundImage: "linear-gradient(to bottom, rgba(252, 250, 242, 0.94), rgba(252, 250, 242, 0.97)), url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1200')"
+        }}
+      >
         
         {/* Hero Section */}
         <section
           className="relative h-[45vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=2000')",
+              "url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=2000')",
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
