@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "motion/react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import DatePicker from "react-datepicker";
@@ -39,6 +43,39 @@ const amenities = [
   { icon: roomServiceIcon, name: "Room Service" },
   { icon: laundryIcon, name: "Laundry Services" },
   { icon: housekeepingIcon, name: "Housekeeper Services" },
+];
+
+const experiences = [
+  {
+    id: "01",
+    title: "Balloon Rides",
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800",
+  },
+  {
+    id: "02",
+    title: "Bike Rides",
+    image:
+      "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=800",
+  },
+  {
+    id: "03",
+    title: "Poolside Retreats",
+    image:
+      "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=800",
+  },
+   {
+    id: "04",
+    title: "Poolside Retreats",
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800",
+  },
+   {
+    id: "05",
+    title: "Poolside Retreats",
+    image:
+      "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=800",
+  },
 ];
 
 // Inline Instagram SVG component to avoid lucide-react version compatibility issues
@@ -393,13 +430,50 @@ export default function Home() {
     // Redirect to rooms with search query state
     navigate("/rooms", { state: { checkIn, checkOut, guests, roomType } });
   };
+const tabKeys = Object.keys(tabData);
 
+// Repeat 10 times for smooth manual scrolling
+const loopedTabs = Array(10)
+  .fill(tabKeys)
+  .flat();
 // const checkInRef = useRef(null);
 // const checkOutRef = useRef(null);
 
   // tabData is statically defined outside the component
+useEffect(() => {
+  const container = scrollContainerRef.current;
+  if (!container) return;
 
-  return (
+  requestAnimationFrame(() => {
+    container.scrollTop = container.scrollHeight / 2;
+  });
+}, []);
+
+useEffect(() => {
+  const container = scrollContainerRef.current;
+  if (!container) return;
+
+  const handleScroll = () => {
+    const oneSetHeight = container.scrollHeight / 3;
+
+    if (container.scrollTop < oneSetHeight * 0.5) {
+      container.scrollTop += oneSetHeight;
+    }
+
+    if (container.scrollTop > oneSetHeight * 1.5) {
+      container.scrollTop -= oneSetHeight;
+    }
+  };
+
+  container.addEventListener("scroll", handleScroll);
+
+  return () => {
+    container.removeEventListener("scroll", handleScroll);
+  };
+}, []); 
+
+
+return (
     <>
       <Navbar />
       <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden ">
@@ -599,7 +673,7 @@ export default function Home() {
           
           {/* Outlined brand text behind the staggered images */}
           <div 
-            className="absolute top-[8%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[9vw] font-corm  uppercase tracking-[5px] font-medium text-[#c8a64d]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
+            className="absolute top-[8%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[9vw] font-corm  uppercase tracking-[5px] font-medium text-[#3fbcc3]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
           >
             Sree Raaga
           </div>
@@ -627,7 +701,7 @@ export default function Home() {
           </div>
 
           {/* Large Title Below Staggered Images */}
-          <h2 className="text-5xl md:text-[120px] font-[400]  text-[#0d2b4e] tracking-[12px] font-corm uppercase text-center relative z-20 -mt-16 md:-mt-30 mb-6">
+          <h2 className="text-5xl md:text-[120px] font-[400]  text-[#c18e35] tracking-[12px] font-corm uppercase text-center relative z-20 -mt-16 md:-mt-30 mb-6">
             Resorts
           </h2>
 
@@ -657,10 +731,12 @@ offer to suit your needs and elevate your experience.          </p>
       </svg>
     </span>
 
-    <span className="relative">
-      DISCOVER MORE
-      <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full"></span>
-    </span>
+ <Link to="/about" className="group inline-block">
+  <span className="relative">
+    DISCOVER MORE
+    <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full"></span>
+  </span>
+</Link>
   </button>
 </div>
 
@@ -876,7 +952,7 @@ offer to suit your needs and elevate your experience.          </p>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
               
               {/* Left: Dynamic tab image */}
-              <div className="lg:col-span-6 relative group w-full h-[450px] md:h-[620px]">
+              <div className="lg:col-span-6 relative group w-full h-[450px] md:h-[90vh]">
                 <WindowReveal 
                   src={tabData[activeTab].image} 
                   alt={tabData[activeTab].title}
@@ -901,34 +977,48 @@ offer to suit your needs and elevate your experience.          </p>
                   ref={scrollContainerRef}
                   className="lg:col-span-10 flex flex-col h-full overflow-y-auto pr-4 scroll-smooth relative pt-[145px] pb-[145px] md:pt-[230px] md:pb-[230px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                 >
-                  {Object.keys(tabData).map((key, idx) => {
-                    const isActive = activeTab === key;
-                    const tabColor = isActive 
-                      ? "text-[#0d2b4e]" 
-                      : "text-[#0d2b4e]/35 hover:text-[#0d2b4e]/60";
-                    
-                    return (
-                      <div 
-                        key={key}
-                        ref={(el) => (gastronomyRefs.current[key] = el)}
-                        data-key={key}
-                        onClick={() => handleTabClick(key)}
-                        className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 min-h-[160px] py-4"
-                      >
-                        <div className={`transition-colors  duration-300 ${tabColor}`}>
-                          {tabData[key].icon}
-                        </div>
-                        <h3 className={`text-xl md:text-4xl font-medium tracking-wide font-corm  mb-2 transition-colors duration-300 ${tabColor}`}>
-                          {tabData[key].title}
-                        </h3>
-                        <p className={`text-sm md:text-sm leading-relaxed  transition-colors duration-300 ${
-                          isActive ? "text-gray-500" : "text-[#0d2b4e]/20"
-                        }`}>
-                          {tabData[key].description}
-                        </p>
-                      </div>
-                    );
-                  })}
+        {loopedTabs.map((key, idx) => {
+  const realKey = tabKeys[idx % tabKeys.length];
+  const isActive = activeTab === realKey;
+
+  const tabColor = isActive
+    ? "text-[#0d2b4e]"
+    : "text-[#0d2b4e]/35 hover:text-[#0d2b4e]/60";
+
+  return (
+    <div
+      key={`${realKey}-${idx}`}
+      ref={(el) => {
+        if (idx >= tabKeys.length * 4 && idx < tabKeys.length * 5) {
+          gastronomyRefs.current[realKey] = el;
+        }
+      }}
+      data-key={realKey}
+      onClick={() => handleTabClick(realKey)}
+      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 min-h-[160px] py-4"
+    >
+      <div className={`transition-colors duration-300 ${tabColor}`}>
+        {tabData[realKey].icon}
+      </div>
+
+      <h3
+        className={`text-xl md:text-4xl font-medium tracking-wide font-corm mb-2 transition-colors duration-300 ${tabColor}`}
+      >
+        {tabData[realKey].title}
+      </h3>
+
+      <p
+        className={`text-sm md:text-sm leading-relaxed transition-colors duration-300 ${
+          isActive
+            ? "text-gray-500"
+            : "text-[#0d2b4e]/20"
+        }`}
+      >
+        {tabData[realKey].description}
+      </p>
+    </div>
+  );
+})}
                 </div>
 
                 {/* Side Pagination Column (Static Indicator aligned on the right) */}
@@ -1019,7 +1109,7 @@ offer to suit your needs and elevate your experience.          </p>
   className="
     px-12 py-4
     border border-white
-    rounded-full
+    
     uppercase
     tracking-widest
     text-sm
@@ -1043,7 +1133,7 @@ offer to suit your needs and elevate your experience.          </p>
 </section>
 
         {/* ================= A WARM, EXPRESSIVE URBAN SPACE ================= */}
-   <section className="py-24 bg-[#f7f7f7] overflow-hidden">
+   <section className="py-24 bg-[#fbfbfb] overflow-hidden">
   <div className=" relative">
 
     {/* Main Center Box */}
@@ -1055,19 +1145,18 @@ offer to suit your needs and elevate your experience.          </p>
         </span>
 
         <h2 className="font-corm text-[#0d2b4e] text-5xl md:text-7xl  leading-[1.15] font-medium mt-6 mb-10">
-          Exceptional Gastronomy
+          DayOut Packages
           <br />
-          In Beautiful Spaces
+          
         </h2>
 
         <p className="text-gray-600 text-lg leading-relaxed max-w-2xl  mx-auto mb-12">
-          Experience extraordinary dining, elegant ambience and unforgettable
-          moments designed to elevate every stay.
+         Enjoy a perfect day of relaxation, adventure, delicious cuisine, and memorable experiences crafted for families, friends, and corporate groups.
         </p>
 
         <Link
           to="/about"
-          className="inline-flex items-center gap-4 px-10 py-5 rounded-full bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+          className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
         >
           <span>—</span>
           Discover More
@@ -1078,12 +1167,12 @@ offer to suit your needs and elevate your experience.          </p>
 
     {/* Left Floating Image */}
     <div className="hidden lg:block absolute left-12 top-16">
-      <div className="flex items-center gap-3 mb-8">
+      {/* <div className="flex items-center gap-3 mb-8">
         <span className="text-3xl">🍽</span>
         <span className="font-corm text-4xl text-[#0d2b4e]">
           Restaurant
         </span>
-      </div>
+      </div> */}
 
       <img
         src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200"
@@ -1100,93 +1189,74 @@ offer to suit your needs and elevate your experience.          </p>
         className="w-[500px] h-[520px] object-cover shadow-xl"
       />
 
-      <div className="flex items-center gap-3 mt-8">
+      {/* <div className="flex items-center gap-3 mt-8">
         <span className="text-3xl ">🍹</span>
         <span className="font-corm text-4xl text-[#0d2b4e]">
           Pool Bar
         </span>
-      </div>
+      </div> */}
     </div>
 
   </div>
 </section>
 
         {/* ================= UNIQUE EXPERIENCES ================= */}
-        <section className="py-24  bg-[#f7faff] text-[#0d2b4e]">
-          <div className="">
-            <div className="max-w-6xl mx-auto text-center mb-16">
-              <span className="text-gray-500 uppercase tracking-[4px] text-xs font-jost font-semibold block mb-2 ">
-                There's so much to discover
-              </span>
-              <h2 className="text-4xl md:text-5xl font-medium font-corm  text-[#0d2b4e]">
-                Unique Experiences
-              </h2>
-            </div>
+        <div className="bg-[#fbfbfb] pb-20">
+          <div className="max-w-6xl mx-auto text-center mb-16">
+  <span className="text-gray-500 uppercase tracking-[4px] text-xs font-jost font-semibold block mb-3">
+    There's so much to discover
+  </span>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12  ">
-              
-              {/* Card 1: Poolside/Beach Retreat */}
-              <div className="group cursor-default flex flex-col relative">
-                <div className="relative overflow-hidden mb-6 h-[280px] lg:h-[420px] ">
-                  <WindowReveal 
-                    src="https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=800" 
-                    alt="Poolside Retreat" 
-                    className="w-full h-full"
-                  />
-                  {/* Left Circle Arrow Overlay */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#c8a64d] text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer transition duration-300 shadow-lg">
-                    <ChevronLeft size={20} />
-                  </div>
-                </div>
-               <div className="px-2">
-                 <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">03</span>
-                <h3 className="text-2xl font-light text-[#0d2b4e] font-jost  hover:text-[#c8a64d] transition duration-300">
-                  Poolside Retreats
-                </h3>
-               </div>
-              </div>
+  <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium font-corm text-[#0d2b4e] mb-4">
+    Unique Experiences
+  </h2>
+  </div>
+     <Swiper
+  modules={[Autoplay]}
+  loop={true}
+  centeredSlides={true}
+  slidesPerView={1.2}
+  spaceBetween={40}
+  speed={1000}
+  autoplay={{
+    delay: 3000,
+    disableOnInteraction: false,
+  }}
+  breakpoints={{
+    768: {
+      slidesPerView: 3,
+    },
+  }}
+  className="unique-experience-slider"
+>
+  
+  {experiences.map((item) => (
+    <SwiperSlide key={item.id}>
+      <div className="group flex flex-col relative transition-all duration-700">
+        <div
+          className={`relative overflow-hidden mb-6 ${item.height}`}
+        >
+          <WindowReveal
+            src={item.image}
+            alt={item.title}
+            className="w-full h-full"
+          />
+        </div>
 
-              {/* Card 2: Hot Air Balloon (Active/Center) */}
-              <div className="group cursor-default flex flex-col relative md:-translate-y-10">
-                <div className="relative overflow-hidden mb-6 h-[280px] lg:h-[350px] ">
-                  <WindowReveal 
-                    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800" 
-                    alt="Balloon Rides" 
-                    className="w-full h-full"
-                  />
-                </div>
-              <div className="px-2">
-                  <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">01</span>
-                <h3 className="text-2xl font-light text-[#0d2b4e] font-jost hover:text-[#c8a64d] transition duration-300">
-                  Balloon Rides
-                </h3>
-              </div>
-              </div>
+        <div className="px-2">
+          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">
+            {item.id}
+          </span>
 
-              {/* Card 3: Cycling Nature Trails */}
-              <div className="group cursor-default flex flex-col relative">
-                <div className="relative overflow-hidden mb-6 h-[280px] lg:h-[420px] ">
-                  <WindowReveal 
-                    src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=800" 
-                    alt="Bike Rides" 
-                    className="w-full h-full"
-                  />
-                  {/* Right Circle Arrow Overlay */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-[#c8a64d] text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer transition duration-300 shadow-lg">
-                    <ChevronRight size={20} />
-                  </div>
-                </div>
-               <div className="px-2">
-                 <span className="text-[10px] text-gray-500 uppercase tracking-widest  font-bold mb-2">02</span>
-                <h3 className="text-2xl font-light text-[#0d2b4e] font-jost hover:text-[#c8a64d] transition duration-300">
-                  Bike Rides
-                </h3>
-               </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
+          <h3 className="text-2xl font-light text-[#0d2b4e] font-jost hover:text-[#c8a64d] transition duration-300">
+            {item.title}
+          </h3>
+        </div>
+      </div>
+    </SwiperSlide>
+  ))}
+</Swiper>
+        </div>
 
         {/* ================= BOOK YOUR STAY NOW BANNER ================= */}
         <section 
@@ -1198,7 +1268,7 @@ offer to suit your needs and elevate your experience.          </p>
         >
           <div className="absolute inset-0 bg-black/60"></div>
           
-          <div className="relative z-10 max-w-4xl mx-auto text-center px-6 text-white">
+          <div className="relative z-10  text-center px-6 text-white">
             <span className="text-[#D8BF72] uppercase tracking-[4px] text-xs font-semibold block mb-4">
               Instant Booking
             </span>
@@ -1207,87 +1277,163 @@ offer to suit your needs and elevate your experience.          </p>
             </h2>
             
             {/* Sleek Pill-shaped Booking Panel */}
-            <form 
-              onSubmit={handleSearch}
-              className="max-w-4xl mx-auto bg-[#04121a]/65 backdrop-blur-md border border-white/10 rounded-3xl md:rounded-full px-18 py-4 md:py-2.5 flex flex-col md:flex-row items-center justify-between shadow-2xl text-left"
-            >
-              
-              {/* Check In - Check Out Cell */}
-              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
-                  {checkIn || checkOut 
-                    ? `${checkIn ? checkIn : "Check In"} · ${checkOut ? checkOut : "Check Out"}` 
-                    : "Check In · Check Out"}
-                </span>
-                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
-                
-                {/* Hidden Native Calendar Inputs over the cell */}
-                <div className="absolute inset-0 flex">
-                  <input 
-                    type="date"
-                    value={checkIn}
-                    onChange={handleCheckInChange}
-                    className="w-1/2 h-full opacity-0 cursor-pointer absolute left-0 top-0 z-10"
-                    required
-                  />
-                  <input 
-                    type="date"
-                    value={checkOut}
-                    onChange={(e) => setCheckOut(e.target.value)}
-                    className="w-1/2 h-full opacity-0 cursor-pointer absolute right-0 top-0 z-10"
-                    required
-                  />
-                </div>
-              </div>
+          <form
+  onSubmit={handleSearch}
+  className="max-w-[180vh] mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4  py-4 md:py-0 flex flex-col md:flex-row items-center shadow-2xl mb- overflow-hidden"
+>
+  {/* DATE */}
+<div
+  onClick={() => checkInRef.current?.showPicker?.()}
+  className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group  transition-all duration-300"
+>
+  {/* Calendar Icon
+  <CalendarDays
+    size={18}
+    className="text-[#c8a64d] shrink-0"
+  /> */}
 
-              {/* Rooms Selection Cell */}
-              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 border-b md:border-b-0 md:border-r border-white/10 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
-                  {roomType}
-                </span>
-                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
-                
-                <select
-                  value={roomType}
-                  onChange={(e) => setRoomType(e.target.value)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                >
-                  <option value="Rooms" disabled hidden>Rooms</option>
-                  <option value="Any Suite">Any Suite</option>
-                  <option value="Executive Room">Executive Room</option>
-                  <option value="Private Villa">Private Villa</option>
-                  <option value="Duplex Villa">Duplex Villa</option>
-                </select>
-              </div>
+  {/* Date Display */}
+  <div className="flex-1">
+    <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
 
-              {/* Guests Selection Cell */}
-              <div className="relative w-full md:w-auto flex-1 flex items-center justify-between py-3 md:py-1 px-4 group cursor-pointer">
-                <span className="text-white text-xs lg:text-sm  font-light tracking-wide">
-                  {guests === "Guests" ? "Guests" : (guests === "1" ? "1 Guest" : `${guests} Guests`)}
-                </span>
-                <ChevronDown size={14} className="text-white/60 ml-2 group-hover:text-white transition duration-300" />
-                
-                <select
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                >
-                  <option value="Guests" disabled hidden>Guests</option>
-                  <option value="1">1 Guest</option>
-                  <option value="2">2 Guests</option>
-                  <option value="3">3 Guests</option>
-                  <option value="4">4+ Guests</option>
-                </select>
-              </div>
+    </p>
 
-              {/* Circular GO Button */}
-              <button
-                type="submit"
-                className="w-11 h-11 rounded-full bg-[#fcebd6] text-[#0d2b4e] hover:bg-[#ebd4b8] flex items-center justify-center font-bold tracking-wider transition-all duration-300 ml-0 md:ml-4 mt-3 md:mt-0 shrink-0 cursor-pointer text-xs  shadow-md"
-              >
-                GO
-              </button>
-            </form>
+    <span className="text-white text-xs lg:text-sm">
+      {checkIn
+        ? new Date(checkIn).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+          })
+        : "Check In"}
+
+      {" - "}
+
+      {checkOut
+        ? new Date(checkOut).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+          })
+        : "Check Out"}
+    </span>
+  </div>
+
+  {/* Arrow */}
+  <ChevronDown
+    size={14}
+    className="text-white/60 group-hover:text-white transition"
+  />
+
+  {/* Hidden Inputs */}
+  <input
+    ref={checkInRef}
+    type="date"
+    value={checkIn}
+    onChange={handleCheckInChange}
+    className="absolute inset-0 opacity-0 pointer-events-none"
+    required
+  />
+
+  <input
+    ref={checkOutRef}
+    type="date"
+    value={checkOut}
+    onChange={(e) => setCheckOut(e.target.value)}
+    className="hidden"
+    required
+  />
+</div>
+
+  {/* ROOM */}
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10">
+
+    {/* <BedDouble
+      size={18}
+      className="text-[#c8a64d] shrink-0"
+    /> */}
+
+    <div className="flex-1">
+      <p className="text-[10px] uppercase tracking-[3px] text-white/40">
+        
+      </p>
+
+      <span className="text-white text-xs lg:text-sm">
+        {roomType}
+      </span>
+    </div>
+
+    <ChevronDown
+      size={14}
+      className="text-white/60"
+    />
+
+    <select
+      value={roomType}
+      onChange={(e) => setRoomType(e.target.value)}
+      className="absolute inset-0 opacity-0 cursor-pointer"
+    >
+      <option value="Rooms" disabled hidden>
+        Rooms
+      </option>
+      <option value="Any Suite">Any Suite</option>
+      <option value="Executive Room">Executive Room</option>
+      <option value="Private Villa">Private Villa</option>
+      <option value="Duplex Villa">Duplex Villa</option>
+    </select>
+  </div>
+
+  {/* GUESTS */}
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3">
+
+    {/* <Users
+      size={18}
+      className="text-[#c8a64d] shrink-0"
+    /> */}
+
+    <div className="flex-1">
+      <p className="text-[10px] uppercase tracking-[3px] text-white/40">
+        
+      </p>
+
+      <span className="text-white text-xs lg:text-sm">
+        {guests === "Guests"
+          ? "Guests"
+          : guests === "1"
+          ? "1 Guest"
+          : `${guests} Guests`}
+      </span>
+    </div>
+
+    <ChevronDown
+      size={14}
+      className="text-white/60"
+    />
+
+    <select
+      value={guests}
+      onChange={(e) => setGuests(e.target.value)}
+      className="absolute inset-0 opacity-0 cursor-pointer"
+    >
+      <option value="Guests" disabled hidden>
+        Guests
+      </option>
+      <option value="1">1 Guest</option>
+      <option value="2">2 Guests</option>
+      <option value="3">3 Guests</option>
+      <option value="4">4+ Guests</option>
+    </select>
+  </div>
+
+  {/* SEARCH BUTTON */}
+  <button
+    type="submit"
+    className="group mt-4 md:mt-0 md:ml-4 h-12 w-12 rounded-full bg-[#c8a64d] text-[#04121a] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shrink-0"
+  >
+    <ArrowRight
+      size={18}
+      className="transition-transform duration-300 group-hover:translate-x-1"
+    />
+  </button>
+</form>
           </div>
         </section>
 
