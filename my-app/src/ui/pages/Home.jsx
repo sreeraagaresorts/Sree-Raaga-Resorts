@@ -1352,7 +1352,7 @@ offer to suit your needs and elevate your experience.          </p>
     /> */}
 
     <div className="flex-1">
-      <p className="text-[10px] uppercase tracking-[3px] text-white/40">
+      <p className="text-[10px] uppercase tracking-[3px] text-white/90">
         
       </p>
 
@@ -1363,13 +1363,13 @@ offer to suit your needs and elevate your experience.          </p>
 
     <ChevronDown
       size={14}
-      className="text-white/60"
+      className="text-white/90"
     />
 
     <select
       value={roomType}
       onChange={(e) => setRoomType(e.target.value)}
-      className="absolute inset-0 opacity-0 cursor-pointer"
+      className="absolute inset-0 opacity-0 cursor-pointer text-black"
     >
       <option value="Rooms" disabled hidden>
         Rooms
@@ -1411,7 +1411,7 @@ offer to suit your needs and elevate your experience.          </p>
     <select
       value={guests}
       onChange={(e) => setGuests(e.target.value)}
-      className="absolute inset-0 opacity-0 cursor-pointer"
+      className="absolute inset-0 opacity-0 cursor-pointer text-black"
     >
       <option value="Guests" disabled hidden>
         Guests
