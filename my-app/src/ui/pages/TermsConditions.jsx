@@ -4,10 +4,12 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const termsTabs = [
-  { key: "general", title: "General Terms", path: "/terms-conditions" },
-  { key: "payments", title: "Account & Payments", path: "/terms-conditions/payments" },
-  { key: "orders", title: "Manage Orders", path: "/terms-conditions/orders" },
-  { key: "refunds", title: "Returns & Refunds", path: "/terms-conditions/refunds" }
+  { key: "general", title: "Terms & Conditions", path: "/terms-conditions" },
+  { key: "refunds", title: "Cancellation & Refund", path: "/terms-conditions/refunds" },
+  { key: "shipping", title: "Shipping & Delivery", path: "/terms-conditions/shipping" },
+  { key: "resort-policies", title: "Resort Policies & House Rules", path: "/terms-conditions/resort-policies" },
+  { key: "disclaimer", title: "Disclaimer", path: "/terms-conditions/disclaimer" },
+  { key: "user-account", title: "User Account Policy", path: "/terms-conditions/user-account" }
 ];
 
 const TermsConditions = () => {
@@ -15,9 +17,11 @@ const TermsConditions = () => {
 
   const getActiveTab = () => {
     const path = location.pathname;
-    if (path.endsWith("/payments")) return "payments";
-    if (path.endsWith("/orders")) return "orders";
     if (path.endsWith("/refunds")) return "refunds";
+    if (path.endsWith("/shipping")) return "shipping";
+    if (path.endsWith("/resort-policies")) return "resort-policies";
+    if (path.endsWith("/disclaimer")) return "disclaimer";
+    if (path.endsWith("/user-account")) return "user-account";
     return "general";
   };
 
@@ -39,10 +43,10 @@ const TermsConditions = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
           <div className="relative z-10 text-center px-4 max-w-3xl space-y-4">
-            <span className="text-[#c8a64d] text-xs uppercase tracking-[6px] font-semibold">
+            <span className="text-[#c8a64d] text-xs uppercase tracking-[6px] font-semibold font-jost">
               Legal
             </span>
-            <h1 className="text-4xl md:text-6xl font-light  text-white tracking-wide">
+            <h1 className="text-4xl md:text-6xl font-light text-white tracking-wide font-corm leading-tight">
               Terms & Conditions
             </h1>
           </div>
@@ -52,12 +56,12 @@ const TermsConditions = () => {
         <section className="py-24 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* Sidebar Nav */}
-          <div className="lg:col-span-3 space-y-2">
+          <div className="lg:col-span-3 lg:sticky lg:top-24 self-start space-y-2">
             {termsTabs.map((tab) => (
               <Link
                 key={tab.key}
                 to={tab.path}
-                className={`block w-full text-left px-5 py-4 text-xs md:text-sm  uppercase tracking-[2px] font-semibold rounded-sm transition-all duration-300 ${
+                className={`block w-full text-left px-5 py-4 text-xs md:text-sm uppercase tracking-[2px] font-semibold rounded-sm transition-all duration-300 font-jost ${
                   activeTab === tab.key
                     ? "bg-[#c8a64d] text-white shadow-sm"
                     : "bg-[#f7f5ee] text-[#0d2b4e]/70 hover:bg-[#ebd0b0]/20 hover:text-[#0d2b4e]"
@@ -70,10 +74,10 @@ const TermsConditions = () => {
 
           {/* Terms Detail Pane */}
           <div className="lg:col-span-9 bg-white border border-gray-100 p-8 md:p-12 shadow-sm rounded-sm">
-            <h2 className="text-3xl  font-light mb-8 text-[#0d2b4e] pb-4 border-b border-[#0d2b4e]/10">
+            <h2 className="text-3xl font-corm font-light mb-8 text-[#0d2b4e] pb-4 border-b border-[#0d2b4e]/10 tracking-wide">
               {activeTitle}
             </h2>
-            <div className=" text-xs md:text-sm text-gray-500 leading-relaxed font-light">
+            <div className="text-sm md:text-[15px] text-[#2d5b8a] leading-relaxed font-jost font-light">
               <Outlet />
             </div>
           </div>

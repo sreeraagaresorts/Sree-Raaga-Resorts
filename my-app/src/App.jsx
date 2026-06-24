@@ -23,15 +23,15 @@ import Corporate from "./ui/pages/Corporate";
 
 // PRIVACY SUBPAGES
 import PrivacyGeneral from "./ui/pages/privacy/General";
-import PrivacyPayments from "./ui/pages/privacy/Payments";
-import PrivacyOrders from "./ui/pages/privacy/Orders";
-import PrivacyRefunds from "./ui/pages/privacy/Refunds";
+import PrivacyCookies from "./ui/pages/privacy/Cookies";
 
 // TERMS SUBPAGES
 import TermsGeneral from "./ui/pages/terms/General";
-import TermsPayments from "./ui/pages/terms/Payments";
-import TermsOrders from "./ui/pages/terms/Orders";
 import TermsRefunds from "./ui/pages/terms/Refunds";
+import TermsShipping from "./ui/pages/terms/Shipping";
+import TermsResortPolicies from "./ui/pages/terms/ResortPolicies";
+import TermsDisclaimer from "./ui/pages/terms/Disclaimer";
+import TermsUserAccount from "./ui/pages/terms/UserAccount";
 
 // USER DASHBOARD
 import UserDashboard from "./ui/pages/userprofile/UserDashboard";
@@ -79,17 +79,17 @@ const App = () => {
         {/* PRIVACY POLICY PAGES */}
         <Route path="/privacy-policy" element={<PrivacyPolicy />}>
           <Route index element={<PrivacyGeneral />} />
-          <Route path="payments" element={<PrivacyPayments />} />
-          <Route path="orders" element={<PrivacyOrders />} />
-          <Route path="refunds" element={<PrivacyRefunds />} />
+          <Route path="cookies" element={<PrivacyCookies />} />
         </Route>
 
         {/* TERMS & CONDITIONS PAGES */}
         <Route path="/terms-conditions" element={<TermsConditions />}>
           <Route index element={<TermsGeneral />} />
-          <Route path="payments" element={<TermsPayments />} />
-          <Route path="orders" element={<TermsOrders />} />
           <Route path="refunds" element={<TermsRefunds />} />
+          <Route path="shipping" element={<TermsShipping />} />
+          <Route path="resort-policies" element={<TermsResortPolicies />} />
+          <Route path="disclaimer" element={<TermsDisclaimer />} />
+          <Route path="user-account" element={<TermsUserAccount />} />
         </Route>
 
         {/* AUTH */}
