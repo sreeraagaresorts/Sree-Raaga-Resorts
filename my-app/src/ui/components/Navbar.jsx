@@ -59,8 +59,7 @@ function MagneticLink({ to, children, className = "", onClick, onMouseEnter, onM
       ref={linkRef}
       to={to}
       onClick={onClick}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+   
       onMouseEnter={onMouseEnter}
       style={{
         transform: `translate(${coords.x}px, ${coords.y}px)`,
@@ -76,10 +75,11 @@ function MagneticLink({ to, children, className = "", onClick, onMouseEnter, onM
 const menuLinks = [
   { name: "Home", path: "/" },
   { name: "About Us", path: "/about" },
+   { name: "Amenities", path: "/amenities" },
   { name: "Rooms", path: "/rooms" },
-  { name: "Day Out", path: "/day-out" },
-  { name: "Corporate Outings", path: "/corporate" },
-  { name: "Amenities", path: "/amenities" },
+  // { name: "Day Out", path: "/day-out" },
+  // { name: "Corporate Outings", path: "/corporate" },
+ 
   { name: "Dine", path: "/dine" },
   { name: "Resort Menu", path: "/menu" },
   { name: "Events", path: "/events" },
@@ -363,8 +363,8 @@ const Navbar = () => {
         )}
 
         {/* LEFT COLUMN: Large Serif Menu Links */}
-        <div className="relative flex-1 lg:flex-[0_0_60%] flex flex-col justify-center px-6 md:px-24 py-32 z-10 overflow-y-auto max-h-screen [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <div ref={menuLinksRef} className="flex flex-col mt-24 gap-5 md:gap-7">
+        <div className="relative flex-1 lg:flex-[0_0_60%] flex flex-col justify-center px-6 md:px-24 py-20 z-10 overflow-y-auto max-h-screen [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div ref={menuLinksRef} className="flex flex-col  gap-5 md:gap-7">
             {menuLinks.map((link, idx) => {
               if (link.name === "Rooms") {
                 return (
@@ -381,53 +381,20 @@ const Navbar = () => {
                     }}
                   >
                     <div className="menu-link-wrapper flex items-center">
-                      <MagneticLink 
+                      <Link 
                         to={link.path}
                         onClick={() => setIsOpen(false)}
-                        className="text-3xl md:text-3xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 "
-                      >
+className="text-3xl md:text-3xl font-light uppercase tracking-[8px] text-white"                      >
                         {link.name}
-                        <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100" />
-                      </MagneticLink>
+                        {/* <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 " /> */}
+                        <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#c8a64d]/30" />
+                      </Link>
                       
-                      <ChevronDown 
-                        size={18} 
-                        className={`text-white/60 ml-2 transform lg:-rotate-90 transition-transform duration-300 group-hover/rooms-item:text-[#c8a64d] ${
-                          showRoomsSubmenu ? "rotate-0 text-[#c8a64d]" : ""
-                        }`} 
-                      />
+                  
                     </div>
 
                     {/* Dropright side submenu */}
-                    <div 
-                      className={`lg:absolute lg:left-1/3 lg:top-1/2 lg:-translate-y-1/2 flex flex-col gap-3 pl-6 lg:pl-10 lg:border-l border-white/10 lg:ml-4 overflow-hidden transition-all duration-500 ease-in-out ${
-                        showRoomsSubmenu 
-                          ? "max-h-[250px] opacity-100 visible translate-x-0" 
-                          : "max-h-0 lg:max-h-none opacity-0 invisible lg:-translate-x-4 lg:pointer-events-none"
-                      }`}
-                    >
-                      <Link 
-                        to="/rooms?category=executive-rooms"
-                        onClick={() => setIsOpen(false)}
-                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300  py-1 whitespace-nowrap"
-                      >
-                        • Executive Rooms
-                      </Link>
-                      <Link 
-                        to="/rooms?category=private-villas"
-                        onClick={() => setIsOpen(false)}
-                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300  py-1 whitespace-nowrap"
-                      >
-                        • Private Villas
-                      </Link>
-                      <Link 
-                        to="/rooms?category=duplex-villa"
-                        onClick={() => setIsOpen(false)}
-                        className="text-sm uppercase tracking-[4px] text-white/70 hover:text-[#c8a64d] transition-colors duration-300  py-1 whitespace-nowrap"
-                      >
-                        • Duplex Villa
-                      </Link>
-                    </div>
+              
                   </div>
                 );
               }

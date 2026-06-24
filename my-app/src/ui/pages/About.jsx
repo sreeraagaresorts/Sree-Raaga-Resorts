@@ -44,6 +44,22 @@ const testimonials = [
     author: "Sophia Chen"
   }
 ];
+import wifiIcon from "../../assets/icons/wifi.png";
+import buggyIcon from "../../assets/icons/car.png";
+import tvIcon from "../../assets/icons/tv.png";
+import roomServiceIcon from "../../assets/icons/services.png";
+import laundryIcon from "../../assets/icons/laundry.png";
+import housekeepingIcon from "../../assets/icons/cleaning.png";
+
+
+const amenities = [
+  { icon: wifiIcon, name: "Wifi & Internet" },
+  { icon: buggyIcon, name: "Buggy Services" },
+  { icon: tvIcon, name: "Smart TV" },
+  { icon: roomServiceIcon, name: "Room Service" },
+  { icon: laundryIcon, name: "Laundry Services" },
+  { icon: housekeepingIcon, name: "Housekeeper Services" },
+];
 
 const About = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -74,62 +90,108 @@ const About = () => {
 
         {/* ================= WELCOME & STATS SECTION ================= */}
           {/* ================= SHOWCASE / ABOUT SECTION ================= */}
-        <section className="relative pt-24 pb-24 px-6 bg-[#f7faff] text-[#0d2b4e] overflow-hidden">
-          
-          {/* Outlined brand text behind the staggered images */}
-          <div 
-            className="absolute top-[8%] lg:top-[-1%] left-1/2 -translate-x-1/2 text-[7vw]  uppercase tracking-[10px] font-medium text-[#c8a64d]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
-          >
-            Sree Raaga
-          </div>
-
-          {/* Staggered Images Grid */}
-          <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-14 items-center px-4 z-10 mb-12">
-            <WindowReveal 
-              src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
-              alt="Villa Exterior" 
-              className="h-[280px] md:h-[350px] lg:h-[400px] rounded-xl"
-            />
-            
-            {/* Center image is taller and offset upwards, overlapping background text */}
-            <WindowReveal 
-              src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
-              alt="Villa Interior" 
-              className="h-[340px] md:h-[430px] lg:h-[550px] md:-translate-y-6 rounded-xl"
-            />
-            
-            <WindowReveal 
-              src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
-              alt="Luxury Pool" 
-              className="h-[280px] md:h-[350px] lg:h-[400px] rounded-xl"
-            />
-          </div>
-
-          {/* Large Title Below Staggered Images */}
-          <h2 className="text-5xl md:text-8xl  text-[#0d2b4e] tracking-[12px] uppercase text-center relative z-20 -mt-16 md:-mt-28 mb-6">
-            Resorts
-          </h2>
-
-          {/* Centered Curated Description */}
-          <p className="max-w-3xl mx-auto text-gray-500 text-center leading-relaxed text-xs lg:text-sm  px-4 mb-20">
-            Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create lasting memories. Whether you're planning a romantic getaway, a family vacation, or a business trip, we have the perfect offer to suit your needs and elevate your experience.
-          </p>
-
-          {/* Stats Bar */}
-          <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { number: "1,200+", label: "Guest Reviews" },
-              { number: "24/7", label: "Front Desk" },
-              { number: "15+", label: "Villa Suites" },
-              { number: "17+", label: "Amenities" }
-            ].map((stat, i) => (
-              <div key={i} className="flex flex-col items-center">
-                <span className="text-3xl md:text-4xl font-light text-[#c8a64d] mb-1">{stat.number}</span>
-                <span className="text-xs uppercase tracking-widest text-gray-500 font-semibold">{stat.label}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+       <section className="relative py-48 px-6 bg-[#f7faff] text-[#0d2b4e] overflow-hidden">
+               
+               {/* Outlined brand text behind the staggered images */}
+               <div 
+                 className="absolute top-[8%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[9vw] font-corm  uppercase tracking-[5px] font-medium text-[#3fbcc3]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
+               >
+                 Sree Raaga
+               </div>
+     
+               {/* Staggered Images Grid */}
+               <div className="relative max-w-[150vh] mx-auto grid grid-cols-1 md:grid-cols-3 gap-24 items-center px-4 z-10 mb-12">
+                 <WindowReveal 
+                   src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
+                   alt="Villa Exterior" 
+                   className="h-[280px] md:h-[350px] lg:h-[400px] "
+                 />
+                 
+                 {/* Center image is taller and offset upwards, overlapping background text */}
+                 <WindowReveal 
+                   src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
+                   alt="Villa Interior" 
+                   className="h-[340px] md:h-[430px] lg:h-[520px] md:-translate-y-6 "
+                 />
+                 
+                 <WindowReveal 
+                   src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
+                   alt="Luxury Pool" 
+                   className="h-[280px] md:h-[350px] lg:h-[400px] "
+                 />
+               </div>
+     
+               {/* Large Title Below Staggered Images */}
+               <h2 className="text-5xl md:text-[120px] font-[400]  text-[#c18e35] tracking-[12px] font-corm uppercase text-center relative z-20 -mt-16 md:-mt-30 mb-6">
+                 Resorts
+               </h2>
+     
+               {/* Centered Curated Description */}
+               <p className="max-w-3xl mx-auto text-gray-500 text-center font-jost leading-relaxed text-xs lg:text-[17px]   mb-20">
+     Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create
+     lasting memories. Whether you’re planning a romantic getaway, a family vacation, or a business trip, we have the perfect
+     offer to suit your needs and elevate your experience.          </p>
+     
+     
+     <div className="flex justify-center mb-20">
+       <button className="group flex items-center gap-4 uppercase tracking-wide text-sm font-medium text-black">
+         <span className="w-9 h-9 rounded-full border border-black flex items-center justify-center transition-all duration-300 group-hover:bg-black group-hover:text-white">
+           <svg
+             xmlns="http://www.w3.org/2000/svg"
+             className="w-4 h-4"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor"
+             strokeWidth={2}
+           >
+             <path
+               strokeLinecap="round"
+               strokeLinejoin="round"
+               d="M5 12h14m-5-5 5 5-5 5"
+             />
+           </svg>
+         </span>
+     
+      <Link to="/about" className="group inline-block">
+       <span className="relative">
+         DISCOVER MORE
+         <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full"></span>
+       </span>
+     </Link>
+       </button>
+     </div>
+     
+           <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 text-center">
+       {[
+         { number: "1,200+", label: "Guest Reviews" },
+         { number: "24/7", label: "Front Desk" },
+         { number: "15", label: "Villa Suites" },
+         { number: "17+", label: "Amenities" },
+       ].map((stat, i) => (
+         <motion.div
+           key={i}
+           initial={{ opacity: 0, y: 50 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true, amount: 0.3 }}
+           transition={{
+             duration: 0.8,
+             delay: i * 0.2,
+             ease: "easeOut",
+           }}
+           className="flex flex-col items-center"
+         >
+           <span className="text-3xl md:text-[92px] font-medium font-corm text-[#c8a64d] mb-1">
+             {stat.number}
+           </span>
+     
+           <span className="text-sm uppercase tracking-widest w-50 text-gray-500 font-medium">
+             {stat.label}
+           </span>
+         </motion.div>
+       ))}
+     </div>
+             </section>
+     
         {/* ================= SPLIT FEATURE ROWS ================= */}
         <section className="py-24 px-6 bg-white">
           <div className=" space-y-32">
@@ -188,100 +250,27 @@ const About = () => {
           </div>
         </section>
 
-        {/* ================= AMENITIES ICONS ROW ================= */}
-        <section className="py-20 px-6 bg-[#f7f5ee]">
-          <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 justify-center items-center">
-            {[
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12a10 10 0 0 1 14 0" />
-                    <path d="M8.5 15a5 5 0 0 1 7 0" />
-                    <circle cx="12" cy="18" r="1" fill="currentColor" />
-                    <path d="M15 10v2.5c0 1.2.8 2.2 2 2.5 1.2-.3 2-1.3 2-2.5V10l-2-1-2 1z" />
-                    <path d="M16.5 12l0.7 0.7 1.3-1.3" />
-                  </svg>
-                ), 
-                name: "Wifi & Internet" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    {/* Golf cart / buggy wheels */}
-                    <circle cx="6" cy="18" r="2" />
-                    <circle cx="18" cy="18" r="2" />
-                    {/* Frame and canopy */}
-                    <path d="M3 18h18" />
-                    <path d="M8 18V8h7v10" />
-                    <path d="M5 8h12v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1z" />
-                    {/* Steering wheel */}
-                    <line x1="8" y1="12" x2="11" y2="10" />
-                    <circle cx="11" cy="10" r="1" />
-                  </svg>
-                ), 
-                name: "Buggy services" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="6" width="14" height="10" rx="1" />
-                    <path d="M8 16v3h4v-3H8zM6 19h8" />
-                    <rect x="19" y="8" width="2" height="8" rx="0.5" />
-                    <circle cx="20" cy="10" r="0.5" fill="currentColor" />
-                    <line x1="20" y1="12" x2="20" y2="15" strokeWidth="1" />
-                  </svg>
-                ), 
-                name: "Smart TV" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 17h18" />
-                    <path d="M6 17a6 6 0 0 1 12 0" />
-                    <circle cx="12" cy="9.5" r="1.5" />
-                    <path d="M2 20h20" />
-                  </svg>
-                ), 
-                name: "Room Service" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="5" y="4" width="14" height="16" rx="2" />
-                    <circle cx="12" cy="13" r="5" />
-                    <circle cx="12" cy="13" r="3" strokeDasharray="2 1" />
-                    <circle cx="8" cy="7" r="0.8" fill="currentColor" />
-                    <circle cx="10" cy="7" r="0.8" fill="currentColor" />
-                    <line x1="13" y1="7" x2="16" y2="7" />
-                  </svg>
-                ), 
-                name: "Laundry Services" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 12h8l-1 8H5l-1-8z" />
-                    <path d="M4 12a4 4 0 0 1 8 0" />
-                    <line x1="18" y1="4" x2="10" y2="20" />
-                    <path d="M16 4l3 3-1.5 1.5-3-3L16 4z" fill="currentColor" />
-                    <path d="M20 12l0.5 0.5-0.5 0.5-0.5-0.5z" fill="currentColor" />
-                    <path d="M15 18l0.4 0.4-0.4 0.4-0.4-0.4z" fill="currentColor" />
-                  </svg>
-                ), 
-                name: "Housekeeper Services" 
-              }
-            ].map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group cursor-default">
-                <div className="mb-4 text-[#0d2b4e]/60 group-hover:text-[#c8a64d] transition-colors duration-300">
-                  {item.icon}
-                </div>
-                <span className="text-sm md:text-base font-light text-gray-500  group-hover:text-[#0d2b4e] transition-colors duration-300">
-                  {item.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
+            {/* Icons Row */}
+            <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6  justify-center items-center py-4 mb-32">
+  {amenities.map((item, idx) => (
+    <div
+      key={idx}
+      className="flex flex-col items-center text-center group cursor-default"
+    >
+      <div className=" overflow-hidden">
+        <img
+          src={item.icon}
+          alt={item.name}
+          className="w-20 h-20 px-4 object-contain transition-all duration-300 group-hover:scale-110"
+        />
+      </div>
+
+      <span className="text-sm md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+        {item.name}
+      </span>
+    </div>
+  ))}
+</div>
 
         {/* ================= THREE COLUMNS ACTIVITIES ================= */}
         <section className="py-24 px-6 bg-white">
