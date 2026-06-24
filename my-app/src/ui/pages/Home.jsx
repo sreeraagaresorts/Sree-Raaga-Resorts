@@ -301,81 +301,11 @@ export default function Home() {
   
   // Gastronomy & Amenities interactive tab state
   const [activeTab, setActiveTab] = useState("zumafish");
-  const gastronomyRefs = useRef({});
-  const scrollContainerRef = useRef(null);
-  const activeTabRef = useRef("zumafish");
 
-  useEffect(() => {
-    activeTabRef.current = activeTab;
-  }, [activeTab]);
-
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      const isLargeScreen = window.innerWidth >= 1024;
-      if (!isLargeScreen) return;
-
-      const containerCenter = container.scrollTop + container.clientHeight / 2;
-      
-      let closestKey = "";
-      let minDistance = Infinity;
-
-      Object.keys(tabData).forEach((key) => {
-        const el = gastronomyRefs.current[key];
-        if (el) {
-          const elCenter = el.offsetTop + el.clientHeight / 2;
-          const distance = Math.abs(containerCenter - elCenter);
-          if (distance < minDistance) {
-            minDistance = distance;
-            closestKey = key;
-          }
-        }
-      });
-
-      if (closestKey && closestKey !== activeTabRef.current) {
-        setActiveTab(closestKey);
-      }
-    };
-
-    // Run once on mount to align state
-    handleScroll();
-
-    container.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleScroll);
-
-    return () => {
-      container.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-    };
-  }, []);
-
-  // Smooth click-to-scroll handler centering the item inside the container
   const handleTabClick = (key) => {
-    const container = scrollContainerRef.current;
-    const target = gastronomyRefs.current[key];
-    if (container && target) {
-      const containerHeight = container.clientHeight;
-      const targetHeight = target.clientHeight;
-      const targetTop = target.offsetTop;
-      
-      const scrollToPosition = targetTop - containerHeight / 2 + targetHeight / 2;
-      
-      container.scrollTo({
-        top: scrollToPosition,
-        behavior: "smooth"
-      });
-    }
+    setActiveTab(key);
   };
 
-  useEffect(() => {
-    // Scroll to the default active tab (zumafish) on mount
-    const timer = setTimeout(() => {
-      handleTabClick("zumafish");
-    }, 150);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Booking search inputs & refs
   const [checkIn, setCheckIn] = useState("");
@@ -430,47 +360,7 @@ export default function Home() {
     // Redirect to rooms with search query state
     navigate("/rooms", { state: { checkIn, checkOut, guests, roomType } });
   };
-const tabKeys = Object.keys(tabData);
-
-// Repeat 10 times for smooth manual scrolling
-const loopedTabs = Array(10)
-  .fill(tabKeys)
-  .flat();
-// const checkInRef = useRef(null);
-// const checkOutRef = useRef(null);
-
-  // tabData is statically defined outside the component
-useEffect(() => {
-  const container = scrollContainerRef.current;
-  if (!container) return;
-
-  requestAnimationFrame(() => {
-    container.scrollTop = container.scrollHeight / 2;
-  });
-}, []);
-
-useEffect(() => {
-  const container = scrollContainerRef.current;
-  if (!container) return;
-
-  const handleScroll = () => {
-    const oneSetHeight = container.scrollHeight / 3;
-
-    if (container.scrollTop < oneSetHeight * 0.5) {
-      container.scrollTop += oneSetHeight;
-    }
-
-    if (container.scrollTop > oneSetHeight * 1.5) {
-      container.scrollTop -= oneSetHeight;
-    }
-  };
-
-  container.addEventListener("scroll", handleScroll);
-
-  return () => {
-    container.removeEventListener("scroll", handleScroll);
-  };
-}, []); 
+ 
 
 
 return (
@@ -969,85 +859,40 @@ offer to suit your needs and elevate your experience.          </p>
                 </Link>
               </div>
 
-              {/* Right: Interactive Tabs List & Side Pagination */}
-              <div className="lg:col-span-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-[450px] md:h-[620px] overflow-hidden">
-                
-                {/* Tabs Column (Internally Scrollable) */}
-                <div 
-                  ref={scrollContainerRef}
-                  className="lg:col-span-10 flex flex-col h-full overflow-y-auto pr-4 scroll-smooth relative pt-[145px] pb-[145px] md:pt-[230px] md:pb-[230px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                >
-        {loopedTabs.map((key, idx) => {
-  const realKey = tabKeys[idx % tabKeys.length];
-  const isActive = activeTab === realKey;
+              {/* Right: Static Tabs List */}
+              <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
+                {Object.keys(tabData).map((key) => {
+                  const isActive = activeTab === key;
+                  const tabColor = isActive
+                    ? "text-[#0d2b4e]"
+                    : "text-[#0d2b4e]/35 hover:text-[#0d2b4e]/60";
 
-  const tabColor = isActive
-    ? "text-[#0d2b4e]"
-    : "text-[#0d2b4e]/35 hover:text-[#0d2b4e]/60";
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => handleTabClick(key)}
+                      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-3 border-b border-[#0d2b4e]/5 last:border-b-0"
+                    >
+                      <div className={`transition-colors duration-300 ${tabColor}`}>
+                        {tabData[key].icon}
+                      </div>
 
-  return (
-    <div
-      key={`${realKey}-${idx}`}
-      ref={(el) => {
-        if (idx >= tabKeys.length * 4 && idx < tabKeys.length * 5) {
-          gastronomyRefs.current[realKey] = el;
-        }
-      }}
-      data-key={realKey}
-      onClick={() => handleTabClick(realKey)}
-      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 min-h-[160px] py-4"
-    >
-      <div className={`transition-colors duration-300 ${tabColor}`}>
-        {tabData[realKey].icon}
-      </div>
+                      <h3
+                        className={`text-xl md:text-3xl font-medium tracking-wide font-corm mb-1 transition-colors duration-300 ${tabColor}`}
+                      >
+                        {tabData[key].title}
+                      </h3>
 
-      <h3
-        className={`text-xl md:text-4xl font-medium tracking-wide font-corm mb-2 transition-colors duration-300 ${tabColor}`}
-      >
-        {tabData[realKey].title}
-      </h3>
-
-      <p
-        className={`text-sm md:text-sm leading-relaxed transition-colors duration-300 ${
-          isActive
-            ? "text-gray-500"
-            : "text-[#0d2b4e]/20"
-        }`}
-      >
-        {tabData[realKey].description}
-      </p>
-    </div>
-  );
-})}
-                </div>
-
-                {/* Side Pagination Column (Static Indicator aligned on the right) */}
-                <div className="hidden lg:col-span-2 lg:flex lg:flex-col lg:items-end lg:justify-center lg:h-full select-none pr-2">
-                  <div className="flex flex-col space-y-8">
-                    {Object.keys(tabData).map((key, idx) => {
-                      const isActive = activeTab === key;
-                      return (
-                        <div 
-                          key={key} 
-                          onClick={() => handleTabClick(key)}
-                          className="flex items-center gap-3 cursor-pointer group justify-end"
-                        >
-                          <span className={`h-[1px] transition-all duration-500 ${
-                            isActive 
-                              ? "w-10 bg-[#0d2b4e]" 
-                              : "w-4 bg-[#0d2b4e]/30 group-hover:w-8 group-hover:bg-[#0d2b4e]/50"
-                          }`} />
-                          <span className={`text-xs  font-bold tracking-widest transition-colors duration-300 ${
-                            isActive ? "text-[#0d2b4e]" : "text-[#0d2b4e]/30"
-                          }`}>
-                            0{idx + 1}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
+                      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                        isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-0 opacity-0"
+                      }`}>
+                        <p className="text-sm text-gray-500 leading-relaxed font-jost font-light">
+                          {tabData[key].description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
             </div>
