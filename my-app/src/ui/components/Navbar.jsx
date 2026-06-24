@@ -491,16 +491,16 @@ const Navbar = () => {
           >
             {/* Top Logo / Brand */}
             <div className="flex flex-col items-center ">
-              <span className="text-[#0d2b4e] uppercase tracking-[6px] text-xs font-semibold block">
+              <span className="text-[#0d2b4e] uppercase tracking-[2px] text-3xl font-corm  font-semibold block">
                 Sree Raaga
               </span>
-              <span className="text-[#c8a64d] uppercase tracking-[4px] text-[9px] font-bold mt-1">
+              <span className="text-[#c8a64d] uppercase tracking-[4px] text-[14px] font-semibold mt-1">
                 Luxury Resorts
               </span>
             </div>
 
             {/* Elegant Tagline / Heading */}
-            <h2 className="text-3xl font-light italic  text-[#0d2b4e] leading-tight">
+            <h2 className="text-[40px] font-medium font-corm  text-[#0d2b4e] leading-tight">
               Resort & Spa Sree Raaga
             </h2>
 
@@ -511,40 +511,40 @@ const Navbar = () => {
             <div className="space-y-8 w-full ">
               {/* Location */}
               <div className="flex flex-col items-center">
-                <span className="text-xs uppercase tracking-[3px] font-bold text-[#0d2b4e] mb-2">
+                <span className="text-4xl  tracking-[3px] font-medium font-corm font-semibold text-[#0d2b4e] mb-2">
                   Location
                 </span>
-                <span className="text-xs text-gray-700 font-light leading-relaxed">
+                <span className="text-xl text-gray-700 font-light leading-relaxed">
                   Devanahalli Hobli, Taluk Chamarayapatna
                 </span>
-                <span className="text-xs text-gray-700 font-light leading-relaxed mt-0.5">
+                <span className="text-xl text-gray-700 font-light leading-relaxed mt-0.5">
                   Karnataka 562129, India
                 </span>
               </div>
 
               {/* Phone Support */}
               <div className="flex flex-col items-center">
-                <span className="text-xs uppercase tracking-[3px] font-bold text-[#0d2b4e] mb-2">
+                <span className="text-4xl  tracking-[3px] font-medium font-corm font-semibold text-[#0d2b4e] mb-2">
                   Phone Support
                 </span>
-                <span className="text-xs text-gray-700 font-light">
+                <span className="text-xl text-gray-700 font-light">
                   089045 61155
                 </span>
-                <span className="text-xs text-gray-700 font-light mt-0.5">
+                <span className="text-xl text-gray-700 font-light mt-0.5">
                   info@sreeraagaresorts.in
                 </span>
               </div>
 
               {/* Connect With Us */}
               <div className="flex flex-col items-center">
-                <span className="text-xs uppercase tracking-[3px] font-bold text-[#0d2b4e] mb-2">
+                <span className="text-4xl  tracking-[3px] font-medium font-corm font-semibold text-[#0d2b4e] mb-2">
                   Connect With Us
                 </span>
-                <span className="text-xs text-gray-700 font-light">
+                <span className="text-xl text-gray-700 font-light">
                   089045 61155
                 </span>
                 {/* Social icons */}
-                <div className="flex gap-4 mt-3">
+                {/* <div className="flex gap-4 mt-3">
                   <a 
                     href="https://instagram.com" 
                     target="_blank" 
@@ -553,7 +553,7 @@ const Navbar = () => {
                   >
                     <InstagramIcon size={18} />
                   </a>
-                </div>
+                </div> */}
               </div>
             </div>
             
