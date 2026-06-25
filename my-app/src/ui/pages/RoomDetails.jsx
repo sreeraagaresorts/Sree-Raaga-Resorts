@@ -127,6 +127,12 @@ const RoomDetails = () => {
   const [paymentMethod, setPaymentMethod] = useState("online");
   const [extraService1, setExtraService1] = useState(false); // Service per Booking (₹1000)
   const [extraService2, setExtraService2] = useState(false); // Service per Person Daily (₹1200)
+  
+  // Custom dropdown open states
+  const [isRoomsOpen, setIsRoomsOpen] = useState(false);
+  const [isAdultsOpen, setIsAdultsOpen] = useState(false);
+  const [isChildrenOpen, setIsChildrenOpen] = useState(false);
+  const [isPaymentMethodOpen, setIsPaymentMethodOpen] = useState(false);
 
   // Slider State
   const [galleryIndex, setGalleryIndex] = useState(0);
@@ -167,6 +173,19 @@ const RoomDetails = () => {
 
     fetchRoomDetails();
   }, [id]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".booking-field")) {
+        setIsRoomsOpen(false);
+        setIsAdultsOpen(false);
+        setIsChildrenOpen(false);
+        setIsPaymentMethodOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const getImageUrl = (image) => {
     if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
@@ -713,8 +732,12 @@ const RoomDetails = () => {
                           className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                         >
                           <span className="font-medium text-[#0d2b4e]">
-                            {checkIn && checkOut
-                              ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })} - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                            {checkIn
+                              ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
+                                  checkOut
+                                    ? ` - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                                    : " - Check Out"
+                                }`
                               : "Check In - Check Out"}
                           </span>
                           <ChevronDown size={14} className="text-gray-400" />
@@ -732,53 +755,163 @@ const RoomDetails = () => {
                     />
                   </div>
 
-                  {/* Rooms dropdown */}
-                  <div className="relative">
-                    <select
-                      value={rooms}
-                      onChange={(e) => setRooms(Number(e.target.value))}
-                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] outline-none cursor-pointer appearance-none font-jost focus:border-[#c8a64d] transition-all"
+                   {/* Rooms dropdown */}
+                  <div className="relative booking-field">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsRoomsOpen(!isRoomsOpen);
+                        setIsAdultsOpen(false);
+                        setIsChildrenOpen(false);
+                        setIsPaymentMethodOpen(false);
+                      }}
+                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
-                      <option value="1">1 Room</option>
-                      <option value="2">2 Rooms</option>
-                      <option value="3">3 Rooms</option>
-                      <option value="4">4 Rooms</option>
-                      <option value="5">5 Rooms</option>
-                    </select>
-                    <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                      <span className="font-medium text-[#0d2b4e]">
+                        {rooms} {rooms === 1 ? "Room" : "Rooms"}
+                      </span>
+                      <ChevronDown
+                        size={14}
+                        className={`text-gray-400 transition-transform duration-300 ${isRoomsOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {isRoomsOpen && (
+                      <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-sm">Rooms</span>
+                          <div className="flex items-center gap-6">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (rooms > 1) setRooms(rooms - 1);
+                              }}
+                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                            >
+                              -
+                            </button>
+                            <span className="font-semibold text-sm w-4 text-center">{rooms}</span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (rooms < 5) setRooms(rooms + 1);
+                              }}
+                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Adults dropdown */}
-                  <div className="relative">
-                    <select
-                      value={adults}
-                      onChange={(e) => setAdults(Number(e.target.value))}
-                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] outline-none cursor-pointer appearance-none font-jost focus:border-[#c8a64d] transition-all"
+                  <div className="relative booking-field">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAdultsOpen(!isAdultsOpen);
+                        setIsRoomsOpen(false);
+                        setIsChildrenOpen(false);
+                        setIsPaymentMethodOpen(false);
+                      }}
+                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
-                      <option value="1">1 Adult </option>
-                      <option value="2">2 Adults </option>
-                      <option value="3">3 Adults </option>
-                      <option value="4">4 Adults </option>
-                      <option value="5">5 Adults </option>
-                      <option value="6">6 Adults </option>
-                    </select>
-                    <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                      <span className="font-medium text-[#0d2b4e]">
+                        {adults} {adults === 1 ? "Adult" : "Adults"}
+                      </span>
+                      <ChevronDown
+                        size={14}
+                        className={`text-gray-400 transition-transform duration-300 ${isAdultsOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {isAdultsOpen && (
+                      <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-sm">Adults</span>
+                          <div className="flex items-center gap-6">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (adults > 1) setAdults(adults - 1);
+                              }}
+                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                            >
+                              -
+                            </button>
+                            <span className="font-semibold text-sm w-4 text-center">{adults}</span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (adults < 10) setAdults(adults + 1);
+                              }}
+                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Children dropdown */}
-                  <div className="relative">
-                    <select
-                      value={children}
-                      onChange={(e) => setChildren(Number(e.target.value))}
-                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] outline-none cursor-pointer appearance-none font-jost focus:border-[#c8a64d] transition-all"
+                  <div className="relative booking-field">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsChildrenOpen(!isChildrenOpen);
+                        setIsRoomsOpen(false);
+                        setIsAdultsOpen(false);
+                        setIsPaymentMethodOpen(false);
+                      }}
+                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
-                      <option value="0">Children </option>
-                      <option value="1">1 Child </option>
-                      <option value="2">2 Children </option>
-                      <option value="3">3 Children </option>
-                      <option value="4">4 Children </option>
-                    </select>
-                    <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                      <span className="font-medium text-[#0d2b4e]">
+                        {children === 0 ? "Children" : children === 1 ? "1 Child" : `${children} Children`}
+                      </span>
+                      <ChevronDown
+                        size={14}
+                        className={`text-gray-400 transition-transform duration-300 ${isChildrenOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {isChildrenOpen && (
+                      <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-sm">Children</span>
+                          <div className="flex items-center gap-6">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (children > 0) setChildren(children - 1);
+                              }}
+                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                            >
+                              -
+                            </button>
+                            <span className="font-semibold text-sm w-4 text-center">{children}</span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (children < 10) setChildren(children + 1);
+                              }}
+                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Payment Method */}
@@ -786,16 +919,48 @@ const RoomDetails = () => {
                     <label className="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1.5 pl-1 font-jost">
                       Payment Method
                     </label>
-                    <div className="relative">
-                      <select
-                        value={paymentMethod}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] outline-none cursor-pointer appearance-none font-jost focus:border-[#c8a64d] transition-all"
+                    <div className="relative booking-field">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsPaymentMethodOpen(!isPaymentMethodOpen);
+                          setIsRoomsOpen(false);
+                          setIsAdultsOpen(false);
+                          setIsChildrenOpen(false);
+                        }}
+                        className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                       >
-                        <option value="online">Online Payment (Razorpay)</option>
-                        <option value="cash">Pay at Resort (Cash)</option>
-                      </select>
-                      <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                        <span className="font-medium text-[#0d2b4e]">
+                          {paymentMethod === "online" ? "Online Payment (Razorpay)" : "Pay at Resort (Cash)"}
+                        </span>
+                        <ChevronDown
+                          size={14}
+                          className={`text-gray-400 transition-transform duration-300 ${isPaymentMethodOpen ? "rotate-180" : ""}`}
+                        />
+                      </button>
+
+                      {isPaymentMethodOpen && (
+                        <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl py-3 px-2 shadow-2xl z-50 font-jost text-left select-none border-none">
+                          {[
+                            { label: "Online Payment (Razorpay)", value: "online" },
+                            { label: "Pay at Resort (Cash)", value: "cash" }
+                          ].map((option) => (
+                            <div
+                              key={option.value}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setPaymentMethod(option.value);
+                                setIsPaymentMethodOpen(false);
+                              }}
+                              className={`px-4 py-2.5 rounded-full text-xs lg:text-sm font-semibold transition hover:bg-[#fbd2a4] hover:text-[#0d2b4e] cursor-pointer ${
+                                paymentMethod === option.value ? "bg-[#0d2b4e] text-white" : ""
+                              }`}
+                            >
+                              {option.label}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
 

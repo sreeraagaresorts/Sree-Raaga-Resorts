@@ -94,11 +94,13 @@ const Navbar = () => {
   
   // States
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
   const [cursorHovered, setCursorHovered] = useState(false);
   const [showRoomsSubmenu, setShowRoomsSubmenu] = useState(false);
+  const lastScrollY = useRef(0);
 
   // Animation Refs
   const overlayRef = useRef(null);
@@ -132,7 +134,25 @@ const Navbar = () => {
   // Scroll logic
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+      const prevScrollY = lastScrollY.current;
+      const diff = currentScrollY - prevScrollY;
+
+      // 1. Background glassmorphism state
+      setIsScrolled(currentScrollY > 50);
+
+      // 2. Hide on scroll down, show on scroll up (with an 8px delta threshold to avoid jitter)
+      if (currentScrollY <= 50) {
+        setIsVisible(true);
+      } else if (Math.abs(diff) > 8) {
+        if (diff > 0) {
+          setIsVisible(false); // scrolling down
+        } else {
+          setIsVisible(true); // scrolling up
+        }
+      }
+
+      lastScrollY.current = currentScrollY;
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -240,11 +260,12 @@ const Navbar = () => {
       {/* ================= DESKTOP & MOBILE HEADER ================= */}
       <motion.header
         initial="initial"
-        animate={isScrolled ? "scrolled" : "initial"}
+        animate={!isVisible ? "hidden" : isScrolled ? "scrolled" : "initial"}
         variants={{
           initial: {
             y: 0,
-            backgroundColor: "rgba(13, 43, 78, 0)", // transparent background
+            opacity: 1,
+            // backgroundColor: "rgba(13, 43, 78, 0)", // transparent background
             backdropFilter: "blur(0px)",
             borderBottomColor: "rgba(255, 255, 255, 0.15)", // subtle border
             boxShadow: "0 0px 0px rgba(0, 0, 0, 0)",
@@ -252,16 +273,26 @@ const Navbar = () => {
             paddingBottom: "24px"
           },
           scrolled: {
-            y: -15, // slide upward by 10-20px
+            y: 0, // Keep at initial position
+            opacity: 1,
             backgroundColor: "rgba(13, 43, 78, 0.85)", // bg-[#0d2b4e]/85
             backdropFilter: "blur(12px)", // backdrop-blur-md
-            borderBottomColor: "rgba(255, 255, 255, 0.1)", // subtle border
+            borderBottomColor: "rgba(255, 255, 255, 0.15)", // subtle border
             boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)", // soft shadow
-            paddingTop: "12px",
-            paddingBottom: "12px"
+            paddingTop: "24px", // Keep initial padding
+            paddingBottom: "24px" // Keep initial padding
+          },
+          hidden: {
+            y: -120, // fade up / minimize from screen
+            opacity: 0,
+            // backgroundColor: "rgba(13, 43, 78, 0.85)",
+            backdropFilter: "blur(12px)",
+            borderBottomColor: "rgba(255, 255, 255, 0.1)",
+            paddingTop: "24px", // Keep height base consistent
+            paddingBottom: "24px"
           }
         }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
+        transition={{ type: "spring", stiffness: 100, damping: 18, mass: 1 }}
         className="fixed top-0 left-0 right-0 z-50 border-b flex flex-col items-center"
       >
         {/* TOP ROW */}
@@ -298,7 +329,7 @@ const Navbar = () => {
             }`}
           >
             <motion.div
-              animate={{ scale: isScrolled ? 0.85 : 1 }}
+              animate={{ scale: 1 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="flex flex-col items-center justify-center"
             >

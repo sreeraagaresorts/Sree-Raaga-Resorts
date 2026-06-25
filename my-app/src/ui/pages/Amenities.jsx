@@ -69,12 +69,26 @@ function FishIcon({ className = "" }) {
   );
 }
 
-function GolfIcon({ className = "" }) {
+function SportsBarIcon({ className = "" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2v20" />
-      <path d="M12 2l7 4-7 4" />
-      <circle cx="8" cy="20" r="2" />
+      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+      <path d="M4 22h16" />
+      <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34" />
+      <path d="M12 2a6 6 0 0 1 6 6v5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8a6 6 0 0 1 6-6z" />
+    </svg>
+  );
+}
+
+function CoffeeIcon({ className = "" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+      <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+      <line x1="6" y1="1" x2="6" y2="4" />
+      <line x1="10" y1="1" x2="10" y2="4" />
+      <line x1="14" y1="1" x2="14" y2="4" />
     </svg>
   );
 }
@@ -114,40 +128,34 @@ function WindowReveal({ src, alt, className = "", delay = 0 }) {
 }
 
 const tabData = {
-  dining: {
-    title: "Signature Restaurant",
-    description: "An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.",
+  multicuisine: {
+    title: "Multi cuisine restaurant",
+    description: "Savor a world of flavors at our exquisite multi-cuisine restaurant, offering a curated menu of delicious domestic and international dishes prepared by our expert chefs.",
     image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200",
     icon: <RestaurantIcon className="w-6 h-6 mb-3" />
   },
-  poolbar: {
-    title: "Pool Bar",
-    description: "Sip classic cocktails, dynamic mocktails, and refreshing spirits by the pool. Our open pool bar serves perfect bites to complement a relaxing day in the sun.",
+  barrestaurant: {
+    title: "Bar and restaurant",
+    description: "Experience the perfect blend of fine dining and premium drinks. Enjoy a cozy ambience, handcrafted cocktails, and gourmet plates with friends and family.",
     image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=1200",
     icon: <MartiniIcon className="w-6 h-6 mb-3" />
   },
-  zumafish: {
-    title: "Zuma Fish",
-    description: "Enjoy a unique, coastal fish-fry and seafood specialty experience. Zuma Fish highlights locally-sourced ingredients prepared using traditional coastal recipes.",
-    image: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1200",
-    icon: <FishIcon className="w-6 h-6 mb-3" />
+  sportsbar: {
+    title: "Sports bar",
+    description: "Catch all the live action of your favorite sports on big screens while enjoying cold beers, signature bites, and a lively atmosphere.",
+    image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200",
+    icon: <SportsBarIcon className="w-6 h-6 mb-3" />
   },
-  golf: {
-    title: "Golf",
-    description: "Unwind on our pristine golf lawns. Complete with high-grade equipment, our golfing turf offers a perfect recreational getaway for beginners and enthusiasts alike.",
-    image: "https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?q=80&w=1200",
-    icon: <GolfIcon className="w-6 h-6 mb-3" />
-  },
-  lounge: {
-    title: "Sunset Lounge",
-    description: "Overlook the grand landscaped gardens and the setting sun. Our lounge is designed to offer calm seating, signature drinks, and light finger food in beautiful spaces.",
-    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1200",
-    icon: <SunsetIcon className="w-6 h-6 mb-3" />
+  coffeeshop: {
+    title: "Coffee shop",
+    description: "Relax with freshly brewed artisan coffee, fine teas, and a delightful selection of fresh pastries, wraps, and desserts in a warm, welcoming space.",
+    image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200",
+    icon: <CoffeeIcon className="w-6 h-6 mb-3" />
   }
 };
 
 const Amenities = () => {
-  const [activeTab, setActiveTab] = useState("zumafish");
+  const [activeTab, setActiveTab] = useState("multicuisine");
 
   const handleTabClick = (key) => {
     setActiveTab(key);
@@ -156,8 +164,22 @@ const Amenities = () => {
   const navigate = useNavigate();
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [roomType, setRoomType] = useState("Rooms");
-  const [guests, setGuests] = useState("Guests");
+  const [roomsCount, setRoomsCount] = useState(1);
+  const [adultsCount, setAdultsCount] = useState(1);
+  const [childrenCount, setChildrenCount] = useState(0);
+  const [isRoomsOpen, setIsRoomsOpen] = useState(false);
+  const [isGuestsOpen, setIsGuestsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".booking-field")) {
+        setIsRoomsOpen(false);
+        setIsGuestsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const checkInRef = useRef(null);
   const checkOutRef = useRef(null);
@@ -173,7 +195,7 @@ const Amenities = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate("/rooms", { state: { checkIn, checkOut, guests, roomType } });
+    navigate("/rooms", { state: { checkIn, checkOut, guests: adultsCount + childrenCount, rooms: roomsCount } });
   };
 
   return (
@@ -346,7 +368,7 @@ const Amenities = () => {
             </h2>
             <form
               onSubmit={handleSearch}
-              className="max-w-5xl w-full mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl mt-8 overflow-hidden"
+              className="max-w-5xl w-full mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl mt-8"
             >
               {/* DATE */}
               <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group transition-all duration-300">
@@ -372,8 +394,12 @@ const Amenities = () => {
                           Dates
                         </p>
                         <span className="text-white text-xs lg:text-sm">
-                          {checkIn && checkOut
-                            ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })} - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                          {checkIn
+                            ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
+                                checkOut
+                                  ? ` - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                                  : " - Check Out"
+                              }`
                             : "Check In - Check Out"}
                         </span>
                       </div>
@@ -396,76 +422,150 @@ const Amenities = () => {
               </div>
 
               {/* ROOM */}
-              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10">
+              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10 select-none cursor-pointer booking-field"
+                   onClick={() => {
+                     setIsRoomsOpen(!isRoomsOpen);
+                     setIsGuestsOpen(false);
+                   }}
+              >
                 <div className="flex-1 text-left">
                   <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
                     Room Type
                   </p>
                   <span className="text-white text-xs lg:text-sm">
-                    {roomType}
+                    Rooms {roomsCount}
                   </span>
                 </div>
                 <ChevronDown
                   size={14}
-                  className="text-white/60"
+                  className={`text-white/60 transition-transform duration-300 ${isRoomsOpen ? "rotate-180" : ""}`}
                 />
-                <select
-                  value={roomType}
-                  onChange={(e) => setRoomType(e.target.value)}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                >
-                  <option value="Rooms" disabled hidden>
-                    Rooms
-                  </option>
-                  <option value="Any Suite">Any Suite</option>
-                  <option value="Executive Room">Executive Room</option>
-                  <option value="Private Villa">Private Villa</option>
-                  <option value="Duplex Villa">Duplex Villa</option>
-                </select>
+
+                {isRoomsOpen && (
+                  <div className="absolute top-[110%] left-0 w-64 bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-sm">Rooms</span>
+                      <div className="flex items-center gap-6">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (roomsCount > 1) setRoomsCount(roomsCount - 1);
+                          }}
+                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                        >
+                          -
+                        </button>
+                        <span className="font-semibold text-sm w-4 text-center">{roomsCount}</span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setRoomsCount(roomsCount + 1);
+                          }}
+                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* GUESTS */}
-              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3">
+              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 select-none cursor-pointer booking-field"
+                   onClick={() => {
+                     setIsGuestsOpen(!isGuestsOpen);
+                     setIsRoomsOpen(false);
+                   }}
+              >
                 <div className="flex-1 text-left">
                   <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
                     Guests
                   </p>
                   <span className="text-white text-xs lg:text-sm">
-                    {guests === "Guests"
+                    {adultsCount + childrenCount === 0
                       ? "Guests"
-                      : guests === "1"
+                      : adultsCount + childrenCount === 1
                       ? "1 Guest"
-                      : `${guests} Guests`}
+                      : `${adultsCount + childrenCount} Guests`}
                   </span>
                 </div>
                 <ChevronDown
                   size={14}
-                  className="text-white/60"
+                  className={`text-white/60 transition-transform duration-300 ${isGuestsOpen ? "rotate-180" : ""}`}
                 />
-                <select
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
-                >
-                  <option value="Guests" disabled hidden>
-                    Guests
-                  </option>
-                  <option value="1">1 Guest</option>
-                  <option value="2">2 Guests</option>
-                  <option value="3">3 Guests</option>
-                  <option value="4">4+ Guests</option>
-                </select>
+
+                {isGuestsOpen && (
+                  <div className="absolute top-[110%] left-0 w-64 bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none space-y-4">
+                    {/* Adults */}
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-sm">Adults</span>
+                      <div className="flex items-center gap-6">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (adultsCount > 0) setAdultsCount(adultsCount - 1);
+                          }}
+                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                        >
+                          -
+                        </button>
+                        <span className="font-semibold text-sm w-4 text-center">{adultsCount}</span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setAdultsCount(adultsCount + 1);
+                          }}
+                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-[#0d2b4e]/10"></div>
+
+                    {/* Children */}
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-sm">Children</span>
+                      <div className="flex items-center gap-6">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (childrenCount > 0) setChildrenCount(childrenCount - 1);
+                          }}
+                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                        >
+                          -
+                        </button>
+                        <span className="font-semibold text-sm w-4 text-center">{childrenCount}</span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setChildrenCount(childrenCount + 1);
+                          }}
+                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* SEARCH BUTTON */}
               <button
                 type="submit"
-                className="group mt-4 md:mt-0 md:ml-4 h-12 w-12 rounded-full bg-[#c8a64d] text-[#04121a] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shrink-0 cursor-pointer"
+                className="group mt-4 md:mt-0 md:ml-4 h-12 w-12 rounded-full bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white text-[#0d2b4e] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shrink-0 cursor-pointer"
               >
-                <ArrowRight
-                  size={18}
-                  className="transition-transform duration-300 group-hover:translate-x-1"
-                />
+                <span className="font-jost font-semibold text-xs tracking-wider uppercase">GO</span>
               </button>
             </form>
           </div>
@@ -559,7 +659,7 @@ const Amenities = () => {
                       <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                         isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-0 opacity-0"
                       }`}>
-                        <p className="text-sm text-gray-500 leading-relaxed font-jost font-light">
+                        <p className="text-sm text-gray-500 leading-relaxed font-jost font-light mr-2">
                           {tabData[key].description}
                         </p>
                       </div>
