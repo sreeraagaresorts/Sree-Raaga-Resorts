@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { ChevronDown, ArrowRight } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import DatePicker from "react-datepicker";
 
 import wifiIcon from "../../assets/icons/wifi.png";
 import buggyIcon from "../../assets/icons/car.png";
@@ -190,10 +191,10 @@ const Amenities = () => {
           <div className="absolute inset-0 bg-[#04121a]/30"></div>
           <div className="relative z-10 text-center text-white px-4 max-w-3xl space-y-4">
             <span className="text-[#c8a64d] uppercase tracking-[6px] block text-xs font-semibold font-jost">
-              Sree Raaga Resorts Amenities
+              Sree Raaga Resorts 
             </span>
-            <h1 className="text-5xl md:text-7xl font-light font-corm leading-tight tracking-wide text-white">
-              Kayak Surfing
+            <h1 className="text-5xl md:text-7xl font-medium font-corm leading-tight tracking-wide text-white">
+              Our Amenities
             </h1>
             {/* <p className="text-white/80 font-jost font-light text-xs md:text-sm tracking-widest uppercase max-w-2xl mx-auto leading-relaxed">
               Active recreation is an integral part of your stay. Paddle boarding is the perfect way to explore the beauty of the resort.
@@ -210,7 +211,7 @@ const Amenities = () => {
             <span className="text-[#c8a64d] text-xs uppercase tracking-[4px] font-semibold font-jost block">
               LUXURY RESORT
             </span>
-            <h2 className="text-3xl md:text-5xl font-light font-corm text-[#0d2b4e] leading-snug">
+            <h2 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e] leading-snug">
               Water Sports you Must Try
             </h2>
             <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[16px] leading-relaxed max-w-2xl mx-auto">
@@ -348,49 +349,49 @@ const Amenities = () => {
               className="max-w-5xl w-full mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl mt-8 overflow-hidden"
             >
               {/* DATE */}
-              <div
-                onClick={() => checkInRef.current?.showPicker?.()}
-                className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group transition-all duration-300"
-              >
-                <div className="flex-1 text-left">
-                  <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-                    Dates
-                  </p>
-                  <span className="text-white text-xs lg:text-sm">
-                    {checkIn
-                      ? new Date(checkIn).toLocaleDateString("en-IN", {
-                          day: "2-digit",
-                          month: "short",
-                        })
-                      : "Check In"}
-                    {" - "}
-                    {checkOut
-                      ? new Date(checkOut).toLocaleDateString("en-IN", {
-                          day: "2-digit",
-                          month: "short",
-                        })
-                      : "Check Out"}
-                  </span>
-                </div>
-                <ChevronDown
-                  size={14}
-                  className="text-white/60 group-hover:text-white transition"
-                />
-                <input
-                  ref={checkInRef}
-                  type="date"
-                  value={checkIn}
-                  onChange={handleCheckInChange}
-                  className="absolute inset-0 opacity-0 pointer-events-none"
-                  required
-                />
-                <input
-                  ref={checkOutRef}
-                  type="date"
-                  value={checkOut}
-                  onChange={(e) => setCheckOut(e.target.value)}
-                  className="hidden"
-                  required
+              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group transition-all duration-300">
+                <DatePicker
+                  selectsRange={true}
+                  startDate={checkIn ? new Date(checkIn) : null}
+                  endDate={checkOut ? new Date(checkOut) : null}
+                  onChange={(update) => {
+                    const [start, end] = update;
+                    const formatDate = (date) => {
+                      if (!date) return "";
+                      const tzOffset = date.getTimezoneOffset() * 60000;
+                      return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
+                    };
+                    setCheckIn(start ? formatDate(start) : "");
+                    setCheckOut(end ? formatDate(end) : "");
+                  }}
+                  minDate={new Date()}
+                  customInput={
+                    <div className="flex-1 text-left flex items-center justify-between w-full select-none">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
+                          Dates
+                        </p>
+                        <span className="text-white text-xs lg:text-sm">
+                          {checkIn && checkOut
+                            ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })} - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                            : "Check In - Check Out"}
+                        </span>
+                      </div>
+                      <ChevronDown
+                        size={14}
+                        className="text-white/60 group-hover:text-white transition ml-4"
+                      />
+                    </div>
+                  }
+                  calendarClassName="custom-datepicker"
+                  popperModifiers={[
+                    {
+                      name: "preventOverflow",
+                      options: {
+                        boundary: "viewport",
+                      },
+                    },
+                  ]}
                 />
               </div>
 
@@ -499,7 +500,7 @@ const Amenities = () => {
         </section>
 
         {/* ================= 6. EXCEPTIONAL GASTRONOMY SECTION ================= */}
-        <section className="pt-24 bg-[#fcfaf2] border-t border-[#0d2b4e]/5">
+        <section className="pt-24 bg-[#f7faff] ">
           <div className=" ">
             
             <div className="text-center mb-16 select-none">
@@ -515,7 +516,7 @@ const Amenities = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
               
               {/* Left Side: Dynamic image display */}
-              <div className="lg:col-span-7 h-[450px] lg:h-[800px] relative group w-full overflow-hidden shadow-lg rounded-sm">
+              <div className="lg:col-span-7 h-[450px] lg:h-[800px] relative group w-full overflow-hidden shadow-lg ">
                 <WindowReveal 
                   src={tabData[activeTab].image} 
                   alt={tabData[activeTab].title}

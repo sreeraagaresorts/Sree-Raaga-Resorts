@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import { 
   User, 
   Phone, 
@@ -237,16 +238,34 @@ const Navbar = () => {
   return (
     <>
       {/* ================= DESKTOP & MOBILE HEADER ================= */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 py-6 lg:py-6 transition-all duration-500 border-b border-white/35 ${
-          isScrolled
-            ? "bg-black/5 backdrop-blur py-4 lg:py-5 shadow-lg"
-            : "bg-transparent"
-        }`}
+      <motion.header
+        initial="initial"
+        animate={isScrolled ? "scrolled" : "initial"}
+        variants={{
+          initial: {
+            y: 0,
+            backgroundColor: "rgba(13, 43, 78, 0)", // transparent background
+            backdropFilter: "blur(0px)",
+            borderBottomColor: "rgba(255, 255, 255, 0.15)", // subtle border
+            boxShadow: "0 0px 0px rgba(0, 0, 0, 0)",
+            paddingTop: "24px",
+            paddingBottom: "24px"
+          },
+          scrolled: {
+            y: -15, // slide upward by 10-20px
+            backgroundColor: "rgba(13, 43, 78, 0.85)", // bg-[#0d2b4e]/85
+            backdropFilter: "blur(12px)", // backdrop-blur-md
+            borderBottomColor: "rgba(255, 255, 255, 0.1)", // subtle border
+            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)", // soft shadow
+            paddingTop: "12px",
+            paddingBottom: "12px"
+          }
+        }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+        className="fixed top-0 left-0 right-0 z-50 border-b flex flex-col items-center"
       >
-    <div className="mx-24 w-px h-full bg-white/10"></div>
-        <div className=" mx-[20px] px-6 flex items-center justify-between">
-          
+        {/* TOP ROW */}
+        <div className="w-full mx-[20px] px-6 flex items-center justify-between">
           {/* LEFT PANEL: Menu Toggle & Phone Number */}
           <div className="flex items-center gap-10 flex-1">
             {/* Custom Morphing Menu Toggle */}
@@ -259,7 +278,7 @@ const Navbar = () => {
                 <span className={`w-5 h-[1.5px] bg-white transition-opacity duration-300 ${isOpen ? "opacity-0" : "group-hover:w-7"}`} />
                 <span className={`w-7 h-[1.5px] bg-white transition-all duration-500 origin-center ${isOpen ? "-rotate-45 -translate-y-[9px]" : ""}`} />
               </div>
-              <span className="text-xs lg:text-sm uppercase tracking-[5px] font-semibold text-white select-none ">
+              <span className="text-xs lg:text-sm uppercase tracking-[5px] font-semibold text-white select-none">
                 {isOpen ? "Close" : "Menu"}
               </span>
             </div>
@@ -267,7 +286,7 @@ const Navbar = () => {
             {/* Telephone Line */}
             <div className={`hidden md:flex items-center gap-2.5 text-white/80 hover:text-white transition-all duration-500 ${isOpen ? "opacity-0 pointer-events-none blur-sm" : ""}`}>
               <Phone size={14} className="text-[#c8a64d] shrink-0" />
-              <span className="text-xs lg:text-sm tracking-widest  font-jost ">089045 61155</span>
+              <span className="text-xs lg:text-sm tracking-widest font-jost">089045 61155</span>
             </div>
           </div>
 
@@ -278,35 +297,35 @@ const Navbar = () => {
               isOpen ? "opacity-0 pointer-events-none blur-sm scale-95" : ""
             }`}
           >
-            <h1 className="text-3xl lg:text-4xl  text-[#c8a64d] tracking-wide font-jost leading-none">
-              Sree Raaga
-            </h1>
-            <span className="text-[10px] lg:text-[11px] tracking-[6px] uppercase font-jost text-white  mt-1">
-              Resorts
-            </span>
+            <motion.div
+              animate={{ scale: isScrolled ? 0.85 : 1 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="flex flex-col items-center justify-center"
+            >
+              <h1 className="text-3xl lg:text-4xl text-[#c8a64d] tracking-wide font-corm leading-none">
+                Sree Raaga
+              </h1>
+              <span className="text-[10px] lg:text-[11px] tracking-[6px] uppercase font-jost text-white mt-1">
+                Resorts
+              </span>
+            </motion.div>
           </Link>
 
-          {/* RIGHT PANEL: Lang Dropdown, Login/Profile, Book Button */}
+          {/* RIGHT PANEL: Profile/Login, Book Button */}
           <div className={`flex items-center justify-end gap-8 flex-1 transition-all duration-500 ${
             isOpen ? "opacity-0 pointer-events-none blur-sm scale-95" : ""
           }`}>
-            
-  
-
             {/* Login & Profile Dashboard */}
             <div className="flex items-center gap-4">
               {user ? (
-                <>
-                  <Link
-                    to={user.role === "admin" ? "/admin" : "/dashboard/profile"}
-                    className="w-10 h-10 rounded-full border border-[#c8a64d] flex items-center justify-center text-[#c8a64d] hover:bg-[#c8a64d] hover:text-black transition duration-300"
-                    title={user.full_name}
-                  >
-                    <User size={15} />
-                  </Link>
-                </>
+                <Link
+                  to={user.role === "admin" ? "/admin" : "/dashboard/profile"}
+                  className="w-10 h-10 rounded-full border border-[#c8a64d] flex items-center justify-center text-[#c8a64d] hover:bg-[#c8a64d] hover:text-black transition duration-300"
+                  title={user.full_name}
+                >
+                  <User size={15} />
+                </Link>
               ) : (
-                
                 <Link
                   to="/login"
                   className="hover:text-[#c8a64d] text-white uppercase tracking-widest text-xs lg:text-sm font-semibold"
@@ -316,18 +335,19 @@ const Navbar = () => {
               )}
             </div>
 
-<div className="absolute hidden md:block mx-47 w-px h-26 bg-white/20"></div>
+            <div className="absolute hidden md:block mx-47 w-px h-26 bg-white/20"></div>
             {/* Booking Call to Action */}
             <Link
               to="/rooms"
-              className="hidden md:inline-block px-6 py-3  text-white hover:text-[#c8a64d]  font-jost transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-medium"
+              className="hidden md:inline-block px-6 py-3 text-white hover:text-[#c8a64d] font-jost transition duration-300 rounded uppercase tracking-widest text-xs lg:text-sm font-medium"
             >
               Book Your Stay
             </Link>
           </div>
-
         </div>
-      </header>
+
+
+      </motion.header>
 
       {/* ================= CINEMATIC OVERLAY MENU ================= */}
       <div 

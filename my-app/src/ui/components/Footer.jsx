@@ -152,7 +152,7 @@ const Footer = () => {
               </p>
               
               <a
-                href="mailto:info@sreeraagaresorts.in"
+                href="mailto:support@sreeraagaresorts.in"
                 className="block hover:text-[#c8a64d] transition duration-300"
               >
                 info@sreeraagaresorts.in
@@ -162,7 +162,7 @@ const Footer = () => {
                 href="tel:08904561155"
                 className="block hover:text-[#c8a64d] transition duration-300"
               >
-                089045 61155
+                +91 89045 61155
               </a>
             </div>
           </div>
@@ -178,7 +178,7 @@ const Footer = () => {
                <ul className="space-y-3">
                 <li>
                   <Link to="/about" className="text-whitehover:text-[#c8a64d] transition">
-                    About Hotel
+                    About Us
                   </Link>
                 </li>
                 <li>
@@ -191,7 +191,11 @@ const Footer = () => {
                     Day Out
                   </Link>
                 </li>
-                
+                    <li>
+                  <Link to="/faq" className="text-whitehover:text-[#c8a64d] transition">
+                    FAQ
+                  </Link>
+                </li>
               </ul> 
            </div>
            <div>
@@ -206,6 +210,7 @@ const Footer = () => {
                     Restaurant & Bar
                   </Link>
                 </li>
+                
                 <li>
                   <Link to="/contact" className="text-whitehover:text-[#c8a64d] transition">
                     Contact
@@ -222,32 +227,50 @@ const Footer = () => {
           {/* Newsletter Column */}
           <div>
             <h3 className="text-lg md:text-2xl font-medium font-corm tracking-wide mb-6">
-              Terms & Conditions
+              Legal Pages
             </h3>
-          <ul className="space-y-3">
-                <li>
-                  <Link to="/faq" className="text-whitehover:text-[#c8a64d] transition">
-                    FAQ
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/privacy-policy" className="text-whitehover:text-[#c8a64d] transition">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/terms-conditions" className="text-whitehover:text-[#c8a64d] transition">
-                    Terms & Conditions
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="text-whitehover:text-[#c8a64d] transition">
-                    Get Directions
-                  </Link>
-                </li>
-              </ul>
-
-        
+            <ul className="space-y-3">
+              <li>
+                <Link to="/privacy-policy" className="text-white hover:text-[#c8a64d] transition">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms-conditions" className="text-white hover:text-[#c8a64d] transition">
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link to="/cancellation-refund" className="text-white hover:text-[#c8a64d] transition">
+                  Cancellation & Refund Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/shipping-delivery" className="text-white hover:text-[#c8a64d] transition">
+                  Shipping & Delivery Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/booking-terms" className="text-white hover:text-[#c8a64d] transition">
+                  Booking Terms / House Rules
+                </Link>
+              </li>
+              <li>
+                <Link to="/cookie-policy" className="text-white hover:text-[#c8a64d] transition">
+                  Cookie Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/disclaimer" className="text-white hover:text-[#c8a64d] transition">
+                  Disclaimer
+                </Link>
+              </li>
+              <li>
+                <Link to="/user-account-policy" className="text-white hover:text-[#c8a64d] transition">
+                  User Account Policy
+                </Link>
+              </li>
+            </ul>
           </div>
 
         </div>

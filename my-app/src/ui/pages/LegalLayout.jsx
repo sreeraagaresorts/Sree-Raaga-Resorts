@@ -3,22 +3,28 @@ import { Link, useLocation, Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-const policyTabs = [
-  { key: "general", title: "Privacy Policy", path: "/privacy-policy" },
-  { key: "cookies", title: "Cookie Policy", path: "/privacy-policy/cookies" }
+const legalTabs = [
+  { key: "privacy", title: "Privacy Policy", path: "/privacy-policy" },
+  { key: "terms", title: "Terms & Conditions", path: "/terms-conditions" },
+  { key: "refunds", title: "Cancellation & Refund Policy", path: "/cancellation-refund" },
+  { key: "shipping", title: "Shipping & Delivery Policy", path: "/shipping-delivery" },
+  { key: "resort-policies", title: "Booking Terms / Resort Policies / House Rules", path: "/booking-terms" },
+  { key: "cookies", title: "Cookie Policy", path: "/cookie-policy" },
+  { key: "disclaimer", title: "Disclaimer", path: "/disclaimer" },
+  { key: "user-account", title: "User Account Policy", path: "/user-account-policy" }
 ];
 
-const PrivacyPolicy = () => {
+const LegalLayout = () => {
   const location = useLocation();
 
   const getActiveTab = () => {
     const path = location.pathname;
-    if (path.endsWith("/cookies")) return "cookies";
-    return "general";
+    const tab = legalTabs.find(t => t.path === path);
+    return tab ? tab.key : "privacy";
   };
 
   const activeTab = getActiveTab();
-  const activeTitle = policyTabs.find(t => t.key === activeTab)?.title || "Privacy Policy";
+  const activeTitle = legalTabs.find(t => t.key === activeTab)?.title || "Privacy Policy";
 
   return (
     <>
@@ -44,7 +50,7 @@ const PrivacyPolicy = () => {
               Legal
             </span>
             <h1 className="text-4xl md:text-6xl font-light text-white tracking-wide font-corm leading-tight">
-              Privacy Policy
+              {activeTitle}
             </h1>
           </div>
         </section>
@@ -54,7 +60,7 @@ const PrivacyPolicy = () => {
           
           {/* Sidebar Nav */}
           <div className="lg:col-span-3 lg:sticky lg:top-24 self-start space-y-2">
-            {policyTabs.map((tab) => (
+            {legalTabs.map((tab) => (
               <Link
                 key={tab.key}
                 to={tab.path}
@@ -87,4 +93,4 @@ const PrivacyPolicy = () => {
   );
 };
 
-export default PrivacyPolicy;
+export default LegalLayout;

@@ -9,6 +9,7 @@ import {
   ArrowRight, 
   ChevronLeft, 
   ChevronRight,
+  ChevronDown,
   ShieldAlert,
   Calendar,
   Lock,
@@ -18,6 +19,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useToast } from "../components/Toast";
 import { API_URL } from "../../config/api";
+import DatePicker from "react-datepicker";
 
 const fallbackRoomsDetails = {
   "executive-room": {
@@ -119,6 +121,7 @@ const RoomDetails = () => {
   // Form states
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
+  const [rooms, setRooms] = useState(1);
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("online");
@@ -198,7 +201,7 @@ const RoomDetails = () => {
     }
 
     const priceVal = parseFloat(room.price) || 4990;
-    const subtotal = (nights > 0 ? nights : 1) * priceVal;
+    const subtotal = (nights > 0 ? nights : 1) * priceVal * rooms;
     
     let services = 0;
     if (extraService1) {
@@ -274,6 +277,7 @@ const RoomDetails = () => {
             room_id: room.id || room._id,
             check_in: checkIn,
             check_out: checkOut,
+            rooms,
             total_amount: totals.total // Include calculated totals with services
           })
         });
@@ -354,6 +358,7 @@ const RoomDetails = () => {
             check_out: checkOut,
             adults,
             children,
+            rooms,
             payment_method: "cash"
           })
         });
@@ -413,87 +418,64 @@ const RoomDetails = () => {
   return (
     <>
       <Navbar />
-       <section
-          className="relative h-[45vh] flex items-center justify-center bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2000')",
-          }}
-        >
-          <div className="absolute inset-0 bg-[#04121a]/55"></div>
-          <div className="relative z-10 text-center text-white select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
-              Sree Raaga Resorts
-            </span>
-            <h1 className="text-4xl md:text-6xl font-light  leading-tight">
-              Rooms
-            </h1>
-          </div>
-        </section>
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden  min-h-screen pt-24 md:pt-32">
+      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden min-h-screen pt-28 md:pt-36">
         
-        {/* ================= TOP HORIZONTAL GALLERY SLIDER ================= */}
-        <section className="relative px-4 pb-12 max-w-7xl mx-auto select-none">
-          <div className="relative overflow-hidden rounded-md">
-            <div 
-              className="flex w-full transition-transform duration-700 ease-out"
-              style={{ transform: `translateX(-${galleryIndex * (100 / visibleImagesCount)}%)` }}
-            >
-              {gallery.map((src, idx) => (
-                <div 
-                  key={idx} 
-                  className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 px-2 aspect-[4/3] relative group overflow-hidden rounded-sm shadow-md"
-                >
-                  <img 
-                    src={src} 
-                    alt={`Room Gallery ${idx + 1}`} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                  />
-                  <div className="absolute inset-0 bg-[#0d2b4e]/5 group-hover:bg-transparent transition-all"></div>
-                </div>
-              ))}
-            </div>
-            
-            {/* Left Chevron */}
-            {galleryIndex > 0 && (
-              <button 
-                onClick={() => setGalleryIndex(prev => Math.max(0, prev - 1))}
-                className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/25 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/30 cursor-pointer shadow-md"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-            )}
-
-            {/* Right Chevron */}
-            {galleryIndex < maxGalleryIndex && (
-              <button 
-                onClick={() => setGalleryIndex(prev => Math.min(maxGalleryIndex, prev + 1))}
-                className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/25 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/30 cursor-pointer shadow-md"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            )}
-          </div>
-        </section>
-
         {/* ================= MAIN CONTENT DETAILS GRID ================= */}
         <section className="py-12 max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
             {/* LEFT COLUMN */}
-            <div className="lg:col-span-8 space-y-12">
+            <div className="lg:col-span-8 space-y-8">
               
-              {/* Header Titles */}
-              <div className="select-none">
-                <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold ">
-                  Sree Raaga Resort
-                </span>
-                <h1 className="text-4xl md:text-5xl font-light  text-[#0d2b4e] leading-tight mb-6">
+              {/* Gallery Image Slider (Single active image layout matching Swiss Resort) */}
+              <div className="relative overflow-hidden aspect-[80/55] shadow-md group select-none bg-black/5 rounded-sm">
+                {gallery.map((src, idx) => (
+                  <div
+                    key={idx}
+                    className={`absolute inset-0 transition-all duration-750 ease-in-out ${
+                      idx === galleryIndex ? "opacity-100 scale-100 z-10" : "opacity-0 scale-95 z-0 pointer-events-none"
+                    }`}
+                  >
+                    <img
+                      src={src}
+                      alt={`Room Gallery ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+                
+                {/* Left/Right chevrons */}
+                {gallery.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setGalleryIndex(prev => (prev === 0 ? gallery.length - 1 : prev - 1))}
+                      className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setGalleryIndex(prev => (prev === gallery.length - 1 ? 0 : prev + 1))}
+                      className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Price, Title & Specs */}
+              <div className="select-none space-y-4">
+                <div className="font-semibold text-xs uppercase tracking-[2px] font-jost text-[#c8a64d]">
+                  ₹{parseFloat(room.price).toLocaleString()} PER NIGHT
+                </div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-light font-corm text-[#0d2b4e] leading-tight">
                   {room.name}
                 </h1>
                 
                 {/* Specs Row */}
-                <div className="flex flex-wrap items-center gap-6 text-xs  text-gray-500">
+                <div className="flex flex-wrap items-center gap-6 text-xs text-gray-500 font-jost">
                   <div className="flex items-center">
                     <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                     <span>{room.area || "30 M²"} SQM</span>
@@ -641,9 +623,6 @@ const RoomDetails = () => {
 
               <hr className="border-gray-200/60" />
 
-         
-              <hr className="border-gray-200/60" />
-
               {/* What's included in this suite? */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
@@ -654,22 +633,22 @@ const RoomDetails = () => {
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>220V electrical outlets</span>
+                      <span>220V electrical sockets</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>Hairdryer</span>
+                      <span>Safety box</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>Ironing board</span>
+                      <span>Room safe for your top mountain photos</span>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>220V electrical outlets</span>
+                      <span>220V electrical sockets</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
@@ -677,7 +656,7 @@ const RoomDetails = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>Free Wifi</span>
+                      <span>Mini bar</span>
                     </div>
                   </div>
                 </div>
@@ -692,11 +671,11 @@ const RoomDetails = () => {
                 </h3>
                 
                 <ul className="space-y-4  text-xs md:text-sm text-gray-500 list-disc pl-5 select-none">
-                  <li>Check-in: From 15:00 PM - anytime</li>
-                  <li>Check-out: 12:00 PM</li>
-                  <li>Pets are not allowed</li>
+                  <li>Check-in from 9:00 AM - anytime</li>
+                  <li>Check-out: 11:00 AM</li>
+                  <li>Self-check-in with lockbox</li>
                   <li>No smoking</li>
-                  <li>Parties are not allowed</li>
+                  <li>Pets are allowed</li>
                 </ul>
               </div>
 
@@ -704,94 +683,131 @@ const RoomDetails = () => {
 
             {/* RIGHT COLUMN (BOOKING SIDEBAR CARD) */}
             <div className="lg:col-span-4 lg:sticky lg:top-28">
-              <div className="bg-white border border-gray-100 rounded-sm p-8 shadow-xl space-y-6 ">
+              <div className="bg-[#fafafa] border border-gray-200/80 p-8 shadow-xl space-y-6 rounded-sm">
                 
-                <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
+                <h3 className="text-2xl font-light font-corm text-[#0d2b4e] select-none text-center lg:text-left">
                   Book Your Room
                 </h3>
 
-                <div className="space-y-4">
-                  {/* Dates */}
-                  <div>
-                    <label className="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">
-                      Check In
-                    </label>
-                    <input
-                      type="date"
-                      value={checkIn}
-                      onChange={(e) => setCheckIn(e.target.value)}
-                      className="w-full bg-[#fcfaf2] border border-gray-100 rounded px-3 py-2 text-xs text-[#0d2b4e] outline-none"
+                <div className="space-y-5 font-jost">
+                  {/* Dates range picker dropdown */}
+                  <div className="relative">
+                    <DatePicker
+                      selectsRange={true}
+                      startDate={checkIn ? new Date(checkIn) : null}
+                      endDate={checkOut ? new Date(checkOut) : null}
+                      onChange={(update) => {
+                        const [start, end] = update;
+                        const formatDate = (date) => {
+                          if (!date) return "";
+                          const tzOffset = date.getTimezoneOffset() * 60000;
+                          return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
+                        };
+                        setCheckIn(start ? formatDate(start) : "");
+                        setCheckOut(end ? formatDate(end) : "");
+                      }}
+                      minDate={new Date()}
+                      customInput={
+                        <button
+                          type="button"
+                          className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                        >
+                          <span className="font-medium text-[#0d2b4e]">
+                            {checkIn && checkOut
+                              ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })} - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                              : "Check In - Check Out"}
+                          </span>
+                          <ChevronDown size={14} className="text-gray-400" />
+                        </button>
+                      }
+                      calendarClassName="custom-datepicker"
+                      popperModifiers={[
+                        {
+                          name: "preventOverflow",
+                          options: {
+                            boundary: "viewport",
+                          },
+                        },
+                      ]}
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">
-                      Check Out
-                    </label>
-                    <input
-                      type="date"
-                      value={checkOut}
-                      onChange={(e) => setCheckOut(e.target.value)}
-                      className="w-full bg-[#fcfaf2] border border-gray-100 rounded px-3 py-2 text-xs text-[#0d2b4e] outline-none"
-                    />
+                  {/* Rooms dropdown */}
+                  <div className="relative">
+                    <select
+                      value={rooms}
+                      onChange={(e) => setRooms(Number(e.target.value))}
+                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] outline-none cursor-pointer appearance-none font-jost focus:border-[#c8a64d] transition-all"
+                    >
+                      <option value="1">1 Room</option>
+                      <option value="2">2 Rooms</option>
+                      <option value="3">3 Rooms</option>
+                      <option value="4">4 Rooms</option>
+                      <option value="5">5 Rooms</option>
+                    </select>
+                    <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
 
-                  {/* Guests */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">
-                        Adults
-                      </label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="6"
-                        value={adults}
-                        onChange={(e) => setAdults(Number(e.target.value))}
-                        className="w-full bg-[#fcfaf2] border border-gray-100 rounded px-3 py-2 text-xs text-[#0d2b4e] outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">
-                        Children
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="6"
-                        value={children}
-                        onChange={(e) => setChildren(Number(e.target.value))}
-                        className="w-full bg-[#fcfaf2] border border-gray-100 rounded px-3 py-2 text-xs text-[#0d2b4e] outline-none"
-                      />
-                    </div>
+                  {/* Adults dropdown */}
+                  <div className="relative">
+                    <select
+                      value={adults}
+                      onChange={(e) => setAdults(Number(e.target.value))}
+                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] outline-none cursor-pointer appearance-none font-jost focus:border-[#c8a64d] transition-all"
+                    >
+                      <option value="1">1 Adult </option>
+                      <option value="2">Adults </option>
+                      <option value="3">3 Adults </option>
+                      <option value="4">4 Adults </option>
+                      <option value="5">5 Adults </option>
+                      <option value="6">6 Adults </option>
+                    </select>
+                    <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  </div>
+
+                  {/* Children dropdown */}
+                  <div className="relative">
+                    <select
+                      value={children}
+                      onChange={(e) => setChildren(Number(e.target.value))}
+                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] outline-none cursor-pointer appearance-none font-jost focus:border-[#c8a64d] transition-all"
+                    >
+                      <option value="0">Children </option>
+                      <option value="1">1 Child </option>
+                      <option value="2">2 Children </option>
+                      <option value="3">3 Children </option>
+                      <option value="4">4 Children </option>
+                    </select>
+                    <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
 
                   {/* Payment Method */}
                   <div>
-                    <label className="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">
+                    <label className="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1.5 pl-1 font-jost">
                       Payment Method
                     </label>
-                    <select
-                      value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="w-full bg-[#fcfaf2] border border-gray-100 rounded px-3 py-2 text-xs text-[#0d2b4e] outline-none cursor-pointer"
-                    >
-                      <option value="online">Online Payment (Razorpay)</option>
-                      <option value="cash">Pay at Resort (Cash)</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        value={paymentMethod}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] outline-none cursor-pointer appearance-none font-jost focus:border-[#c8a64d] transition-all"
+                      >
+                        <option value="online">Online Payment (Razorpay)</option>
+                        <option value="cash">Pay at Resort (Cash)</option>
+                      </select>
+                      <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    </div>
                   </div>
 
-             
-
                   {/* Price Calculation details */}
-                  <div className="border-t border-gray-100 pt-6 text-center select-none">
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1">Total Booking Cost</span>
-                    <h4 className="text-3xl font-semibold text-[#c8a64d]">
-                      ₹{totals.total.toLocaleString()}
-                    </h4>
+                  <div className="border-t border-gray-200/60 pt-5 space-y-2 select-none">
+                    <div className="flex justify-between items-end pt-2">
+                      <span className="text-xs font-semibold text-[#0d2b4e]">Total Cost</span>
+                      <span className="text-2xl font-bold text-[#c8a64d]">₹{totals.total.toLocaleString()}</span>
+                    </div>
                     {totals.nights > 0 && (
-                      <span className="text-gray-400 text-[10px] font-semibold uppercase tracking-wider block mt-1">
-                        {totals.nights} Nights Stay
+                      <span className="text-gray-400 text-[10px] font-semibold uppercase tracking-wider block text-right">
+                        For {totals.nights} Nights Stay
                       </span>
                     )}
                   </div>
@@ -805,14 +821,13 @@ const RoomDetails = () => {
                     <button
                       onClick={handleBooking}
                       disabled={bookingLoading}
-                      className="w-full mt-4 py-4 bg-[#e8dcc4] hover:bg-[#c8a64d] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2px] text-xs rounded-sm shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
+                      className="w-full mt-4 py-4 bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-xs rounded-sm shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
                     >
-                      {bookingLoading ? "Processing..." : `BOOK NOW`}
+                      {bookingLoading ? "Processing..." : `BOOK YOUR STAY NOW`}
                     </button>
                   )}
 
                 </div>
-
               </div>
             </div>
 

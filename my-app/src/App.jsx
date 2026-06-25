@@ -15,8 +15,7 @@ import Menu from "./ui/pages/Menu";
 import Login from "./ui/UserReg/Login";
 import Register from "./ui/UserReg/Register";
 import FAQ from "./ui/pages/FAQ";
-import PrivacyPolicy from "./ui/pages/PrivacyPolicy";
-import TermsConditions from "./ui/pages/TermsConditions";
+import LegalLayout from "./ui/pages/LegalLayout";
 import NotFound from "./ui/pages/NotFound";
 import DayOut from "./ui/pages/DayOut";
 import Corporate from "./ui/pages/Corporate";
@@ -76,20 +75,16 @@ const App = () => {
         <Route path="/day-out" element={<DayOut />} />
         <Route path="/corporate" element={<Corporate />} />
         <Route path="/faq" element={<FAQ />} />
-        {/* PRIVACY POLICY PAGES */}
-        <Route path="/privacy-policy" element={<PrivacyPolicy />}>
-          <Route index element={<PrivacyGeneral />} />
-          <Route path="cookies" element={<PrivacyCookies />} />
-        </Route>
-
-        {/* TERMS & CONDITIONS PAGES */}
-        <Route path="/terms-conditions" element={<TermsConditions />}>
-          <Route index element={<TermsGeneral />} />
-          <Route path="refunds" element={<TermsRefunds />} />
-          <Route path="shipping" element={<TermsShipping />} />
-          <Route path="resort-policies" element={<TermsResortPolicies />} />
-          <Route path="disclaimer" element={<TermsDisclaimer />} />
-          <Route path="user-account" element={<TermsUserAccount />} />
+        {/* LEGAL PAGES WITH UNIFIED LAYOUT */}
+        <Route element={<LegalLayout />}>
+          <Route path="/privacy-policy" element={<PrivacyGeneral />} />
+          <Route path="/terms-conditions" element={<TermsGeneral />} />
+          <Route path="/cancellation-refund" element={<TermsRefunds />} />
+          <Route path="/shipping-delivery" element={<TermsShipping />} />
+          <Route path="/booking-terms" element={<TermsResortPolicies />} />
+          <Route path="/cookie-policy" element={<PrivacyCookies />} />
+          <Route path="/disclaimer" element={<TermsDisclaimer />} />
+          <Route path="/user-account-policy" element={<TermsUserAccount />} />
         </Route>
 
         {/* AUTH */}

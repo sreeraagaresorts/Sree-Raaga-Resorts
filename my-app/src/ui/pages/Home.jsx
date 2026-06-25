@@ -9,7 +9,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import DatePicker from "react-datepicker";
 // import { motion } from "framer-motion";
-import "react-datepicker/dist/react-datepicker.css";
 import { 
   Wifi, 
   Dumbbell, 
@@ -403,66 +402,51 @@ return (
   className="max-w-5xl mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl mb-40 overflow-hidden"
 >
   {/* DATE */}
-<div
-  onClick={() => checkInRef.current?.showPicker?.()}
-  className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group  transition-all duration-300"
->
-  {/* Calendar Icon
-  <CalendarDays
-    size={18}
-    className="text-[#c8a64d] shrink-0"
-  /> */}
-
-  {/* Date Display */}
-  <div className="flex-1">
-    <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-
-    </p>
-
-    <span className="text-white text-xs lg:text-sm">
-      {checkIn
-        ? new Date(checkIn).toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-          })
-        : "Check In"}
-
-      {" - "}
-
-      {checkOut
-        ? new Date(checkOut).toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-          })
-        : "Check Out"}
-    </span>
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group transition-all duration-300">
+    <DatePicker
+      selectsRange={true}
+      startDate={checkIn ? new Date(checkIn) : null}
+      endDate={checkOut ? new Date(checkOut) : null}
+      onChange={(update) => {
+        const [start, end] = update;
+        const formatDate = (date) => {
+          if (!date) return "";
+          const tzOffset = date.getTimezoneOffset() * 60000;
+          return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
+        };
+        setCheckIn(start ? formatDate(start) : "");
+        setCheckOut(end ? formatDate(end) : "");
+      }}
+      minDate={new Date()}
+      customInput={
+        <div className="flex-1 text-left flex items-center justify-between w-full select-none">
+          <div>
+            <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
+              Dates
+            </p>
+            <span className="text-white text-xs lg:text-sm">
+              {checkIn && checkOut
+                ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })} - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                : "Check In - Check Out"}
+            </span>
+          </div>
+          <ChevronDown
+            size={14}
+            className="text-white/60 group-hover:text-white transition ml-4"
+          />
+        </div>
+      }
+      calendarClassName="custom-datepicker"
+      popperModifiers={[
+        {
+          name: "preventOverflow",
+          options: {
+            boundary: "viewport",
+          },
+        },
+      ]}
+    />
   </div>
-
-  {/* Arrow */}
-  <ChevronDown
-    size={14}
-    className="text-white/60 group-hover:text-white transition"
-  />
-
-  {/* Hidden Inputs */}
-  <input
-    ref={checkInRef}
-    type="date"
-    value={checkIn}
-    onChange={handleCheckInChange}
-    className="absolute inset-0 opacity-0 pointer-events-none"
-    required
-  />
-
-  <input
-    ref={checkOutRef}
-    type="date"
-    value={checkOut}
-    onChange={(e) => setCheckOut(e.target.value)}
-    className="hidden"
-    required
-  />
-</div>
 
   {/* ROOM */}
   <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10">
@@ -1127,66 +1111,51 @@ offer to suit your needs and elevate your experience.          </p>
   className="max-w-[180vh] mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4  py-4 md:py-0 flex flex-col md:flex-row items-center shadow-2xl mb- overflow-hidden"
 >
   {/* DATE */}
-<div
-  onClick={() => checkInRef.current?.showPicker?.()}
-  className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group  transition-all duration-300"
->
-  {/* Calendar Icon
-  <CalendarDays
-    size={18}
-    className="text-[#c8a64d] shrink-0"
-  /> */}
-
-  {/* Date Display */}
-  <div className="flex-1">
-    <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-
-    </p>
-
-    <span className="text-white text-xs lg:text-sm">
-      {checkIn
-        ? new Date(checkIn).toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-          })
-        : "Check In"}
-
-      {" - "}
-
-      {checkOut
-        ? new Date(checkOut).toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-          })
-        : "Check Out"}
-    </span>
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group transition-all duration-300">
+    <DatePicker
+      selectsRange={true}
+      startDate={checkIn ? new Date(checkIn) : null}
+      endDate={checkOut ? new Date(checkOut) : null}
+      onChange={(update) => {
+        const [start, end] = update;
+        const formatDate = (date) => {
+          if (!date) return "";
+          const tzOffset = date.getTimezoneOffset() * 60000;
+          return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
+        };
+        setCheckIn(start ? formatDate(start) : "");
+        setCheckOut(end ? formatDate(end) : "");
+      }}
+      minDate={new Date()}
+      customInput={
+        <div className="flex-1 text-left flex items-center justify-between w-full select-none">
+          <div>
+            <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
+              Dates
+            </p>
+            <span className="text-white text-xs lg:text-sm">
+              {checkIn && checkOut
+                ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })} - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                : "Check In - Check Out"}
+            </span>
+          </div>
+          <ChevronDown
+            size={14}
+            className="text-white/60 group-hover:text-white transition ml-4"
+          />
+        </div>
+      }
+      calendarClassName="custom-datepicker"
+      popperModifiers={[
+        {
+          name: "preventOverflow",
+          options: {
+            boundary: "viewport",
+          },
+        },
+      ]}
+    />
   </div>
-
-  {/* Arrow */}
-  <ChevronDown
-    size={14}
-    className="text-white/60 group-hover:text-white transition"
-  />
-
-  {/* Hidden Inputs */}
-  <input
-    ref={checkInRef}
-    type="date"
-    value={checkIn}
-    onChange={handleCheckInChange}
-    className="absolute inset-0 opacity-0 pointer-events-none"
-    required
-  />
-
-  <input
-    ref={checkOutRef}
-    type="date"
-    value={checkOut}
-    onChange={(e) => setCheckOut(e.target.value)}
-    className="hidden"
-    required
-  />
-</div>
 
   {/* ROOM */}
   <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10">

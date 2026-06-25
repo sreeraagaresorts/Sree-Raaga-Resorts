@@ -171,7 +171,7 @@ const Rooms = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
               Sree Raaga Resorts Accommodation
             </span>
-            <h1 className="text-5xl md:text-7xl font-light  leading-tight">
+            <h1 className="text-5xl md:text-7xl font-medium font-corm  leading-tight">
               {getCategoryTitle()}
             </h1>
           </div>
@@ -182,16 +182,16 @@ const Rooms = () => {
           
           {/* Header Introduction */}
           <div className="row justify-center text-center mb-20 select-none">
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-2xl mx-auto">
               <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
                 Our Accommodations
               </span>
-              <h2 className="text-4xl md:text-6xl font-light  text-[#0d2b4e] leading-tight mb-6">
+              <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]  mb-6">
                 Discover Our Rooms & Suites and Villas
               </h2>
-              <p className="text-gray-500 text-sm md:text-base leading-relaxed  max-w-2xl mx-auto">
+              {/* <p className="text-gray-500 text-sm md:text-base leading-relaxed  max-w-2xl mx-auto">
                 Come in, take your shoes off and let yourself sink into the mattress.
-              </p>
+              </p> */}
             </div>
           </div>
 
@@ -234,7 +234,7 @@ const Rooms = () => {
                 <div className="flex flex-col flex-grow select-none">
                   <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                     <div>
-                      <h3 className="text-2xl md:text-3xl font-light  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                      <h3 className="text-2xl md:text-3xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
                         {room.name}
                       </h3>
                       {room.category && (
@@ -243,33 +243,33 @@ const Rooms = () => {
                         </span>
                       )}
                     </div>
-                    <div className="text-right">
-                      <span className="text-sm md:text-base  font-semibold text-[#c8a64d]">
+                    <div className="text-right ">
+                      <span className="text-sm md:text-base  font-semibold text-gray-800">
                         ₹{parseFloat(room.price).toLocaleString()}
                       </span>
-                      <span className="text-[10px] text-gray-400  block tracking-wider uppercase font-semibold">
+                      <span className="text-[10px] text-gray-800    uppercase font-semibold">
                         / NIGHT
                       </span>
                     </div>
                   </div>
 
                   {/* Room Specs Row */}
-                  <div className="flex flex-wrap items-center gap-6 pb-6 text-[11px] md:text-xs  text-gray-500 border-b border-gray-100">
+                  <div className="flex flex-wrap items-center gap-6 pb-6 text-[11px] md:text-sm  text-gray-500 border-b border-gray-100">
                     <div className="flex items-center">
                       <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.area || "30 M²"}</span>
+                      <span>{room.area || "30 M²"} Sqft</span>
                     </div>
                     <div className="flex items-center">
                       <Users className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.guests || "2 Guests"}</span>
+                      <span>{room.guests || "2 Guests"} Guests</span>
                     </div>
                     <div className="flex items-center">
                       <Bed className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.beds || "1 Bed"}</span>
+                      <span>{room.beds || "1 Bed"} Bed</span>
                     </div>
                     <div className="flex items-center">
                       <Bath className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.bathrooms || "1 Bath"}</span>
+                      <span>{room.bathrooms || "1 Bath"} Bathroom</span>
                     </div>
                   </div>
 
