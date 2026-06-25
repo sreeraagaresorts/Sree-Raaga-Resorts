@@ -77,16 +77,16 @@ const FAQ = () => {
           className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=2000')",
+              "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000')",
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
 
           <div className="relative z-10 text-center px-4 max-w-7xl space-y-4">
-            <span className="text-[#c8a64d] text-xs uppercase tracking-[6px] font-semibold">
+            <span className="text-white text-[17px] uppercase tracking-[6px] font-semibold">
               FAQ
             </span>
-            <h1 className="text-4xl md:text-6xl font-light  text-white tracking-wide leading-tight">
+            <h1 className="text-4xl md:text-[92px] font-medium font-corm  text-white tracking-wide leading-tight">
               Frequently Asked Questions
             </h1>
           </div>
@@ -96,7 +96,7 @@ const FAQ = () => {
         <section className="py-24 px-6 max-w-4xl mx-auto">
           {Object.entries(faqData).map(([catKey, category]) => (
             <div key={catKey} className="mb-20">
-              <h2 className="text-3xl  font-light mb-10 pb-4 border-b border-[#0d2b4e]/10">
+              <h2 className="text-4xl  font-medium font-corm mb-10 pb-4 border-b border-[#0d2b4e]/10">
                 {category.title}
               </h2>
 
@@ -114,7 +114,7 @@ const FAQ = () => {
                         onClick={() => toggleAccordion(itemKey)}
                         className="w-full px-6 py-5 text-left flex justify-between items-center hover:bg-[#ebd0b0]/20 transition cursor-pointer"
                       >
-                        <span className=" text-[#0d2b4e] text-sm md:text-base font-light">
+                        <span className=" text-[#0d2b4e] text-sm md:text-[17px] font-medium">
                           {item.question}
                         </span>
                         <ChevronDown 
@@ -131,7 +131,7 @@ const FAQ = () => {
                           isOpen ? "max-h-[300px] border-t border-gray-200/35" : "max-h-0"
                         }`}
                       >
-                        <div className="px-6 py-5 text-[#0d2b4e]/85 text-xs md:text-sm leading-relaxed  font-light">
+                        <div className="px-6 py-5 text-[#0d2b4e]/85 text-xs md:text-[15px] leading-relaxed  font-medium">
                           {item.answer}
                         </div>
                       </div>
