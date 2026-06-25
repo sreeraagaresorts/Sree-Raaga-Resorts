@@ -11,7 +11,7 @@ const DayOut = () => {
         
         {/* Hero Section */}
         <section
-          className="relative h-[60vh] flex items-center justify-center bg-cover bg-center"
+          className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2000')",
@@ -19,10 +19,10 @@ const DayOut = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white px-4 mt-20 select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold">
+            <span className="text-white uppercase tracking-[6px] block mb-4 text-[17px] font-semibold">
               Sree Raaga Resorts Packages
             </span>
-            <h1 className="text-4xl md:text-7xl font-light  leading-tight">
+            <h1 className="text-4xl md:text-[92px] font-medium font-corm  leading-tight">
               Day Out Experience
             </h1>
           </div>
