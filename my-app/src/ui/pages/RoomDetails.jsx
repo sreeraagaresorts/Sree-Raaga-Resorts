@@ -428,7 +428,7 @@ const RoomDetails = () => {
             <div className="lg:col-span-8 space-y-8">
               
               {/* Gallery Image Slider (Single active image layout matching Swiss Resort) */}
-              <div className="relative overflow-hidden aspect-[80/55] shadow-md group select-none bg-black/5 rounded-sm">
+              <div className="relative overflow-hidden aspect-[80/55] shadow-md group select-none bg-black/5 ">
                 {gallery.map((src, idx) => (
                   <div
                     key={idx}
@@ -475,7 +475,7 @@ const RoomDetails = () => {
                 </h1>
                 
                 {/* Specs Row */}
-                <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 font-jost">
+                <div className="flex flex-wrap items-center gap-6 text-[15px] text-gray-500 font-jost">
                   <div className="flex items-center">
                     <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                     <span>{room.area || "30 M²"} SQM</span>
@@ -499,13 +499,13 @@ const RoomDetails = () => {
 
               {/* About accommodation */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-light  text-[#0d2b4e]">
+                <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e]">
                   About accommodation
                 </h3>
-                <p className="text-gray-500 text-xs md:text-sm leading-relaxed ">
+                <p className="text-gray-500 text-sm md:text-[15px] leading-relaxed ">
                   {room.description}
                 </p>
-                <p className="text-gray-500 text-xs md:text-sm leading-relaxed ">
+                <p className="text-gray-500 text-xs md:text-[15px] leading-relaxed ">
                   Experience premium resort living with custom services tailored specifically for you. Sree Raaga Resorts prioritizes design excellence and clean spaces to make your vacation peaceful and relaxing.
                 </p>
               </div>
@@ -514,7 +514,7 @@ const RoomDetails = () => {
 
               {/* Room Amenities (12 items) */}
               <div className="space-y-6">
-                <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
+                <h3 className="text-3xl font-medium  font-corm text-[#0d2b4e] select-none">
                   Room Amenities
                 </h3>
                 
@@ -615,7 +615,7 @@ const RoomDetails = () => {
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-center gap-3 text-xs  text-gray-700">
                       {item.icon}
-                      <span>{item.name}</span>
+                      <span className="text-[15px]">{item.name}</span>
                     </div>
                   ))}
                 </div>
@@ -625,7 +625,7 @@ const RoomDetails = () => {
 
               {/* What's included in this suite? */}
               <div className="space-y-6">
-                <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
+                <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e] select-none">
                   What's included in this suite?
                 </h3>
                 
@@ -633,30 +633,30 @@ const RoomDetails = () => {
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>220V electrical sockets</span>
+                      <span  className="text-[15px]">220V electrical sockets</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>Safety box</span>
+                      <span className="text-[15px]">Safety box</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>Room safe for your top mountain photos</span>
+                      <span className="text-[15px]">Room safe for your top mountain photos</span>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>220V electrical sockets</span>
+                      <span className="text-[15px]">220V electrical sockets</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>Slippers</span>
+                      <span className="text-[15px]">Slippers</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span>Mini bar</span>
+                      <span className="text-[15px]">Mini bar</span>
                     </div>
                   </div>
                 </div>
@@ -666,11 +666,11 @@ const RoomDetails = () => {
 
               {/* Room Rules */}
               <div className="space-y-6">
-                <h3 className="text-2xl font-light  text-[#0d2b4e] select-none">
+                <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e] select-none">
                   Room Rules
                 </h3>
                 
-                <ul className="space-y-4  text-xs md:text-sm text-gray-500 list-disc pl-5 select-none">
+                <ul className="space-y-4  text-xs md:text-[17px] text-gray-500 list-disc pl-5 select-none">
                   <li>Check-in from 9:00 AM - anytime</li>
                   <li>Check-out: 11:00 AM</li>
                   <li>Self-check-in with lockbox</li>
@@ -682,8 +682,8 @@ const RoomDetails = () => {
             </div>
 
             {/* RIGHT COLUMN (BOOKING SIDEBAR CARD) */}
-            <div className="lg:col-span-4 lg:sticky lg:top-28">
-              <div className="bg-[#fafafa] border border-gray-200/80 p-8 shadow-xl space-y-6 rounded-sm">
+            <div className="lg:col-span-4 lg:sticky ">
+              <div className="bg-[#fafafa] border border-gray-200/80 p-8 shadow-xl space-y-6 ">
                 
                 <h3 className="text-2xl font-light font-corm text-[#0d2b4e] select-none text-center lg:text-left">
                   Book Your Room
@@ -841,10 +841,8 @@ const RoomDetails = () => {
             {/* Header Titles */}
             <div className="flex flex-col sm:flex-row justify-between items-end mb-16 select-none">
               <div>
-                <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold ">
-                  Similar
-                </span>
-                <h2 className="text-3xl md:text-4xl font-light  text-[#0d2b4e]">
+           
+                <h2 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e]">
                   Similar Rooms
                 </h2>
               </div>
@@ -881,7 +879,7 @@ const RoomDetails = () => {
                   <div className="flex flex-col select-none">
                     <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                       <div>
-                        <h4 className="text-xl font-light  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                        <h4 className="text-xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
                           {item.name}
                         </h4>
                         {item.category && (
@@ -904,15 +902,15 @@ const RoomDetails = () => {
                     <div className="flex flex-wrap items-center gap-4 pb-6 text-[10px]  text-gray-400">
                       <div className="flex items-center">
                         <Maximize className="w-3.5 h-3.5 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
-                        <span>{item.area || "30 M²"}</span>
+                        <span className="text-black">{item.area || "30 M²"}</span>
                       </div>
                       <div className="flex items-center">
                         <Bed className="w-3.5 h-3.5 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
-                        <span>{item.beds || "1 Bed"}</span>
+                        <span className="text-black">{item.beds || "1 Bed"}</span>
                       </div>
                       <div className="flex items-center">
                         <Bath className="w-3.5 h-3.5 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
-                        <span>{item.bathrooms || "1 Bath"}</span>
+                        <span className="text-black">{item.bathrooms || "1 Bath"}</span>
                       </div>
                     </div>
                   </div>
