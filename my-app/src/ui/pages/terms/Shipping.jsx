@@ -14,7 +14,7 @@ const Shipping = () => {
         <p className="text-[#2d5b8a] font-jost font-light text-[15px] mb-4 leading-relaxed">
           Upon successful booking and payment:
         </p>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-light text-[15px]">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px]">
           <li>Booking confirmation will be sent by email and/or SMS.</li>
           <li>Reservation details will be available upon arrival at the resort.</li>
           <li>Event bookings will be confirmed through written communication from our team.</li>

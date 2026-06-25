@@ -11,7 +11,7 @@ const ResortPolicies = () => {
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Check-In & Check-Out</h3>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-light text-[15px] mb-4">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px] mb-4">
           <li>Check-In Time: 1:00 PM</li>
           <li>Check-Out Time: 12:00 PM</li>
         </ul>

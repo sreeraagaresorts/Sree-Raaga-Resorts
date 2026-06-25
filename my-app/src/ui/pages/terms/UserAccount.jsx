@@ -42,7 +42,7 @@ const UserAccount = () => {
         <p className="text-[#2d5b8a] font-jost font-light text-[15px] mb-4 leading-relaxed">
           We reserve the right to suspend or terminate accounts involved in:
         </p>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-light text-[15px]">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px]">
           <li>Fraudulent activity</li>
           <li>Misuse of the website</li>
           <li>Violation of resort policies</li>
