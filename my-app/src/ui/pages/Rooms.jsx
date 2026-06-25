@@ -171,7 +171,7 @@ const Rooms = () => {
             <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
               Sree Raaga Resorts Accommodation
             </span>
-            <h1 className="text-5xl md:text-7xl font-medium font-corm  leading-tight">
+            <h1 className="text-5xl md:text-[92px] font-medium font-corm  leading-tight">
               {getCategoryTitle()}
             </h1>
           </div>
