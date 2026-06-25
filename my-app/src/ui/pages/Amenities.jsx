@@ -190,10 +190,10 @@ const Amenities = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/30"></div>
           <div className="relative z-10 text-center text-white px-4 max-w-3xl space-y-4">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block text-xs font-semibold font-jost">
+            <span className="text-white uppercase tracking-[6px]  text-[17px] font-semibold font-jost">
               Sree Raaga Resorts 
             </span>
-            <h1 className="text-5xl md:text-7xl font-medium font-corm leading-tight tracking-wide text-white">
+            <h1 className="text-5xl md:text-[92px] font-medium font-corm leading-tight tracking-wide text-white">
               Our Amenities
             </h1>
             {/* <p className="text-white/80 font-jost font-light text-xs md:text-sm tracking-widest uppercase max-w-2xl mx-auto leading-relaxed">
@@ -338,7 +338,7 @@ const Amenities = () => {
         >
           <div className="absolute inset-0 bg-black/60"></div>
           <div className="relative z-10 w-full max-w-6xl px-6 text-center space-y-6">
-            <span className="text-[#c8a64d] text-xs uppercase tracking-[6px] font-semibold font-jost">
+            <span className="text-white text-[17px] uppercase tracking-[6px] font-semibold font-jost">
               Sree Raaga Resorts
             </span>
             <h2 className="text-4xl md:text-5xl font-light font-corm text-white">

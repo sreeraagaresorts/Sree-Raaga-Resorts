@@ -19,7 +19,7 @@ const Dine = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
+            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
               Sree Raaga Resorts
             </span>
             <h1 className="text-4xl md:text-6xl font-light leading-tight">

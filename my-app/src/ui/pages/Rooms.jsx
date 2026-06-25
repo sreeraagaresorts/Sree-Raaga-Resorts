@@ -168,7 +168,7 @@ const Rooms = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white px-4 mt-20 select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
+            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
               Sree Raaga Resorts Accommodation
             </span>
             <h1 className="text-5xl md:text-7xl font-medium font-corm  leading-tight">
@@ -183,7 +183,7 @@ const Rooms = () => {
           {/* Header Introduction */}
           <div className="row justify-center text-center mb-20 select-none">
             <div className="max-w-2xl mx-auto">
-              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
+              <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
                 Our Accommodations
               </span>
               <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]  mb-6">
@@ -308,7 +308,7 @@ const Rooms = () => {
         {/* ================= HOTEL FACILITIES SECTION ================= */}
         <section className="py-24 px-6 bg-[#f7f5ee]">
           <div className="max-w-6xl mx-auto text-center mb-16 select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
+            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
               Our Services
             </span>
             <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
@@ -409,7 +409,7 @@ const Rooms = () => {
         {/* ================= FOLLOW US ON INSTAGRAM SECTION ================= */}
         <section className=" bg-white">
           <div className="py-10 text-center mb-16 select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
+            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
               Our Socials
             </span>
             <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">

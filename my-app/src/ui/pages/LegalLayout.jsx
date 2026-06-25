@@ -45,11 +45,11 @@ const LegalLayout = () => {
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
-          <div className="relative z-10 text-center px-4 max-w-3xl space-y-4">
-            <span className="text-[#c8a64d] text-xs uppercase tracking-[6px] font-semibold font-jost">
+          <div className="relative z-10 text-center px-4 max-w-7xl space-y-4">
+            <span className="text-white text-[17px] uppercase tracking-[6px] font-semibold font-jost">
               Legal
             </span>
-            <h1 className="text-4xl md:text-6xl font-light text-white tracking-wide font-corm leading-tight">
+            <h1 className="text-4xl md:text-[92px] font-medium text-white tracking-wide font-corm leading-tight">
               {activeTitle}
             </h1>
           </div>
