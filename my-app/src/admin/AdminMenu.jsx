@@ -21,7 +21,7 @@ const AdminMenu = () => {
   const [editingDish, setEditingDish] = useState(null);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("Starters");
+  const [category, setCategory] = useState("Breakfast");
   const [description, setDescription] = useState("");
   const [isVegetarian, setIsVegetarian] = useState(true);
   const [isAvailable, setIsAvailable] = useState(true);
@@ -34,12 +34,18 @@ const AdminMenu = () => {
   const [orderSearchQuery, setOrderSearchQuery] = useState("");
   const [updatingStatusId, setUpdatingStatusId] = useState(null);
 
-  const categories = ["Starters", "Main Course", "Desserts", "Beverages"];
+  // Dynamic Categories states
+  const [categories, setCategories] = useState(["Breakfast", "Starters", "Main Course", "Biryani", "Rice & Noodles", "Desserts", "Beverages"]);
+  const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [addingCategory, setAddingCategory] = useState(false);
+
   const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
   useEffect(() => {
     fetchDishes();
     fetchOrders();
+    fetchCategories();
 
     // Auto-poll orders every 10 seconds silently to show new room service requests in real-time
     const interval = setInterval(() => {
@@ -48,6 +54,48 @@ const AdminMenu = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/categories`);
+      const data = await response.json();
+      if (data.success) {
+        setCategories(data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch categories:", err);
+    }
+  };
+
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+    if (!newCategoryName.trim()) return;
+
+    setAddingCategory(true);
+    try {
+      const response = await fetch(`${API_URL}/api/categories`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: newCategoryName.trim() }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success(data.message || "Category added successfully!");
+        setNewCategoryName("");
+        setIsCategoryFormOpen(false);
+        fetchCategories();
+      } else {
+        throw new Error(data.message || "Failed to add category.");
+      }
+    } catch (err) {
+      toast.error(err.message || "Failed to add category.");
+    } finally {
+      setAddingCategory(false);
+    }
+  };
 
   const fetchDishes = async () => {
     setLoading(true);
@@ -92,7 +140,7 @@ const AdminMenu = () => {
     setEditingDish(null);
     setName("");
     setPrice("");
-    setCategory("Starters");
+    setCategory("Breakfast");
     setDescription("");
     setIsVegetarian(true);
     setIsAvailable(true);
@@ -278,12 +326,20 @@ const AdminMenu = () => {
         </div>
 
         {activeTab === "dishes" && (
-          <button
-            onClick={openAddModal}
-            className="bg-[#C8A64D] text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition"
-          >
-            <Plus size={16} /> Add Dish
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setIsCategoryFormOpen(true)}
+              className="border border-white/20 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium cursor-pointer hover:bg-white/5 transition"
+            >
+              <Plus size={16} /> Add Category
+            </button>
+            <button
+              onClick={openAddModal}
+              className="bg-[#C8A64D] text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition"
+            >
+              <Plus size={16} /> Add Dish
+            </button>
+          </div>
         )}
       </div>
 
@@ -697,6 +753,54 @@ const AdminMenu = () => {
                   ) : (
                     "Save Dish"
                   )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* CATEGORY ADD MODAL */}
+      {isCategoryFormOpen && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#081A2F] w-full max-w-md rounded-xl p-6 border border-white/10 shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">Add Category</h2>
+              <button
+                onClick={() => setIsCategoryFormOpen(false)}
+                className="text-white/60 hover:text-white cursor-pointer bg-transparent border-0"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleAddCategory} className="space-y-4">
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Category Name</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Desserts, Beverages"
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white"
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={() => setIsCategoryFormOpen(false)}
+                  className="px-4 py-2 border border-white/10 rounded-lg text-white hover:bg-white/5 transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={addingCategory}
+                  className="px-6 py-2 bg-[#C8A64D] text-black font-bold rounded-lg hover:bg-[#b09141] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {addingCategory ? "Adding..." : "Add"}
                 </button>
               </div>
             </form>

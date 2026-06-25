@@ -28,7 +28,7 @@ const Menu = () => {
   // Filter/Search states
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [vegetarianOnly, setVegetarianOnly] = useState(false);
+  const [dietFilter, setDietFilter] = useState("all");
 
   // Order Modal states
   const [selectedDishForOrder, setSelectedDishForOrder] = useState(null);
@@ -39,11 +39,12 @@ const Menu = () => {
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [placingOrder, setPlacingOrder] = useState(false);
 
-  const categories = ["All", "Starters", "Main Course", "Desserts", "Beverages"];
+  const [categories, setCategories] = useState(["All", "Breakfast", "Starters", "Main Course", "Biryani", "Rice & Noodles", "Desserts", "Beverages"]);
 
   useEffect(() => {
     fetchDishes();
     fetchRooms();
+    fetchCategories();
     
     // Autofill name and email from logged in user if available
     const storedUser = localStorage.getItem("user");
@@ -57,6 +58,18 @@ const Menu = () => {
       } catch (e) {}
     }
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/categories`);
+      const data = await response.json();
+      if (data.success) {
+        setCategories(["All", ...data.data]);
+      }
+    } catch (e) {
+      console.error("Failed to load categories:", e);
+    }
+  };
 
   const fetchDishes = async () => {
     setLoading(true);
@@ -103,8 +116,11 @@ const Menu = () => {
     const matchesSearch = dish.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           (dish.description && dish.description.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesCategory = selectedCategory === "All" || dish.category === selectedCategory;
-    const matchesVeg = !vegetarianOnly || dish.isVegetarian;
-    return matchesSearch && matchesCategory && matchesVeg && dish.isAvailable;
+    const matchesDiet = 
+      dietFilter === "all" ||
+      (dietFilter === "veg" && dish.isVegetarian) ||
+      (dietFilter === "nonveg" && !dish.isVegetarian);
+    return matchesSearch && matchesCategory && matchesDiet && dish.isAvailable;
   });
 
   const handlePlaceOrder = async (e) => {
@@ -231,7 +247,7 @@ const Menu = () => {
           </div>
 
           {/* Search & Veg filters */}
-          <div className="max-w-xl mx-auto px-6 mb-16 flex flex-col sm:flex-row gap-6 items-center justify-between  text-xs select-none">
+          <div className="max-w-xl mx-auto px-6 mb-16 flex flex-col sm:flex-row gap-6 items-center justify-between text-xs select-none">
             {/* Search Input */}
             <div className="relative w-full sm:w-64">
               <input
@@ -244,18 +260,44 @@ const Menu = () => {
               <Search className="absolute left-3 top-2.5 text-gray-400" size={13} />
             </div>
 
-            {/* Veg Checkbox Toggle */}
-            <label className="flex items-center gap-2 cursor-pointer select-none shrink-0">
-              <input
-                type="checkbox"
-                checked={vegetarianOnly}
-                onChange={(e) => setVegetarianOnly(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-200 bg-white text-[#c8a64d] focus:ring-[#c8a64d] accent-[#c8a64d]"
-              />
-              <span className="text-[10px] uppercase tracking-wider text-gray-500 flex items-center gap-1 font-bold">
-                <Leaf size={12} className="text-green-600" /> Veg Only
-              </span>
-            </label>
+            {/* Diet Selection Toggles */}
+            <div className="flex gap-3 items-center shrink-0">
+              <button
+                type="button"
+                onClick={() => setDietFilter("all")}
+                className={`px-4 py-2 rounded-full border text-[10px] uppercase tracking-wider font-bold transition flex items-center gap-1 cursor-pointer ${
+                  dietFilter === "all"
+                    ? "bg-[#c8a64d] text-black border-[#c8a64d]"
+                    : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+                }`}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                onClick={() => setDietFilter("veg")}
+                className={`px-4 py-2 rounded-full border text-[10px] uppercase tracking-wider font-bold transition flex items-center gap-2 cursor-pointer ${
+                  dietFilter === "veg"
+                    ? "bg-green-50 text-green-700 border-green-300"
+                    : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+                }`}
+              >
+                <img src="/veg.png" alt="Veg" className="w-3.5 h-3.5 object-contain" />
+                Veg
+              </button>
+              <button
+                type="button"
+                onClick={() => setDietFilter("nonveg")}
+                className={`px-4 py-2 rounded-full border text-[10px] uppercase tracking-wider font-bold transition flex items-center gap-2 cursor-pointer ${
+                  dietFilter === "nonveg"
+                    ? "bg-red-50 text-red-700 border-red-300"
+                    : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
+                }`}
+              >
+                <img src="/nonveg.png" alt="Non-veg" className="w-3.5 h-3.5 object-contain" />
+                Non-Veg
+              </button>
+            </div>
           </div>
 
           {/* LOADING & ERRORS */}
@@ -287,7 +329,7 @@ const Menu = () => {
   className="flex gap-4 items-start group"
 >
                   {/* Thumbnail */}
-                  <div className="w-16 h-16 rounded-full overflow-hidden shrink-0 border border-gray-200 shadow-md">
+                  <div className="w-19 h-19  overflow-hidden shrink-0 border border-gray-200 shadow-md">
                     <img 
                       src={getImageUrl(dish.image)} 
                       alt={dish.name} 
@@ -298,16 +340,21 @@ const Menu = () => {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-end gap-2 mb-1">
-                      <h4 className=" text-lg text-[#0d2b4e]  truncate">
+                      <h4 className=" text-[25px] font-medium font-corm text-[#0d2b4e]  truncate flex items-center gap-2">
+                        <img 
+                          src={dish.isVegetarian ? "/veg.png" : "/nonveg.png"} 
+                          alt={dish.isVegetarian ? "Veg" : "Non-Veg"} 
+                          className="w-4 h-4 object-contain shrink-0" 
+                        />
                         {dish.name}
                       </h4>
                       {/* Dotted connector */}
                       <div className="flex-1 border-b border-dotted border-gray-300 mx-2 mb-1.5 min-w-[20px]" />
-                      <span className=" text-sm font-semibold text-[#c8a64d] shrink-0">
+                      <span className=" text-sm font-semibold text-black shrink-0">
                         ₹{parseFloat(dish.price).toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-gray-400 text-xs font-light line-clamp-2 leading-relaxed ">
+                    <p className="text-gray-500 text-xs font-light line-clamp-2 leading-relaxed ">
                       {dish.description || "Freshly cooked exquisite dish prepared by our resort specialty chefs."}
                     </p>
                   </div>

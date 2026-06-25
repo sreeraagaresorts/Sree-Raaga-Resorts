@@ -68,6 +68,7 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/settings", require("./routes/settingsRoutes"));
 app.use("/api/dishes", require("./routes/dishRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
+app.use("/api/categories", require("./routes/categoryRoutes"));
 
 // Add your remaining routes here
 
