@@ -52,13 +52,13 @@ const Events = () => {
           <div className="absolute inset-0 bg-black/60"></div>
 
           <div className="relative z-10 text-center text-white px-4 mt-20 select-none max-w-3xl space-y-4">
-            <span className="text-[#c8a64d] text-xs uppercase tracking-[6px] font-semibold block mb-2">
+            <span className="text-white text-[17px] uppercase tracking-[6px] font-semibold block mb-2">
               MEET & CELEBRATE
             </span>
-            <h1 className="text-4xl md:text-7xl font-light  leading-tight">
+            <h1 className="text-4xl md:text-[92px] font-medium font-corm  leading-tight">
               Meet & Celebrate
             </h1>
-            <p className="text-white/80 font-light text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
+            <p className="text-white/80 font-medium text-xs md:text-[17px] max-w-xl mx-auto leading-relaxed">
               At Sree Raaga Resorts, we host custom weddings, corporate conferences, and private celebrations tailored to your expectations.
             </p>
           </div>
@@ -69,19 +69,26 @@ const Events = () => {
           <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold block">
             OUR VENUES & CELEBRATIONS
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl  font-light text-[#0d2b4e] leading-relaxed max-w-3xl mx-auto">
-            Elevate your events to new heights at Sree Raaga Resorts. With custom catering, beautiful venues, and unparalleled service, our expert team ensures your event is a grand success.
+          <h2 className="text-2xl md:text-3xl lg:text-5xl  font-medium font-corm text-[#0d2b4e]  max-w-3xl mx-auto">
+            Elevate your events to new heights at Sree Raaga Resorts.
           </h2>
 
           {/* Quick Contact links under introduction */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-8 md:gap-12 pt-6  text-xs uppercase tracking-widest text-[#0d2b4e]/80">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-8 md:gap-12 pt-6  text-xs  tracking-widest text-[#0d2b4e]/80">
             <a href="tel:08904561155" className="flex items-center gap-3 hover:text-[#c8a64d] transition-colors">
               <Phone size={14} className="text-[#c8a64d]" />
-              <span>+91 89045 61155</span>
+               <span className="text-[15px]"><a href="tel:918904561155">+91 89045 61155</a></span>
+              <span></span>
             </a>
+               <a href="tel:08904561155" className="flex items-center gap-3 hover:text-[#c8a64d] transition-colors">
+              <Phone size={14} className="text-[#c8a64d]" />
+                  <span className="text-[15px]"><a href="tel:918904381155">+91 8904381155</a></span>
+              <span></span>
+            </a>
+           
             <a href="mailto:info@sreeraagaresorts.in" className="flex items-center gap-3 hover:text-[#c8a64d] transition-colors">
               <Mail size={14} className="text-[#c8a64d]" />
-              <span>info@sreeraagaresorts.in</span>
+              <span className="text-[15px]">info@sreeraagaresorts.in</span>
             </a>
           </div>
         </section>
