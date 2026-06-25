@@ -152,7 +152,7 @@ const Footer = () => {
               </p>
               
               <a
-                href="mailto:support@sreeraagaresorts.in"
+                href="mailto:info@sreeraagaresorts.in"
                 className="block hover:text-[#c8a64d] transition duration-300"
               >
                 info@sreeraagaresorts.in

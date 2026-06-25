@@ -143,7 +143,7 @@ const AdminSettings = () => {
                   value={contactEmail}
                   onChange={(e) => setContactEmail(e.target.value)}
                   className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 pl-10 outline-none focus:border-yellow-500 transition text-white"
-                  placeholder="support@sreeraagaresorts.in"
+                  placeholder="info@sreeraagaresorts.in"
                 />
                 <Mail className="absolute left-3 top-3.5 text-white/40" size={18} />
               </div>

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const settingsSchema = new mongoose.Schema({
   resortName: { type: String, default: "Sree Raaga Resort" },
-  contactEmail: { type: String, default: "support@sreeraagaresorts.in" },
+  contactEmail: { type: String, default: "info@sreeraagaresorts.in" },
   contactPhone: { type: String, default: "+91 98765 43210" },
   address: { type: String, default: "Bypass Road, Main Highway, Kochi, Kerala" },
   checkInTime: { type: String, default: "12:00 PM" },

@@ -22,7 +22,7 @@ function formatDate(dateStr) {
  * Always catches errors gracefully to prevent crashing main HTTP workflows.
  */
 async function sendMail({ to, subject, html, text, allowAdminDesk = false }) {
-  if (to === "support@sreeraagaresorts.in" && !allowAdminDesk) {
+  if (to === "info@sreeraagaresorts.in" && !allowAdminDesk) {
     console.log(`[Email Skip] Skipping customer action email to support desk: ${to}`);
     return true;
   }
@@ -432,7 +432,7 @@ exports.sendContactSubmissionEmail = async (contact) => {
     </div>
   `;
   return sendMail({
-    to: "support@sreeraagaresorts.in",
+    to: "info@sreeraagaresorts.in",
     subject: `New Contact Inquiry: ${contact.subject || "No Subject"}`,
     html: getEmailShell("New Contact Submission", content),
     text: `New contact form submission from ${contact.name} (${contact.email}): ${contact.message}`,

@@ -183,7 +183,7 @@ const Menu = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail size={13} className="text-[#c8a64d]" />
-                <span>support@sreeraagaresorts.in</span>
+                <span>info@sreeraagaresorts.in</span>
               </div>
               <div className="flex items-center gap-2">
                 <span>📅 Mon - Sun</span>
