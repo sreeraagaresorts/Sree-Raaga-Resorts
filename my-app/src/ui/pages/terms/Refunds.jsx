@@ -11,7 +11,7 @@ const Refunds = () => {
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Room Bookings</h3>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px]">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[17px]">
           <li>All cancellations are non-refundable.</li>
           <li>No-show bookings are non-refundable.</li>
         </ul>
@@ -19,14 +19,14 @@ const Refunds = () => {
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Day Out Packages</h3>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px]">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[17px]">
           <li>All cancellations are non-refundable.</li>
         </ul>
       </div>
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Event & Banquet Bookings</h3>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px]">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[17px]">
           <li>All advance payments for weddings, receptions, corporate events, and banquet bookings are strictly non-refundable.</li>
           <li>Date changes are subject to availability.</li>
         </ul>
@@ -34,14 +34,14 @@ const Refunds = () => {
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Refund Processing</h3>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px]">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[17px]">
           <li>No refunds will be processed under any circumstances.</li>
         </ul>
       </div>
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Force Majeure</h3>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px]">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[17px]">
           <li>No refunds will be provided for cancellations caused by natural disasters, government restrictions, pandemics, or circumstances beyond our control.</li>
         </ul>
       </div>

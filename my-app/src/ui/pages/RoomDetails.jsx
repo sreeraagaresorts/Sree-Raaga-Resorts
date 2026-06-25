@@ -468,14 +468,14 @@ const RoomDetails = () => {
               {/* Price, Title & Specs */}
               <div className="select-none space-y-4">
                 <div className="font-semibold text-xs uppercase tracking-[2px] font-jost text-[#c8a64d]">
-                  ₹{parseFloat(room.price).toLocaleString()} PER NIGHT
+                  ₹{parseFloat(room.price).toLocaleString()} / NIGHT
                 </div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-light font-corm text-[#0d2b4e] leading-tight">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium font-corm text-[#0d2b4e] leading-tight">
                   {room.name}
                 </h1>
                 
                 {/* Specs Row */}
-                <div className="flex flex-wrap items-center gap-6 text-xs text-gray-500 font-jost">
+                <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 font-jost">
                   <div className="flex items-center">
                     <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                     <span>{room.area || "30 M²"} SQM</span>

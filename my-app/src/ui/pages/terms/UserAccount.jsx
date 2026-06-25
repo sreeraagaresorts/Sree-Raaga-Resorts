@@ -39,10 +39,10 @@ const UserAccount = () => {
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Account Suspension</h3>
-        <p className="text-[#2d5b8a] font-jost font-light text-[15px] mb-4 leading-relaxed">
+        <p className="text-[#2d5b8a] font-jost font-medium text-[17px] mb-4 leading-relaxed">
           We reserve the right to suspend or terminate accounts involved in:
         </p>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px]">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[17px]">
           <li>Fraudulent activity</li>
           <li>Misuse of the website</li>
           <li>Violation of resort policies</li>
@@ -52,7 +52,7 @@ const UserAccount = () => {
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Account Deletion</h3>
-        <p className="text-[#2d5b8a] font-jost font-light text-[15px] mb-4 leading-relaxed">
+        <p className="text-[#2d5b8a] font-jost font-medium text-[17px] mb-4 leading-relaxed">
           Users may request account deletion by contacting:
         </p>
         <div className="bg-[#fcfaf2] p-6 rounded-sm border border-[#0d2b4e]/5 space-y-2 text-[#2d5b8a] font-jost font-light text-sm md:text-[15px]">

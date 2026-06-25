@@ -11,10 +11,10 @@ const Shipping = () => {
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Service Delivery</h3>
-        <p className="text-[#2d5b8a] font-jost font-light text-[15px] mb-4 leading-relaxed">
+        <p className="text-[#2d5b8a] font-jost font-medium text-[17px] mb-4 leading-relaxed">
           Upon successful booking and payment:
         </p>
-        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[15px]">
+        <ul className="list-disc pl-6 space-y-2 text-[#2d5b8a] font-jost font-medium text-[17px]">
           <li>Booking confirmation will be sent by email and/or SMS.</li>
           <li>Reservation details will be available upon arrival at the resort.</li>
           <li>Event bookings will be confirmed through written communication from our team.</li>
