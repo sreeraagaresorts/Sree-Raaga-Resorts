@@ -4,7 +4,7 @@ const Refunds = () => {
   return (
     <div className="space-y-8 text-[#0d2b4e]">
       <div>
-        <p className="text-[#2d5b8a] font-jost font-light text-[15px] leading-relaxed">
+        <p className="text-[#2d5b8a] font-jost font-light text-[17px] leading-relaxed">
           Please read the cancellation and refund policy carefully. All bookings are subject to the following non-refundable terms.
         </p>
       </div>

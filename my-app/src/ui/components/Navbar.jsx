@@ -286,7 +286,7 @@ const Navbar = () => {
             {/* Telephone Line */}
             <div className={`hidden md:flex items-center gap-2.5 text-white/80 hover:text-white transition-all duration-500 ${isOpen ? "opacity-0 pointer-events-none blur-sm" : ""}`}>
               <Phone size={14} className="text-[#c8a64d] shrink-0" />
-              <span className="text-xs lg:text-sm tracking-widest font-jost">089045 61155</span>
+              <span className="text-xs lg:text-sm tracking-widest font-jost">+91 89045 61155</span>
             </div>
           </div>
 
@@ -515,7 +515,7 @@ className="text-3xl md:text-3xl font-light uppercase tracking-[8px] text-white" 
                   Phone Support
                 </span>
                 <span className="text-xl text-gray-700 font-light">
-                  089045 61155
+                  +91 89045 61155
                 </span>
                 <span className="text-xl text-gray-700 font-light mt-0.5">
                   info@sreeraagaresorts.in
@@ -528,7 +528,7 @@ className="text-3xl md:text-3xl font-light uppercase tracking-[8px] text-white" 
                   Connect With Us
                 </span>
                 <span className="text-xl text-gray-700 font-light">
-                  089045 61155
+                  +91 89045 61155
                 </span>
                 {/* Social icons */}
                 {/* <div className="flex gap-4 mt-3">

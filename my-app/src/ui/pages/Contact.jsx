@@ -212,7 +212,7 @@ const Contact = () => {
               </p>
               <p className=" text-xs">
                 <span className="text-[#c8a64d] font-semibold">Email:</span> info@sreeraagaresorts.in<br />
-                <span className="text-[#c8a64d] font-semibold">Phone:</span> 089045 61155
+                <span className="text-[#c8a64d] font-semibold">Phone:</span> +91 89045 61155
               </p>
             </div>
 

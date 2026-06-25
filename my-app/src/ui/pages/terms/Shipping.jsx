@@ -4,7 +4,7 @@ const Shipping = () => {
   return (
     <div className="space-y-8 text-[#0d2b4e]">
       <div>
-        <p className="text-[#2d5b8a] font-jost font-light text-[15px] leading-relaxed">
+        <p className="text-[#2d5b8a] font-jost font-light text-[17px] leading-relaxed">
           Sree Raaga Resorts does not sell or ship physical products through its website.
         </p>
       </div>
@@ -23,7 +23,7 @@ const Shipping = () => {
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
         <h3 className="text-2xl font-corm font-light tracking-wide mb-4 text-[#0d2b4e]">Electronic Delivery</h3>
-        <p className="text-[#2d5b8a] font-jost font-light text-[15px] leading-relaxed">
+        <p className="text-[#2d5b8a] font-jost font-light text-[17px] leading-relaxed">
           All services purchased through the website are delivered electronically in the form of booking confirmations and reservation records.
         </p>
       </div>

@@ -77,7 +77,7 @@ const Events = () => {
           <div className="flex flex-col sm:flex-row justify-center items-center gap-8 md:gap-12 pt-6  text-xs uppercase tracking-widest text-[#0d2b4e]/80">
             <a href="tel:08904561155" className="flex items-center gap-3 hover:text-[#c8a64d] transition-colors">
               <Phone size={14} className="text-[#c8a64d]" />
-              <span>089045 61155</span>
+              <span>+91 89045 61155</span>
             </a>
             <a href="mailto:info@sreeraagaresorts.in" className="flex items-center gap-3 hover:text-[#c8a64d] transition-colors">
               <Mail size={14} className="text-[#c8a64d]" />
