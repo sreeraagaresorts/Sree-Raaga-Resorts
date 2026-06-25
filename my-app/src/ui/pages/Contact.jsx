@@ -75,7 +75,7 @@ const Contact = () => {
         
         {/* HERO BANNER SECTION */}
         <section
-          className="relative h-[55vh] flex items-center justify-center bg-cover bg-center"
+          className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000')",

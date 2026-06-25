@@ -161,7 +161,7 @@ const Menu = () => {
         
         {/* ================= HERO BANNER ================= */}
         <section
-          className="relative h-[55vh] flex items-center justify-center bg-cover bg-center select-none"
+          className="relative h-[65vh] flex items-center justify-center bg-cover bg-center select-none"
           style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2000')"
           }}
@@ -282,24 +282,23 @@ const Menu = () => {
           {!loading && !error && filteredDishes.length > 0 && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-y-12 md:gap-x-16 max-w-6xl mx-auto px-6">
               {filteredDishes.map((dish) => (
-                <div 
-                  key={dish.id || dish._id} 
-                  onClick={() => setSelectedDishForOrder(dish)}
-                  className="flex gap-4 items-start cursor-pointer group hover:opacity-90 transition"
-                >
+               <div 
+  key={dish.id || dish._id}
+  className="flex gap-4 items-start group"
+>
                   {/* Thumbnail */}
                   <div className="w-16 h-16 rounded-full overflow-hidden shrink-0 border border-gray-200 shadow-md">
                     <img 
                       src={getImageUrl(dish.image)} 
                       alt={dish.name} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
+                      className="w-full h-full object-cover" 
                     />
                   </div>
                   
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-end gap-2 mb-1">
-                      <h4 className=" text-lg text-[#0d2b4e] group-hover:text-[#c8a64d] transition truncate">
+                      <h4 className=" text-lg text-[#0d2b4e]  truncate">
                         {dish.name}
                       </h4>
                       {/* Dotted connector */}

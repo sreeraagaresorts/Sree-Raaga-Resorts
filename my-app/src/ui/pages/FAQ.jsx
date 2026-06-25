@@ -74,7 +74,7 @@ const FAQ = () => {
         
         {/* Hero Section */}
         <section
-          className="relative h-[55vh] flex items-center justify-center bg-cover bg-center"
+          className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=2000')",

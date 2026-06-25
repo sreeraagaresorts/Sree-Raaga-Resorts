@@ -12,7 +12,7 @@ const Dine = () => {
         
         {/* Hero Section */}
         <section
-          className="relative h-[55vh] flex items-center justify-center bg-cover bg-center select-none"
+          className="relative h-[65vh] flex items-center justify-center bg-cover bg-center select-none"
           style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2000')"
           }}
