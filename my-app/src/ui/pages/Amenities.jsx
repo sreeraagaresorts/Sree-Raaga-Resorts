@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
+import { ChevronDown, ArrowRight } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -151,6 +152,29 @@ const Amenities = () => {
     setActiveTab(key);
   };
 
+  const navigate = useNavigate();
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [roomType, setRoomType] = useState("Rooms");
+  const [guests, setGuests] = useState("Guests");
+
+  const checkInRef = useRef(null);
+  const checkOutRef = useRef(null);
+
+  const handleCheckInChange = (e) => {
+    setCheckIn(e.target.value);
+    setTimeout(() => {
+      if (checkOutRef.current) {
+        checkOutRef.current.showPicker ? checkOutRef.current.showPicker() : checkOutRef.current.click();
+      }
+    }, 150);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate("/rooms", { state: { checkIn, checkOut, guests, roomType } });
+  };
+
   return (
     <>
       <Navbar />
@@ -171,14 +195,14 @@ const Amenities = () => {
             <h1 className="text-5xl md:text-7xl font-light font-corm leading-tight tracking-wide text-white">
               Kayak Surfing
             </h1>
-            <p className="text-white/80 font-jost font-light text-xs md:text-sm tracking-widest uppercase max-w-2xl mx-auto leading-relaxed">
+            {/* <p className="text-white/80 font-jost font-light text-xs md:text-sm tracking-widest uppercase max-w-2xl mx-auto leading-relaxed">
               Active recreation is an integral part of your stay. Paddle boarding is the perfect way to explore the beauty of the resort.
-            </p>
+            </p> */}
           </div>
         </section>
 
         {/* ================= 2. WATER SPORTS DESCRIPTION SECTION ================= */}
-        <section className="py-24 px-6 bg-white text-center">
+        <section className="py-24 px-6 bg-[] text-center">
           <div className="max-w-3xl mx-auto space-y-6">
             <div className="text-[#c8a64d] flex justify-center">
               <WaterSportsIcon className="w-12 h-12" />
@@ -193,12 +217,13 @@ const Amenities = () => {
               An integral part of relax and perfect experience of your stay is water sports. Paddle boarding, kayaking, and surfing activities are designed to create memorable moments for you and your family.
             </p>
             <div className="pt-4">
-              <Link
-                to="/contact"
-                className="inline-block bg-[#c8a64d] text-white px-10 py-4 text-xs uppercase tracking-widest font-semibold hover:bg-[#0d2b4e] transition duration-300 rounded-sm"
-              >
-                BOOK NOW
-              </Link>
+           <Link
+                   to="/rooms"
+                   className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                 >
+                   <span>—</span>
+                   Book now
+                 </Link>
             </div>
           </div>
         </section>
@@ -227,12 +252,13 @@ const Amenities = () => {
                   An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.
                 </p>
                 <div className="pt-4">
-                  <Link 
-                    to="/menu" 
-                    className="inline-block border border-[#0d2b4e] text-[#0d2b4e] px-8 py-3.5 text-xs uppercase tracking-widest font-semibold hover:bg-[#0d2b4e] hover:text-white transition duration-300 rounded-sm"
-                  >
-                    VIEW OUR MENU
-                  </Link>
+                     <Link
+                   to="/about"
+                   className="inline-flex items-center gap-4 px-6 py-4  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                 >
+                   <span>—</span>
+                   Discover More
+                 </Link>
                 </div>
               </div>
             </div>
@@ -241,7 +267,7 @@ const Amenities = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 lg:order-2 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?q=80&w=800" 
+                  src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=800" 
                   alt="Spa & Wellness"
                   className="h-full w-full"
                 />
@@ -257,12 +283,13 @@ const Amenities = () => {
                   Indulge in absolute relaxation. Rejuvenate your mind, body, and soul with our curated therapies, healing massages, and organic spa treatments administered by expert therapists.
                 </p>
                 <div className="pt-4">
-                  <Link 
-                    to="/contact" 
-                    className="inline-block border border-[#0d2b4e] text-[#0d2b4e] px-8 py-3.5 text-xs uppercase tracking-widest font-semibold hover:bg-[#0d2b4e] hover:text-white transition duration-300 rounded-sm"
-                  >
-                    VIEW SPA
-                  </Link>
+                <Link
+                   to="/about"
+                   className="inline-flex items-center gap-4 px-6 py-4  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                 >
+                   <span>—</span>
+                   Discover More
+                 </Link>
                 </div>
               </div>
             </div>
@@ -287,12 +314,13 @@ const Amenities = () => {
                   Keep up with your fitness regime. Our state-of-the-art gym is equipped with premium cardio machines, strength training equipment, and free weights for a complete workout.
                 </p>
                 <div className="pt-4">
-                  <Link 
-                    to="/contact" 
-                    className="inline-block border border-[#0d2b4e] text-[#0d2b4e] px-8 py-3.5 text-xs uppercase tracking-widest font-semibold hover:bg-[#0d2b4e] hover:text-white transition duration-300 rounded-sm"
-                  >
-                    VIEW GYM
-                  </Link>
+                   <Link
+                   to="/about"
+                   className="inline-flex items-center gap-4 px-6 py-4  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                 >
+                   <span>—</span>
+                   Discover More
+                 </Link>
                 </div>
               </div>
             </div>
@@ -315,21 +343,130 @@ const Amenities = () => {
             <h2 className="text-4xl md:text-5xl font-light font-corm text-white">
               Book Your Stay Now
             </h2>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 bg-white/10 backdrop-blur-md p-6 rounded-lg max-w-4xl mx-auto border border-white/10 mt-8">
-              <div className="w-full md:flex-1 text-left">
-                <label className="block text-[10px] text-white/60 uppercase tracking-widest mb-2 pl-2 font-jost">Check In</label>
-                <input type="date" className="w-full bg-white/20 border border-white/10 text-white px-4 py-3 outline-none text-sm font-jost" />
+            <form
+              onSubmit={handleSearch}
+              className="max-w-5xl w-full mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl mt-8 overflow-hidden"
+            >
+              {/* DATE */}
+              <div
+                onClick={() => checkInRef.current?.showPicker?.()}
+                className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group transition-all duration-300"
+              >
+                <div className="flex-1 text-left">
+                  <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
+                    Dates
+                  </p>
+                  <span className="text-white text-xs lg:text-sm">
+                    {checkIn
+                      ? new Date(checkIn).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                        })
+                      : "Check In"}
+                    {" - "}
+                    {checkOut
+                      ? new Date(checkOut).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                        })
+                      : "Check Out"}
+                  </span>
+                </div>
+                <ChevronDown
+                  size={14}
+                  className="text-white/60 group-hover:text-white transition"
+                />
+                <input
+                  ref={checkInRef}
+                  type="date"
+                  value={checkIn}
+                  onChange={handleCheckInChange}
+                  className="absolute inset-0 opacity-0 pointer-events-none"
+                  required
+                />
+                <input
+                  ref={checkOutRef}
+                  type="date"
+                  value={checkOut}
+                  onChange={(e) => setCheckOut(e.target.value)}
+                  className="hidden"
+                  required
+                />
               </div>
-              <div className="w-full md:flex-1 text-left">
-                <label className="block text-[10px] text-white/60 uppercase tracking-widest mb-2 pl-2 font-jost">Check Out</label>
-                <input type="date" className="w-full bg-white/20 border border-white/10 text-white px-4 py-3 outline-none text-sm font-jost" />
+
+              {/* ROOM */}
+              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10">
+                <div className="flex-1 text-left">
+                  <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
+                    Room Type
+                  </p>
+                  <span className="text-white text-xs lg:text-sm">
+                    {roomType}
+                  </span>
+                </div>
+                <ChevronDown
+                  size={14}
+                  className="text-white/60"
+                />
+                <select
+                  value={roomType}
+                  onChange={(e) => setRoomType(e.target.value)}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                >
+                  <option value="Rooms" disabled hidden>
+                    Rooms
+                  </option>
+                  <option value="Any Suite">Any Suite</option>
+                  <option value="Executive Room">Executive Room</option>
+                  <option value="Private Villa">Private Villa</option>
+                  <option value="Duplex Villa">Duplex Villa</option>
+                </select>
               </div>
-              <div className="w-full md:w-auto self-end pt-4 md:pt-0">
-                <Link to="/rooms" className="block w-full bg-[#c8a64d] hover:bg-[#0d2b4e] text-white text-xs font-semibold uppercase tracking-widest px-8 py-4 transition duration-300 rounded-sm">
-                  CHECK AVAILABILITY
-                </Link>
+
+              {/* GUESTS */}
+              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3">
+                <div className="flex-1 text-left">
+                  <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
+                    Guests
+                  </p>
+                  <span className="text-white text-xs lg:text-sm">
+                    {guests === "Guests"
+                      ? "Guests"
+                      : guests === "1"
+                      ? "1 Guest"
+                      : `${guests} Guests`}
+                  </span>
+                </div>
+                <ChevronDown
+                  size={14}
+                  className="text-white/60"
+                />
+                <select
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                >
+                  <option value="Guests" disabled hidden>
+                    Guests
+                  </option>
+                  <option value="1">1 Guest</option>
+                  <option value="2">2 Guests</option>
+                  <option value="3">3 Guests</option>
+                  <option value="4">4+ Guests</option>
+                </select>
               </div>
-            </div>
+
+              {/* SEARCH BUTTON */}
+              <button
+                type="submit"
+                className="group mt-4 md:mt-0 md:ml-4 h-12 w-12 rounded-full bg-[#c8a64d] text-[#04121a] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shrink-0 cursor-pointer"
+              >
+                <ArrowRight
+                  size={18}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </button>
+            </form>
           </div>
         </section>
 
@@ -362,35 +499,36 @@ const Amenities = () => {
         </section>
 
         {/* ================= 6. EXCEPTIONAL GASTRONOMY SECTION ================= */}
-        <section className="py-24 bg-[#fcfaf2] border-t border-[#0d2b4e]/5">
-          <div className="max-w-7xl mx-auto px-6">
+        <section className="pt-24 bg-[#fcfaf2] border-t border-[#0d2b4e]/5">
+          <div className=" ">
             
             <div className="text-center mb-16 select-none">
               <span className="text-gray-400 uppercase tracking-[4px] text-[12px] block mb-4 font-jost">
                 Sree Raaga Resorts Luxury Hotel
               </span>
               <h2 className="text-3xl md:text-[56px] font-medium font-corm text-[#0d2b4e] leading-snug">
-                Exceptional Gastronomy In Beautiful Spaces
+                Exceptional Gastronomy <br>
+                </br>In Beautiful Spaces
               </h2>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
               
               {/* Left Side: Dynamic image display */}
-              <div className="lg:col-span-7 h-[450px] lg:h-[600px] relative group w-full overflow-hidden shadow-lg rounded-sm">
+              <div className="lg:col-span-7 h-[450px] lg:h-[800px] relative group w-full overflow-hidden shadow-lg rounded-sm">
                 <WindowReveal 
                   src={tabData[activeTab].image} 
                   alt={tabData[activeTab].title}
                   className="h-full w-full"
                 />
-                <Link 
-                  to="/rooms"
-                  className="absolute bottom-8 right-8 z-20 w-24 h-24 rounded-full bg-[#0d2b4e]/85 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
-                >
-                  <span className="text-[10px] font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
-                    Book Now
-                  </span>
-                </Link>
+               <Link
+  to="/rooms"
+  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-24 h-24 rounded-full bg-[#0d2b4e]/85 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
+>
+  <span className="text-[10px] font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
+    Book Now
+  </span>
+</Link>
               </div>
 
               {/* Right Side: Static interactive tabs */}
@@ -405,7 +543,7 @@ const Amenities = () => {
                     <div
                       key={key}
                       onClick={() => handleTabClick(key)}
-                      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-3 border-b border-[#0d2b4e]/5 last:border-b-0"
+                      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-3 px-2 border-b border-[#0d2b4e]/5 last:border-b-0"
                     >
                       <div className={`transition-colors duration-300 ${tabColor}`}>
                         {tabData[key].icon}

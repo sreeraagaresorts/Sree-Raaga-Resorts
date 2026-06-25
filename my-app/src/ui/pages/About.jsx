@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import restaurantIcon from "../../assets/images/icons/restaurant.svg";
+import spaIcon from "../../assets/images/icons/spa.svg";
+import fitnessIcon from "../../assets/images/icons/fitness.svg";
 
 // Custom "Window Open" Reveal scroll animation component
 function WindowReveal({ src, alt, className = "", delay = 0 }) {
@@ -82,7 +85,7 @@ const About = () => {
             <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-xs font-semibold ">
               Sree Raaga Resorts
             </span>
-            <h1 className="text-4xl md:text-6xl font-light  leading-tight">
+            <h1 className="text-4xl md:text-6xl font-medium  font-corm leading-tight">
               About Sree Raaga Resorts
             </h1>
           </div>
@@ -278,22 +281,26 @@ const About = () => {
             {[
               {
                 title: "Restaurant & Bars",
-                image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800"
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800",
+                icon: restaurantIcon
               },
               {
                 title: "Spa & Wellness",
-                image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=800"
+                image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=800",
+                icon: spaIcon
               },
               {
                 title: "Fitness Center",
-                image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800"
+                image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800",
+                icon: fitnessIcon
               }
             ].map((act, idx) => (
-              <div key={idx} className="relative overflow-hidden group  aspect-[3/4] shadow-md">
+              <div key={idx} className="relative overflow-hidden group aspect-[3/4] shadow-md">
                 <WindowReveal src={act.image} alt={act.title} className="w-full h-full" delay={idx * 0.1} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10"></div>
-                <div className="absolute bottom-8 left-0 right-0 z-20 text-center">
-                  <h3 className="text-xl md:text-3xl  font-medium font-corm text-white uppercase tracking-wide">
+                <div className="absolute bottom-8 left-0 right-0 z-20 flex flex-col items-center justify-center gap-3 text-center">
+                  <img src={act.icon} alt={act.title} className="w-8 h-8 group-hover:scale-110  transition-transform duration-300 object-contain" />
+                  <h3 className="text-xl md:text-3xl font-medium font-corm text-white  tracking-wide">
                     {act.title}
                   </h3>
                 </div>
@@ -306,7 +313,7 @@ const About = () => {
     
         {/* ================= CALL TO ACTION (CTA) ================= */}
         <section
-          className="relative py-28 px-6 bg-cover bg-center flex flex-col items-center justify-center text-center"
+          className="relative py-42 px-6 bg-cover bg-center flex flex-col items-center justify-center text-center"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=2000')",
@@ -314,7 +321,7 @@ const About = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
           <div className="relative z-10 text-white select-none max-w-3xl">
-            <h2 className="text-3xl md:text-6xl font-medium font-corm  leading-snug mb-8">
+            <h2 className="text-3xl md:text-7xl font-medium font-corm  leading-snug mb-8">
               Luxury Awaits, <br /> Book Your Stay Today!
             </h2>
             <Link
