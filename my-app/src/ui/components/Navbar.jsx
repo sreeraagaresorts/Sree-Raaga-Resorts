@@ -285,8 +285,8 @@ const Navbar = () => {
 
             {/* Telephone Line */}
             <div className={`hidden md:flex items-center gap-2.5 text-white/80 hover:text-white transition-all duration-500 ${isOpen ? "opacity-0 pointer-events-none blur-sm" : ""}`}>
-              <Phone size={14} className="text-[#c8a64d] shrink-0" />
-              <span className="text-xs lg:text-sm tracking-widest font-jost">+91 89045 61155</span>
+              <Phone size={14} className="text-white shrink-0" />
+              <span className="text-xs lg:text-[16px]  tracking-widest font-jost">+91 89045 61155</span>
             </div>
           </div>
 
@@ -320,7 +320,7 @@ const Navbar = () => {
               {user ? (
                 <Link
                   to={user.role === "admin" ? "/admin" : "/dashboard/profile"}
-                  className="w-10 h-10 rounded-full border border-[#c8a64d] flex items-center justify-center text-[#c8a64d] hover:bg-[#c8a64d] hover:text-black transition duration-300"
+                  className="w-10 h-10 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#c8a64d] hover:text-black transition duration-300"
                   title={user.full_name}
                 >
                   <User size={15} />
