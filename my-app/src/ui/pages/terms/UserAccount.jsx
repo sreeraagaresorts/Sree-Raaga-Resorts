@@ -10,35 +10,35 @@ const UserAccount = () => {
       </div>
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
-        <h3 className="text-2xl font-corm font-light tracking-wide mb-4 text-[#0d2b4e]">Account Registration</h3>
+        <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Account Registration</h3>
         <p className="text-[#2d5b8a] font-jost font-light text-[17px] leading-relaxed">
           Users may create an account to manage bookings, reservations, and communication preferences.
         </p>
       </div>
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
-        <h3 className="text-2xl font-corm font-light tracking-wide mb-4 text-[#0d2b4e]">Account Information</h3>
+        <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Account Information</h3>
         <p className="text-[#2d5b8a] font-jost font-light text-[17px] leading-relaxed">
           Users must provide accurate and complete information during registration.
         </p>
       </div>
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
-        <h3 className="text-2xl font-corm font-light tracking-wide mb-4 text-[#0d2b4e]">Password Security</h3>
+        <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Password Security</h3>
         <p className="text-[#2d5b8a] font-jost font-light text-[17px] leading-relaxed">
           Users are responsible for maintaining the confidentiality of their login credentials.
         </p>
       </div>
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
-        <h3 className="text-2xl font-corm font-light tracking-wide mb-4 text-[#0d2b4e]">Unauthorized Access</h3>
+        <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Unauthorized Access</h3>
         <p className="text-[#2d5b8a] font-jost font-light text-[17px] leading-relaxed">
           Users must immediately notify Sree Raaga Resorts if they suspect unauthorized access to their account.
         </p>
       </div>
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
-        <h3 className="text-2xl font-corm font-light tracking-wide mb-4 text-[#0d2b4e]">Account Suspension</h3>
+        <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Account Suspension</h3>
         <p className="text-[#2d5b8a] font-jost font-light text-[15px] mb-4 leading-relaxed">
           We reserve the right to suspend or terminate accounts involved in:
         </p>
@@ -51,7 +51,7 @@ const UserAccount = () => {
       </div>
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
-        <h3 className="text-2xl font-corm font-light tracking-wide mb-4 text-[#0d2b4e]">Account Deletion</h3>
+        <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Account Deletion</h3>
         <p className="text-[#2d5b8a] font-jost font-light text-[15px] mb-4 leading-relaxed">
           Users may request account deletion by contacting:
         </p>
@@ -63,7 +63,7 @@ const UserAccount = () => {
       </div>
 
       <div className="border-t border-[#0d2b4e]/10 pt-6">
-        <h3 className="text-2xl font-corm font-light tracking-wide mb-4 text-[#0d2b4e]">Limitation of Liability</h3>
+        <h3 className="text-2xl  font-corm font-medium tracking-wide mb-4 text-[#0d2b4e]">Limitation of Liability</h3>
         <p className="text-[#2d5b8a] font-jost font-light text-[17px] leading-relaxed">
           Sree Raaga Resorts shall not be liable for losses resulting from unauthorized access caused by user negligence.
         </p>

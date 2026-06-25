@@ -77,7 +77,7 @@ const LegalLayout = () => {
 
           {/* Policy Detail Pane */}
           <div className="lg:col-span-9 bg-white border border-gray-100 p-8 md:p-12 shadow-sm rounded-sm">
-            <h2 className="text-3xl font-corm font-light mb-8 text-[#0d2b4e] pb-4 border-b border-[#0d2b4e]/10 tracking-wide">
+            <h2 className="text-3xl md:text-[40px] font-corm font-medium mb-8 text-[#0d2b4e] pb-4 border-b border-[#0d2b4e]/10 tracking-wide">
               {activeTitle}
             </h2>
             <div className="text-sm md:text-[15px] text-[#2d5b8a] leading-relaxed font-jost font-light">
