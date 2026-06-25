@@ -167,19 +167,23 @@ const Menu = () => {
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
-          <div className="relative z-10 text-center text-white px-6 w-full max-w-5xl">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold ">
+          <div className="relative z-10 text-center text-white px-6 w-full max-w-7xl">
+            <span className="text=white uppercase tracking-[6px] block  text-[17px] font-semibold ">
               Restaurant
             </span>
-            <h1 className="text-4xl md:text-6xl font-light  leading-tight mb-8">
+            <h1 className="text-4xl md:text-[92px] font-medium font-corm  leading-tight mb-8">
               Restaurent Menu
             </h1>
             
             {/* Details Row */}
-            <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 pt-8 border-t border-white/20  text-[10px] md:text-xs uppercase tracking-widest text-white/80">
+            <div className=" flex flex-wrap justify-center gap-x-8 gap-y-4 pt-8 border-t border-white/20  text-[10px] md:text-sm  tracking-widest text-white/80">
               <div className="flex items-center gap-2">
                 <Phone size={13} className="text-[#c8a64d]" />
-                <span>+91 99000 11550</span>
+                   <span><a href="tel:918904381155">+91 8904381155</a></span>
+              </div>
+                <div className="flex items-center gap-2">
+                <Phone size={13} className="text-[#c8a64d]" />
+               <span><a href="tel:918904381155">+91 89045 61155</a></span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail size={13} className="text-[#c8a64d]" />
@@ -197,38 +201,7 @@ const Menu = () => {
             </div>
           </div>
         </section>
-
-        {/* ================= INTRO DESCRIPTION SECTION ================= */}
-        <section className="py-20 max-w-4xl mx-auto px-6 text-center select-none">
-          <h2 className="text-3xl font-light text-[#0d2b4e] leading-relaxed mb-6">
-            An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.
-          </h2>
-          <p className="text-gray-500 font-light text-xs md:text-sm leading-relaxed max-w-2xl mx-auto ">
-            Our commitment to quality starts with the selection of the finest ingredients from organic farms. Each dish is a masterpiece designed to delight your taste buds and create memorable dining experiences for our guests.
-          </p>
-        </section>
-
-        {/* ================= RESORT GALLERY IMAGES ================= */}
-        <section className="pb-16 select-none">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto px-6">
-            {[
-              "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=600", // pool
-              "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600", // resort
-              "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600", // dining
-              "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600"  // table
-            ].map((img, idx) => (
-              <div key={idx} className="aspect-[3/4] overflow-hidden rounded-sm shadow-md">
-                <img 
-                  src={img} 
-                  alt={`Resort gallery ${idx + 1}`} 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ================= MENU HIGHLIGHTS SECTION ================= */}
+            {/* ================= MENU HIGHLIGHTS SECTION ================= */}
         <section className="py-16 max-w-7xl mx-auto px-6 pb-28">
           
           <div className="text-center mb-10 select-none">
@@ -344,6 +317,36 @@ const Menu = () => {
             </div>
           )}
         </section>
+
+        {/* ================= INTRO DESCRIPTION SECTION ================= */}
+        <section className="py-20 max-w-4xl mx-auto px-6 text-center select-none">
+          <h2 className="text-3xl font-medium font-corm text-[#0d2b4e] leading-relaxed mb-6">
+            An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.
+          </h2>
+    
+        </section>
+
+        {/* ================= RESORT GALLERY IMAGES ================= */}
+        <section className="pb-16 select-none">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto px-6">
+            {[
+              "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=600", // pool
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600", // resort
+              "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600", // dining
+              "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600"  // table
+            ].map((img, idx) => (
+              <div key={idx} className="aspect-[3/4] overflow-hidden rounded-sm shadow-md">
+                <img 
+                  src={img} 
+                  alt={`Resort gallery ${idx + 1}`} 
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+
+    
 
       </div>
 

@@ -84,10 +84,10 @@ const Contact = () => {
           <div className="absolute inset-0 bg-black/60"></div>
 
           <div className="relative z-10 text-center px-4 max-w-7xl space-y-4">
-            <h1 className="text-5xl md:text-7xl font-light  text-white tracking-wide">
+            <h1 className="text-5xl md:text-[92px] font-medium font-corm text-white tracking-wide">
               Contact
             </h1>
-            <p className="text-white/80 font-light text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
+            <p className="text-white/80 font-medium text-sm md:text-[17px] font-corm leading-relaxed max-w-2xl mx-auto">
               Would you like to find out how to get to us? Have a question you want to ask? 
               Tell us you want to say hello? Let us know what you need to know.
             </p>
@@ -104,10 +104,10 @@ const Contact = () => {
               <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold mb-2 block">
                 GET IN TOUCH
               </span>
-              <h2 className="text-3xl md:text-5xl  text-[#0d2b4e] font-light">
+              <h2 className="text-3xl md:text-6xl  text-[#0d2b4e] font-medium font-corm">
                 Leave Us Your Info
               </h2>
-              <p className="text-gray-500 text-xs md:text-sm max-w-xl leading-relaxed mt-4 font-light">
+              <p className="text-gray-500 text-xs md:text-[17px] max-w-xl leading-relaxed mt-4 font-light">
                 Please complete the form below. A guest representative from Sree Raaga Resorts 
                 will reach out to you within 24 business hours regarding your inquiry.
               </p>
@@ -220,7 +220,7 @@ const Contact = () => {
               href="https://maps.google.com/?q=Budigere+Bypass+Road+Devanahalli+Karnataka"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-fit border border-[#c8a64d] text-[#c8a64d] hover:bg-[#c8a64d] hover:text-[#071524] px-8 py-3 text-xs uppercase tracking-[2px] font-semibold transition mt-6"
+              className="w-fit border border-[#c8a64d]  bg-[#c8a64d] text-[#071524] hover:bg-transparent hover:text-white transition duration px-8 py-3 text-xs uppercase tracking-[2px] font-semibold transition mt-6"
             >
               Get Directions
             </a>
@@ -228,18 +228,18 @@ const Contact = () => {
         </section>
 
         {/* INSTAGRAM SECTION */}
-        <section className="py-24 bg-white text-center">
-          <div className="max-w-7xl mx-auto space-y-12">
+        <section className="pt-24 bg-white text-center">
+          <div className=" space-y-12">
             <div>
               <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold mb-2 block">
                 INSTAGRAM
               </span>
-              <h2 className="text-3xl md:text-5xl  text-[#0d2b4e] font-light">
+              <h2 className="text-3xl md:text-6xl font-corm  text-[#0d2b4e] font-medium">
                 Follow us on Instagram
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 px-6">
+            <div className="grid grid-cols-2 md:grid-cols-5  ">
               {[
                 "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=600",
                 "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
