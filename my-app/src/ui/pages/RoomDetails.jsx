@@ -756,7 +756,7 @@ const RoomDetails = () => {
                       className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] outline-none cursor-pointer appearance-none font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <option value="1">1 Adult </option>
-                      <option value="2">Adults </option>
+                      <option value="2">2 Adults </option>
                       <option value="3">3 Adults </option>
                       <option value="4">4 Adults </option>
                       <option value="5">5 Adults </option>

@@ -38,7 +38,7 @@ const LegalLayout = () => {
         
         {/* Hero Section */}
         <section
-          className="relative h-[45vh] flex items-center justify-center bg-cover bg-center"
+          className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=2000')",
