@@ -71,7 +71,7 @@ const Contact = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-white text-[#0d2b4e]  overflow-x-hidden">
+      <div className=" text-[#0d2b4e]  overflow-x-hidden">
         
         {/* HERO BANNER SECTION */}
         <section
