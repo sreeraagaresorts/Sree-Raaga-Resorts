@@ -179,7 +179,7 @@ const Contact = () => {
           {/* Map Left */}
           <div className="w-full lg:w-1/2 min-h-[450px] lg:min-h-0 lg:h-full bg-gray-100 relative">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.3402484643033!2d77.74797071110034!3d13.14102921115858!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1c251f22dfab%3A0xe54d9c79216d7a42!2sBudigere%20Bypass%20Rd%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1719000000000!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.413190293874!2d77.74043089999999!3d13.1363168!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1ba595b168bb%3A0xca9bfc4b61cad568!2sSree%20Raaga%20Resorts!5e0!3m2!1sen!2sin!4v1782304690046!5m2!1sen!2sin"
               width="100%"
               height="100%"
               style={{ border: 0 }}
