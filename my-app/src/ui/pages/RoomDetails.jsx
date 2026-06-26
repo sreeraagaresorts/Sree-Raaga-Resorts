@@ -689,7 +689,7 @@ const RoomDetails = () => {
                   Room Rules
                 </h3>
                 
-                <ul className="space-y-4  text-xs md:text-[17px] text-gray-500 list-disc pl-5 select-none">
+                <ul className="space-y-4  text-xs md:text-[17px] text-gray-700 list-disc pl-5 select-none">
                   <li>Check-in from 9:00 AM - anytime</li>
                   <li>Check-out: 11:00 AM</li>
                   <li>Self-check-in with lockbox</li>
