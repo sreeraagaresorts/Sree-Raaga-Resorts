@@ -75,7 +75,7 @@ const Contact = () => {
         
         {/* HERO BANNER SECTION */}
         <section
-          className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
+          className="relative h-[50vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000')",
@@ -99,13 +99,13 @@ const Contact = () => {
               <div className="w-12 h-12 rounded-full bg-[#c8a64d]/10 flex items-center justify-center text-[#c8a64d] mb-4">
                 <Mail className="w-5 h-5" />
               </div>
-              <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold mb-2 block">
+              <span className="text-[#c8a64d] text-[17px] uppercase tracking-[4px] font-medium mb-2 block">
                 GET IN TOUCH
               </span>
               <h2 className="text-3xl md:text-6xl  text-[#0d2b4e] font-medium font-corm">
                 Leave Us Your Info
               </h2>
-              <p className="text-gray-500 text-xs md:text-[17px] max-w-xl leading-relaxed mt-4 font-light">
+              <p className="text-gray-500 text-[17px] max-w-xl leading-relaxed mt-4 font-medium">
                 Please complete the form below. A guest representative from Sree Raaga Resorts 
                 will reach out to you within 24 business hours regarding your inquiry.
               </p>
@@ -120,7 +120,7 @@ const Contact = () => {
                     placeholder="First Name"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-sm"
+                    className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-[17px]"
                   />
                 </div>
                 <div>
@@ -130,7 +130,7 @@ const Contact = () => {
                     placeholder="Last Name"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-sm"
+                    className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-[17px]"
                   />
                 </div>
               </div>
@@ -142,7 +142,7 @@ const Contact = () => {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-sm"
+                  className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-[17px]"
                 />
               </div>
 
@@ -153,7 +153,7 @@ const Contact = () => {
                   placeholder="Comment"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-sm resize-none"
+                  className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-[17px] resize-none"
                 />
               </div>
 
@@ -165,7 +165,7 @@ const Contact = () => {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="w-full py-4 bg-[#f5dec2] text-[#0d2b4e] hover:bg-[#ebd0b0] font-semibold uppercase tracking-[2px] text-xs transition cursor-pointer shadow-sm disabled:bg-gray-200"
+                  className="w-full py-5 bg-[#f5dec2] text-[#0d2b4e] hover:bg-[#ebd0b0] font-semibold uppercase tracking-[2px] text-[17px] transition cursor-pointer shadow-sm disabled:bg-gray-200"
                 >
                   {status === "sending" ? "SENDING MESSAGE..." : "SEND YOUR MESSAGE"}
                 </button>
@@ -201,14 +201,14 @@ const Contact = () => {
               </h2>
             </div>
 
-            <div className="space-y-4  text-sm font-light text-white/80 leading-relaxed border-t border-white/5 pt-6">
+            <div className="space-y-4  text-[20px] font-light text-white/80 leading-relaxed border-t border-white/5 pt-6">
               <p>
                 No. 1246, Budigere Bypass Road,<br />
                 Devanahalli Hobli,<br />
                 Taluk Chamarayapatna,<br />
                 Karnataka 562129
               </p>
-              <p className=" text-xs">
+              <p className=" text-[17px]">
                 <span className="text-[#c8a64d] font-semibold">Email:</span> info@sreeraagaresorts.in<br />
                 <span className="text-[#c8a64d] font-semibold">Phone:</span> +91 89045 61155
               </p>
@@ -218,7 +218,7 @@ const Contact = () => {
               href="https://maps.google.com/?q=Budigere+Bypass+Road+Devanahalli+Karnataka"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-fit border border-[#c8a64d]  bg-[#c8a64d] text-[#071524] hover:bg-transparent hover:text-white transition duration px-8 py-3 text-xs uppercase tracking-[2px] font-semibold transition mt-6"
+              className="w-fit border border-[#c8a64d]  bg-[#c8a64d] text-[#071524] hover:bg-transparent hover:text-white transition duration px-8 py-4 text-[17px] uppercase tracking-[2px] font-semibold transition mt-6"
             >
               Get Directions
             </a>
