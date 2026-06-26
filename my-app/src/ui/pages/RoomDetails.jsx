@@ -1025,7 +1025,7 @@ const RoomDetails = () => {
                   {/* Image hover block */}
                   <Link 
                     to={`/rooms/${item.id || item._id}`} 
-                    className="block relative overflow-hidden rounded-sm aspect-[76/62] mb-6 shadow-md"
+                    className="block relative overflow-hidden  aspect-[76/62] mb-6 shadow-md"
                   >
                     <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
