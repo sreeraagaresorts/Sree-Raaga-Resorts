@@ -634,7 +634,7 @@ const RoomDetails = () => {
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-center gap-3 text-xs  text-gray-700">
                       {item.icon}
-                      <span className="text-[15px]">{item.name}</span>
+                      <span className="text-[17px]">{item.name}</span>
                     </div>
                   ))}
                 </div>
@@ -702,7 +702,7 @@ const RoomDetails = () => {
 
             {/* RIGHT COLUMN (BOOKING SIDEBAR CARD) */}
             <div className="lg:sticky ">
-              <div className=" border border-gray-200/80 p-8  space-y-14  shadow-xl">
+              <div className="border border-[#0d2b4e]/20 p-8 space-y-14 shadow-xl max-w-[400px] w-full mx-auto lg:ml-auto">
                 
                 <h3 className="text-3xl md:text-[30px] font-semibold font-corm text-[#0d2b4e] select-none text-center lg:text-left">
                   Book Your Room
@@ -998,28 +998,28 @@ const RoomDetails = () => {
         </section>
 
         {/* ================= SIMILAR ROOMS SECTION ================= */}
-        <section className="py-24 px-6 bg-[#fdfeff] border-t border-gray-100">
-          <div className="max-w-7xl mx-auto">
+        <section className="py-28 px-6 bg-[#fdfeff] border-t border-gray-100">
+          <div className="max-w-[1400px] mx-auto">
             
             {/* Header Titles */}
             <div className="flex flex-col sm:flex-row justify-between items-end mb-16 select-none">
               <div>
            
-                <h2 className="text-4xl md:text-5xl font-medium font-corm  text-[#0d2b4e]">
+                <h2 className="text-5xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
                   Similar Rooms
                 </h2>
               </div>
               <Link 
                 to="/rooms" 
-                className="group inline-flex items-center text-sm font-bold  uppercase tracking-[2px] text-[#0d2b4e] hover:text-[#c8a64d] transition-colors mt-4 sm:mt-0"
+                className="group inline-flex items-center text-base font-bold  uppercase tracking-[2px] text-[#0d2b4e] hover:text-[#c8a64d] transition-colors mt-4 sm:mt-0"
               >
                 <span className="mr-2 border-b border-transparent group-hover:border-[#c8a64d] pb-0.5">View All Rooms</span>
-                <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
             {/* List */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               {getSimilarRoomsList().map((item) => (
                 <div key={item.id || item._id} className="group flex flex-col">
                   {/* Image hover block */}
@@ -1028,8 +1028,8 @@ const RoomDetails = () => {
                     className="block relative overflow-hidden rounded-sm aspect-[76/62] mb-6 shadow-md"
                   >
                     <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
-                      <span className="text-xs font-semibold  tracking-[3px]">BOOK NOW</span>
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
+                      <span className="text-sm font-semibold  tracking-[3px]">BOOK NOW</span>
                     </div>
                     <img
                       src={getImageUrl(item.image)}
@@ -1042,37 +1042,37 @@ const RoomDetails = () => {
                   <div className="flex flex-col select-none">
                     <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                       <div>
-                        <h4 className="text-2xl md:text-3xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                        <h4 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
                           {item.name}
                         </h4>
                         {item.category && (
-                          <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block mt-1.5 uppercase">
+                          <span className="text-sm text-[#c8a64d]  font-bold tracking-[2px] block mt-1.5 uppercase">
                             {item.category}
                           </span>
                         )}
                       </div>
                       <div className="text-right">
-                        <span className="text-base md:text-lg  font-bold text-[#c8a64d]">
+                        <span className="text-lg md:text-2xl  font-bold text-[#c8a64d]">
                           ₹{parseFloat(item.price).toLocaleString()}
                         </span>
-                        <span className="text-[10px] text-gray-400  block tracking-wider uppercase font-semibold">
+                        <span className="text-xs text-gray-400  block tracking-wider uppercase font-semibold">
                           / NIGHT
                         </span>
                       </div>
                     </div>
 
                     {/* Specs Row */}
-                    <div className="flex flex-wrap items-center gap-4.5 pb-6 text-[14px]  text-gray-400">
+                    <div className="flex flex-wrap items-center gap-5 pb-6 text-base  text-gray-400">
                       <div className="flex items-center">
-                        <Maximize className="w-4 h-4 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
+                        <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                         <span className="text-black">{item.area || "30 M²"} Sqft</span>
                       </div>
                       <div className="flex items-center">
-                        <Bed className="w-4 h-4 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
+                        <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                         <span className="text-black">{item.beds || "1 Bed"} Bed</span>
                       </div>
                       <div className="flex items-center">
-                        <Bath className="w-4 h-4 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
+                        <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                         <span className="text-black">{item.bathrooms || "1 Bath"} Bathroom</span>
                       </div>
                     </div>
