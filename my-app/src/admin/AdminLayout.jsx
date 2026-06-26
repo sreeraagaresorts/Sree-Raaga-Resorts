@@ -284,8 +284,9 @@ const  AdminLayout=()=> {
               <div className="p-6 flex items-center justify-between border-b border-white/5">
                 <div>
                   <h2 className="text-xl font-bold flex items-center gap-2">
-                    <span>Sree</span>
+                    <span className="text-[#C8A64D]">Sree</span>
                     <span className="text-[#C8A64D]">Raaga</span>
+                    <span className="text-[#C8A64D]">Resorts</span>
                   </h2>
                   <p className="text-xs text-white/40 mt-1">Admin Panel</p>
                 </div>

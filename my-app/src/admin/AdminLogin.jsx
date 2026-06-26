@@ -63,13 +63,7 @@ const AdminLogin = () => {
         transition={{ duration: 0.8 }}
         className="w-full max-w-md bg-zinc-950/90 border border-yellow-500/20 p-8 shadow-2xl relative z-10"
       >
-        {/* Back Link */}
-        <Link 
-          to="/" 
-          className="inline-flex items-center gap-2 text-xs text-gray-500 hover:text-yellow-500 transition mb-6 uppercase tracking-wider"
-        >
-          <ArrowLeft size={12} /> Back to Homepage
-        </Link>
+      
 
         {/* Brand/Header */}
         <div className="text-center mb-8">
@@ -99,12 +93,12 @@ const AdminLogin = () => {
           {/* Email */}
           <div>
             <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-2 font-medium">
-              Administrative Email
+               Email
             </label>
             <input
               type="email"
               required
-              placeholder="admin@sreeraagaresort.com"
+              placeholder="Enter Your Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-zinc-900/50 border border-yellow-500/15 py-3 px-4 outline-none focus:border-yellow-500 text-white transition text-sm rounded-none"
@@ -114,12 +108,12 @@ const AdminLogin = () => {
           {/* Password */}
           <div>
             <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-2 font-medium">
-              Passcode
+              Password
             </label>
             <input
               type="password"
               required
-              placeholder="••••••••"
+              placeholder="Enter your Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-zinc-900/50 border border-yellow-500/15 py-3 px-4 outline-none focus:border-yellow-500 text-white transition text-sm rounded-none"
@@ -135,9 +129,16 @@ const AdminLogin = () => {
             {loading ? "Authorizing access..." : "Enter Portal"}
           </button>
         </form>
+          {/* Back Link */}
+        <Link 
+          to="/" 
+          className="flex items-center pt-8 justify-center gap-2 text-xs text-gray-100 hover:text-yellow-500 transition mb-6 uppercase tracking-wider"
+        >
+          <ArrowLeft size={12} /> Back to Homepage
+        </Link>
 
-        <p className="text-[10px] text-center text-gray-600 mt-8 uppercase tracking-widest">
-          Sree Raaga Resort © {new Date().getFullYear()} All Rights Reserved
+        <p className="text-[14px] text-center text-gray-400 mt-8 uppercase tracking-widest">
+ Restricted area. Admin access only.
         </p>
       </motion.div>
     </div>

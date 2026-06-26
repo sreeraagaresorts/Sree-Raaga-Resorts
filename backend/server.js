@@ -26,6 +26,7 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   "https://sreeraagaresorts.in",
   "https://www.sreeraagaresorts.in",
+  "http://localhost:5173"
 ].filter(Boolean);
 
 // CORS Configuration
