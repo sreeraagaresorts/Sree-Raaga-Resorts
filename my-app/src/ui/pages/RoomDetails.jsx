@@ -652,30 +652,30 @@ const RoomDetails = () => {
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span  className="text-[17px]">220V electrical sockets</span>
+                      <span  className="text-[17px] text-gray-700">220V electrical sockets</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px]">Safety box</span>
+                      <span className="text-[17px] text-gray-700">Safety box</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px]">Room safe for your top mountain photos</span>
+                      <span className="text-[17px] text-gray-700">Room safe for your top mountain photos</span>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px]">220V electrical sockets</span>
+                      <span className="text-[17px] text-gray-700">220V electrical sockets</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px]">Slippers</span>
+                      <span className="text-[17px] text-gray-700">Slippers</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px]">Mini bar</span>
+                      <span className="text-[17px] text-gray-700">Mini bar</span>
                     </div>
                   </div>
                 </div>
@@ -1042,7 +1042,7 @@ const RoomDetails = () => {
                   <div className="flex flex-col select-none">
                     <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                       <div>
-                        <h4 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                        <h4 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 ">
                           {item.name}
                         </h4>
                         {item.category && (
@@ -1055,14 +1055,14 @@ const RoomDetails = () => {
                         <span className="text-lg md:text-2xl  font-bold text-[#c8a64d]">
                           ₹{parseFloat(item.price).toLocaleString()}
                         </span>
-                        <span className="text-xs text-gray-400  block tracking-wider uppercase font-semibold">
+                        <span className="text-[17px] text-gray-700  block tracking-wider uppercase font-semibold">
                           / NIGHT
                         </span>
                       </div>
                     </div>
 
                     {/* Specs Row */}
-                    <div className="flex flex-wrap items-center gap-5 pb-6 text-base  text-gray-400">
+                    <div className="flex flex-wrap items-center gap-5 pb-6 text-[17px]  text-gray-400">
                       <div className="flex items-center">
                         <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                         <span className="text-black">{item.area || "30 M²"} Sqft</span>
