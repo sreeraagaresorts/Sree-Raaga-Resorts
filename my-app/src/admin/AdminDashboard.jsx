@@ -4,7 +4,7 @@ import {
   Users,
   BedDouble,
   CalendarDays,
-  DollarSign,
+  IndianRupee,
   Wallet,
   Activity,
   TrendingUp,
@@ -151,7 +151,7 @@ const AdminDashboard = () => {
 
   const stats = [
     // { label: "Room Occupancy", value: `${metrics.occupancyRate}%`, icon: BedDouble, trend: "+2.1%", isPositive: true },
-    { label: "Total Revenue", value: `₹${metrics.totalRevenue.toLocaleString()}`, icon: DollarSign, trend: "+12.5%", isPositive: true },
+    { label: "Total Revenue", value: `₹${metrics.totalRevenue.toLocaleString()}`, icon: IndianRupee, trend: "+12.5%", isPositive: true },
     { label: "Pending Payments", value: `₹${metrics.pendingPayments.toLocaleString()}`, icon: Wallet, trend: "-8.1%", isPositive: false },
     { label: "Registered Users", value: usersCount.toString(), icon: Users, trend: "+4.3%", isPositive: true },
   ];

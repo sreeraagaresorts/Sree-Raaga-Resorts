@@ -16,7 +16,6 @@ import {
   Sun,
   CreditCard,
   UtensilsCrossed,
-  ArrowLeft,
   Menu,
   X,
 } from "lucide-react";
@@ -341,13 +340,6 @@ const  AdminLayout=()=> {
                   </div>
                 </div>
 
-                <button 
-                  onClick={() => navigate("/")}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/50 hover:text-[#C8A64D] hover:bg-white/5 rounded-md cursor-pointer bg-transparent border-0"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Back to Home
-                </button>
 
                 <button 
                   onClick={handleSignOut}
@@ -416,13 +408,6 @@ const  AdminLayout=()=> {
             </div>
           </div>
 
-          <button 
-            onClick={() => navigate("/")}
-            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/50 hover:text-[#C8A64D] hover:bg-white/5 rounded-md cursor-pointer bg-transparent border-0"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </button>
 
           <button 
             onClick={handleSignOut}
