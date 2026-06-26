@@ -440,11 +440,11 @@ const RoomDetails = () => {
       <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden min-h-screen pt-28 md:pt-36">
         
         {/* ================= MAIN CONTENT DETAILS GRID ================= */}
-        <section className="py-12 max-w-[140vh] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-28 items-start">
+        <section className="py-12 max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[7fr_4fr] gap-16 items-start">
             
             {/* LEFT COLUMN */}
-            <div className="lg:col-span-8 space-y-8">
+            <div className="space-y-8">
               
               {/* Gallery Image Slider (Single active image layout matching Swiss Resort) */}
               <div className="relative overflow-hidden aspect-[80/55] shadow-md group select-none bg-black/5 ">
@@ -701,13 +701,12 @@ const RoomDetails = () => {
             </div>
 
             {/* RIGHT COLUMN (BOOKING SIDEBAR CARD) */}
-            <div className="lg:col-span-4 lg:sticky ">
+            <div className="lg:sticky ">
               <div className=" border border-gray-200/80 p-8  space-y-14  shadow-xl">
                 
                 <h3 className="text-3xl md:text-[30px] font-semibold font-corm text-[#0d2b4e] select-none text-center lg:text-left">
                   Book Your Room
                 </h3>
-
                 <div className="space-y-5 font-jost">
                   {/* Dates range picker dropdown */}
                   <div className="relative">
@@ -822,7 +821,7 @@ const RoomDetails = () => {
                       className="w-full  border border-gray-200  px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
-                        {adults} {adults === 1 ? "Adult" : "Adults"}
+                        {adults} {adults === 1 ? "Adult (18+ Years)" : "Adults (18+ Years)"}
                       </span>
                       <ChevronDown
                         size={14}
@@ -833,7 +832,7 @@ const RoomDetails = () => {
                     {isAdultsOpen && (
                       <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-sm">Adults</span>
+                          <span className="font-semibold text-sm">Adults (18+ Years)</span>
                           <div className="flex items-center gap-6">
                             <button
                               type="button"
@@ -875,7 +874,7 @@ const RoomDetails = () => {
                       className="w-full  border border-gray-200  px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
-                        {children === 0 ? "Children" : children === 1 ? "1 Child" : `${children} Children`}
+                        {children === 0 ? "Children" : children === 1 ? "1 Child " : `${children} Children `}
                       </span>
                       <ChevronDown
                         size={14}
@@ -886,7 +885,7 @@ const RoomDetails = () => {
                     {isChildrenOpen && (
                       <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-sm">Children</span>
+                          <span className="font-semibold text-sm">Children (0-6 Years)</span>
                           <div className="flex items-center gap-6">
                             <button
                               type="button"
