@@ -110,50 +110,49 @@ const EventDetails = () => {
       "https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=800"
     ];
   };
+const handleEnquiry = async (e) => {
+  e.preventDefault();
+  setEnquireLoading(true);
 
-  const handleEnquiry = async (e) => {
-    e.preventDefault();
-    setEnquireLoading(true);
+  try {
+    const response = await fetch(`${API_URL}/api/events/enquiries`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        phone,
+        email,
+        eventName: event.name,
+        guests: Number(guests),
+      }),
+    });
 
-    try {
-      await fetch(`${API_URL}/api/events/enquiries`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name,
-          phone,
-          email,
-          eventName: event.name,
-          guests: Number(guests)
-        })
-      });
+    const data = await response.json();
 
-      toast.success("Enquiry request submitted successfully!");
-
-      // Prepopulate WhatsApp text and redirect for instant booking
-      const waText = `Hello Sree Raaga Resorts, I am interested in booking/enquiring about the event package "${event.name}".%0D%0A%0D%0A*My Details*:%0D%0A- Name: ${encodeURIComponent(name)}%0D%0A- Phone: ${encodeURIComponent(phone)}%0D%0A- Email: ${encodeURIComponent(email)}%0D%0A- Estimated Guests: ${encodeURIComponent(guests)}${event.show_price ? `%0D%0A- Package Price: ₹${Number(event.price).toLocaleString()}` : ""}`;
-      
-      const waUrl = `https://wa.me/918904561155?text=${waText}`;
-      window.open(waUrl, "_blank", "noopener,noreferrer");
-
-      // Reset form
-      setName("");
-      setPhone("");
-      setEmail("");
-      setGuests("");
-    } catch (err) {
-      console.warn("Failed to record inquiry on backend, redirecting to WhatsApp:", err.message);
-      
-      const waText = `Hello Sree Raaga Resorts, I am interested in booking/enquiring about the event package "${event.name}".%0D%0A%0D%0A*My Details*:%0D%0A- Name: ${encodeURIComponent(name)}%0D%0A- Phone: ${encodeURIComponent(phone)}%0D%0A- Email: ${encodeURIComponent(email)}%0D%0A- Estimated Guests: ${encodeURIComponent(guests)}`;
-      
-      const waUrl = `https://wa.me/918904561155?text=${waText}`;
-      window.open(waUrl, "_blank", "noopener,noreferrer");
-    } finally {
-      setEnquireLoading(false);
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Failed to submit enquiry.");
     }
-  };
+
+    // Success Toast
+    toast.success("Your enquiry has been submitted successfully!");
+
+    // Reset Form
+    setName("");
+    setPhone("");
+    setEmail("");
+    setGuests("");
+
+  } catch (err) {
+    console.error(err);
+
+    // Error Toast
+    toast.error(err.message || "Something went wrong. Please try again.");
+  } finally {
+    setEnquireLoading(false);
+  }
+};
 
   const getSimilarEventsList = () => {
     if (similarEvents.length > 0) return similarEvents.slice(0, 3);
