@@ -85,7 +85,6 @@ const AdminMenu = () => {
       if (data.success) {
         toast.success(data.message || "Category added successfully!");
         setNewCategoryName("");
-        setIsCategoryFormOpen(false);
         fetchCategories();
       } else {
         throw new Error(data.message || "Failed to add category.");
@@ -94,6 +93,28 @@ const AdminMenu = () => {
       toast.error(err.message || "Failed to add category.");
     } finally {
       setAddingCategory(false);
+    }
+  };
+
+  const handleDeleteCategory = async (catName) => {
+    if (!window.confirm(`Are you sure you want to delete the category "${catName}"?`)) return;
+
+    try {
+      const response = await fetch(`${API_URL}/api/categories/${encodeURIComponent(catName)}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success(data.message || "Category deleted successfully!");
+        fetchCategories();
+      } else {
+        throw new Error(data.message || "Failed to delete category.");
+      }
+    } catch (err) {
+      toast.error(err.message || "Failed to delete category.");
     }
   };
 
@@ -331,7 +352,7 @@ const AdminMenu = () => {
               onClick={() => setIsCategoryFormOpen(true)}
               className="border border-white/20 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium cursor-pointer hover:bg-white/5 transition"
             >
-              <Plus size={16} /> Add Category
+              <Plus size={16} /> Manage Categories
             </button>
             <button
               onClick={openAddModal}
@@ -760,12 +781,12 @@ const AdminMenu = () => {
         </div>
       )}
 
-      {/* CATEGORY ADD MODAL */}
+      {/* CATEGORY MANAGE MODAL */}
       {isCategoryFormOpen && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#081A2F] w-full max-w-md rounded-xl p-6 border border-white/10 shadow-2xl">
+          <div className="bg-[#081A2F] w-full max-w-md rounded-xl p-6 border border-white/10 shadow-2xl flex flex-col max-h-[90vh]">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">Add Category</h2>
+              <h2 className="text-xl font-bold">Manage Categories</h2>
               <button
                 onClick={() => setIsCategoryFormOpen(false)}
                 className="text-white/60 hover:text-white cursor-pointer bg-transparent border-0"
@@ -774,36 +795,63 @@ const AdminMenu = () => {
               </button>
             </div>
             
-            <form onSubmit={handleAddCategory} className="space-y-4">
+            {/* Add Category Form */}
+            <form onSubmit={handleAddCategory} className="space-y-4 mb-6 pb-6 border-b border-white/10">
               <div>
-                <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Category Name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Desserts, Beverages"
-                  value={newCategoryName}
-                  onChange={(e) => setNewCategoryName(e.target.value)}
-                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white"
-                  required
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
-                <button
-                  type="button"
-                  onClick={() => setIsCategoryFormOpen(false)}
-                  className="px-4 py-2 border border-white/10 rounded-lg text-white hover:bg-white/5 transition cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={addingCategory}
-                  className="px-6 py-2 bg-[#C8A64D] text-black font-bold rounded-lg hover:bg-[#b09141] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {addingCategory ? "Adding..." : "Add"}
-                </button>
+                <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Add New Category</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="e.g. Desserts, Beverages"
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    className="flex-1 bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white text-sm"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    disabled={addingCategory}
+                    className="px-5 py-3 bg-[#C8A64D] text-black font-bold rounded-lg hover:bg-[#b09141] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                  >
+                    {addingCategory ? "Adding..." : "Add"}
+                  </button>
+                </div>
               </div>
             </form>
+
+            {/* List of Existing Categories */}
+            <div className="flex-1 overflow-y-auto space-y-2 pr-1 mb-4">
+              <label className="block text-white/50 text-xs uppercase tracking-widest mb-3">Existing Categories</label>
+              {categories.length === 0 ? (
+                <p className="text-white/30 text-sm py-2">No categories configured.</p>
+              ) : (
+                <div className="space-y-2">
+                  {categories.map((cat) => (
+                    <div key={cat} className="flex justify-between items-center bg-[#071524] px-4 py-2.5 rounded-lg border border-white/5">
+                      <span className="text-white text-sm font-medium">{cat}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteCategory(cat)}
+                        className="text-red-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded transition cursor-pointer bg-transparent border-0"
+                        title="Delete Category"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end pt-4 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => setIsCategoryFormOpen(false)}
+                className="px-4 py-2 border border-white/10 rounded-lg text-white hover:bg-white/5 transition cursor-pointer text-sm"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
