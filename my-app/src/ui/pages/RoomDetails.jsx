@@ -486,7 +486,7 @@ const RoomDetails = () => {
 
               {/* Price, Title & Specs */}
               <div className="select-none space-y-4">
-                <div className="font-semibold text-lg uppercase tracking-[2px] font-jost text-[#c8a64d]">
+                <div className="font-semibold text-[25px] uppercase tracking-[2px] font-jost text-[#c8a64d]">
                   ₹{parseFloat(room.price).toLocaleString()} / NIGHT
                 </div>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium font-corm text-[#0d2b4e] leading-tight">
