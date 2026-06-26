@@ -192,7 +192,7 @@ const Contact = () => {
           </div>
 
           {/* Info Right */}
-          <div className="w-full lg:w-1/2 bg-[#071524] text-white p-12 md:p-20 lg:pl-34 flex flex-col justify-center items-start lg:h-full">
+          <div className="w-full lg:w-1/2 bg-[#011b3c] text-white p-12 md:p-20 lg:pl-34 flex flex-col justify-center items-start lg:h-full">
             <div className="flex flex-col items-start text-left space-y-6 max-w-md w-full">
               <div>
                 <span className="text-[#c8a64d] text-[36px] tracking-[4px] font-medium uppercase block">
@@ -200,15 +200,15 @@ const Contact = () => {
                 </span>
               </div>
 
-              <div className="space-y-4 text-[24px] font-medium text-white/80 leading-relaxed border-t border-white/5 pt-6 w-full">
+              <div className="space-y-4 text-[24px] font-medium text-[#fefdff] leading-relaxed border-t border-white/5 pt-6 w-full">
                 <p>
                   No. 1246, Budigere Bypass Road,<br />
                   Devanahalli Hobli, Taluk Chamarayapatna,<br />
                   Karnataka 562129.<br />
                 </p>
                 <p className="text-[24px]">
-                  <span className="text-[#c8a64d] font-semibold">Email:</span> info@sreeraagaresorts.in<br />
-                  <span className="text-[#c8a64d] font-semibold">Phone:</span> +91 89045 61155
+                  <span className="text-white font-semibold">Email:</span><span className="text-[#c8a64d] "> info@sreeraagaresorts.in</span><br />
+                  <span className="text-white font-semibold">Phone:</span> <span className="text-[#c8a64d] ">+91 89045 61155</span>
                 </p>
               </div>
 
