@@ -27,7 +27,7 @@ const navItems = [
   { name: "Rooms & Bookings", path: "/admin/bookings", icon: Calendar },
   { name: "Room Inventory", path: "/admin/rooms", icon: BedDouble },
   { name: "Restaurant Menu", path: "/admin/menu", icon: UtensilsCrossed },
-  { name: "Events & Activities", path: "/admin/events", icon: CalendarDays },
+  { name: "Events & Packages", path: "/admin/events", icon: CalendarDays },
   { name: "CMS", path: "/admin/content", icon: Edit3 },
   { name: "Settings", path: "/admin/settings", icon: Settings },
 ];
@@ -360,8 +360,9 @@ const  AdminLayout=()=> {
 
         <div className="p-6">
           <h2 className="text-xl font-bold flex items-center gap-2">
-            <span>Sree</span>
+            <span className="text-[#C8A64D]">Sree</span>
             <span className="text-[#C8A64D]">Raaga</span>
+            <span className="text-[#C8A64D]">Resorts</span>
           </h2>
           <p className="text-xs text-white/40 mt-1">Admin Panel</p>
         </div>

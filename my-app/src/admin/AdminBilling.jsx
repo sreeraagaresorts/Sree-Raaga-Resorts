@@ -9,11 +9,16 @@ import {
   Activity,
   Undo2,
   RefreshCw,
+  Filter,
 } from 'lucide-react';
 
 const AdminBilling = () => {
   const [activeTab, setActiveTab] = useState('invoices');
+  const [timeFilter, setTimeFilter] = useState('all');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,6 +56,43 @@ const AdminBilling = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Time range helper
+  const filterByTime = (date) => {
+    if (timeFilter === 'all') return true;
+    
+    if (timeFilter === 'custom') {
+      if (!startDate && !endDate) return true;
+      const itemTime = new Date(date).getTime();
+      if (startDate) {
+        const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+        if (itemTime < start.getTime()) return false;
+      }
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        if (itemTime > end.getTime()) return false;
+      }
+      return true;
+    }
+
+    const now = new Date();
+    const itemDate = new Date(date);
+    const diffTime = Math.abs(now - itemDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (timeFilter === 'weekly') {
+      return diffDays <= 7;
+    }
+    if (timeFilter === 'monthly') {
+      return diffDays <= 30;
+    }
+    if (timeFilter === 'yearly') {
+      return diffDays <= 365;
+    }
+    return true;
+  };
+
   // Calculate dynamic stats
   const getStats = () => {
     let totalRevenue = 0;
@@ -61,6 +103,8 @@ const AdminBilling = () => {
     const todayStr = new Date().toDateString();
 
     bookings.forEach((b) => {
+      if (!filterByTime(b.created_at)) return;
+
       const price = parseFloat(b.total_price);
       if (b.status === "confirmed" || b.status === "checked_in") {
         totalRevenue += price;
@@ -113,22 +157,115 @@ const AdminBilling = () => {
   // Filtering
   const filteredInvoices = invoices.filter(
     (inv) =>
-      inv.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      filterByTime(inv.createdAt) &&
+      (inv.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
       inv.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      inv.customerEmail.toLowerCase().includes(searchQuery.toLowerCase())
+      inv.customerEmail.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const filteredPayments = payments.filter(
     (pay) =>
-      pay.paymentId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      filterByTime(pay.createdAt) &&
+      (pay.paymentId.toLowerCase().includes(searchQuery.toLowerCase()) ||
       pay.bookingId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      pay.customerName.toLowerCase().includes(searchQuery.toLowerCase())
+      pay.customerName.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 w-full text-white">
+      {/* CSS print override styles */}
+      <style>{`
+        @media print {
+          /* Global layouts, sidebar and headers to hide */
+          aside, header, nav, .print\\:hidden, button, input, select, .relative {
+            display: none !important;
+          }
+          /* Reset root background, margins, padding, and height */
+          body, html, #root, .h-screen, .min-h-screen, main, div {
+            background: white !important;
+            color: black !important;
+            height: auto !important;
+            overflow: visible !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+          }
+          /* Ensure container wrapper occupies full width and doesn't scroll */
+          .max-w-7xl {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          /* Style table specifically for printing */
+          table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            color: black !important;
+            background: white !important;
+            margin-top: 10px !important;
+          }
+          tr {
+            page-break-inside: avoid !important;
+          }
+          th {
+            background-color: #f3f4f6 !important;
+            color: black !important;
+            font-weight: bold !important;
+            border-bottom: 2px solid #d1d5db !important;
+            padding: 10px 8px !important;
+            text-transform: uppercase !important;
+            font-size: 11px !important;
+            text-align: left !important;
+          }
+          td {
+            border-bottom: 1px solid #e5e7eb !important;
+            color: #1f2937 !important;
+            padding: 10px 8px !important;
+            font-size: 12px !important;
+            text-align: left !important;
+          }
+          /* Style active status badges for black/white print */
+          td span {
+            background: transparent !important;
+            border: none !important;
+            color: black !important;
+            font-weight: bold !important;
+            padding: 0 !important;
+          }
+          /* Show print title only */
+          .print-title {
+            display: block !important;
+            font-size: 22px !important;
+            font-weight: bold !important;
+            margin-bottom: 15px !important;
+            text-align: center !important;
+            color: black !important;
+            border-bottom: 2px solid black !important;
+            padding-bottom: 8px !important;
+          }
+        }
+        @media screen {
+          .print-title {
+            display: none !important;
+          }
+        }
+      `}</style>
+
+      {/* PRINT TITLE (Hidden on screen) */}
+      <div className="print-title">
+        SREE RAAGA RESORTS - SALES REPORT ({
+          timeFilter === 'all' ? 'ALL TIME' : 
+          timeFilter === 'weekly' ? 'WEEKLY VIEW' : 
+          timeFilter === 'monthly' ? 'MONTHLY VIEW' : 
+          timeFilter === 'yearly' ? 'YEARLY VIEW' : 
+          `CUSTOM RANGE: ${startDate || 'Beginning'} to ${endDate || 'Present'}`
+        })
+      </div>
+
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between gap-4 border-b border-white/5 pb-6">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 border-b border-white/5 pb-6 print:hidden">
         <div>
           <h1 className="text-2xl font-bold">Billing & Payments</h1>
           <p className="text-white/50 text-sm">
@@ -138,10 +275,21 @@ const AdminBilling = () => {
 
         <div className="flex gap-3">
           <button 
-            onClick={() => window.print()}
-            className="flex items-center gap-2 px-4 py-2 border border-white/10 text-white rounded-lg hover:bg-white/5 transition cursor-pointer"
+            onClick={() => setShowFilters(!showFilters)}
+            className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition cursor-pointer text-sm font-semibold ${
+              showFilters 
+                ? 'border-[#C8A64D] bg-[#C8A64D]/10 text-[#C8A64D]' 
+                : 'border-white/10 text-white hover:bg-white/5'
+            }`}
           >
-            <Download className="w-4 h-4" /> Print Reports
+            <Filter className="w-4 h-4" /> {showFilters ? "Hide Filters" : "Filter"}
+          </button>
+          
+          <button 
+            onClick={() => window.print()}
+            className="flex items-center gap-2 px-4 py-2 bg-[#C8A64D] text-[#071524] rounded-lg hover:bg-[#C8A64D]/90 font-bold transition cursor-pointer text-sm"
+          >
+            <Download className="w-4 h-4" /> Export
           </button>
         </div>
       </div>
@@ -154,12 +302,12 @@ const AdminBilling = () => {
 
       {/* STATS */}
       {loading ? (
-        <div className="flex items-center gap-2 text-white/60 justify-center py-6">
+        <div className="flex items-center gap-2 text-white/60 justify-center py-6 print:hidden">
           <RefreshCw className="animate-spin w-5 h-5 text-[#C8A64D]" />
           <span>Calculating billing stats...</span>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 print:hidden">
           <div className="bg-[#081A2F] p-5 rounded-xl border border-white/5 shadow-md">
             <div className="flex justify-between text-white/50 text-sm mb-2">
               Total Revenue <IndianRupee className="w-4 h-4 text-emerald-400" />
@@ -192,7 +340,7 @@ const AdminBilling = () => {
 
       {/* TABS + SEARCH */}
       <div className="bg-[#081A2F] rounded-xl border border-white/5 overflow-hidden">
-        <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-white/5 gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-white/5 gap-4 print:hidden">
           <div className="flex gap-6 text-sm font-bold uppercase tracking-wider">
             {['invoices', 'payments'].map((tab) => (
               <button
@@ -207,14 +355,67 @@ const AdminBilling = () => {
             ))}
           </div>
 
-          <div className="relative w-full sm:w-64">
-            <Search className="w-4 h-4 text-white/40 absolute left-3 top-2.5" />
-            <input
-              className="w-full bg-[#071524] border border-white/10 pl-9 pr-3 py-2 rounded text-sm text-white focus:outline-none focus:border-[#C8A64D]"
-              placeholder={`Search ${activeTab}...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-start sm:items-center">
+            {showFilters && (
+              <>
+                {/* Range filter selector */}
+                <div className="flex items-center gap-2">
+                  <span className="text-white/40 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">Range:</span>
+                  <select
+                    value={timeFilter}
+                    onChange={(e) => {
+                      setTimeFilter(e.target.value);
+                      // Reset custom date values when switching away
+                      if (e.target.value !== 'custom') {
+                        setStartDate('');
+                        setEndDate('');
+                      }
+                    }}
+                    className="bg-[#071524] border border-white/10 text-white rounded text-xs px-3 py-2 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+                  >
+                    <option value="all">All Time</option>
+                    <option value="weekly">Weekly (Last 7 Days)</option>
+                    <option value="monthly">Monthly (Last 30 Days)</option>
+                    <option value="yearly">Yearly (Last 365 Days)</option>
+                    <option value="custom">Custom Date Range</option>
+                  </select>
+                </div>
+
+                {/* Custom dates input fields */}
+                {timeFilter === 'custom' && (
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-white/40 text-[10px] uppercase font-semibold">From:</span>
+                      <input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className="bg-[#071524] border border-white/10 text-white rounded text-xs px-2 py-1.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-white/40 text-[10px] uppercase font-semibold">To:</span>
+                      <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="bg-[#071524] border border-white/10 text-white rounded text-xs px-2 py-1.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            <div className="relative w-full sm:w-60">
+              <Search className="w-4 h-4 text-white/40 absolute left-3 top-2.5" />
+              <input
+                className="w-full bg-[#071524] border border-white/10 pl-9 pr-3 py-2 rounded text-sm text-white focus:outline-none focus:border-[#C8A64D]"
+                placeholder={`Search ${activeTab}...`}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
         </div>
 

@@ -22,9 +22,10 @@ const AdminEvents = () => {
 
   // Form states
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("Wedding");
-  const [eventDate, setEventDate] = useState("");
   const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [sqft, setSqft] = useState("");
+  const [showPrice, setShowPrice] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
 
@@ -61,9 +62,10 @@ const AdminEvents = () => {
   const openAddModal = () => {
     setEditingEvent(null);
     setName("");
-    setCategory("Wedding");
-    setEventDate("");
     setDescription("");
+    setPrice("");
+    setSqft("");
+    setShowPrice(false);
     setImageFile(null);
     setImagePreview("");
     setIsFormOpen(true);
@@ -72,9 +74,10 @@ const AdminEvents = () => {
   const openEditModal = (event) => {
     setEditingEvent(event);
     setName(event.name);
-    setCategory(event.category);
-    setEventDate(event.event_date || "");
     setDescription(event.description || "");
+    setPrice(event.price || "");
+    setSqft(event.sqft || "");
+    setShowPrice(event.show_price || false);
     setImageFile(null);
     setImagePreview(event.image ? (event.image.startsWith("http") ? event.image : `${API_URL}/uploads/${event.image}`) : "");
     setIsFormOpen(true);
@@ -104,9 +107,10 @@ const AdminEvents = () => {
 
       const formData = new FormData();
       formData.append("name", name);
-      formData.append("category", category);
-      formData.append("event_date", eventDate);
       formData.append("description", description);
+      formData.append("price", price);
+      formData.append("sqft", sqft);
+      formData.append("show_price", showPrice);
       if (compressedImage) {
         formData.append("image", compressedImage);
       }
@@ -178,7 +182,7 @@ const AdminEvents = () => {
       {/* HEADER */}
       <div className="flex justify-between items-center border-b border-white/5 pb-6">
         <div>
-          <h1 className="text-2xl font-bold">Events Management</h1>
+          <h1 className="text-2xl font-bold">Events & Packages</h1>
           <p className="text-white/50 text-sm">
             Manage resort activities, weddings, and conferences
           </p>
@@ -227,28 +231,42 @@ const AdminEvents = () => {
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
                   />
                 </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Category</label>
-                  <select 
-                    value={category} 
-                    onChange={(e) => setCategory(e.target.value)} 
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white"
-                  >
-                    <option value="Wedding">Wedding</option>
-                    <option value="Business">Business</option>
-                    <option value="Celebration">Celebration</option>
-                    <option value="Family">Family</option>
-                  </select>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Package Price (₹)</label>
+                    <input 
+                      type="number"
+                      required
+                      placeholder="e.g. 150000" 
+                      value={price} 
+                      onChange={(e) => setPrice(e.target.value)} 
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Venue Size (Sq Ft)</label>
+                    <input 
+                      required
+                      placeholder="e.g. 5,000 Sq Ft" 
+                      value={sqft} 
+                      onChange={(e) => setSqft(e.target.value)} 
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Event Date / Availability</label>
-                  <input 
-                    required 
-                    placeholder="e.g. 2026-10-15 or Available Year Round" 
-                    value={eventDate} 
-                    onChange={(e) => setEventDate(e.target.value)} 
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
+
+                <div className="flex items-center gap-3 bg-[#071524] p-3 rounded-lg border border-white/5">
+                  <input
+                    type="checkbox"
+                    id="showPrice"
+                    checked={showPrice}
+                    onChange={(e) => setShowPrice(e.target.checked)}
+                    className="w-4 h-4 text-yellow-500 bg-[#071524] border-white/10 rounded focus:ring-yellow-500 focus:ring-2 cursor-pointer"
                   />
+                  <label htmlFor="showPrice" className="text-white/80 text-sm font-semibold select-none cursor-pointer">
+                    Show Price on Public Website (Toggle off to show "Enquire Now" only)
+                  </label>
                 </div>
               </div>
 
@@ -343,19 +361,21 @@ const AdminEvents = () => {
 
                 {/* CONTENT */}
                 <div className="p-4 space-y-3">
-                  <div className="flex justify-between items-start">
-                    <span className="text-[#C8A64D] text-[10px] uppercase tracking-widest font-semibold border border-[#C8A64D]/25 px-2 py-0.5 rounded">
-                      {event.category}
+                  <div className="flex justify-between items-center">
+                    <span className="text-white/40 text-[11px] uppercase tracking-widest font-semibold">
+                      {event.sqft || "N/A Sq Ft"}
+                    </span>
+                    <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 rounded border ${
+                      event.show_price 
+                        ? "bg-green-500/10 text-green-400 border-green-500/20" 
+                        : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                    }`}>
+                      {event.show_price ? `₹${Number(event.price || 0).toLocaleString()}` : "Enquire Mode"}
                     </span>
                   </div>
 
                   <h2 className="font-bold text-lg">{event.name}</h2>
                   
-                  <div className="flex items-center gap-1.5 text-xs text-white/60">
-                    <Calendar size={14} className="text-[#C8A64D]" />
-                    <span>{event.event_date}</span>
-                  </div>
-
                   <p className="text-white/50 text-xs line-clamp-3">
                     {event.description}
                   </p>

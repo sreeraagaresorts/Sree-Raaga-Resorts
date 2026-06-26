@@ -280,7 +280,7 @@ const AdminRooms = () => {
       {/* FORM MODAL */}
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-[#081A2F] w-full max-w-3xl rounded-xl p-6 border border-white/10 my-8">
+          <div className="bg-[#081A2F] w-full max-w-2xl rounded-xl p-6 border border-white/10 my-4 max-h-[90vh] overflow-y-auto">
             {/* HEADER */}
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">{editingRoom ? "Edit Room" : "Add Room"}</h2>

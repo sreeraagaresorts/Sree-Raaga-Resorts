@@ -47,7 +47,10 @@ exports.createEvent = async (req, res) => {
       name,
       category,
       event_date,
-      description
+      description,
+      price,
+      sqft,
+      show_price
     } = req.body;
 
     let image = null;
@@ -58,10 +61,13 @@ exports.createEvent = async (req, res) => {
 
     const event = new Event({
       name,
-      category,
+      category: category || "",
       image,
-      event_date,
-      description
+      event_date: event_date || "",
+      description,
+      price: price ? Number(price) : 0,
+      sqft: sqft || "",
+      show_price: show_price === "true" || show_price === true
     });
     await event.save();
 
@@ -85,14 +91,20 @@ exports.updateEvent = async (req, res) => {
       name,
       category,
       event_date,
-      description
+      description,
+      price,
+      sqft,
+      show_price
     } = req.body;
 
     const updateData = {
       name,
-      category,
-      event_date,
-      description
+      category: category || "",
+      event_date: event_date || "",
+      description,
+      price: price ? Number(price) : 0,
+      sqft: sqft || "",
+      show_price: show_price === "true" || show_price === true
     };
 
     if (req.file) {

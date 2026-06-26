@@ -1,9 +1,26 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { Phone, Mail, ArrowRight, Calendar, AlertCircle, Sparkles } from "lucide-react";
+import { Phone, Mail, ArrowRight, Calendar, AlertCircle, Sparkles, Maximize, Users } from "lucide-react";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { API_URL } from "../../config/api";
+
+import wifiIcon from "../../assets/icons/wifi.png";
+import buggyIcon from "../../assets/icons/car.png";
+import tvIcon from "../../assets/icons/tv.png";
+import roomServiceIcon from "../../assets/icons/services.png";
+import laundryIcon from "../../assets/icons/laundry.png";
+import housekeepingIcon from "../../assets/icons/cleaning.png";
+
+const amenitiesList = [
+  { icon: wifiIcon, name: "Wifi & Internet" },
+  { icon: buggyIcon, name: "Buggy Services" },
+  { icon: tvIcon, name: "Smart TV" },
+  { icon: roomServiceIcon, name: "Room Service" },
+  { icon: laundryIcon, name: "Laundry Services" },
+  { icon: housekeepingIcon, name: "Housekeeper Services" },
+];
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -35,7 +52,20 @@ const Events = () => {
     if (image.startsWith("http")) return image;
     return `${API_URL}/uploads/${image}`;
   };
-
+function WaterSportsIcon({ className = "" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 18c1.5 0 2.5-1 4-1s2.5 1 4 1 2.5-1 4-1 2.5 1 4 1 2.5-1 4-1" />
+      <path d="M2 21c1.5 0 2.5-1 4-1s2.5 1 4 1 2.5-1 4-1 2.5 1 4 1 2.5-1 4-1" />
+      <path d="M3 14.5c2-0.5 8-1.5 18-0.5 1 0.1 1.5 0.8 1 1.5-0.5 0.7-1.5 0.5-2.5 0.5H4.5c-1 0-1.8-0.8-1.5-1.5z" />
+      <line x1="8" y1="16" x2="16" y2="4" />
+      <path d="M15 5.5l1.5-2.2c0.3-0.4 0.9-0.4 1.2 0l0.8 1.2c0.3 0.4 0.1 1-.4 1.2L16.6 6.5" />
+      <circle cx="11.5" cy="6.5" r="1.5" />
+      <path d="M9.5 11l1.5-3 2 0.5 1.5 2.5" />
+      <path d="M11 8v4" />
+    </svg>
+  );
+}
   return (
     <>
       <Navbar />
@@ -51,12 +81,12 @@ const Events = () => {
         >
           <div className="absolute inset-0 bg-black/60"></div>
 
-          <div className="relative z-10 text-center text-white px-4 mt-20 select-none max-w-3xl space-y-4">
+          <div className="relative z-10 text-center text-white px-4 mt-20 select-none  space-y-4">
             <span className="text-white text-[17px] uppercase tracking-[6px] font-semibold block mb-2">
-              MEET & CELEBRATE
+              Events & Packages
             </span>
             <h1 className="text-4xl md:text-[92px] font-medium font-corm  leading-tight">
-              Meet & Celebrate
+              Tailored Packages for Every Celebration
             </h1>
             {/* <p className="text-white/80 font-medium text-xs md:text-[17px] max-w-xl mx-auto leading-relaxed">
               At Sree Raaga Resorts, we host custom weddings, corporate conferences, and private celebrations tailored to your expectations.
@@ -65,31 +95,29 @@ const Events = () => {
         </section>
 
         {/* INTRODUCTION BLOCK */}
-        <section className="py-20 px-6 bg-[#fdfeff] text-center max-w-4xl mx-auto space-y-8">
-          <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold block">
-            OUR VENUES & CELEBRATIONS
-          </span>
-          <h2 className="text-2xl md:text-3xl lg:text-5xl  font-medium font-corm text-[#0d2b4e]  max-w-3xl mx-auto">
-            Elevate your events to new heights at Sree Raaga Resorts.
-          </h2>
-
-          {/* Quick Contact links under introduction */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-8 md:gap-12 pt-6  text-xs  tracking-widest text-[#0d2b4e]/80">
-            <a href="tel:08904561155" className="flex items-center gap-3 hover:text-[#c8a64d] transition-colors">
-              <Phone size={14} className="text-[#c8a64d]" />
-               <span className="text-[15px]"><a href="tel:918904561155">+91 89045 61155</a></span>
-              <span></span>
-            </a>
-               <a href="tel:08904561155" className="flex items-center gap-3 hover:text-[#c8a64d] transition-colors">
-              <Phone size={14} className="text-[#c8a64d]" />
-                  <span className="text-[15px]"><a href="tel:918904381155">+91 8904381155</a></span>
-              <span></span>
-            </a>
-           
-            <a href="mailto:info@sreeraagaresorts.in" className="flex items-center gap-3 hover:text-[#c8a64d] transition-colors">
-              <Mail size={14} className="text-[#c8a64d]" />
-              <span className="text-[15px]">info@sreeraagaresorts.in</span>
-            </a>
+     <section className="py-24 px-6 bg-[] text-center">
+          <div className="max-w-3xl mx-auto space-y-6">
+            <div className="text-[#c8a64d] flex justify-center">
+              <WaterSportsIcon className="w-12 h-12" />
+            </div>
+            <span className="text-[#c8a64d] text-xs uppercase tracking-[4px] font-semibold font-jost block">
+              LUXURY RESORT
+            </span>
+            <h2 className="text-3xl md:text-6xl font-medium font-corm text-[#0d2b4e] leading-snug">
+              Water Sports you Must Try
+            </h2>
+            <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[17px] leading-relaxed max-w-2xl mx-auto">
+              An integral part of relax and perfect experience of your stay is water sports. Paddle boarding, kayaking, and surfing activities are designed to create memorable moments for you and your family.
+            </p>
+            <div className="pt-4">
+           <Link
+                   to="/rooms"
+                   className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transition duration-300 text-black uppercase tracking-wider font-medium"
+                 >
+                   <span>—</span>
+                   Book now
+                 </Link>
+            </div>
           </div>
         </section>
 
@@ -126,63 +154,132 @@ const Events = () => {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {events.map((event, idx) => (
-                  <motion.div
-                    key={event.id || idx}
-                    initial={{ opacity: 0, y: 25 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    className="bg-white border border-[#0d2b4e]/5 rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between"
-                  >
-                    <div>
+              <div className="space-y-24">
+                {events.map((event, idx) => {
+                  const isEven = idx % 2 === 0;
+                  return (
+                    <motion.div
+                      key={event.id || idx}
+                      initial={{ opacity: 0, y: 35 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.1 }}
+                      className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+                    >
                       {/* Event Image */}
-                      <div className="relative h-56 overflow-hidden bg-gray-100">
-                        <img
-                          src={getImageUrl(event.image)}
-                          alt={event.name}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                        />
-                        <span className="absolute top-4 left-4 bg-white/95 backdrop-blur-xs text-[#0d2b4e] text-[9px] uppercase tracking-widest font-bold px-3 py-1 rounded-sm border border-[#c8a64d]/30">
-                          {event.category || "Celebration"}
-                        </span>
+                      <div className={`lg:col-span-6 w-full ${isEven ? "" : "lg:order-last"}`}>
+                        <div className="relative overflow-hidden aspect-[4/3] bg-gray-100 group shadow-sm rounded-sm">
+                          <img
+                            src={getImageUrl(event.image)}
+                            alt={event.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                          {event.sqft && (
+                            <span className="absolute top-6 left-6 bg-white/95 backdrop-blur-xs text-[#0d2b4e] text-[10px] uppercase tracking-widest font-bold px-4 py-1.5 rounded-sm border border-[#c8a64d]/30 shadow-xs">
+                              {event.sqft}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
-                      {/* Event Body */}
-                      <div className="p-6 space-y-4">
-                        <h3 className="text-xl  font-light text-[#0d2b4e]">
-                          {event.name}
-                        </h3>
-
-                        {event.event_date && (
-                          <div className="flex items-center gap-1.5 text-xs text-gray-500 ">
-                            <Calendar size={13} className="text-[#c8a64d]" />
-                            <span>{event.event_date}</span>
+                      {/* Event Details */}
+                      <div className={`lg:col-span-5 ${isEven ? "lg:offset-1" : ""} flex flex-col justify-between h-full py-4 text-left`}>
+                        <div>
+                          <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
+                            <div>
+                              <h3 className="text-3xl md:text-4xl font-medium font-corm text-[#0d2b4e]">
+                                {event.name}
+                              </h3>
+                            </div>
+                            {event.show_price && (
+                              <div className="text-right">
+                                <span className="text-lg md:text-xl font-semibold text-gray-800">
+                                  ₹{Number(event.price || 0).toLocaleString()}
+                                </span>
+                              </div>
+                            )}
                           </div>
-                        )}
 
-                        <p className="text-gray-500 text-xs md:text-sm  font-light leading-relaxed line-clamp-4">
-                          {event.description}
-                        </p>
+                          {/* Event Specs Row */}
+                          <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px] text-gray-500 border-b border-gray-100 mb-6">
+                            {event.sqft && (
+                              <div className="flex items-center">
+                                <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                                <span>{event.sqft}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Description */}
+                          <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mb-8 font-jost">
+                            {event.description}
+                          </p>
+                        </div>
+
+                        {/* Actions CTA Link (same style as Rooms.jsx) */}
+                        <div>
+                          {event.show_price ? (
+                            <a
+                              href={`https://wa.me/918904561155?text=I%20am%20interested%20in%20booking%20the%20event%20package%20called%20"${encodeURIComponent(event.name)}"%20for%20₹${Number(event.price || 0).toLocaleString()}%20at%20Sree%20Raaga%20Resorts.`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d] text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
+                            >
+                              <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
+                                Book Package
+                              </span>
+                              <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
+                            </a>
+                          ) : (
+                            <a
+                              href={`https://wa.me/918904561155?text=I%20am%20interested%20in%20enquiring%20about%20the%20event%20package%20called%20"${encodeURIComponent(event.name)}"%20at%20Sree%20Raaga%20Resorts.`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d] text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
+                            >
+                              <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
+                                Enquire Now
+                              </span>
+                              <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
+                            </a>
+                          )}
+                        </div>
                       </div>
-                    </div>
-
-                    {/* WhatsApp Action Button */}
-                    <div className="p-6 pt-0">
-                      <a
-                        href={`https://wa.me/918904561155?text=I%20am%20interested%20in%20booking%20the%20event%20package%20called%20"${encodeURIComponent(event.name)}"%20at%20Sree%20Raaga%20Resorts.`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full flex items-center justify-center gap-2 py-3 border border-[#c8a64d] text-[#0d2b4e] hover:bg-[#c8a64d] hover:text-white text-xs font-semibold uppercase tracking-[1px] transition duration-300 rounded-sm"
-                      >
-                        Enquire Package <ArrowRight size={12} />
-                      </a>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
+          </div>
+        </section>
+
+        {/* ================= RESORT FACILITIES SECTION ================= */}
+        <section className="py-24 px-6 bg-[#fdfeff] border-t border-gray-100">
+          <div className="max-w-6xl mx-auto text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-medium font-corm text-[#0d2b4e]">
+              Resort Facilities
+            </h2>
+          </div>
+
+          {/* Icons Row */}
+          <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 justify-center items-center py-4 gap-y-8">
+            {amenitiesList.map((item, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col items-center text-center group cursor-default"
+              >
+                <div className="overflow-hidden">
+                  <img
+                    src={item.icon}
+                    alt={item.name}
+                    className="w-20 h-20 px-4 object-contain transition-all duration-300 group-hover:scale-110"
+                  />
+                </div>
+                <span className="text-sm md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+                  {item.name}
+                </span>
+              </div>
+            ))}
           </div>
         </section>
 
