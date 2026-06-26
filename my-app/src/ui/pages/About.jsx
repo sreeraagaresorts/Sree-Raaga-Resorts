@@ -70,7 +70,7 @@ const About = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden ">
+      <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden ">
         
         {/* ================= HERO SECTION ================= */}
         <section
@@ -93,7 +93,7 @@ const About = () => {
 
         {/* ================= WELCOME & STATS SECTION ================= */}
           {/* ================= SHOWCASE / ABOUT SECTION ================= */}
-       <section className="relative py-48 px-6 bg-[#f7faff] text-[#0d2b4e] overflow-hidden">
+       <section className="relative py-48 px-6 bg-[#fdfeff]  text-[#0d2b4e] overflow-hidden">
                
                {/* Outlined brand text behind the staggered images */}
                <div 
@@ -164,7 +164,7 @@ const About = () => {
        </button>
      </div>
      
-           <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 text-center">
+           <div className="max-w-5xl mx-auto  py-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 text-center">
        {[
          { number: "1,200+", label: "Guest Reviews" },
          { number: "24/7", label: "Front Desk" },
@@ -196,7 +196,7 @@ const About = () => {
              </section>
      
         {/* ================= SPLIT FEATURE ROWS ================= */}
-        <section className="py-24 px-6 bg-[#f7faff]">
+        <section className="py-24 px-6 bg-[#fdfeff] ">
           <div className=" space-y-32">
             
             {/* Row 1: Sophisticated Comfort */}
@@ -245,7 +245,7 @@ const About = () => {
                 <WindowReveal 
                   src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800"
                   alt="A Unique Experience"
-                  className="w-full h-full rounded-lg shadow-xl"
+                  className="w-full h-full  shadow-xl"
                 />
               </div>
             </div>
@@ -254,7 +254,7 @@ const About = () => {
         </section>
 
             {/* Icons Row */}
-            <div className="max-w-[160vh] bg-[#f7faff] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6  justify-center items-center ">
+            <div className="max-w-[160vh] bg-[#fdfeff]  mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6  justify-center items-center ">
   {amenities.map((item, idx) => (
     <div
       key={idx}
@@ -276,7 +276,7 @@ const About = () => {
 </div>
 
         {/* ================= THREE COLUMNS ACTIVITIES ================= */}
-        <section className="py-24 px-6 bg-[#f7faff]">
+        <section className="py-24 px-6 bg-[#fdfeff] ">
           <div className="max-w-[150vh] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -321,7 +321,7 @@ const About = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/60"></div>
           <div className="relative z-10 text-white select-none max-w-3xl">
-            <h2 className="text-3xl md:text-7xl font-medium font-corm  leading-snug mb-8">
+            <h2 className="text-3xl md:text-6xl font-medium font-corm   mb-8">
               Luxury Awaits, <br /> Book Your Stay Today!
             </h2>
             <Link

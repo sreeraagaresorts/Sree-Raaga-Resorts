@@ -8,7 +8,7 @@ const Dine = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen">
+      <div className="bg-[#fdfeff] text-[#0d2b4e]  min-h-screen">
         
         {/* Hero Section */}
         <section
@@ -33,7 +33,7 @@ const Dine = () => {
           <span className="text-[#c8a64d] uppercase tracking-[4px] mb-4 text-xs font-semibold  block">
             Culinary Delights
           </span>
-          <h2 className="text-3xl md:text-4xl font-light font-corm text-[#0d2b4e] leading-relaxed mb-8">
+          <h2 className="text-3xl md:text-4xl font-medium font-corm text-[#0d2b4e] leading-snug mb-8">
             Elevate your senses with our fine culinary offerings. From refreshing morning brews to upscale multi-cuisine dining.
           </h2>
           
@@ -67,10 +67,10 @@ const Dine = () => {
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold  block">
                 Restaurant
               </span>
-              <h3 className="text-4xl font-medium font-corm text-[#0d2b4e]">
+              <h3 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e]">
                 Multi-Cuisine Dining
               </h3>
-              <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed  font-medium mr-4">
+              <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed   mr-4">
                 Experience a rich canvas of global and local flavors at our main dining hall. Serving curated breakfast, lunch, and dinner, our chefs craft every dish using fresh local ingredients, farm-to-table vegetables, and premium imports in an upscale dining environment.
               </p>
               <div className="pt-2">
@@ -90,10 +90,10 @@ const Dine = () => {
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold  block">
                 Garden Cafe
               </span>
-              <h3 className="text-4xl font-medium font-corm text-[#0d2b4e]">
+              <h3 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e]">
                 Coffee Shop
               </h3>
-              <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed  font-medium">
+              <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed  ">
                 Start your day with freshly brewed espresso, premium loose-leaf teas, and artisanal baked goods. Our cozy garden coffee shop is the perfect spot for casual meetings, morning reading, or a quiet sunset beverage amidst lush resort greenery.
               </p>
               <div className="pt-2">
@@ -127,10 +127,10 @@ const Dine = () => {
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold  block">
                 Lounge
               </span>
-              <h3 className="text-4xl font-medium font-corm text-[#0d2b4e]">
+              <h3 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e]">
                 Bar & Restaurant
               </h3>
-              <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mr-4 font-medium">
+              <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mr-4 ">
                 Sip custom cocktails, fine wines, and premium single malts in an atmosphere of refined luxury. Indulge in custom catering, chef-crafted pairings, and premium seating next to our pool area for a relaxing, stylish night.
               </p>
               <div className="pt-2">
@@ -150,10 +150,10 @@ const Dine = () => {
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold  block">
                 Gaming Lounge
               </span>
-              <h3 className="text-4xl font-medium font-corm text-[#0d2b4e]">
+              <h3 className="text-3xl md:text-5xl font-medium  font-corm text-[#0d2b4e]">
                 Sports Bar
               </h3>
-              <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed  font-medium ">
+              <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed   ">
                 Unwind with games and drinks in our lively sports lounge. Fully equipped with snooker tables, table tennis, board games, and large high-definition screens to watch your favorite matches with friends and family.
               </p>
               <div className="pt-2">

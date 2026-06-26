@@ -39,7 +39,7 @@ const Events = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen overflow-x-hidden">
+      <div className="bg-[#fdfeff] text-[#0d2b4e]  min-h-screen overflow-x-hidden">
 
         {/* HERO SECTION */}
         <section
@@ -65,7 +65,7 @@ const Events = () => {
         </section>
 
         {/* INTRODUCTION BLOCK */}
-        <section className="py-20 px-6 bg-[#fcfaf2] text-center max-w-4xl mx-auto space-y-8">
+        <section className="py-20 px-6 bg-[#fdfeff] text-center max-w-4xl mx-auto space-y-8">
           <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold block">
             OUR VENUES & CELEBRATIONS
           </span>
@@ -94,7 +94,7 @@ const Events = () => {
         </section>
 
         {/* DYNAMIC UPLOADED EVENTS SECTION */}
-        <section className="py-12 pb-24 px-6 bg-[#fcfaf2]">
+        <section className="py-12 pb-24 px-6 bg-[#fdfeff]">
           <div className="max-w-7xl mx-auto space-y-12">
             
             {loading ? (

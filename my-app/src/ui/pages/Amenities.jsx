@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { ChevronDown, ArrowRight } from "lucide-react";
@@ -201,7 +201,7 @@ const Amenities = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden">
+      <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden">
         
         {/* ================= 1. HERO SECTION ================= */}
         <section
@@ -233,10 +233,10 @@ const Amenities = () => {
             <span className="text-[#c8a64d] text-xs uppercase tracking-[4px] font-semibold font-jost block">
               LUXURY RESORT
             </span>
-            <h2 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e] leading-snug">
+            <h2 className="text-3xl md:text-6xl font-medium font-corm text-[#0d2b4e] leading-snug">
               Water Sports you Must Try
             </h2>
-            <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[16px] leading-relaxed max-w-2xl mx-auto">
+            <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[17px] leading-relaxed max-w-2xl mx-auto">
               An integral part of relax and perfect experience of your stay is water sports. Paddle boarding, kayaking, and surfing activities are designed to create memorable moments for you and your family.
             </p>
             <div className="pt-4">
@@ -252,7 +252,7 @@ const Amenities = () => {
         </section>
 
         {/* ================= 3. ALTERNATING AMENITIES SECTION ================= */}
-        <section className="py-24 px-6 bg-[#fcfaf2]">
+        <section className="py-24 px-6 bg-[#fdfeff]">
           <div className="max-w-7xl mx-auto space-y-28">
             
             {/* ITEM 01: Restaurant & Bar */}
@@ -268,10 +268,10 @@ const Amenities = () => {
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   01
                 </span>
-                <h3 className="text-3xl md:text-4xl font-corm font-light text-[#0d2b4e] tracking-wide">
+                <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
                   Restaurant & Bar
                 </h3>
-                <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[15px] leading-relaxed">
+                <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[17px] leading-relaxed">
                   An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.
                 </p>
                 <div className="pt-4">
@@ -299,10 +299,10 @@ const Amenities = () => {
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   02
                 </span>
-                <h3 className="text-3xl md:text-4xl font-corm font-light text-[#0d2b4e] tracking-wide">
+                <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
                   Spa & Wellness
                 </h3>
-                <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[15px] leading-relaxed">
+                <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[17px] leading-relaxed">
                   Indulge in absolute relaxation. Rejuvenate your mind, body, and soul with our curated therapies, healing massages, and organic spa treatments administered by expert therapists.
                 </p>
                 <div className="pt-4">
@@ -330,10 +330,10 @@ const Amenities = () => {
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   03
                 </span>
-                <h3 className="text-3xl md:text-4xl font-corm font-light text-[#0d2b4e] tracking-wide">
+                <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
                   Fitness Center
                 </h3>
-                <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[15px] leading-relaxed">
+                <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[17px] leading-relaxed">
                   Keep up with your fitness regime. Our state-of-the-art gym is equipped with premium cardio machines, strength training equipment, and free weights for a complete workout.
                 </p>
                 <div className="pt-4">
@@ -572,7 +572,7 @@ const Amenities = () => {
         </section>
 
         {/* ================= 5. HOTEL FACILITIES SECTION ================= */}
-        <section className="py-24 bg-[#f7faff] text-[#0d2b4e]">
+        <section className="py-24 bg-[#fdfeff]  text-[#0d2b4e]">
           <div className="max-w-[160vh] mx-auto">
             <div className="text-center mb-16 select-none">
               <h2 className="text-4xl md:text-6xl font-medium font-corm text-[#0d2b4e]">
@@ -600,75 +600,77 @@ const Amenities = () => {
         </section>
 
         {/* ================= 6. EXCEPTIONAL GASTRONOMY SECTION ================= */}
-        <section className="pt-24 bg-[#f7faff] ">
+        <section className="pt-24 bg-[#fdfeff]  ">
           <div className=" ">
             
             <div className="text-center mb-16 select-none">
               <span className="text-gray-400 uppercase tracking-[4px] text-[12px] block mb-4 font-jost">
                 Sree Raaga Resorts Luxury Hotel
               </span>
-              <h2 className="text-3xl md:text-[56px] font-medium font-corm text-[#0d2b4e] leading-snug">
+              <h2 className="text-3xl md:text-6xl font-medium font-corm text-[#0d2b4e] leading-snug">
                 Exceptional Gastronomy <br>
                 </br>In Beautiful Spaces
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-              
-              {/* Left Side: Dynamic image display */}
-              <div className="lg:col-span-7 h-[450px] lg:h-[800px] relative group w-full overflow-hidden shadow-lg ">
-                <WindowReveal 
-                  src={tabData[activeTab].image} 
-                  alt={tabData[activeTab].title}
-                  className="h-full w-full"
-                />
-               <Link
-  to="/rooms"
-  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-24 h-24 rounded-full bg-[#0d2b4e]/85 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
->
-  <span className="text-[10px] font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
-    Book Now
-  </span>
-</Link>
-              </div>
-
-              {/* Right Side: Static interactive tabs */}
-              <div className="lg:col-span-5 flex flex-col justify-center space-y-6">
-                {Object.keys(tabData).map((key) => {
-                  const isActive = activeTab === key;
-                  const tabColor = isActive
-                    ? "text-[#0d2b4e]"
-                    : "text-[#0d2b4e]/35 hover:text-[#0d2b4e]/60";
-
-                  return (
-                    <div
-                      key={key}
-                      onClick={() => handleTabClick(key)}
-                      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-3 px-2 border-b border-[#0d2b4e]/5 last:border-b-0"
-                    >
-                      <div className={`transition-colors duration-300 ${tabColor}`}>
-                        {tabData[key].icon}
-                      </div>
-
-                      <h3
-                        className={`text-xl md:text-3xl font-medium tracking-wide font-corm mb-1 transition-colors duration-300 ${tabColor}`}
-                      >
-                        {tabData[key].title}
-                      </h3>
-
-                      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                        isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-0 opacity-0"
-                      }`}>
-                        <p className="text-sm text-gray-500 leading-relaxed font-jost font-light mr-2">
-                          {tabData[key].description}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-            </div>
+              {/* Gastronomy Interactive Split */}
+                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                         
+                         {/* Left: Dynamic tab image */}
+                         <div className="lg:col-span-6 relative group w-full  h-[450px] md:h-[90vh]">
+                           <WindowReveal 
+                             src={tabData[activeTab].image} 
+                             alt={tabData[activeTab].title}
+                             className="h-full w-full"
+                           />
+                           {/* Custom circular interaction overlay: BOOK NOW */}
+                           <Link 
+                             to="/rooms"
+                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
+                           >
+                             <span className="text-[11px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
+                               Book Now
+                             </span>
+                           </Link>
+                         </div>
+           
+                         {/* Right: Static Tabs List */}
+                         <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
+                           {Object.keys(tabData).map((key) => {
+                             const isActive = activeTab === key;
+                             const tabColor = isActive
+                               ? "text-[#0d2b4e]"
+                               : "text-[#0d2b4e]/35 hover:text-[#0d2b4e]/60";
+           
+                             return (
+                               <div
+                                 key={key}
+                                 onClick={() => handleTabClick(key)}
+                                 className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-11 border-b border-[#0d2b4e]/5 last:border-b-0"
+                               >
+                                 <div className={`transition-colors duration-300 ${tabColor}`}>
+                                   {tabData[key].icon}
+                                 </div>
+           
+                                 <h3
+                                   className={`text-xl md:text-4xl font-medium tracking-wide font-corm mb-1  transition-colors duration-300 ${tabColor}`}
+                                 >
+                                   {tabData[key].title}
+                                 </h3>
+           
+                                 <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                                   isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-0 opacity-0"
+                                 }`}>
+                                   <p className="text-xl text-gray-500 leading-relaxed font-jost font-light font-jost mr-2">
+                                     {tabData[key].description}
+                                   </p>
+                                 </div>
+                               </div>
+                             );
+                           })}
+                         </div>
+           
+                       </div>
 
           </div>
         </section>

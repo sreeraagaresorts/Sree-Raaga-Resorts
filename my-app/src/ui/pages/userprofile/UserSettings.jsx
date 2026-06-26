@@ -113,8 +113,8 @@ const UserSettings = () => {
           <p className="text-[10px] text-[#c8a64d] uppercase tracking-widest px-3 font-semibold">Preferences</p>
           <div className="text-xs text-gray-500 space-y-1">
             <p className="px-3 py-2.5 bg-[#c8a64d]/10 text-[#c8a64d] rounded-none font-semibold border-l-2 border-[#c8a64d] uppercase tracking-wider text-[10px]">Security Settings</p>
-            <p className="px-3 py-2.5 hover:bg-[#fcfaf2] hover:text-[#c8a64d] rounded-none cursor-pointer uppercase tracking-wider text-[10px]">Notification Subscriptions</p>
-            <p className="px-3 py-2.5 hover:bg-[#fcfaf2] hover:text-[#c8a64d] rounded-none cursor-pointer uppercase tracking-wider text-[10px]">Privacy & Data</p>
+            <p className="px-3 py-2.5 hover:bg-[#fdfeff] hover:text-[#c8a64d] rounded-none cursor-pointer uppercase tracking-wider text-[10px]">Notification Subscriptions</p>
+            <p className="px-3 py-2.5 hover:bg-[#fdfeff] hover:text-[#c8a64d] rounded-none cursor-pointer uppercase tracking-wider text-[10px]">Privacy & Data</p>
           </div>
         </div>
 
@@ -138,7 +138,7 @@ const UserSettings = () => {
                     placeholder="••••••••"
                     value={passwordData.current}
                     onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })}
-                    className="w-full bg-[#fcfaf2] border border-gray-300 rounded-none p-3 pr-10 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
+                    className="w-full bg-[#fdfeff] border border-gray-300 rounded-none p-3 pr-10 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
                   />
                   <button
                     type="button"
@@ -159,7 +159,7 @@ const UserSettings = () => {
                     placeholder="••••••••"
                     value={passwordData.new}
                     onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
-                    className="w-full bg-[#fcfaf2] border border-gray-300 rounded-none p-3 pr-10 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
+                    className="w-full bg-[#fdfeff] border border-gray-300 rounded-none p-3 pr-10 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
                   />
                   <button
                     type="button"
@@ -180,7 +180,7 @@ const UserSettings = () => {
                     placeholder="••••••••"
                     value={passwordData.confirm}
                     onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
-                    className="w-full bg-[#fcfaf2] border border-gray-300 rounded-none p-3 pr-10 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
+                    className="w-full bg-[#fdfeff] border border-gray-300 rounded-none p-3 pr-10 text-[#0d2b4e] outline-none focus:border-[#c8a64d] focus:bg-white transition text-xs"
                   />
                   <button
                     type="button"

@@ -15,7 +15,7 @@ import {
   Lock,
   Wind
 } from "lucide-react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/RoomNav";
 import Footer from "../components/Footer";
 import { useToast } from "../components/Toast";
 import { API_URL } from "../../config/api";
@@ -409,7 +409,7 @@ const RoomDetails = () => {
     return (
       <>
         <Navbar />
-        <div className="bg-[#fcfaf2] text-[#0d2b4e] min-h-screen flex items-center justify-center ">
+        <div className="bg-[#fdfeff] text-[#0d2b4e] min-h-screen flex items-center justify-center ">
           <p className="text-[#c8a64d] text-2xl font-light">Loading room details...</p>
         </div>
         <Footer />
@@ -421,7 +421,7 @@ const RoomDetails = () => {
     return (
       <>
         <Navbar />
-        <div className="bg-[#fcfaf2] text-[#0d2b4e] min-h-screen flex items-center justify-center ">
+        <div className="bg-[#fdfeff] text-[#0d2b4e] min-h-screen flex items-center justify-center ">
           <p className="text-red-500 text-2xl font-light">Error: {error}</p>
         </div>
         <Footer />
@@ -437,7 +437,7 @@ const RoomDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden min-h-screen pt-28 md:pt-36">
+      <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden min-h-screen pt-28 md:pt-36">
         
         {/* ================= MAIN CONTENT DETAILS GRID ================= */}
         <section className="py-12 max-w-7xl mx-auto px-6">
@@ -521,10 +521,10 @@ const RoomDetails = () => {
                 <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e]">
                   About accommodation
                 </h3>
-                <p className="text-gray-500 text-sm md:text-[15px] leading-relaxed ">
+                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed ">
                   {room.description}
                 </p>
-                <p className="text-gray-500 text-xs md:text-[15px] leading-relaxed ">
+                <p className="text-gray-500 text-xs md:text-[17px] leading-relaxed ">
                   Experience premium resort living with custom services tailored specifically for you. Sree Raaga Resorts prioritizes design excellence and clean spaces to make your vacation peaceful and relaxing.
                 </p>
               </div>
@@ -652,30 +652,30 @@ const RoomDetails = () => {
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span  className="text-[15px]">220V electrical sockets</span>
+                      <span  className="text-[17px]">220V electrical sockets</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[15px]">Safety box</span>
+                      <span className="text-[17px]">Safety box</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[15px]">Room safe for your top mountain photos</span>
+                      <span className="text-[17px]">Room safe for your top mountain photos</span>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[15px]">220V electrical sockets</span>
+                      <span className="text-[17px]">220V electrical sockets</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[15px]">Slippers</span>
+                      <span className="text-[17px]">Slippers</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[15px]">Mini bar</span>
+                      <span className="text-[17px]">Mini bar</span>
                     </div>
                   </div>
                 </div>
@@ -916,10 +916,8 @@ const RoomDetails = () => {
 
                   {/* Payment Method */}
                   <div>
-                    <label className="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1.5 pl-1 font-jost">
-                      Payment Method
-                    </label>
-                    <div className="relative booking-field">
+                   
+                    {/* <div className="relative booking-field">
                       <button
                         type="button"
                         onClick={() => {
@@ -961,7 +959,7 @@ const RoomDetails = () => {
                           ))}
                         </div>
                       )}
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Price Calculation details */}
@@ -1000,7 +998,7 @@ const RoomDetails = () => {
         </section>
 
         {/* ================= SIMILAR ROOMS SECTION ================= */}
-        <section className="py-24 px-6 bg-white border-t border-gray-100">
+        <section className="py-24 px-6 bg-[#fdfeff] border-t border-gray-100">
           <div className="max-w-7xl mx-auto">
             
             {/* Header Titles */}
@@ -1044,11 +1042,11 @@ const RoomDetails = () => {
                   <div className="flex flex-col select-none">
                     <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                       <div>
-                        <h4 className="text-xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                        <h4 className="text-xl md:text-2xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
                           {item.name}
                         </h4>
                         {item.category && (
-                          <span className="text-[10px] text-[#c8a64d]  font-bold tracking-[2px] block mt-1 uppercase">
+                          <span className="text-[11px] text-[#c8a64d]  font-bold tracking-[2px] block mt-1 uppercase">
                             {item.category}
                           </span>
                         )}
@@ -1064,18 +1062,18 @@ const RoomDetails = () => {
                     </div>
 
                     {/* Specs Row */}
-                    <div className="flex flex-wrap items-center gap-4 pb-6 text-[10px]  text-gray-400">
+                    <div className="flex flex-wrap items-center gap-4 pb-6 text-[13px]  text-gray-400">
                       <div className="flex items-center">
                         <Maximize className="w-3.5 h-3.5 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
-                        <span className="text-black">{item.area || "30 M²"}</span>
+                        <span className="text-black">{item.area || "30 M²"} Sqft</span>
                       </div>
                       <div className="flex items-center">
                         <Bed className="w-3.5 h-3.5 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
-                        <span className="text-black">{item.beds || "1 Bed"}</span>
+                        <span className="text-black">{item.beds || "1 Bed"} Bed</span>
                       </div>
                       <div className="flex items-center">
                         <Bath className="w-3.5 h-3.5 text-[#c8a64d] mr-1.5" strokeWidth={1.2} />
-                        <span className="text-black">{item.bathrooms || "1 Bath"}</span>
+                        <span className="text-black">{item.bathrooms || "1 Bath"} Bathroom</span>
                       </div>
                     </div>
                   </div>

@@ -76,7 +76,7 @@ const UserProfile = () => {
             
             {/* FULL NAME */}
             <div className="flex gap-4 items-start">
-              <div className="p-2.5 bg-[#fcfaf2] rounded-none text-[#c8a64d] border border-gray-200/30">
+              <div className="p-2.5 bg-[#fdfeff] rounded-none text-[#c8a64d] border border-gray-200/30">
                 <User size={16} />
               </div>
               <div>
@@ -87,7 +87,7 @@ const UserProfile = () => {
 
             {/* EMAIL */}
             <div className="flex gap-4 items-start">
-              <div className="p-2.5 bg-[#fcfaf2] rounded-none text-[#c8a64d] border border-gray-200/30">
+              <div className="p-2.5 bg-[#fdfeff] rounded-none text-[#c8a64d] border border-gray-200/30">
                 <Mail size={16} />
               </div>
               <div className="overflow-hidden">
@@ -98,7 +98,7 @@ const UserProfile = () => {
 
             {/* PHONE */}
             <div className="flex gap-4 items-start">
-              <div className="p-2.5 bg-[#fcfaf2] rounded-none text-[#c8a64d] border border-gray-200/30">
+              <div className="p-2.5 bg-[#fdfeff] rounded-none text-[#c8a64d] border border-gray-200/30">
                 <Phone size={16} />
               </div>
               <div>
@@ -109,7 +109,7 @@ const UserProfile = () => {
 
             {/* JOIN DATE */}
             <div className="flex gap-4 items-start">
-              <div className="p-2.5 bg-[#fcfaf2] rounded-none text-[#c8a64d] border border-gray-200/30">
+              <div className="p-2.5 bg-[#fdfeff] rounded-none text-[#c8a64d] border border-gray-200/30">
                 <Calendar size={16} />
               </div>
               <div>

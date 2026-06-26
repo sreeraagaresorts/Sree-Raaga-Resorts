@@ -96,7 +96,7 @@ const UserDashboard = () => {
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Total Stays</p>
             <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">{bookings.length}</h2>
           </div>
-          <div className="w-10 h-10 bg-[#fcfaf2] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
+          <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Calendar className="w-5 h-5 text-[#c8a64d]" />
           </div>
         </div>
@@ -106,7 +106,7 @@ const UserDashboard = () => {
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Active Bookings</p>
             <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">{activeBookings}</h2>
           </div>
-          <div className="w-10 h-10 bg-[#fcfaf2] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
+          <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Shield className="w-5 h-5 text-[#c8a64d]" />
           </div>
         </div>
@@ -116,7 +116,7 @@ const UserDashboard = () => {
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Pending Approvals</p>
             <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">{pendingBookings}</h2>
           </div>
-          <div className="w-10 h-10 bg-[#fcfaf2] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
+          <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Clock className="w-5 h-5 text-[#c8a64d]" />
           </div>
         </div>
@@ -126,7 +126,7 @@ const UserDashboard = () => {
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Saved Rooms</p>
             <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">1</h2>
           </div>
-          <div className="w-10 h-10 bg-[#fcfaf2] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
+          <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Heart className="w-5 h-5 text-[#c8a64d]" />
           </div>
         </div>
@@ -143,7 +143,7 @@ const UserDashboard = () => {
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-[#fcfaf2] p-5 rounded-none border border-gray-200/30 flex gap-4 items-start">
+              <div className="bg-[#fdfeff] p-5 rounded-none border border-gray-200/30 flex gap-4 items-start">
                 <Coffee className="text-[#c8a64d] shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <h4 className="font-semibold text-sm text-[#c8a64d] tracking-wide uppercase text-xs">Complimentary Breakfast</h4>
@@ -151,7 +151,7 @@ const UserDashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-[#fcfaf2] p-5 rounded-none border border-gray-200/30 flex gap-4 items-start">
+              <div className="bg-[#fdfeff] p-5 rounded-none border border-gray-200/30 flex gap-4 items-start">
                 <MapPin className="text-[#c8a64d] shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <h4 className="font-semibold text-sm text-[#c8a64d] tracking-wide uppercase text-xs">Airport Shuttle Pickup</h4>
@@ -167,22 +167,22 @@ const UserDashboard = () => {
               <span className="w-1.5 h-6 bg-[#c8a64d] inline-block"></span> Quick Actions
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Link to="/dashboard/profile" className="p-5 bg-[#fcfaf2] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
+              <Link to="/dashboard/profile" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
                 <User className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
                 <span className="text-[10px] tracking-wider uppercase font-semibold text-gray-600 block">Edit Profile</span>
               </Link>
 
-              <Link to="/dashboard/bookings" className="p-5 bg-[#fcfaf2] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
+              <Link to="/dashboard/bookings" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
                 <Calendar className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
                 <span className="text-[10px] tracking-wider uppercase font-semibold text-gray-600 block">My Stays</span>
               </Link>
 
-              <Link to="/dashboard/notifications" className="p-5 bg-[#fcfaf2] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
+              <Link to="/dashboard/notifications" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
                 <Bell className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
                 <span className="text-[10px] tracking-wider uppercase font-semibold text-gray-600 block">Alerts</span>
               </Link>
 
-              <Link to="/dashboard/settings" className="p-5 bg-[#fcfaf2] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
+              <Link to="/dashboard/settings" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
                 <Settings className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
                 <span className="text-[10px] tracking-wider uppercase font-semibold text-gray-600 block">Account</span>
               </Link>
@@ -199,7 +199,7 @@ const UserDashboard = () => {
             
             <div className="space-y-3">
               {bookings.slice(0, 3).map((b) => (
-                <div key={b.id} className="p-4 bg-[#fcfaf2] rounded-none border border-gray-200/30 flex justify-between items-center text-xs">
+                <div key={b.id} className="p-4 bg-[#fdfeff] rounded-none border border-gray-200/30 flex justify-between items-center text-xs">
                   <div className="space-y-1">
                     <h4 className="font-semibold text-[#0d2b4e] truncate max-w-[120px] sm:max-w-[180px] md:max-w-[220px] tracking-wide">{b.room_name}</h4>
                     <p className="text-gray-500 font-light">{new Date(b.check_in).toLocaleDateString()}</p>

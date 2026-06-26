@@ -62,7 +62,7 @@ const UserLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfaf2] flex text-[#0d2b4e] ">
+    <div className="min-h-screen bg-[#fdfeff] flex text-[#0d2b4e] ">
       
       {/* SIDEBAR (Desktop) */}
       <aside className="w-64 border-r border-gray-200/50 hidden lg:flex flex-col bg-white min-h-screen sticky top-0">
@@ -231,7 +231,7 @@ const UserLayout = () => {
         </header>
 
         {/* PAGE OUTLET */}
-        <div className="p-4 sm:p-6 flex-1 bg-[#fcfaf2] overflow-y-auto">
+        <div className="p-4 sm:p-6 flex-1 bg-[#fdfeff] overflow-y-auto">
           <Outlet />
         </div>
 

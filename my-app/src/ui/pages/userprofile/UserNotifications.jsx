@@ -45,7 +45,7 @@ const UserNotifications = () => {
             const Icon = notif.icon;
             return (
               <div key={notif.id} className="p-5 flex gap-4 hover:bg-gray-50 transition duration-200 items-start">
-                <div className="p-2.5 rounded-none border border-[#c8a64d]/25 bg-[#fcfaf2] text-[#c8a64d] shrink-0">
+                <div className="p-2.5 rounded-none border border-[#c8a64d]/25 bg-[#fdfeff] text-[#c8a64d] shrink-0">
                   <Icon size={18} />
                 </div>
                 

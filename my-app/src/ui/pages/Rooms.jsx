@@ -82,6 +82,23 @@ const fallbackRooms = [
   }
 ];
 
+import wifiIcon from "../../assets/icons/wifi.png";
+import buggyIcon from "../../assets/icons/car.png";
+import tvIcon from "../../assets/icons/tv.png";
+import roomServiceIcon from "../../assets/icons/services.png";
+import laundryIcon from "../../assets/icons/laundry.png";
+import housekeepingIcon from "../../assets/icons/cleaning.png";
+
+
+const amenities = [
+  { icon: wifiIcon, name: "Wifi & Internet" },
+  { icon: buggyIcon, name: "Buggy Services" },
+  { icon: tvIcon, name: "Smart TV" },
+  { icon: roomServiceIcon, name: "Room Service" },
+  { icon: laundryIcon, name: "Laundry Services" },
+  { icon: housekeepingIcon, name: "Housekeeper Services" },
+];
+
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -156,7 +173,7 @@ const Rooms = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden  min-h-screen">
+      <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden  min-h-screen">
         
         {/* ================= HERO BANNER ================= */}
         <section
@@ -183,7 +200,7 @@ const Rooms = () => {
           {/* Header Introduction */}
           <div className="row justify-center text-center mb-20 select-none">
             <div className="max-w-2xl mx-auto">
-              <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
+              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-[12px]  font-semibold ">
                 Our Accommodations
               </span>
               <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]  mb-6">
@@ -213,7 +230,7 @@ const Rooms = () => {
                 {/* Room Image Container with Centered Hover circle */}
                 <Link 
                   to={`/rooms/${room.id || room._id}`} 
-                  className="block relative overflow-hidden rounded-sm aspect-[76/62] mb-6 shadow-md"
+                  className="block relative overflow-hidden  aspect-[76/62] mb-6 shadow-md"
                 >
                   {/* Subtle overlay */}
                   <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
@@ -306,113 +323,43 @@ const Rooms = () => {
         </section>
 
         {/* ================= HOTEL FACILITIES SECTION ================= */}
-        <section className="py-24 px-6 bg-[#f7f5ee]">
-          <div className="max-w-6xl mx-auto text-center mb-16 select-none">
-            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
-              Our Services
-            </span>
-            <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
-              Hotel Facilities
-            </h2>
-          </div>
+        <section className="py-24 px-6 bg-[#fdfeff]">
+         <div className="max-w-6xl mx-auto text-center mb-16">
+          
+              <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
+                Resort Facilities
+              </h2>
+            </div>
+        
 
-          <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 justify-center items-center">
-            {[
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12a10 10 0 0 1 14 0" />
-                    <path d="M8.5 15a5 5 0 0 1 7 0" />
-                    <circle cx="12" cy="18" r="1" fill="currentColor" />
-                    <path d="M15 10v2.5c0 1.2.8 2.2 2 2.5 1.2-.3 2-1.3 2-2.5V10l-2-1-2 1z" />
-                    <path d="M16.5 12l0.7 0.7 1.3-1.3" />
-                  </svg>
-                ), 
-                name: "Wifi & Internet" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="6" cy="18" r="2" />
-                    <circle cx="18" cy="18" r="2" />
-                    <path d="M3 18h18" />
-                    <path d="M8 18V8h7v10" />
-                    <path d="M5 8h12v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1z" />
-                    <line x1="8" y1="12" x2="11" y2="10" />
-                    <circle cx="11" cy="10" r="1" />
-                  </svg>
-                ), 
-                name: "Buggy services" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="6" width="14" height="10" rx="1" />
-                    <path d="M8 16v3h4v-3H8zM6 19h8" />
-                    <rect x="19" y="8" width="2" height="8" rx="0.5" />
-                    <circle cx="20" cy="10" r="0.5" fill="currentColor" />
-                    <line x1="20" y1="12" x2="20" y2="15" strokeWidth="1" />
-                  </svg>
-                ), 
-                name: "Smart TV" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 17h18" />
-                    <path d="M6 17a6 6 0 0 1 12 0" />
-                    <circle cx="12" cy="9.5" r="1.5" />
-                    <path d="M2 20h20" />
-                  </svg>
-                ), 
-                name: "Room Service" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="5" y="4" width="14" height="16" rx="2" />
-                    <circle cx="12" cy="13" r="5" />
-                    <circle cx="12" cy="13" r="3" strokeDasharray="2 1" />
-                    <circle cx="8" cy="7" r="0.8" fill="currentColor" />
-                    <circle cx="10" cy="7" r="0.8" fill="currentColor" />
-                    <line x1="13" y1="7" x2="16" y2="7" />
-                  </svg>
-                ), 
-                name: "Laundry Services" 
-              },
-              { 
-                icon: (
-                  <svg className="w-10 h-10 text-[#0d2b4e]/70 group-hover:text-[#c8a64d] transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 12h8l-1 8H5l-1-8z" />
-                    <path d="M4 12a4 4 0 0 1 8 0" />
-                    <line x1="18" y1="4" x2="10" y2="20" />
-                    <path d="M16 4l3 3-1.5 1.5-3-3L16 4z" fill="currentColor" />
-                    <path d="M20 12l0.5 0.5-0.5 0.5-0.5-0.5z" fill="currentColor" />
-                    <path d="M15 18l0.4 0.4-0.4 0.4-0.4-0.4z" fill="currentColor" />
-                  </svg>
-                ), 
-                name: "Housekeeper Services" 
-              }
-            ].map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group cursor-default">
-                <div className="mb-4 text-[#0d2b4e]/60 group-hover:text-[#c8a64d] transition-colors duration-300">
-                  {item.icon}
-                </div>
-                <span className="text-xs md:text-sm font-semibold tracking-wider text-gray-500  group-hover:text-[#0d2b4e] transition-colors duration-300 uppercase">
-                  {item.name}
-                </span>
-              </div>
-            ))}
-          </div>
+            {/* Icons Row */}
+            <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6  justify-center items-center py-4 mb-32">
+  {amenities.map((item, idx) => (
+    <div
+      key={idx}
+      className="flex flex-col items-center text-center group cursor-default"
+    >
+      <div className=" overflow-hidden">
+        <img
+          src={item.icon}
+          alt={item.name}
+          className="w-20 h-20 px-4 object-contain transition-all duration-300 group-hover:scale-110"
+        />
+      </div>
+
+      <span className="text-sm md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+        {item.name}
+      </span>
+    </div>
+  ))}
+</div>
         </section>
 
         {/* ================= FOLLOW US ON INSTAGRAM SECTION ================= */}
-        <section className=" bg-white">
+        <section className=" bg-[#fdfeff]">
           <div className="py-10 text-center mb-16 select-none">
-            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
-              Our Socials
-            </span>
-            <h2 className="text-4xl md:text-5xl font-light  text-[#0d2b4e]">
+           <span class="text-[#c8a64d] uppercase tracking-[4px] text-xs font-jost font-semibold block mb-2">Social Media</span>
+            <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
               Follow us on Instagram
             </h2>
           </div>

@@ -173,7 +173,7 @@ const Menu = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen ">
+      <div className="bg-[#fdfeff] text-[#0d2b4e]  min-h-screen ">
         
         {/* ================= HERO BANNER ================= */}
         <section
@@ -218,26 +218,26 @@ const Menu = () => {
           </div>
         </section>
             {/* ================= MENU HIGHLIGHTS SECTION ================= */}
-        <section className="py-16 max-w-7xl mx-auto px-6 pb-28">
+        <section className="py-16 max-w-[180vh] mx-auto px-6 pb-28">
           
           <div className="text-center mb-10 select-none">
             <span className="text-[#c8a64d] uppercase tracking-[4px] mb-3 text-xs font-semibold  block">
               Our Menu
             </span>
-            <h2 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e]">
+            <h2 className="text-3xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
               Menu Highlights
             </h2>
           </div>
 
           {/* Category Tabs */}
-          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center items-center  text-[15px] uppercase tracking-widest text-gray-400 select-none mb-8">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center items-center  text-[24px] uppercase  text-gray-400 select-none mb-8">
             {categories.map((cat, idx) => (
               <React.Fragment key={cat}>
-                {idx > 0 && <span className="text-[#c8a64d]/60">•</span>}
+                {idx > 0 && <span className="text-[#c8a64d]/60 text-5xl mt-2">•</span>}
                 <button
                   onClick={() => setSelectedCategory(cat)}
-                  className={`hover:text-[#c8a64d] transition font-bold cursor-pointer ${
-                    selectedCategory === cat ? "text-[#c8a64d]" : "text-gray-500"
+                  className={`hover:text-[#c8a64d] transition  font-corm font-medium cursor-pointer ${
+                    selectedCategory === cat ? "text-[#c8a64d]" : "text-gray-800"
                   }`}
                 >
                   {cat}
@@ -255,7 +255,7 @@ const Menu = () => {
                 placeholder="Search dishes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#fbfbfb] border border-gray-200 rounded-md py-2 pl-9 pr-3 text-xs text-[#0d2b4e] focus:outline-none focus:border-[#c8a64d] transition shadow-sm"
+                className="w-full bg-[#fbfbfb] border border-gray-200 rounded-md py-3 pl-9 pr-3 text-xs text-[#0d2b4e] focus:outline-none focus:border-[#c8a64d] transition shadow-sm"
               />
               <Search className="absolute left-3 top-2.5 text-gray-400" size={13} />
             </div>
@@ -340,7 +340,7 @@ const Menu = () => {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-end gap-2 mb-1">
-                      <h4 className=" text-[25px] font-medium font-corm text-[#0d2b4e]  truncate flex items-center gap-2">
+                      <h4 className=" text-[30px] font-medium font-corm text-[#0d2b4e]  truncate flex items-center gap-2">
                         <img 
                           src={dish.isVegetarian ? "/veg.png" : "/nonveg.png"} 
                           alt={dish.isVegetarian ? "Veg" : "Non-Veg"} 
@@ -350,11 +350,11 @@ const Menu = () => {
                       </h4>
                       {/* Dotted connector */}
                       <div className="flex-1 border-b border-dotted border-gray-300 mx-2 mb-1.5 min-w-[20px]" />
-                      <span className=" text-sm font-semibold text-black shrink-0">
+                      <span className=" text-[17px] font-semibold text-black shrink-0">
                         ₹{parseFloat(dish.price).toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-gray-500 text-xs font-light line-clamp-2 leading-relaxed ">
+                    <p className="text-gray-500 text-[15px] font-light line-clamp-2 leading-relaxed ">
                       {dish.description || "Freshly cooked exquisite dish prepared by our resort specialty chefs."}
                     </p>
                   </div>
@@ -418,7 +418,7 @@ const Menu = () => {
               <img
                 src={getImageUrl(selectedDishForOrder.image)}
                 alt={selectedDishForOrder.name}
-                className="w-16 h-16 object-cover rounded shadow border border-white/10"
+                className="w-28 h-28 object-cover rounded shadow border border-white/10"
               />
               <div>
                 <h3 className="font-bold text-lg">{selectedDishForOrder.name}</h3>

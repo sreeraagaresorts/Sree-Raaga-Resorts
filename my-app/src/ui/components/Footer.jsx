@@ -122,7 +122,7 @@ const Footer = () => {
         </motion.button>
       </div>
 
-      <div className="max-w-[180vh] mx-auto px-6 py-44">
+      <div className="max-w-[180vh] mx-auto px-6 pt-44 pb-22">
         
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
@@ -132,7 +132,7 @@ const Footer = () => {
             <h3 className="text-lg md:text-3xl font-medium font-corm tracking-wide mb-6">
               About Us
             </h3>
-            <p className="text-white text-xs md:text-[15px] leading-relaxed max-w-xs">
+            <p className="text-white text-xs md:text-[16px] leading-relaxed max-w-xs">
               Sree Raaga Resorts offers a sanctuary of peace, where luxury meets nature. Escape the city's hustle and enjoy a perfect blend of stays, corporate events, weddings, and family recreation.
             </p>
           </div>
@@ -142,7 +142,7 @@ const Footer = () => {
             <h3 className="text-lg md:text-4xl font-medium font-corm tracking-wide mb-6">
               Contact
             </h3>
-            <div className="space-y-4 text-white text-xs md:text-[15px] leading-relaxed">
+            <div className="space-y-4 text-white text-xs md:text-[16px] leading-relaxed">
               <p>
                 No. 1246, Budigere Bypass Road,
                 <br />
@@ -181,7 +181,7 @@ const Footer = () => {
               Links
             </h3>
             
-            <div className="grid grid-cols-2 gap-4  text-xs md:text-[15px]">
+            <div className="grid grid-cols-2 gap-4  text-xs md:text-[16px]">
            <div>
                <ul className="space-y-3">
                 <li>
@@ -234,7 +234,7 @@ const Footer = () => {
 
           {/* Newsletter Column */}
           <div>
-            <h3 className="text-lg md:text-2xl font-medium font-corm tracking-wide mb-6">
+            <h3 className="text-lg md:text-3xl font-medium font-corm tracking-wide mb-6">
               Legal Pages
             </h3>
             <ul className="space-y-3">

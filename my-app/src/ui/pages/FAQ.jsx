@@ -70,7 +70,7 @@ const FAQ = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e]  min-h-screen">
+      <div className="bg-[#fdfeff] text-[#0d2b4e]  min-h-screen">
         
         {/* Hero Section */}
         <section

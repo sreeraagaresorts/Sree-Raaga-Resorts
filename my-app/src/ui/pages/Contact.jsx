@@ -95,7 +95,7 @@ const Contact = () => {
         </section>
 
         {/* LEAVE US YOUR INFO FORM SECTION */}
-        <section className="py-24 px-6 bg-[#fcfaf2] text-center">
+        <section className="py-24 px-6 bg-[#fdfeff] text-center">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="flex flex-col items-center">
               <div className="w-12 h-12 rounded-full bg-[#c8a64d]/10 flex items-center justify-center text-[#c8a64d] mb-4">
@@ -228,7 +228,7 @@ const Contact = () => {
         </section>
 
         {/* INSTAGRAM SECTION */}
-        <section className="pt-24 bg-white text-center">
+        <section className="pt-24 bg-[#fdfeff] text-center">
           <div className=" space-y-12">
             <div>
               <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold mb-2 block">

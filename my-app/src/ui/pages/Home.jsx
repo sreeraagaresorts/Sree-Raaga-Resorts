@@ -387,7 +387,7 @@ export default function Home() {
 return (
     <>
       <Navbar />
-      <div className="bg-[#fcfaf2] text-[#0d2b4e] overflow-x-hidden ">
+      <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden ">
         
         {/* ================= HERO SECTION ================= */}
         <section className="relative h-screen flex items-center justify-center">
@@ -625,7 +625,7 @@ return (
         </section>
 
         {/* ================= SHOWCASE / ABOUT SECTION ================= */}
-        <section className="relative py-48 px-6 bg-[#f7faff] text-[#0d2b4e] overflow-hidden">
+        <section className="relative py-48 px-6 bg-[#fdfeff] text-[#0d2b4e] overflow-hidden">
           
           {/* Outlined brand text behind the staggered images */}
           <div 
@@ -861,7 +861,7 @@ offer to suit your needs and elevate your experience.          </p>
         </section>
 
         {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
-        <section className="pt-24  bg-[#f7faff] text-[#0d2b4e]">
+        <section className="pt-24  bg-[#fdfeff] text-[#0d2b4e]">
           <div className="">
                <div className="max-w-6xl mx-auto text-center mb-16">
           
@@ -898,7 +898,7 @@ offer to suit your needs and elevate your experience.          </p>
               <span className="text-gray-400 uppercase tracking-[4px] text-[12px]  font-medium block mb-4">
                 Sree Raaga Resorts Luxury Hotel
               </span>
-              <h2 className="text-3xl md:text-[64px] font-medium font-corm  text-[#0d2b4e] leading-snug">
+              <h2 className="text-3xl md:text-[60px] font-medium font-corm  text-[#0d2b4e] leading-snug">
                 Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
               </h2>
             </div>
@@ -908,7 +908,7 @@ offer to suit your needs and elevate your experience.          </p>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
               
               {/* Left: Dynamic tab image */}
-              <div className="lg:col-span-6 relative group w-full h-[450px] md:h-[90vh]">
+              <div className="lg:col-span-6 relative group w-full  h-[450px] md:h-[90vh]">
                 <WindowReveal 
                   src={tabData[activeTab].image} 
                   alt={tabData[activeTab].title}
@@ -937,14 +937,14 @@ offer to suit your needs and elevate your experience.          </p>
                     <div
                       key={key}
                       onClick={() => handleTabClick(key)}
-                      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-3 border-b border-[#0d2b4e]/5 last:border-b-0"
+                      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-11 border-b border-[#0d2b4e]/5 last:border-b-0"
                     >
                       <div className={`transition-colors duration-300 ${tabColor}`}>
                         {tabData[key].icon}
                       </div>
 
                       <h3
-                        className={`text-xl md:text-3xl font-medium tracking-wide font-corm mb-1 transition-colors duration-300 ${tabColor}`}
+                        className={`text-xl md:text-4xl font-medium tracking-wide font-corm mb-1  transition-colors duration-300 ${tabColor}`}
                       >
                         {tabData[key].title}
                       </h3>
@@ -952,7 +952,7 @@ offer to suit your needs and elevate your experience.          </p>
                       <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                         isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-0 opacity-0"
                       }`}>
-                        <p className="text-sm text-gray-500 leading-relaxed font-jost font-light mr-2">
+                        <p className="text-xl text-gray-500 leading-relaxed font-jost font-light font-jost mr-2">
                           {tabData[key].description}
                         </p>
                       </div>
@@ -968,7 +968,7 @@ offer to suit your needs and elevate your experience.          </p>
 
         {/* ================= EXPERIENCES GRID ================= */}
       <section className="bg-white">
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 ">
     {[
       {
         title: "Yoga On Beach",
@@ -989,7 +989,7 @@ offer to suit your needs and elevate your experience.          </p>
     ].map((exp, index) => (
       <div
         key={index}
-        className="relative h-[500px] lg:h-[850px] overflow-hidden group"
+        className="relative h-[500px] lg:h-[850px] overflow-hidden group "
       >
         {/* Background Image */}
         <img
@@ -1044,11 +1044,11 @@ offer to suit your needs and elevate your experience.          </p>
 </section>
 
         {/* ================= A WARM, EXPRESSIVE URBAN SPACE ================= */}
-   <section className="py-24 bg-[#fbfbfb] overflow-hidden">
+   <section className="py-24 bg-[#fdfeff] overflow-hidden">
   <div className=" relative">
 
     {/* Main Center Box */}
-    <div className="bg-[#f3f1ec] min-h-[700px] flex items-center justify-center px-8">
+    <div className="bg-[#fdfeff] min-h-[700px] flex items-center justify-center px-8">
       <div className="max-w-3xl text-center">
 
         <span className="uppercase tracking-[3px] text-sm font-jost text-[#0d2b4e]">
@@ -1112,7 +1112,7 @@ offer to suit your needs and elevate your experience.          </p>
 </section>
 
         {/* ================= UNIQUE EXPERIENCES ================= */}
-        <div className="bg-[#fbfbfb] pb-20">
+        <div className="bg-[#fdfeff] pb-20">
           <div className="max-w-6xl mx-auto text-center mb-16">
   <span className="text-gray-500 uppercase tracking-[4px] text-xs font-jost font-semibold block mb-3">
     There's so much to discover
@@ -1394,12 +1394,12 @@ offer to suit your needs and elevate your experience.          </p>
         </section>
 
         {/* ================= FOLLOW US ON INSTAGRAM ================= */}
-        <section className="  bg-[#f7faff] text-[#0d2b4e]">
+        <section className="  bg-[#fdfeff] text-[#0d2b4e]">
           <div className="py-12 text-center mb-12">
             <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-jost font-semibold block mb-2">
               Social Media
             </span>
-            <h2 className="text-5xl font-medium font-corm  flex items-center justify-center gap-2">
+            <h2 className="text-2xl md:text-6xl font-medium font-corm  flex items-center justify-center gap-2">
               Follow us on Instagram <InstagramIcon size={26} className="text-[#c8a64d] mt-2" />
             </h2>
           </div>
