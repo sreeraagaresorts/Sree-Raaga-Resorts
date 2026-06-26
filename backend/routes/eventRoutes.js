@@ -16,7 +16,10 @@ const {
   getEvent,
   createEvent,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  createEnquiry,
+  getEnquiries,
+  deleteEnquiry
 } = require("../controllers/eventController");
 
 /*
@@ -28,6 +31,8 @@ const {
 router.get("/", getEvents);
 
 router.get("/:id", getEvent);
+
+router.post("/enquiries", createEnquiry);
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +61,20 @@ router.delete(
   verifyToken,
   adminMiddleware,
   deleteEvent
+);
+
+router.get(
+  "/enquiries/admin",
+  verifyToken,
+  adminMiddleware,
+  getEnquiries
+);
+
+router.delete(
+  "/enquiries/admin/:id",
+  verifyToken,
+  adminMiddleware,
+  deleteEnquiry
 );
 
 module.exports = router;

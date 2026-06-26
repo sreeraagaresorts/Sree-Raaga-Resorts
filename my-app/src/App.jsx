@@ -9,6 +9,7 @@ import Amenities from "./ui/pages/Amenities";
 import Rooms from "./ui/pages/Rooms";
 import RoomDetails from "./ui/pages/RoomDetails";
 import Events from "./ui/pages/Events";
+import EventDetails from "./ui/pages/EventDetails";
 import Dine from "./ui/pages/Dine";
 import Contact from "./ui/pages/Contact";
 import Menu from "./ui/pages/Menu";
@@ -71,6 +72,7 @@ const App = () => {
         <Route path="/menu" element={<Menu />} />
         <Route path="/dine" element={<Dine />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/day-out" element={<DayOut />} />
         <Route path="/corporate" element={<Corporate />} />

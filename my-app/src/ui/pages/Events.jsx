@@ -168,7 +168,10 @@ function WaterSportsIcon({ className = "" }) {
                     >
                       {/* Event Image */}
                       <div className={`lg:col-span-6 w-full ${isEven ? "" : "lg:order-last"}`}>
-                        <div className="relative overflow-hidden aspect-[4/3] bg-gray-100 group shadow-sm rounded-sm">
+                        <Link 
+                          to={`/events/${event.id || event._id}`}
+                          className="block relative overflow-hidden aspect-[4/3] bg-gray-100 group shadow-sm rounded-sm"
+                        >
                           <img
                             src={getImageUrl(event.image)}
                             alt={event.name}
@@ -179,7 +182,7 @@ function WaterSportsIcon({ className = "" }) {
                               {event.sqft}
                             </span>
                           )}
-                        </div>
+                        </Link>
                       </div>
 
                       {/* Event Details */}
@@ -218,31 +221,15 @@ function WaterSportsIcon({ className = "" }) {
 
                         {/* Actions CTA Link (same style as Rooms.jsx) */}
                         <div>
-                          {event.show_price ? (
-                            <a
-                              href={`https://wa.me/918904561155?text=I%20am%20interested%20in%20booking%20the%20event%20package%20called%20"${encodeURIComponent(event.name)}"%20for%20₹${Number(event.price || 0).toLocaleString()}%20at%20Sree%20Raaga%20Resorts.`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d] text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
-                            >
-                              <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
-                                Book Package
-                              </span>
-                              <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
-                            </a>
-                          ) : (
-                            <a
-                              href={`https://wa.me/918904561155?text=I%20am%20interested%20in%20enquiring%20about%20the%20event%20package%20called%20"${encodeURIComponent(event.name)}"%20at%20Sree%20Raaga%20Resorts.`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d] text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
-                            >
-                              <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
-                                Enquire Now
-                              </span>
-                              <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
-                            </a>
-                          )}
+                          <Link
+                            to={`/events/${event.id || event._id}`}
+                            className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d] text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
+                          >
+                            <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
+                              {event.show_price ? "Book Package" : "Enquire Now"}
+                            </span>
+                            <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
+                          </Link>
                         </div>
                       </div>
                     </motion.div>

@@ -1,4 +1,5 @@
 const Event = require("../models/Event");
+const EventEnquiry = require("../models/EventEnquiry");
 
 exports.getEvents = async (req, res) => {
   try {
@@ -155,6 +156,81 @@ exports.deleteEvent = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Delete Failed"
+    });
+  }
+};
+
+exports.createEnquiry = async (req, res) => {
+  try {
+    const { name, phone, email, eventName, guests } = req.body;
+
+    if (!name || !phone || !email || !eventName || !guests) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      });
+    }
+
+    const enquiry = new EventEnquiry({
+      name,
+      phone,
+      email,
+      eventName,
+      guests: Number(guests)
+    });
+    await enquiry.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Event Enquiry Submitted Successfully",
+      enquiryId: enquiry.id
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to submit enquiry"
+    });
+  }
+};
+
+exports.getEnquiries = async (req, res) => {
+  try {
+    const enquiries = await EventEnquiry.find({}).sort({ id: -1 });
+
+    res.json({
+      success: true,
+      count: enquiries.length,
+      data: enquiries
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch enquiries"
+    });
+  }
+};
+
+exports.deleteEnquiry = async (req, res) => {
+  try {
+    const enquiry = await EventEnquiry.findOneAndDelete({ id: Number(req.params.id) });
+    if (!enquiry) {
+      return res.status(404).json({
+        success: false,
+        message: "Enquiry not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Enquiry deleted successfully"
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete enquiry"
     });
   }
 };
