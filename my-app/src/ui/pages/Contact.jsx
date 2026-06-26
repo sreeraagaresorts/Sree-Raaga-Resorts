@@ -193,7 +193,7 @@ const Contact = () => {
           {/* Info Right */}
           <div className="w-full lg:w-1/2 bg-[#071524] text-white p-12 md:p-20 flex flex-col justify-center space-y-6">
             <div>
-              <span className="text-[#c8a64d] text-[10px] tracking-[4px] font-semibold uppercase block mb-2">
+              <span className="text-[#c8a64d] text-[17px] tracking-[4px] font-semibold uppercase block mb-2">
                 CONTACT
               </span>
               <h2 className="text-4xl  font-light tracking-wide">
