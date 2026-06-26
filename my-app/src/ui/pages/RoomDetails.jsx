@@ -712,6 +712,7 @@ const RoomDetails = () => {
                   {/* Dates range picker dropdown */}
                   <div className="relative">
                     <DatePicker
+                      wrapperClassName="w-full"
                       selectsRange={true}
                       startDate={checkIn ? new Date(checkIn) : null}
                       endDate={checkOut ? new Date(checkOut) : null}
@@ -729,9 +730,9 @@ const RoomDetails = () => {
                       customInput={
                         <button
                           type="button"
-                          className="w-full  border border-gray-200 px-4  py-5 text-xs text-[#0d2b4e] flex items-center gap-32 justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                          className="w-full border border-gray-200 px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                         >
-                          <span className="font-medium text-[#0d2b4e] text-sm w-35 ">
+                          <span className="font-medium text-[#0d2b4e]">
                             {checkIn
                               ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
                                   checkOut
@@ -740,7 +741,7 @@ const RoomDetails = () => {
                                 }`
                               : "Check In - Check Out"}
                           </span>
-                            <ChevronDown size={14} className="text-gray-400" />
+                          <ChevronDown size={14} className="text-gray-400" />
                         </button>
                       }
                       calendarClassName="custom-datepicker"

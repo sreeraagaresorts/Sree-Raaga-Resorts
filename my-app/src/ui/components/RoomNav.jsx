@@ -505,7 +505,7 @@ className="text-3xl md:text-3xl font-light uppercase tracking-[8px] text-white" 
         <div className="hidden lg:flex lg:w-[40%] bg-[#f5dec2] text-[#0d2b4e] flex-col justify-center items-center px-12 py-16 relative z-10 overflow-y-auto">
           <div 
             ref={infoPanelRef}
-            className="flex flex-col items-center text-center space-y-10 max-w-sm w-full"
+            className="flex flex-col items-center text-center space-y-10 max-w-sm w-full mt-20"
           >
             {/* Top Logo / Brand */}
             <div className="flex flex-col items-center ">
