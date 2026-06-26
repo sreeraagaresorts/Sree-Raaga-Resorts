@@ -702,7 +702,7 @@ const RoomDetails = () => {
 
             {/* RIGHT COLUMN (BOOKING SIDEBAR CARD) */}
             <div className="lg:col-span-4 lg:sticky ">
-              <div className=" border border-gray-200/80 p-8  space-y-14 ">
+              <div className=" border border-gray-200/80 p-8  space-y-14  shadow-xl">
                 
                 <h3 className="text-3xl md:text-[30px] font-semibold font-corm text-[#0d2b4e] select-none text-center lg:text-left">
                   Book Your Room
