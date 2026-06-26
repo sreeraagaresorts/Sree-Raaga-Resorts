@@ -6,7 +6,7 @@ import { compressImage } from "../utils/imageCompressor";
 
 const AdminMenu = () => {
   const toast = useToast();
-  const [activeTab, setActiveTab] = useState("orders"); // "dishes" or "orders"
+  const [activeTab, setActiveTab] = useState("dishes"); // "dishes" or "orders"
 
   // Dishes Inventory states
   const [dishes, setDishes] = useState([]);
