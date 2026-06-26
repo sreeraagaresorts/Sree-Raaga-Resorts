@@ -87,7 +87,7 @@ const Contact = () => {
               contact us
             </span>
             <h1 className="text-5xl md:text-[92px] font-medium font-corm leading-tight">
-              Reach Us
+              Get in touch with us today
             </h1>
           </div>
         </section>
