@@ -441,7 +441,7 @@ const RoomDetails = () => {
         
         {/* ================= MAIN CONTENT DETAILS GRID ================= */}
         <section className="py-12 max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[7fr_4fr] gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[6.5fr_4.5fr] gap-16 items-start">
             
             {/* LEFT COLUMN */}
             <div className="space-y-8">
@@ -729,7 +729,7 @@ const RoomDetails = () => {
                       customInput={
                         <button
                           type="button"
-                          className="w-full border border-gray-200 px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                          className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                         >
                           <span className="font-medium text-[#0d2b4e]">
                             {checkIn
@@ -740,7 +740,7 @@ const RoomDetails = () => {
                                 }`
                               : "Check In - Check Out"}
                           </span>
-                          <ChevronDown size={14} className="text-gray-400" />
+                          <ChevronDown size={16} className="text-gray-400" />
                         </button>
                       }
                       calendarClassName="custom-datepicker"
@@ -765,13 +765,13 @@ const RoomDetails = () => {
                         setIsChildrenOpen(false);
                         setIsPaymentMethodOpen(false);
                       }}
-                      className="w-full  border border-gray-200  px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                      className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
                         {rooms} {rooms === 1 ? "Room" : "Rooms"}
                       </span>
                       <ChevronDown
-                        size={14}
+                        size={16}
                         className={`text-gray-400 transition-transform duration-300 ${isRoomsOpen ? "rotate-180" : ""}`}
                       />
                     </button>
@@ -818,13 +818,13 @@ const RoomDetails = () => {
                         setIsChildrenOpen(false);
                         setIsPaymentMethodOpen(false);
                       }}
-                      className="w-full  border border-gray-200  px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                      className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
                         {adults} {adults === 1 ? "Adult (18+ Years)" : "Adults (18+ Years)"}
                       </span>
                       <ChevronDown
-                        size={14}
+                        size={16}
                         className={`text-gray-400 transition-transform duration-300 ${isAdultsOpen ? "rotate-180" : ""}`}
                       />
                     </button>
@@ -871,13 +871,13 @@ const RoomDetails = () => {
                         setIsAdultsOpen(false);
                         setIsPaymentMethodOpen(false);
                       }}
-                      className="w-full  border border-gray-200  px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                      className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
-                        {children === 0 ? "Children" : children === 1 ? "1 Child " : `${children} Children `}
+                        {children === 0 ? "Children (0-6 Years)" : children === 1 ? "1 Child (0-6 Years)" : `${children} Children (0-6 Years)`}
                       </span>
                       <ChevronDown
-                        size={14}
+                        size={16}
                         className={`text-gray-400 transition-transform duration-300 ${isChildrenOpen ? "rotate-180" : ""}`}
                       />
                     </button>
@@ -965,7 +965,7 @@ const RoomDetails = () => {
                   {/* Price Calculation details */}
                   <div className="border-t border-gray-200/60 pt-5 space-y-2 select-none">
                     <div className="flex justify-between items-end pt-2">
-                      <span className="text-sm font-semibold text-[#0d2b4e]">Total Cost</span>
+                      <span className="text-[17px] font-semibold text-[#0d2b4e]">Total Cost</span>
                       <span className="text-2xl font-bold text-[#c8a64d]">₹{totals.total.toLocaleString()}</span>
                     </div>
                     {totals.nights > 0 && (
@@ -984,7 +984,7 @@ const RoomDetails = () => {
                     <button
                       onClick={handleBooking}
                       disabled={bookingLoading}
-                      className="w-full mt-4 py-4 bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-sm  shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
+                      className="w-full mt-4 py-5 bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-[17px] shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
                     >
                       {bookingLoading ? "Processing..." : `BOOK YOUR STAY NOW`}
                     </button>
