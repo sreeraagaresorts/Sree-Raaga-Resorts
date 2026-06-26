@@ -102,7 +102,7 @@ const Contact = () => {
               <span className="text-[#c8a64d] text-[17px] uppercase tracking-[4px] font-medium mb-2 block">
                 GET IN TOUCH
               </span>
-              <h2 className="text-3xl md:text-6xl  text-[#0d2b4e] font-medium font-corm">
+              <h2 className="text-3xl md:text-[70px]  text-[#0d2b4e] font-medium font-corm">
                 Leave Us Your Info
               </h2>
               <p className="text-gray-500 text-[17px] max-w-xl leading-relaxed mt-4 font-medium">
@@ -175,14 +175,15 @@ const Contact = () => {
         </section>
 
         {/* LOCATION MAP SECTION */}
-        <section className="flex flex-col lg:flex-row items-stretch">
+        <section className="flex flex-col lg:flex-row items-stretch lg:h-[781px]">
           {/* Map Left */}
-          <div className="w-full lg:w-1/2 min-h-[400px] bg-gray-100 relative">
+          <div className="w-full lg:w-1/2 min-h-[450px] lg:min-h-0 lg:h-full bg-gray-100 relative">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.3402484643033!2d77.74797071110034!3d13.14102921115858!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1c251f22dfab%3A0xe54d9c79216d7a42!2sBudigere%20Bypass%20Rd%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1719000000000!5m2!1sen!2sin"
               width="100%"
               height="100%"
-              style={{ border: 0, minHeight: "450px" }}
+              style={{ border: 0 }}
+              className="w-full h-full min-h-[450px] lg:min-h-0"
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -191,37 +192,35 @@ const Contact = () => {
           </div>
 
           {/* Info Right */}
-          <div className="w-full lg:w-1/2 bg-[#071524] text-white p-12 md:p-20 flex flex-col justify-center space-y-6">
-            <div>
-              <span className="text-[#c8a64d] text-[17px] tracking-[4px] font-semibold uppercase block mb-2">
-                CONTACT
-              </span>
-              <h2 className="text-4xl  font-light tracking-wide">
-                Location
-              </h2>
-            </div>
+          <div className="w-full lg:w-1/2 bg-[#071524] text-white p-12 md:p-20 lg:pl-34 flex flex-col justify-center items-start lg:h-full">
+            <div className="flex flex-col items-start text-left space-y-6 max-w-md w-full">
+              <div>
+                <span className="text-[#c8a64d] text-[36px] tracking-[4px] font-medium uppercase block">
+                  CONTACT
+                </span>
+              </div>
 
-            <div className="space-y-4  text-[20px] font-light text-white/80 leading-relaxed border-t border-white/5 pt-6">
-              <p>
-                No. 1246, Budigere Bypass Road,<br />
-                Devanahalli Hobli,<br />
-                Taluk Chamarayapatna,<br />
-                Karnataka 562129
-              </p>
-              <p className=" text-[17px]">
-                <span className="text-[#c8a64d] font-semibold">Email:</span> info@sreeraagaresorts.in<br />
-                <span className="text-[#c8a64d] font-semibold">Phone:</span> +91 89045 61155
-              </p>
-            </div>
+              <div className="space-y-4 text-[24px] font-medium text-white/80 leading-relaxed border-t border-white/5 pt-6 w-full">
+                <p>
+                  No. 1246, Budigere Bypass Road,<br />
+                  Devanahalli Hobli, Taluk Chamarayapatna,<br />
+                  Karnataka 562129.<br />
+                </p>
+                <p className="text-[24px]">
+                  <span className="text-[#c8a64d] font-semibold">Email:</span> info@sreeraagaresorts.in<br />
+                  <span className="text-[#c8a64d] font-semibold">Phone:</span> +91 89045 61155
+                </p>
+              </div>
 
-            <a
-              href="https://maps.google.com/?q=Budigere+Bypass+Road+Devanahalli+Karnataka"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-fit border border-[#c8a64d]  bg-[#c8a64d] text-[#071524] hover:bg-transparent hover:text-white transition duration px-8 py-4 text-[17px] uppercase tracking-[2px] font-semibold transition mt-6"
-            >
-              Get Directions
-            </a>
+              <a
+                href="https://maps.google.com/?q=Budigere+Bypass+Road+Devanahalli+Karnataka"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-fit border border-[#c8a64d] bg-[#c8a64d] text-[#071524] hover:bg-transparent hover:text-white transition duration px-8 py-4 text-[17px] uppercase tracking-[2px] font-semibold mt-4"
+              >
+                Get Directions
+              </a>
+            </div>
           </div>
         </section>
 
@@ -229,10 +228,10 @@ const Contact = () => {
         <section className="pt-24 bg-[#fdfeff] text-center">
           <div className=" space-y-12">
             <div>
-              <span className="text-[#c8a64d] text-[10px] uppercase tracking-[4px] font-semibold mb-2 block">
+              <span className="text-[#c8a64d] text-[17px] uppercase tracking-[4px] font-semibold mb-2 block">
                 INSTAGRAM
               </span>
-              <h2 className="text-3xl md:text-6xl font-corm  text-[#0d2b4e] font-medium">
+              <h2 className="text-3xl md:text-[70px] font-corm  text-[#0d2b4e] font-medium">
                 Follow us on Instagram
               </h2>
             </div>
