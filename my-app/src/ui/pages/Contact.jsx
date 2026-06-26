@@ -81,16 +81,14 @@ const Contact = () => {
               "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000')",
           }}
         >
-          <div className="absolute inset-0 bg-black/60"></div>
-
-          <div className="relative z-10 text-center px-4 max-w-7xl space-y-4">
-            <h1 className="text-5xl md:text-[92px] font-medium font-corm text-white tracking-wide">
-              Contact
+          <div className="absolute inset-0 bg-[#04121a]/55"></div>
+          <div className="relative z-10 text-center text-white select-none">
+            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
+              contact us
+            </span>
+            <h1 className="text-5xl md:text-[92px] font-medium font-corm leading-tight">
+              Reach Us
             </h1>
-            <p className="text-white/80 font-medium text-sm md:text-[17px] font-corm leading-relaxed max-w-2xl mx-auto">
-              Would you like to find out how to get to us? Have a question you want to ask? 
-              Tell us you want to say hello? Let us know what you need to know.
-            </p>
           </div>
         </section>
 

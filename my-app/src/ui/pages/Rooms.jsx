@@ -213,7 +213,7 @@ const Rooms = () => {
           </div>
 
           {/* Rooms Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-24">
             {filteredRooms.map((room, idx) => (
               <motion.div
                 key={room.id || room._id}
@@ -236,8 +236,8 @@ const Rooms = () => {
                   <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
                   
                   {/* Hover centered circular gold button */}
-                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
-                    <span className="text-xs font-semibold  tracking-[3px]">BOOK NOW</span>
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
+                    <span className="text-sm font-semibold  tracking-[3px]">BOOK NOW</span>
                   </div>
 
                   <img
@@ -251,47 +251,47 @@ const Rooms = () => {
                 <div className="flex flex-col flex-grow select-none">
                   <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                     <div>
-                      <h3 className="text-2xl md:text-3xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                      <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
                         {room.name}
                       </h3>
                       {room.category && (
-                        <span className="text-[10px] text-[#c8a64d]  font-bold tracking-[2px] block mt-1 uppercase">
+                        <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block mt-1.5 uppercase">
                           {room.category}
                         </span>
                       )}
                     </div>
                     <div className="text-right ">
-                      <span className="text-sm md:text-base  font-semibold text-gray-800">
+                      <span className="text-lg md:text-xl  font-semibold text-gray-800">
                         ₹{parseFloat(room.price).toLocaleString()}
                       </span>
-                      <span className="text-[10px] text-gray-800    uppercase font-semibold">
+                      <span className="text-xs text-gray-800    uppercase font-semibold">
                         / NIGHT
                       </span>
                     </div>
                   </div>
 
                   {/* Room Specs Row */}
-                  <div className="flex flex-wrap items-center gap-6 pb-6 text-[11px] md:text-sm  text-gray-500 border-b border-gray-100">
+                  <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px]  text-gray-500 border-b border-gray-100">
                     <div className="flex items-center">
-                      <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                      <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                       <span>{room.area || "30 M²"} Sqft</span>
                     </div>
                     <div className="flex items-center">
-                      <Users className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                      <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                       <span>{room.guests || "2 Guests"} Guests</span>
                     </div>
                     <div className="flex items-center">
-                      <Bed className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                      <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                       <span>{room.beds || "1 Bed"} Bed</span>
                     </div>
                     <div className="flex items-center">
-                      <Bath className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                      <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                       <span>{room.bathrooms || "1 Bath"} Bathroom</span>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-500 text-xs md:text-sm leading-relaxed  mt-6 mb-8 flex-grow">
+                  <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed  mt-6 mb-8 flex-grow">
                     {room.description}
                   </p>
 
@@ -299,12 +299,12 @@ const Rooms = () => {
                   <div>
                     <Link
                       to={`/rooms/${room.id || room._id}`}
-                      className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d]  text-xs font-bold uppercase tracking-[2px] transition-colors group/btn"
+                      className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d]  text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
                     >
                       <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
                         Book now
                       </span>
-                      <ArrowRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
                     </Link>
                   </div>
                 </div>

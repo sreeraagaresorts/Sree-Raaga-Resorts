@@ -58,9 +58,9 @@ const Events = () => {
             <h1 className="text-4xl md:text-[92px] font-medium font-corm  leading-tight">
               Meet & Celebrate
             </h1>
-            <p className="text-white/80 font-medium text-xs md:text-[17px] max-w-xl mx-auto leading-relaxed">
+            {/* <p className="text-white/80 font-medium text-xs md:text-[17px] max-w-xl mx-auto leading-relaxed">
               At Sree Raaga Resorts, we host custom weddings, corporate conferences, and private celebrations tailored to your expectations.
-            </p>
+            </p> */}
           </div>
         </section>
 

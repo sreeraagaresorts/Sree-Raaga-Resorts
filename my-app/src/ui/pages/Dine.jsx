@@ -23,7 +23,7 @@ const Dine = () => {
               Sree Raaga Resorts
             </span>
             <h1 className="text-4xl md:text-[92px] font-medium font-corm leading-tight">
-              Dine & Drink
+              Dining Experience
             </h1>
           </div>
         </section>
