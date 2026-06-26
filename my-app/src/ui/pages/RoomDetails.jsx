@@ -441,7 +441,7 @@ const RoomDetails = () => {
         
         {/* ================= MAIN CONTENT DETAILS GRID ================= */}
         <section className="py-12 max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[6.5fr_4.5fr] gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[6.8fr_4.2fr] gap-16 items-start">
             
             {/* LEFT COLUMN */}
             <div className="space-y-8">
@@ -874,7 +874,7 @@ const RoomDetails = () => {
                       className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
-                        {children === 0 ? "Children (0-6 Years)" : children === 1 ? "1 Child (0-6 Years)" : `${children} Children (0-6 Years)`}
+                        {children === 0 ? "Children" : children === 1 ? "1 Child" : `${children} Children`}
                       </span>
                       <ChevronDown
                         size={16}
@@ -885,7 +885,7 @@ const RoomDetails = () => {
                     {isChildrenOpen && (
                       <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-sm">Children (0-6 Years)</span>
+                          <span className="font-semibold text-sm">Children</span>
                           <div className="flex items-center gap-6">
                             <button
                               type="button"
@@ -966,10 +966,10 @@ const RoomDetails = () => {
                   <div className="border-t border-gray-200/60 pt-5 space-y-2 select-none">
                     <div className="flex justify-between items-end pt-2">
                       <span className="text-[17px] font-semibold text-[#0d2b4e]">Total Cost</span>
-                      <span className="text-2xl font-bold text-[#c8a64d]">₹{totals.total.toLocaleString()}</span>
+                      <span className="text-4xl font-bold text-[#c8a64d]">₹{totals.total.toLocaleString()}</span>
                     </div>
                     {totals.nights > 0 && (
-                      <span className="text-gray-400 text-[10px] font-semibold uppercase tracking-wider block text-right">
+                      <span className="text-yellow-500 text-[14px] font-semibold uppercase tracking-wider block text-right">
                         For {totals.nights} Nights Stay
                       </span>
                     )}
