@@ -440,8 +440,8 @@ const RoomDetails = () => {
       <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden min-h-screen pt-28 md:pt-36">
         
         {/* ================= MAIN CONTENT DETAILS GRID ================= */}
-        <section className="py-12 max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <section className="py-12 max-w-[140vh] mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-28 items-start">
             
             {/* LEFT COLUMN */}
             <div className="lg:col-span-8 space-y-8">
@@ -469,14 +469,14 @@ const RoomDetails = () => {
                     <button
                       type="button"
                       onClick={() => setGalleryIndex(prev => (prev === 0 ? gallery.length - 1 : prev - 1))}
-                      className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
+                      className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
                     >
-                      <ChevronLeft className="w-6 h-6" />
+                      <ChevronLeft className="w-7 h-7" />
                     </button>
                     <button
                       type="button"
                       onClick={() => setGalleryIndex(prev => (prev === gallery.length - 1 ? 0 : prev + 1))}
-                      className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
+                      className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
                     >
                       <ChevronRight className="w-6 h-6" />
                     </button>
@@ -702,9 +702,9 @@ const RoomDetails = () => {
 
             {/* RIGHT COLUMN (BOOKING SIDEBAR CARD) */}
             <div className="lg:col-span-4 lg:sticky ">
-              <div className="bg-[#fafafa] border border-gray-200/80 p-8 shadow-xl space-y-6 ">
+              <div className=" border border-gray-200/80 p-8  space-y-14 ">
                 
-                <h3 className="text-2xl font-light font-corm text-[#0d2b4e] select-none text-center lg:text-left">
+                <h3 className="text-3xl md:text-[30px] font-semibold font-corm text-[#0d2b4e] select-none text-center lg:text-left">
                   Book Your Room
                 </h3>
 
@@ -729,9 +729,9 @@ const RoomDetails = () => {
                       customInput={
                         <button
                           type="button"
-                          className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                          className="w-full  border border-gray-200 px-4  py-5 text-xs text-[#0d2b4e] flex items-center gap-32 justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                         >
-                          <span className="font-medium text-[#0d2b4e]">
+                          <span className="font-medium text-[#0d2b4e] text-sm w-35 ">
                             {checkIn
                               ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
                                   checkOut
@@ -740,7 +740,7 @@ const RoomDetails = () => {
                                 }`
                               : "Check In - Check Out"}
                           </span>
-                          <ChevronDown size={14} className="text-gray-400" />
+                            <ChevronDown size={14} className="text-gray-400" />
                         </button>
                       }
                       calendarClassName="custom-datepicker"
@@ -765,7 +765,7 @@ const RoomDetails = () => {
                         setIsChildrenOpen(false);
                         setIsPaymentMethodOpen(false);
                       }}
-                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                      className="w-full  border border-gray-200  px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
                         {rooms} {rooms === 1 ? "Room" : "Rooms"}
@@ -818,7 +818,7 @@ const RoomDetails = () => {
                         setIsChildrenOpen(false);
                         setIsPaymentMethodOpen(false);
                       }}
-                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                      className="w-full  border border-gray-200  px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
                         {adults} {adults === 1 ? "Adult" : "Adults"}
@@ -871,7 +871,7 @@ const RoomDetails = () => {
                         setIsAdultsOpen(false);
                         setIsPaymentMethodOpen(false);
                       }}
-                      className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+                      className="w-full  border border-gray-200  px-4 py-4 text-sm text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
                         {children === 0 ? "Children" : children === 1 ? "1 Child" : `${children} Children`}
@@ -965,7 +965,7 @@ const RoomDetails = () => {
                   {/* Price Calculation details */}
                   <div className="border-t border-gray-200/60 pt-5 space-y-2 select-none">
                     <div className="flex justify-between items-end pt-2">
-                      <span className="text-xs font-semibold text-[#0d2b4e]">Total Cost</span>
+                      <span className="text-sm font-semibold text-[#0d2b4e]">Total Cost</span>
                       <span className="text-2xl font-bold text-[#c8a64d]">₹{totals.total.toLocaleString()}</span>
                     </div>
                     {totals.nights > 0 && (
@@ -984,7 +984,7 @@ const RoomDetails = () => {
                     <button
                       onClick={handleBooking}
                       disabled={bookingLoading}
-                      className="w-full mt-4 py-4 bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-xs rounded-sm shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
+                      className="w-full mt-4 py-4 bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-sm  shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
                     >
                       {bookingLoading ? "Processing..." : `BOOK YOUR STAY NOW`}
                     </button>

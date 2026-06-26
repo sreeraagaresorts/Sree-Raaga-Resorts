@@ -67,6 +67,7 @@ body {
 /* Global React Datepicker Overrides */
 .react-datepicker,
 .react-datepicker__month-container {
+  margin-top: 65px;
   background-color: #f7d6b8 !important; /* Peach background */
   border: none !important;
   border-radius: 1.5rem !important; /* rounded-3xl */

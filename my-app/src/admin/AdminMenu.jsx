@@ -355,7 +355,7 @@ const AdminMenu = () => {
         >
           Dishes Inventory
         </button>
-        <button
+        {/* <button
           onClick={() => {
             setActiveTab("orders");
             fetchOrders();
@@ -367,7 +367,7 @@ const AdminMenu = () => {
           }`}
         >
           Room Service Orders ({orders.filter(o => o.status === "pending" || o.status === "preparing").length})
-        </button>
+        </button> */}
       </div>
 
       {/* TAB 1: DISHES INVENTORY */}
