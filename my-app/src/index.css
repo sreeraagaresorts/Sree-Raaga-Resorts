@@ -169,3 +169,89 @@ body {
 .react-datepicker__triangle {
   display: none !important;
 }
+
+/* Global Admin Portal Overrides */
+.admin-portal-wrapper {
+  font-size: 16px; /* Increases default base size from 14px */
+}
+
+/* Scaling Tailwind text size utility classes inside Admin */
+.admin-portal-wrapper .text-xs {
+  font-size: 0.875rem !important; /* Maps to 14px */
+}
+.admin-portal-wrapper .text-sm {
+  font-size: 1rem !important; /* Maps to 16px */
+}
+.admin-portal-wrapper .text-base {
+  font-size: 1.125rem !important; /* Maps to 18px */
+}
+.admin-portal-wrapper .text-lg {
+  font-size: 1.25rem !important; /* Maps to 20px */
+}
+.admin-portal-wrapper .text-xl {
+  font-size: 1.5rem !important; /* Maps to 24px */
+}
+.admin-portal-wrapper .text-2xl {
+  font-size: 1.875rem !important; /* Maps to 30px */
+}
+.admin-portal-wrapper .text-3xl {
+  font-size: 2.25rem !important; /* Maps to 36px */
+}
+
+/* Make inputs, textareas, selects match billing exactly */
+.admin-portal-wrapper input:not([type="checkbox"]):not([type="radio"]),
+.admin-portal-wrapper select,
+.admin-portal-wrapper textarea {
+  font-size: 1rem !important;
+  padding-top: 0.625rem !important; /* py-2.5 */
+  padding-bottom: 0.625rem !important; /* py-2.5 */
+}
+
+/* Make tables match billing exactly */
+.admin-portal-wrapper table {
+  font-size: 1rem !important;
+}
+.admin-portal-wrapper table thead th {
+  font-size: 0.875rem !important; /* text-sm/14px */
+}
+
+/* Make status badges match billing exactly */
+.admin-portal-wrapper span.rounded-full {
+  font-size: 0.875rem !important; /* text-sm/14px */
+  padding: 0.25rem 0.75rem !important; /* px-3 py-1 */
+}
+
+/* Make buttons match billing exactly, excluding small icon buttons */
+.admin-portal-wrapper button:not(.relative):not(.rounded-full):not(.p-1):not(.p-2):not(.p-3) {
+  font-size: 1rem !important;
+  padding-top: 0.75rem !important; /* py-3 */
+  padding-bottom: 0.75rem !important; /* py-3 */
+  padding-left: 1.5rem !important; /* px-6 */
+  padding-right: 1.5rem !important; /* px-6 */
+}
+/* Ensure lucide icons inside buttons scale appropriately */
+.admin-portal-wrapper button:not(.rounded-full):not(.p-1):not(.p-2):not(.p-3) svg {
+  width: 1.25rem !important; /* w-5 */
+  height: 1.25rem !important; /* h-5 */
+}
+
+/* Scale up padding inside common boxes/cards slightly */
+.admin-portal-wrapper .p-4 {
+  padding: 1.25rem !important; /* 20px instead of 16px */
+}
+.admin-portal-wrapper .p-5 {
+  padding: 1.5rem !important; /* 24px instead of 20px */
+}
+.admin-portal-wrapper .p-6 {
+  padding: 1.75rem !important; /* 28px instead of 24px */
+}
+.admin-portal-wrapper .p-8 {
+  padding: 2.25rem !important; /* 36px instead of 32px */
+}
+
+/* Sidebar item sizing */
+.admin-portal-wrapper aside a {
+  padding-top: 0.85rem !important;
+  padding-bottom: 0.85rem !important;
+  font-size: 1rem !important;
+}

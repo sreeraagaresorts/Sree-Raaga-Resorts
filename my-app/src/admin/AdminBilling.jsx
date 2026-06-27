@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../config/api';
+import * as XLSX from 'xlsx';
 import {
   Download,
   Search,
@@ -100,27 +101,34 @@ const AdminBilling = () => {
   const getStats = () => {
     let totalRevenue = 0;
     let pendingPayments = 0;
-    let refundRequests = 0; // count cancelled bookings
+    let refundRequests = 0; // count cancelled bookings (respecting time filter)
     let todaysCollections = 0;
+    let todaysCancellations = 0;
 
     const todayStr = new Date().toDateString();
 
     bookings.forEach((b) => {
-      if (!filterByTime(b.created_at)) return;
-
       const price = parseFloat(b.total_price);
-      if (b.status === "confirmed" || b.status === "checked_in") {
-        totalRevenue += price;
-      } else if (b.status === "pending") {
-        pendingPayments += price;
-      } else if (b.status === "cancelled") {
-        refundRequests += 1;
+      const bookingDate = new Date(b.created_at).toDateString();
+
+      // Today-specific stats (independent of timeFilter)
+      if (bookingDate === todayStr) {
+        if (b.status === "confirmed" || b.status === "checked_in") {
+          todaysCollections += price;
+        } else if (b.status === "cancelled") {
+          todaysCancellations += 1;
+        }
       }
 
-      // Today's collections: confirmed or checked-in bookings created today
-      const bookingDate = new Date(b.created_at).toDateString();
-      if (bookingDate === todayStr && (b.status === "confirmed" || b.status === "checked_in")) {
-        todaysCollections += price;
+      // Filtered stats (respect timeFilter)
+      if (filterByTime(b.created_at)) {
+        if (b.status === "confirmed" || b.status === "checked_in") {
+          totalRevenue += price;
+        } else if (b.status === "pending") {
+          pendingPayments += price;
+        } else if (b.status === "cancelled") {
+          refundRequests += 1;
+        }
       }
     });
 
@@ -129,6 +137,7 @@ const AdminBilling = () => {
       pendingPayments,
       refundRequests,
       todaysCollections,
+      todaysCancellations,
     };
   };
 
@@ -157,6 +166,18 @@ const AdminBilling = () => {
     createdAt: new Date(b.created_at)
   }));
 
+  // Map bookings to cancellation records
+  const cancellations = bookings
+    .filter((b) => b.status === "cancelled")
+    .map((b) => ({
+      id: b.id.toString(),
+      bookingId: `BK-${b.id.toString().padStart(4, "0")}`,
+      customerName: b.guest_name,
+      customerEmail: b.guest_email,
+      amount: parseFloat(b.total_price),
+      createdAt: new Date(b.created_at)
+    }));
+
   // Filtering
   const filteredInvoices = invoices.filter(
     (inv) =>
@@ -174,38 +195,60 @@ const AdminBilling = () => {
       pay.customerName.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  // Export to Excel (CSV format)
+  const filteredCancellations = cancellations.filter(
+    (cancel) =>
+      filterByTime(cancel.createdAt) &&
+      (cancel.bookingId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cancel.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      cancel.customerEmail.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  // Export to Excel (XLSX Workbook containing Invoices, Payments, and Cancellations)
   const exportToExcel = () => {
-    // Add BOM for UTF-8 to correctly render special characters in Excel
-    let csvContent = "\uFEFF";
     const dateStr = new Date().toISOString().split('T')[0];
-    let filename = `Billing_${activeTab}_${dateStr}.csv`;
+    const filename = `Billing_Report_${dateStr}.xlsx`;
 
-    if (activeTab === 'invoices') {
-      csvContent += "Invoice No,Guest Name,Guest Email,Date Created,Billing Amount,Status\n";
-      filteredInvoices.forEach(inv => {
-        // Escape quotes
-        const name = (inv.customerName || "").replace(/"/g, '""');
-        const email = (inv.customerEmail || "").replace(/"/g, '""');
-        csvContent += `"${inv.invoiceNumber}","${name}","${email}","${inv.createdAt.toLocaleDateString()}","${inv.amount}","${inv.status}"\n`;
-      });
-    } else {
-      csvContent += "Payment ID,Booking Ref,Customer,Payment Gateway,Amount Transacted,Payment Status\n";
-      filteredPayments.forEach(pay => {
-        const name = (pay.customerName || "").replace(/"/g, '""');
-        csvContent += `"${pay.paymentId}","${pay.bookingId}","${name}","${pay.gateway}","${pay.amount}","${pay.paymentStatus}"\n`;
-      });
-    }
+    // 1. Map to Excel-friendly structures
+    const invoicesData = filteredInvoices.map(inv => ({
+      "Invoice No": inv.invoiceNumber,
+      "Guest Name": inv.customerName,
+      "Guest Email": inv.customerEmail,
+      "Date Created": inv.createdAt.toLocaleDateString(),
+      "Billing Amount (INR)": inv.amount,
+      "Status": inv.status
+    }));
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", filename);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const paymentsData = filteredPayments.map(pay => ({
+      "Payment ID": pay.paymentId,
+      "Booking Ref": pay.bookingId,
+      "Customer": pay.customerName,
+      "Payment Gateway": pay.gateway,
+      "Amount Transacted (INR)": pay.amount,
+      "Payment Status": pay.paymentStatus
+    }));
+
+    const cancellationsData = filteredCancellations.map(cancel => ({
+      "Booking Ref": cancel.bookingId,
+      "Guest Name": cancel.customerName,
+      "Guest Email": cancel.customerEmail,
+      "Date Created": cancel.createdAt.toLocaleDateString(),
+      "Amount (INR)": cancel.amount,
+      "Status": "Cancelled"
+    }));
+
+    // 2. Create worksheets
+    const wsInvoices = XLSX.utils.json_to_sheet(invoicesData);
+    const wsPayments = XLSX.utils.json_to_sheet(paymentsData);
+    const wsCancellations = XLSX.utils.json_to_sheet(cancellationsData);
+
+    // 3. Create workbook and append sheets
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, wsInvoices, "Invoices");
+    XLSX.utils.book_append_sheet(wb, wsPayments, "Payments");
+    XLSX.utils.book_append_sheet(wb, wsCancellations, "Cancellations");
+
+    // 4. Trigger download
+    XLSX.writeFile(wb, filename);
   };
 
   return (
@@ -305,7 +348,7 @@ const AdminBilling = () => {
       {/* HEADER WITH FILTERS */}
       <div className="flex flex-col lg:flex-row justify-between gap-4 border-b border-white/5 pb-6 print:hidden items-start lg:items-end">
         <div>
-          <h1 className="text-3xl font-bold">Billing & Payments</h1>
+          <h1 className="text-2xl font-bold">Billing & Payments</h1>
           <p className="text-white/50 text-base">
             Manage invoices, payments, refunds and transactions dynamically.
           </p>
@@ -325,7 +368,7 @@ const AdminBilling = () => {
                   setEndDate('');
                 }
               }}
-              className="bg-[#071524] border border-white/10 text-white rounded text-sm px-4 py-2.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+              className="bg-[#071524] border border-white/10 mr-8 text-white rounded text-sm px-4 py-2.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
             >
               <option value="today">Today</option>
               <option value="all">All Time</option>
@@ -387,42 +430,45 @@ const AdminBilling = () => {
             <div className="flex justify-between text-white/50 text-base mb-2">
               Total Revenue <IndianRupee className="w-5 h-5 text-emerald-400" />
             </div>
-            <h2 className="text-white text-3xl font-bold">₹{stats.totalRevenue.toLocaleString()}</h2>
+            <h2 className="text-white text-2xl font-bold">₹{stats.totalRevenue.toLocaleString()}</h2>
+          </div>
+             <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
+            <div className="flex justify-between text-white/50 text-base mb-2">
+              Today's Revenue <Wallet className="w-5 h-5 text-emerald-400" />
+            </div>
+            <h2 className="text-white text-2xl font-bold">₹{stats.todaysCollections.toLocaleString()}</h2>
           </div>
 
           <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
             <div className="flex justify-between text-white/50 text-base mb-2">
               Pending Payments <Activity className="w-5 h-5 text-amber-400" />
             </div>
-            <h2 className="text-white text-3xl font-bold">₹{stats.pendingPayments.toLocaleString()}</h2>
+            <h2 className="text-white text-2xl font-bold">₹{stats.pendingPayments.toLocaleString()}</h2>
           </div>
 
           <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
             <div className="flex justify-between text-white/50 text-base mb-2">
-              Refunds / Cancellations <Undo2 className="w-5 h-5 text-red-400" />
+               Today's Cancellations <Undo2 className="w-5 h-5 text-red-400" />
             </div>
-            <h2 className="text-white text-3xl font-bold">{stats.refundRequests} bookings</h2>
+            <h2 className="text-white text-2xl font-bold">{stats.todaysCancellations} bookings</h2>
           </div>
 
-          <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
-            <div className="flex justify-between text-white/50 text-base mb-2">
-              Today's Revenue <Wallet className="w-5 h-5 text-emerald-400" />
-            </div>
-            <h2 className="text-white text-3xl font-bold">₹{stats.todaysCollections.toLocaleString()}</h2>
-          </div>
+       
         </div>
       )}
 
       {/* TABS + SEARCH */}
       <div className="bg-[#081A2F] rounded-xl border border-white/5 overflow-hidden">
         <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-white/5 gap-4 print:hidden">
-          <div className="flex gap-6 text-base font-bold uppercase tracking-wider w-full sm:w-auto">
-            {['invoices', 'payments'].map((tab) => (
+          <div className="flex flex-wrap gap-3 text-base font-bold uppercase tracking-wider w-full sm:w-auto">
+            {['invoices', 'payments', 'cancellations'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-1 cursor-pointer transition ${
-                  activeTab === tab ? 'text-[#C8A64D] border-b-2 border-[#C8A64D]' : 'text-white/40'
+                className={`px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
+                  activeTab === tab
+                    ? 'bg-[#C8A64D] text-[#071524] border-[#C8A64D] hover:bg-[#C8A64D]/90'
+                    : 'bg-[#071524] text-white/50 border-white/10 hover:bg-white/5'
                 }`}
               >
                 {tab}
@@ -525,6 +571,42 @@ const AdminBilling = () => {
                                 : "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
                             }`}>
                               {pay.paymentStatus}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )
+              )}
+
+              {/* CANCELLATIONS */}
+              {activeTab === 'cancellations' && (
+                filteredCancellations.length === 0 ? (
+                  <div className="p-10 text-center text-white/40">No cancellation records found.</div>
+                ) : (
+                  <table className="w-full text-base text-white/70">
+                    <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
+                      <tr>
+                        <th className="p-3 text-left">Booking Ref</th>
+                        <th className="p-3 text-left">Guest Name</th>
+                        <th className="p-3 text-left">Guest Email</th>
+                        <th className="p-3 text-left">Date Created</th>
+                        <th className="p-3 text-left">Amount</th>
+                        <th className="p-3 text-center">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredCancellations.map((cancel) => (
+                        <tr key={cancel.id} className="border-t border-white/5 hover:bg-white/5 transition">
+                          <td className="p-3 font-semibold text-white">{cancel.bookingId}</td>
+                          <td className="p-3">{cancel.customerName}</td>
+                          <td className="p-3 text-xs text-white/50">{cancel.customerEmail}</td>
+                          <td className="p-3 text-xs">{cancel.createdAt.toLocaleDateString()}</td>
+                          <td className="p-3 font-bold text-red-400">₹{cancel.amount.toLocaleString()}</td>
+                          <td className="p-3 text-center">
+                            <span className="text-sm px-3 py-1 rounded-full border font-semibold bg-red-500/10 text-red-400 border-red-500/20">
+                              Cancelled
                             </span>
                           </td>
                         </tr>

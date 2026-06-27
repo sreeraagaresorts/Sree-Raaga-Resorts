@@ -258,7 +258,7 @@ const  AdminLayout=()=> {
     (path !== "/admin" && location.pathname.startsWith(path));
 
   return (
-    <div className="h-screen bg-[#071524] flex text-white overflow-hidden">
+    <div className="h-screen bg-[#071524] flex text-white overflow-hidden admin-portal-wrapper">
 
       {/* Mobile Drawer Navigation */}
       <AnimatePresence>

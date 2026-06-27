@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Trash, Shield, ShieldAlert, RefreshCw, Users } from "lucide-react";
+import { Trash, Shield, ShieldAlert, RefreshCw, Users, TrendingUp, TrendingDown } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
 
 const AdminUsers = () => {
   const toast = useToast();
   const [users, setUsers] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("guests");
 
-  const fetchUsers = async (silent = false) => {
+  const fetchUsersAndBookings = async (silent = false) => {
     if (!silent) setLoading(true);
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
@@ -20,11 +21,22 @@ const AdminUsers = () => {
         },
       });
       const data = await response.json();
-      if (data.success) {
-        setUsers(data.data);
-      } else {
+      if (!data.success) {
         throw new Error(data.message || "Failed to load users.");
       }
+
+      const bResponse = await fetch(`${API_URL}/api/bookings`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const bData = await bResponse.json();
+      if (!bData.success) {
+        throw new Error(bData.message || "Failed to load bookings.");
+      }
+
+      setUsers(data.data);
+      setBookings(bData.data);
     } catch (err) {
       if (!silent) setError(err.message);
     } finally {
@@ -33,11 +45,11 @@ const AdminUsers = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchUsersAndBookings();
 
     // Auto-refresh users silently every 10 seconds
     const interval = setInterval(() => {
-      fetchUsers(true);
+      fetchUsersAndBookings(true);
     }, 10000);
 
     return () => clearInterval(interval);
@@ -64,7 +76,7 @@ const AdminUsers = () => {
       }
 
       toast.success("User role updated successfully!");
-      fetchUsers();
+      fetchUsersAndBookings();
     } catch (err) {
       toast.error(err.message || "Failed to change user role.");
     }
@@ -88,7 +100,7 @@ const AdminUsers = () => {
       }
 
       toast.success("User account deleted successfully!");
-      fetchUsers();
+      fetchUsersAndBookings();
     } catch (err) {
       toast.error(err.message || "Failed to delete user.");
     }
@@ -112,6 +124,68 @@ const AdminUsers = () => {
           </p>
         </div>
       </div>
+
+      {/* STATS CARDS */}
+      {!loading && !error && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Total Users */}
+          <div className="bg-[#061f24]/80 border border-cyan-500/20 p-5 rounded-xl hover:border-cyan-500/30 transition">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-white/60 text-xs">Registered Users</p>
+                <h2 className="text-2xl font-bold text-white mt-1">
+                  {users.filter((u) => u.role !== "admin").length}
+                </h2>
+                <div className="flex items-center gap-1 text-xs mt-2 text-green-400">
+                  <TrendingUp className="w-3 h-3" />
+                  +4.3% <span className="text-white/40 ml-1">vs last week</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 bg-cyan-500/10 border border-cyan-500/10 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-cyan-400" />
+              </div>
+            </div>
+          </div>
+
+          {/* Active Users */}
+          <div className="bg-[#062419]/80 border border-green-500/20 p-5 rounded-xl hover:border-green-500/30 transition">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-white/60 text-xs">Active Users</p>
+                <h2 className="text-2xl font-bold text-white mt-1">
+                  {users.filter((u) => u.role !== "admin" && bookings.some((b) => b.guest_email === u.email || b.user_id === u.id)).length}
+                </h2>
+                <div className="flex items-center gap-1 text-xs mt-2 text-green-400">
+                  <TrendingUp className="w-3 h-3" />
+                  +2.1% <span className="text-white/40 ml-1">vs last week</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 bg-green-500/10 border border-green-500/10 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-green-400" />
+              </div>
+            </div>
+          </div>
+
+          {/* Inactive Users */}
+          <div className="bg-[#240606]/80 border border-red-500/20 p-5 rounded-xl hover:border-red-500/30 transition">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-white/60 text-xs">Inactive Users</p>
+                <h2 className="text-2xl font-bold text-white mt-1">
+                  {users.filter((u) => u.role !== "admin" && !bookings.some((b) => b.guest_email === u.email || b.user_id === u.id)).length}
+                </h2>
+                <div className="flex items-center gap-1 text-xs mt-2 text-red-400">
+                  <TrendingDown className="w-3 h-3" />
+                  -1.5% <span className="text-white/40 ml-1">vs last week</span>
+                </div>
+              </div>
+              <div className="w-10 h-10 bg-red-500/10 border border-red-500/10 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-red-400" />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* TABS */}
       <div className="flex gap-4 border-b border-white/5 pb-2">

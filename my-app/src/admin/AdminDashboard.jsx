@@ -107,6 +107,7 @@ const AdminDashboard = () => {
       todaysRevenue,
       pendingPayments,
       occupancyRate,
+      checkedInCount,
     };
   };
 
@@ -158,10 +159,46 @@ const AdminDashboard = () => {
   const maxVal = Math.max(...chartData.map(d => d.total), 1000) * 1.15;
 
   const stats = [
-    // { label: "Room Occupancy", value: `${metrics.occupancyRate}%`, icon: BedDouble, trend: "+2.1%", isPositive: true },
-    { label: "Today's Revenue", value: `₹${metrics.todaysRevenue.toLocaleString()}`, icon: IndianRupee, trend: "+12.5%", isPositive: true },
-    { label: "Pending Payments", value: `₹${metrics.pendingPayments.toLocaleString()}`, icon: Wallet, trend: "-8.1%", isPositive: false },
-    { label: "Registered Users", value: usersCount.toString(), icon: Users, trend: "+4.3%", isPositive: true },
+    { 
+      label: "Today's Revenue", 
+      value: `₹${metrics.todaysRevenue.toLocaleString()}`, 
+      icon: IndianRupee, 
+      trend: "+12.5%", 
+      isPositive: true,
+      bgClass: "bg-[#062419]/80 border border-green-500/20",
+      iconBgClass: "bg-green-500/10 border border-green-500/10",
+      iconColorClass: "text-green-400"
+    },
+    { 
+      label: "Room Occupancy", 
+      value: `${metrics.checkedInCount} ${metrics.checkedInCount === 1 ? 'Room' : 'Rooms'}`, 
+      icon: BedDouble, 
+      trend: "-2.1%", 
+      isPositive: false,
+      bgClass: "bg-[#061f24]/80 border border-cyan-500/20",
+      iconBgClass: "bg-cyan-500/10 border border-cyan-500/10",
+      iconColorClass: "text-cyan-400"
+    },
+    { 
+      label: "Pending Payments", 
+      value: `₹${metrics.pendingPayments.toLocaleString()}`, 
+      icon: Wallet, 
+      trend: "-8.1%", 
+      isPositive: false,
+      bgClass: "bg-[#241a06]/80 border border-amber-500/20",
+      iconBgClass: "bg-amber-500/10 border border-amber-500/10",
+      iconColorClass: "text-amber-400"
+    },
+    { 
+      label: "Registered Users", 
+      value: usersCount.toString(), 
+      icon: Users, 
+      trend: "+4.3%", 
+      isPositive: true,
+      bgClass: "bg-[#061f24]/80 border border-cyan-500/20",
+      iconBgClass: "bg-cyan-500/10 border border-cyan-500/10",
+      iconColorClass: "text-cyan-400"
+    },
   ];
 
   const recentBookings = bookings.slice(0, 4).map((b) => ({
@@ -196,7 +233,7 @@ const AdminDashboard = () => {
         {stats.map((stat, i) => (
           <div
             key={i}
-            className="bg-[#081A2F] border border-white/5 p-5 rounded-xl hover:border-white/10 transition"
+            className={`${stat.bgClass || "bg-[#081A2F] border border-white/5"} p-5 rounded-xl hover:border-white/10 transition`}
           >
             <div className="flex justify-between items-start">
               <div>
@@ -219,8 +256,8 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
-              <div className="w-10 h-10 bg-[#071524] border border-white/5 rounded-lg flex items-center justify-center">
-                <stat.icon className="w-5 h-5 text-[#C8A64D]" />
+              <div className={`w-10 h-10 ${stat.iconBgClass || "bg-[#071524] border border-white/5"} rounded-lg flex items-center justify-center`}>
+                <stat.icon className={`w-5 h-5 ${stat.iconColorClass || "text-[#C8A64D]"}`} />
               </div>
             </div>
           </div>
