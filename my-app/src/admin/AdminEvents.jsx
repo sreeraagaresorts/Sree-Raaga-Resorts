@@ -11,6 +11,7 @@ import {
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
 import { compressImage } from "../utils/imageCompressor";
+import { formatPhoneNumber } from "../utils/phoneFormatter";
 
 const AdminEvents = () => {
   const toast = useToast();
@@ -522,7 +523,7 @@ const AdminEvents = () => {
                     <tr key={enquiry.id || enquiry._id} className="hover:bg-white/2 transition">
                       <td className="px-6 py-4 font-bold text-[#C8A64D]">#{enquiry.id}</td>
                       <td className="px-6 py-4 font-semibold text-white">{enquiry.name}</td>
-                      <td className="px-6 py-4">{enquiry.phone}</td>
+                      <td className="px-6 py-4">{formatPhoneNumber(enquiry.phone)}</td>
                       <td className="px-6 py-4 text-white/60">{enquiry.email}</td>
                       <td className="px-6 py-4 font-medium text-white">{enquiry.eventName}</td>
                       <td className="px-6 py-4 text-center font-bold">{enquiry.guests}</td>

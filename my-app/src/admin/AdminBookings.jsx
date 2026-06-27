@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
+import { formatPhoneNumber } from "../utils/phoneFormatter";
 
 const AdminBookings = () => {
   const toast = useToast();
@@ -370,7 +371,7 @@ const AdminBookings = () => {
                     <td className="p-4">
                       <div className="font-semibold">{b.guest_name}</div>
                       <div className="text-xs text-white/40">{b.guest_email}</div>
-                      {b.guest_phone && <div className="text-[10px] text-white/30">{b.guest_phone}</div>}
+                      {b.guest_phone && <div className="text-[10px] text-white/30">{formatPhoneNumber(b.guest_phone)}</div>}
                     </td>
 
                     {/* ROOM */}

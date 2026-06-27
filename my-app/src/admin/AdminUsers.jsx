@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Trash, Shield, ShieldAlert, RefreshCw, Users, TrendingUp, TrendingDown } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
+import { formatPhoneNumber } from "../utils/phoneFormatter";
 
 const AdminUsers = () => {
   const toast = useToast();
@@ -132,7 +133,7 @@ const AdminUsers = () => {
           <div className="bg-[#061f24]/80 border border-cyan-500/20 p-5 rounded-xl hover:border-cyan-500/30 transition">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-white/60 text-xs">Registered Users</p>
+                <p className="text-white/60 text-xs">Total Users</p>
                 <h2 className="text-2xl font-bold text-white mt-1">
                   {users.filter((u) => u.role !== "admin").length}
                 </h2>
@@ -188,27 +189,20 @@ const AdminUsers = () => {
       )}
 
       {/* TABS */}
-      <div className="flex gap-4 border-b border-white/5 pb-2">
-        <button
-          onClick={() => setActiveTab("guests")}
-          className={`px-4 py-2.5 text-xs font-bold uppercase tracking-widest border-b-2 transition cursor-pointer ${
-            activeTab === "guests"
-              ? "border-[#C8A64D] text-[#C8A64D]"
-              : "border-transparent text-white/50 hover:text-white/80"
-          }`}
-        >
-          Guests ({users.filter((u) => u.role !== "admin").length})
-        </button>
-        <button
-          onClick={() => setActiveTab("admins")}
-          className={`px-4 py-2.5 text-xs font-bold uppercase tracking-widest border-b-2 transition cursor-pointer ${
-            activeTab === "admins"
-              ? "border-[#C8A64D] text-[#C8A64D]"
-              : "border-transparent text-white/50 hover:text-white/80"
-          }`}
-        >
-          Administrators ({users.filter((u) => u.role === "admin").length})
-        </button>
+      <div className="flex flex-wrap gap-3 text-base font-bold uppercase tracking-wider w-full sm:w-auto border-b border-white/5 pb-4">
+        {['guests', 'admins'].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
+              activeTab === tab
+                ? 'bg-[#C8A64D] text-[#071524] border-[#C8A64D] hover:bg-[#C8A64D]/90'
+                : 'bg-[#071524] text-white/50 border-white/10 hover:bg-white/5'
+            }`}
+          >
+            {tab === 'guests' ? 'Guests' : 'Administrators'}
+          </button>
+        ))}
       </div>
 
       {/* ERROR DISPLAY */}
@@ -235,60 +229,66 @@ const AdminUsers = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider">
-                <tr>
-                  <th className="p-4 text-left font-semibold">User details</th>
-                  <th className="p-4 text-left font-semibold">Email</th>
-                  <th className="p-4 text-left font-semibold">Phone</th>
-                  <th className="p-4 text-left font-semibold">Role</th>
-                  <th className="p-4 text-left font-semibold">Registered on</th>
-                  <th className="p-4 text-center font-semibold">Actions</th>
+                <tr className="text-center">
+                     <th className="p-4 text-center font-semibold">Guest ID</th>
+                  <th className="p-4 text-center font-semibold">User Name</th>
+                  <th className="p-4 text-center font-semibold">Email</th>
+                  {/* <th className="p-4 text-center font-semibold">Phone</th> */}
+                  <th className="p-4 text-center font-semibold">Role</th>
+                  <th className="p-4 text-center font-semibold">Registered on</th>
+                  {activeTab === "guests" && <th className="p-4 text-center font-semibold">Actions</th>}
                 </tr>
               </thead>
               <tbody>
                 {displayedUsers.map((u) => (
                   <tr
                     key={u.id}
-                    className="border-t border-white/5 hover:bg-white/5 transition"
+                    className="border-t border-white/5 text-center hover:bg-white/5 transition"
                   >
-                    <td className="p-4 font-semibold text-white/90">
-                      {u.full_name}
-                      <span className="text-[10px] text-white/30 block">User ID: #{u.id}</span>
+                    <td className="p-4 font-semibold text-white">
+                     
+                      <span className="text-[16px] text-white block"> #{u.id}</span>
                     </td>
-                    <td className="p-4 text-white/70">{u.email}</td>
-                    <td className="p-4 text-white/70">{u.phone || "N/A"}</td>
+                       <td className="p-4 font-semibold text-white">
+ {u.full_name}
+                       </td>
+                    <td className="p-4 text-white">{u.email} <br></br> {formatPhoneNumber(u.phone)}</td>
+                    {/* <td className="p-4 text-white"></td> */}
                     <td className="p-4">
                       <span
-                        className={`text-xs px-2.5 py-0.5 rounded border font-semibold inline-flex items-center gap-1 ${
+                        className={`text-xs px-6 py-2 rounded border font-semibold inline-flex items-center gap-1 ${
                           u.role === "admin"
                             ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
                             : "bg-teal-500/10 text-teal-400 border-teal-500/20"
                         }`}
                       >
-                        {u.role === "admin" ? <Shield size={12} /> : <Users size={12} />}
+                        {/* {u.role === "admin" ? <Shield size={12} /> : <Users size={12} />} */}
                         {u.role}
                       </span>
                     </td>
-                    <td className="p-4 text-white/50 text-xs">
+                    <td className="p-4 text-white  text-xs">
                       {new Date(u.created_at).toLocaleDateString()}
                     </td>
-                    <td className="p-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => handleToggleRole(u)}
-                          className="p-1.5 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 rounded cursor-pointer transition"
-                          title={`Toggle role to ${u.role === "admin" ? "user" : "admin"}`}
-                        >
-                          <ShieldAlert size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(u.id)}
-                          className="p-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded cursor-pointer transition"
-                          title="Delete User Account"
-                        >
-                          <Trash size={14} />
-                        </button>
-                      </div>
-                    </td>
+                    {activeTab === "guests" && (
+                      <td className="p-4 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => handleToggleRole(u)}
+                            className="p-1.5 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 rounded cursor-pointer transition"
+                            title={`Toggle role to ${u.role === "admin" ? "user" : "admin"}`}
+                          >
+                            <ShieldAlert size={14} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(u.id)}
+                            className="p-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded cursor-pointer transition"
+                            title="Delete User Account"
+                          >
+                            <Trash size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

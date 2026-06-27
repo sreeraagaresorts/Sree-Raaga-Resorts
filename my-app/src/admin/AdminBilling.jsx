@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../config/api';
 import * as XLSX from 'xlsx';
+import DatePicker from 'react-datepicker';
+import { formatPhoneNumber } from '../utils/phoneFormatter';
 import {
   Download,
   Search,
@@ -9,6 +11,7 @@ import {
   Activity,
   Undo2,
   RefreshCw,
+  Calendar,
 } from 'lucide-react';
 
 const AdminBilling = () => {
@@ -149,8 +152,9 @@ const AdminBilling = () => {
     invoiceNumber: `INV-${b.id.toString().padStart(4, "0")}`,
     customerName: b.guest_name,
     customerEmail: b.guest_email,
+    customerPhone: b.guest_phone,
     amount: parseFloat(b.total_price),
-    status: b.status === "confirmed" || b.status === "checked_in" ? "Paid" : b.status === "cancelled" ? "Cancelled" : "Pending",
+    status: b.status === "confirmed" || b.status === "checked_in" ? "Paid Invoice" : b.status === "cancelled" ? "Cancelled" : "Pending",
     createdAt: new Date(b.created_at)
   }));
 
@@ -174,6 +178,7 @@ const AdminBilling = () => {
       bookingId: `BK-${b.id.toString().padStart(4, "0")}`,
       customerName: b.guest_name,
       customerEmail: b.guest_email,
+      customerPhone: b.guest_phone,
       amount: parseFloat(b.total_price),
       createdAt: new Date(b.created_at)
     }));
@@ -213,6 +218,7 @@ const AdminBilling = () => {
       "Invoice No": inv.invoiceNumber,
       "Guest Name": inv.customerName,
       "Guest Email": inv.customerEmail,
+      "Guest Phone": inv.customerPhone ? formatPhoneNumber(inv.customerPhone) : "N/A",
       "Date Created": inv.createdAt.toLocaleDateString(),
       "Billing Amount (INR)": inv.amount,
       "Status": inv.status
@@ -231,6 +237,7 @@ const AdminBilling = () => {
       "Booking Ref": cancel.bookingId,
       "Guest Name": cancel.customerName,
       "Guest Email": cancel.customerEmail,
+      "Guest Phone": cancel.customerPhone ? formatPhoneNumber(cancel.customerPhone) : "N/A",
       "Date Created": cancel.createdAt.toLocaleDateString(),
       "Amount (INR)": cancel.amount,
       "Status": "Cancelled"
@@ -330,6 +337,12 @@ const AdminBilling = () => {
           .print-title {
             display: none !important;
           }
+          .react-datepicker-wrapper {
+            width: auto !important;
+          }
+          .billing-datepicker {
+            margin-top: 0px !important;
+          }
         }
       `}</style>
 
@@ -350,7 +363,7 @@ const AdminBilling = () => {
         <div>
           <h1 className="text-2xl font-bold">Billing & Payments</h1>
           <p className="text-white/50 text-base">
-            Manage invoices, payments, refunds and transactions dynamically.
+            Manage invoices, payments and cancellations
           </p>
         </div>
 
@@ -368,7 +381,7 @@ const AdminBilling = () => {
                   setEndDate('');
                 }
               }}
-              className="bg-[#071524] border border-white/10 mr-8 text-white rounded text-sm px-4 py-2.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+              className="bg-[#071524] border border-white/10 mr-8  text-white rounded text-sm px-6 py-2.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
             >
               <option value="today">Today</option>
               <option value="all">All Time</option>
@@ -381,24 +394,48 @@ const AdminBilling = () => {
 
           {/* Custom dates input fields */}
           {timeFilter === 'custom' && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5">
                 <span className="text-white/40 text-sm uppercase font-semibold">From:</span>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="bg-[#071524] border border-white/10 text-white rounded text-sm px-3 py-2 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
-                />
+                <div className="relative flex items-center">
+                  <DatePicker
+                    selected={startDate ? new Date(startDate) : null}
+                    onChange={(date) => {
+                      if (date) {
+                        const tzOffset = date.getTimezoneOffset() * 60000;
+                        setStartDate(new Date(date.getTime() - tzOffset).toISOString().split("T")[0]);
+                      } else {
+                        setStartDate('');
+                      }
+                    }}
+                    dateFormat="dd/MM/yyyy"
+                    className="bg-[#071524] border border-white/10 text-white rounded text-sm pl-9 pr-3 py-2.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer w-36"
+                    placeholderText="DD/MM/YYYY"
+                    calendarClassName="billing-datepicker"
+                  />
+                  <Calendar className="w-4 h-4 text-white absolute left-3 pointer-events-none" />
+                </div>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="text-white/40 text-sm uppercase font-semibold">To:</span>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="bg-[#071524] border border-white/10 text-white rounded text-sm px-3 py-2 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
-                />
+                <div className="relative flex items-center">
+                  <DatePicker
+                    selected={endDate ? new Date(endDate) : null}
+                    onChange={(date) => {
+                      if (date) {
+                        const tzOffset = date.getTimezoneOffset() * 60000;
+                        setEndDate(new Date(date.getTime() - tzOffset).toISOString().split("T")[0]);
+                      } else {
+                        setEndDate('');
+                      }
+                    }}
+                    dateFormat="dd/MM/yyyy"
+                    className="bg-[#071524] border border-white/10 text-white rounded text-sm pl-9 pr-3 py-2.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer w-36"
+                    placeholderText="DD/MM/YYYY"
+                    calendarClassName="billing-datepicker"
+                  />
+                  <Calendar className="w-4 h-4 text-white absolute left-3 pointer-events-none" />
+                </div>
               </div>
             </div>
           )}
@@ -450,7 +487,7 @@ const AdminBilling = () => {
             <div className="flex justify-between text-white/50 text-base mb-2">
                Today's Cancellations <Undo2 className="w-5 h-5 text-red-400" />
             </div>
-            <h2 className="text-white text-2xl font-bold">{stats.todaysCancellations} bookings</h2>
+            <h2 className="text-white text-2xl font-bold">{stats.todaysCancellations} Bookings</h2>
           </div>
 
        
@@ -461,7 +498,7 @@ const AdminBilling = () => {
       <div className="bg-[#081A2F] rounded-xl border border-white/5 overflow-hidden">
         <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-white/5 gap-4 print:hidden">
           <div className="flex flex-wrap gap-3 text-base font-bold uppercase tracking-wider w-full sm:w-auto">
-            {['invoices', 'payments', 'cancellations'].map((tab) => (
+            {['invoices', 'Payments', 'Cancellations'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -504,25 +541,30 @@ const AdminBilling = () => {
                   <table className="w-full text-base text-white/70">
                     <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
                       <tr>
-                        <th className="p-3 text-left">Invoice No</th>
-                        <th className="p-3 text-left">Guest Name</th>
-                        <th className="p-3 text-left">Guest Email</th>
-                        <th className="p-3 text-left">Date Created</th>
-                        <th className="p-3 text-left">Billing Amount</th>
+                        <th className="p-3 text-center">Invoice No</th>
+                        <th className="p-3 text-center">Guest Name</th>
+                        <th className="p-3 text-center">Guest Contact</th>
+                        <th className="p-3 text-center">Date Created</th>
+                        <th className="p-3 text-center">Billing Amount</th>
                         <th className="p-3 text-center">Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredInvoices.map((inv) => (
-                        <tr key={inv.id} className="border-t border-white/5 hover:bg-white/5 transition">
-                          <td className="p-3 font-semibold text-white">{inv.invoiceNumber}</td>
-                          <td className="p-3">{inv.customerName}</td>
-                          <td className="p-3 text-xs text-white/50">{inv.customerEmail}</td>
-                          <td className="p-3 text-xs">{inv.createdAt.toLocaleDateString()}</td>
+                        <tr key={inv.id} className="border-t border-white/5 hover:bg-white/5 transition text-center">
+                          <td className="p-3 font-semibold text-[16px] text-white">{inv.invoiceNumber}</td>
+                          <td className="p-3 text-white">{inv.customerName}</td>
+                          <td className="p-3 text-[16px]">
+                            <div className="text-white">{inv.customerEmail}</div>
+                            {inv.customerPhone && (
+                              <div className="text-white mt-1">{formatPhoneNumber(inv.customerPhone)}</div>
+                            )}
+                          </td>
+                          <td className="p-3 text-xs text-white">{inv.createdAt.toLocaleDateString()}</td>
                           <td className="p-3 font-bold text-[#C8A64D]">₹{inv.amount.toLocaleString()}</td>
                           <td className="p-3 text-center">
                             <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
-                              inv.status === "Paid"
+                              inv.status === "Paid Invoice"
                                 ? "bg-green-500/10 text-green-400 border-green-500/20"
                                 : inv.status === "Cancelled"
                                 ? "bg-red-500/10 text-red-400 border-red-500/20"
@@ -546,11 +588,11 @@ const AdminBilling = () => {
                   <table className="w-full text-base text-white/70">
                     <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
                       <tr>
-                        <th className="p-3 text-left">Payment ID</th>
-                        <th className="p-3 text-left">Booking Ref</th>
-                        <th className="p-3 text-left">Customer</th>
-                        <th className="p-3 text-left">Payment Gateway</th>
-                        <th className="p-3 text-left">Amount Transacted</th>
+                        <th className="p-3 text-center">Payment ID</th>
+                        <th className="p-3 text-center">Booking Ref</th>
+                        <th className="p-3 text-center">Customer</th>
+                        <th className="p-3 text-center">Payment Gateway</th>
+                        <th className="p-3 text-center">Amount Transacted</th>
                         <th className="p-3 text-center">Payment Status</th>
                       </tr>
                     </thead>
@@ -590,7 +632,7 @@ const AdminBilling = () => {
                       <tr>
                         <th className="p-3 text-left">Booking Ref</th>
                         <th className="p-3 text-left">Guest Name</th>
-                        <th className="p-3 text-left">Guest Email</th>
+                        <th className="p-3 text-left">Guest Contact</th>
                         <th className="p-3 text-left">Date Created</th>
                         <th className="p-3 text-left">Amount</th>
                         <th className="p-3 text-center">Status</th>
@@ -601,7 +643,12 @@ const AdminBilling = () => {
                         <tr key={cancel.id} className="border-t border-white/5 hover:bg-white/5 transition">
                           <td className="p-3 font-semibold text-white">{cancel.bookingId}</td>
                           <td className="p-3">{cancel.customerName}</td>
-                          <td className="p-3 text-xs text-white/50">{cancel.customerEmail}</td>
+                          <td className="p-3 text-[16px]">
+                            <div className="text-white/70">{cancel.customerEmail}</div>
+                            {cancel.customerPhone && (
+                              <div className="text-white/40 mt-1">{formatPhoneNumber(cancel.customerPhone)}</div>
+                            )}
+                          </td>
                           <td className="p-3 text-xs">{cancel.createdAt.toLocaleDateString()}</td>
                           <td className="p-3 font-bold text-red-400">₹{cancel.amount.toLocaleString()}</td>
                           <td className="p-3 text-center">
