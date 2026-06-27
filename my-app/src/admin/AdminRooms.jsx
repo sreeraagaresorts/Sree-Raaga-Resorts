@@ -276,214 +276,214 @@ const AdminRooms = () => {
           {error}
         </div>
       )}
+{isFormOpen && (
+  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+    {/* Changed max-w-2xl to max-w-5xl for a much wider modal */}
+    <div className="bg-[#081A2F] w-full max-w-5xl rounded-xl p-6 lg:p-8 border border-white/10 shadow-2xl">
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-bold">{editingRoom ? "Edit Room" : "Add Room"}</h2>
+        <button 
+          onClick={() => setIsFormOpen(false)}
+          className="text-white/60 hover:text-white cursor-pointer bg-transparent border-0"
+        >
+          <X />
+        </button>
+      </div>
 
-      {/* FORM MODAL */}
-      {isFormOpen && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-[#081A2F] w-full max-w-2xl rounded-xl p-6 border border-white/10 my-4 max-h-[90vh] overflow-y-auto">
-            {/* HEADER */}
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">{editingRoom ? "Edit Room" : "Add Room"}</h2>
-              <button 
-                onClick={() => setIsFormOpen(false)}
-                className="text-white/60 hover:text-white cursor-pointer"
-              >
-                <X />
-              </button>
-            </div>
-
-            {/* FORM UI */}
-            <form onSubmit={handleSave} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Number</label>
-                  <input 
-                    required 
-                    placeholder="e.g. 101" 
-                    value={roomNumber} 
-                    onChange={(e) => setRoomNumber(e.target.value)} 
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Name</label>
-                  <input 
-                    required 
-                    placeholder="e.g. Royal Suite" 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)} 
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Price (₹ per night)</label>
-                  <input 
-                    required 
-                    type="number" 
-                    placeholder="e.g. 8000" 
-                    value={price} 
-                    onChange={(e) => setPrice(e.target.value)} 
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Area (e.g. 500 sqft)</label>
-                  <input 
-                    required 
-                    placeholder="e.g. 500 SQ FT" 
-                    value={area} 
-                    onChange={(e) => setArea(e.target.value)} 
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Beds</label>
-                  <input 
-                    required 
-                    placeholder="e.g. KING BED" 
-                    value={beds} 
-                    onChange={(e) => setBeds(e.target.value)} 
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Bathrooms</label>
-                  <input 
-                    required 
-                    placeholder="e.g. 1 BATHROOM" 
-                    value={bathrooms} 
-                    onChange={(e) => setBathrooms(e.target.value)} 
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Guests Capacity</label>
-                  <input 
-                    required 
-                    placeholder="e.g. 2 GUESTS" 
-                    value={guests} 
-                    onChange={(e) => setGuests(e.target.value)} 
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Category</label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white text-xs"
-                  >
-                    <option value="Executive Rooms">Executive Rooms</option>
-                    <option value="Luxury Villas">Luxury Villas</option>
-                    <option value="Compact Villas">Compact Villas</option>
-                    <option value="Duplex Villa">Duplex Villa</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Description</label>
-                <textarea
-                  required
-                  placeholder="Describe the room amenities, view, features..."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-[#071524] p-3 rounded-lg border border-white/10 outline-none focus:border-yellow-500 transition text-white"
-                  rows={3}
-                />
-              </div>
-
-              {/* IMAGE UPLOAD UI */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Image</label>
-                  <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative h-[180px] flex flex-col justify-center items-center">
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      onChange={handleFileChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                    />
-                    {imagePreview ? (
-                      <div className="space-y-2">
-                        <img src={imagePreview} className="max-h-24 mx-auto object-cover rounded" alt="Preview" />
-                        <p className="text-[#C8A64D] text-[10px]">Click/drag to change main image</p>
-                      </div>
-                    ) : (
-                      <>
-                        <Upload className="mx-auto mb-2 text-[#C8A64D]" />
-                        <p className="text-white/60 text-xs">Click or drag image to upload main image</p>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Extra Images (Details Gallery)
-                  </label>
-                  <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative h-[180px] flex flex-col justify-center items-center">
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      multiple
-                      onChange={handleExtraFilesChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                    />
-                    <Upload className="mx-auto mb-2 text-[#C8A64D]" />
-                    <p className="text-white/60 text-xs">Click or drag multiple images to upload</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* EXTRA IMAGES PREVIEW GRID */}
-              {extraImagePreviews.length > 0 && (
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Uploaded Gallery Images ({extraImagePreviews.length})
-                  </label>
-                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-[#071524] border border-white/10 rounded-lg">
-                    {extraImagePreviews.map((previewItem) => (
-                      <div key={previewItem.id} className="relative group aspect-square rounded overflow-hidden bg-black/40 border border-white/10">
-                        <img
-                          src={previewItem.url}
-                          alt="Extra Preview"
-                          className="w-full h-full object-cover"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveExtraImage(previewItem)}
-                          className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 cursor-pointer transition shadow z-10"
-                        >
-                          <X size={10} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* ACTIONS */}
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit" 
-                  disabled={saving}
-                  className="px-6 py-2 bg-[#C8A64D] text-black font-bold rounded-lg hover:bg-[#b09141] transition disabled:bg-yellow-600/50 cursor-pointer"
-                >
-                  {saving ? "Saving..." : "Save Room"}
-                </button>
-              </div>
-            </form>
+      {/* FORM UI */}
+      <form onSubmit={handleSave} className="space-y-6">
+        {/* Changed grid to lg:grid-cols-4 to spread inputs horizontally and reduce height */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Number</label>
+            <input 
+              required 
+              placeholder="e.g. 101" 
+              value={roomNumber} 
+              onChange={(e) => setRoomNumber(e.target.value)} 
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
+            />
+          </div>
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Name</label>
+            <input 
+              required 
+              placeholder="e.g. Royal Suite" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)} 
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
+            />
+          </div>
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Price (₹ / night)</label>
+            <input 
+              required 
+              type="number" 
+              placeholder="e.g. 8000" 
+              value={price} 
+              onChange={(e) => setPrice(e.target.value)} 
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
+            />
+          </div>
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Area</label>
+            <input 
+              required 
+              placeholder="e.g. 500 SQ FT" 
+              value={area} 
+              onChange={(e) => setArea(e.target.value)} 
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
+            />
+          </div>
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Beds</label>
+            <input 
+              required 
+              placeholder="e.g. KING BED" 
+              value={beds} 
+              onChange={(e) => setBeds(e.target.value)} 
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
+            />
+          </div>
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Bathrooms</label>
+            <input 
+              required 
+              placeholder="e.g. 1 BATHROOM" 
+              value={bathrooms} 
+              onChange={(e) => setBathrooms(e.target.value)} 
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
+            />
+          </div>
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Capacity</label>
+            <input 
+              required 
+              placeholder="e.g. 2 GUESTS" 
+              value={guests} 
+              onChange={(e) => setGuests(e.target.value)} 
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
+            />
+          </div>
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Category</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
+            >
+              <option value="Executive Rooms">Executive Rooms</option>
+              <option value="Luxury Villas">Luxury Villas</option>
+              <option value="Compact Villas">Compact Villas</option>
+              <option value="Duplex Villa">Duplex Villa</option>
+            </select>
           </div>
         </div>
-      )}
+
+        <div>
+          <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Description</label>
+          <textarea
+            required
+            placeholder="Describe the room amenities, view, features..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full bg-[#071524] p-3 rounded-lg border border-white/10 outline-none focus:border-yellow-500 transition text-white text-sm"
+            rows={2}
+          />
+        </div>
+
+        {/* IMAGE UPLOAD UI */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Image</label>
+            <div className="border border-dashed border-white/20 p-4 rounded-lg text-center bg-[#071524] relative h-[120px] flex flex-col justify-center items-center">
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handleFileChange}
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+              />
+              {imagePreview ? (
+                <div className="space-y-2">
+                  <img src={imagePreview} className="max-h-16 mx-auto object-cover rounded" alt="Preview" />
+                  <p className="text-[#C8A64D] text-[10px]">Click/drag to change main image</p>
+                </div>
+              ) : (
+                <>
+                  <Upload className="mx-auto mb-2 text-[#C8A64D]" size={20} />
+                  <p className="text-white/60 text-xs">Click or drag image to upload main image</p>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+              Extra Images (Details Gallery)
+            </label>
+            <div className="border border-dashed border-white/20 p-4 rounded-lg text-center bg-[#071524] relative h-[120px] flex flex-col justify-center items-center">
+              <input 
+                type="file" 
+                accept="image/*" 
+                multiple
+                onChange={handleExtraFilesChange}
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+              />
+              <Upload className="mx-auto mb-2 text-[#C8A64D]" size={20} />
+              <p className="text-white/60 text-xs">Click or drag multiple images to upload</p>
+            </div>
+          </div>
+        </div>
+
+        {/* EXTRA IMAGES PREVIEW GRID */}
+        {extraImagePreviews.length > 0 && (
+          <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+              Uploaded Gallery Images ({extraImagePreviews.length})
+            </label>
+            <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2 p-2 bg-[#071524] border border-white/10 rounded-lg">
+              {extraImagePreviews.map((previewItem) => (
+                <div key={previewItem.id} className="relative group aspect-square rounded overflow-hidden bg-black/40 border border-white/10">
+                  <img
+                    src={previewItem.url}
+                    alt="Extra Preview"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveExtraImage(previewItem)}
+                    className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 cursor-pointer transition shadow z-10 border-0"
+                  >
+                    <X size={10} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ACTIONS */}
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => setIsFormOpen(false)}
+            className="px-5 py-2.5 bg-white/5 rounded-lg hover:bg-white/10 transition cursor-pointer border-0 text-white text-sm font-semibold"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            disabled={saving}
+            className="px-6 py-2.5 bg-[#C8A64D] text-black font-bold rounded-lg hover:bg-[#b09141] transition disabled:bg-yellow-600/50 cursor-pointer border-0 text-sm"
+          >
+            {saving ? "Saving..." : "Save Room"}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
 
       {/* ROOM GRID */}
       {loading ? (
