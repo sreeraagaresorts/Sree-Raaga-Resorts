@@ -305,8 +305,8 @@ const AdminBilling = () => {
       {/* HEADER WITH FILTERS */}
       <div className="flex flex-col lg:flex-row justify-between gap-4 border-b border-white/5 pb-6 print:hidden items-start lg:items-end">
         <div>
-          <h1 className="text-2xl font-bold">Billing & Payments</h1>
-          <p className="text-white/50 text-sm">
+          <h1 className="text-3xl font-bold">Billing & Payments</h1>
+          <p className="text-white/50 text-base">
             Manage invoices, payments, refunds and transactions dynamically.
           </p>
         </div>
@@ -314,7 +314,7 @@ const AdminBilling = () => {
         <div className="flex flex-wrap items-center gap-3">
           {/* Range filter selector */}
           <div className="flex items-center gap-2">
-            <span className="text-white/40 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">Range:</span>
+            <span className="text-white/40 text-sm font-semibold uppercase tracking-wider whitespace-nowrap">Range:</span>
             <select
               value={timeFilter}
               onChange={(e) => {
@@ -325,7 +325,7 @@ const AdminBilling = () => {
                   setEndDate('');
                 }
               }}
-              className="bg-[#071524] border border-white/10 text-white rounded text-xs px-3 py-2 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+              className="bg-[#071524] border border-white/10 text-white rounded text-sm px-4 py-2.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
             >
               <option value="today">Today</option>
               <option value="all">All Time</option>
@@ -340,21 +340,21 @@ const AdminBilling = () => {
           {timeFilter === 'custom' && (
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1.5">
-                <span className="text-white/40 text-[10px] uppercase font-semibold">From:</span>
+                <span className="text-white/40 text-sm uppercase font-semibold">From:</span>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="bg-[#071524] border border-white/10 text-white rounded text-xs px-2 py-1.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+                  className="bg-[#071524] border border-white/10 text-white rounded text-sm px-3 py-2 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
                 />
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="text-white/40 text-[10px] uppercase font-semibold">To:</span>
+                <span className="text-white/40 text-sm uppercase font-semibold">To:</span>
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="bg-[#071524] border border-white/10 text-white rounded text-xs px-2 py-1.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+                  className="bg-[#071524] border border-white/10 text-white rounded text-sm px-3 py-2 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
                 />
               </div>
             </div>
@@ -362,9 +362,9 @@ const AdminBilling = () => {
           
           <button 
             onClick={exportToExcel}
-            className="flex items-center gap-2 px-4 py-2 bg-[#C8A64D] text-[#071524] rounded-lg hover:bg-[#C8A64D]/90 font-bold transition cursor-pointer text-sm"
+            className="flex items-center gap-2.5 px-6 py-3 bg-[#C8A64D] text-[#071524] rounded-lg hover:bg-[#C8A64D]/90 font-bold transition cursor-pointer text-base"
           >
-            <Download className="w-4 h-4" /> Export
+            <Download className="w-5 h-5" /> Export
           </button>
         </div>
       </div>
@@ -383,32 +383,32 @@ const AdminBilling = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 print:hidden">
-          <div className="bg-[#081A2F] p-5 rounded-xl border border-white/5 shadow-md">
-            <div className="flex justify-between text-white/50 text-sm mb-2">
-              Total Revenue <IndianRupee className="w-4 h-4 text-emerald-400" />
+          <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
+            <div className="flex justify-between text-white/50 text-base mb-2">
+              Total Revenue <IndianRupee className="w-5 h-5 text-emerald-400" />
             </div>
-            <h2 className="text-white text-2xl font-bold">₹{stats.totalRevenue.toLocaleString()}</h2>
+            <h2 className="text-white text-3xl font-bold">₹{stats.totalRevenue.toLocaleString()}</h2>
           </div>
 
-          <div className="bg-[#081A2F] p-5 rounded-xl border border-white/5 shadow-md">
-            <div className="flex justify-between text-white/50 text-sm mb-2">
-              Pending Payments <Activity className="w-4 h-4 text-amber-400" />
+          <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
+            <div className="flex justify-between text-white/50 text-base mb-2">
+              Pending Payments <Activity className="w-5 h-5 text-amber-400" />
             </div>
-            <h2 className="text-white text-2xl font-bold">₹{stats.pendingPayments.toLocaleString()}</h2>
+            <h2 className="text-white text-3xl font-bold">₹{stats.pendingPayments.toLocaleString()}</h2>
           </div>
 
-          <div className="bg-[#081A2F] p-5 rounded-xl border border-white/5 shadow-md">
-            <div className="flex justify-between text-white/50 text-sm mb-2">
-              Refunds / Cancellations <Undo2 className="w-4 h-4 text-red-400" />
+          <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
+            <div className="flex justify-between text-white/50 text-base mb-2">
+              Refunds / Cancellations <Undo2 className="w-5 h-5 text-red-400" />
             </div>
-            <h2 className="text-white text-2xl font-bold">{stats.refundRequests} bookings</h2>
+            <h2 className="text-white text-3xl font-bold">{stats.refundRequests} bookings</h2>
           </div>
 
-          <div className="bg-[#081A2F] p-5 rounded-xl border border-white/5 shadow-md">
-            <div className="flex justify-between text-white/50 text-sm mb-2">
-              Today's Revenue <Wallet className="w-4 h-4 text-emerald-400" />
+          <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
+            <div className="flex justify-between text-white/50 text-base mb-2">
+              Today's Revenue <Wallet className="w-5 h-5 text-emerald-400" />
             </div>
-            <h2 className="text-white text-2xl font-bold">₹{stats.todaysCollections.toLocaleString()}</h2>
+            <h2 className="text-white text-3xl font-bold">₹{stats.todaysCollections.toLocaleString()}</h2>
           </div>
         </div>
       )}
@@ -416,7 +416,7 @@ const AdminBilling = () => {
       {/* TABS + SEARCH */}
       <div className="bg-[#081A2F] rounded-xl border border-white/5 overflow-hidden">
         <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-white/5 gap-4 print:hidden">
-          <div className="flex gap-6 text-sm font-bold uppercase tracking-wider w-full sm:w-auto">
+          <div className="flex gap-6 text-base font-bold uppercase tracking-wider w-full sm:w-auto">
             {['invoices', 'payments'].map((tab) => (
               <button
                 key={tab}
@@ -431,9 +431,9 @@ const AdminBilling = () => {
           </div>
 
           <div className="relative w-full sm:w-64 lg:w-80">
-            <Search className="w-4 h-4 text-white/40 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-white/40 absolute left-3 top-3" />
             <input
-              className="w-full bg-[#071524] border border-white/10 pl-9 pr-3 py-2 rounded text-sm text-white focus:outline-none focus:border-[#C8A64D]"
+              className="w-full bg-[#071524] border border-white/10 pl-9 pr-3 py-2.5 rounded text-base text-white focus:outline-none focus:border-[#C8A64D]"
               placeholder={`Search ${activeTab}...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -455,8 +455,8 @@ const AdminBilling = () => {
                 filteredInvoices.length === 0 ? (
                   <div className="p-10 text-center text-white/40">No invoice records found.</div>
                 ) : (
-                  <table className="w-full text-sm text-white/70">
-                    <thead className="text-white/40 text-xs uppercase tracking-wider bg-[#071524]">
+                  <table className="w-full text-base text-white/70">
+                    <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
                       <tr>
                         <th className="p-3 text-left">Invoice No</th>
                         <th className="p-3 text-left">Guest Name</th>
@@ -475,7 +475,7 @@ const AdminBilling = () => {
                           <td className="p-3 text-xs">{inv.createdAt.toLocaleDateString()}</td>
                           <td className="p-3 font-bold text-[#C8A64D]">₹{inv.amount.toLocaleString()}</td>
                           <td className="p-3 text-center">
-                            <span className={`text-xs px-2.5 py-0.5 rounded-full border font-semibold ${
+                            <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
                               inv.status === "Paid"
                                 ? "bg-green-500/10 text-green-400 border-green-500/20"
                                 : inv.status === "Cancelled"
@@ -497,8 +497,8 @@ const AdminBilling = () => {
                 filteredPayments.length === 0 ? (
                   <div className="p-10 text-center text-white/40">No payment transaction records found.</div>
                 ) : (
-                  <table className="w-full text-sm text-white/70">
-                    <thead className="text-white/40 text-xs uppercase tracking-wider bg-[#071524]">
+                  <table className="w-full text-base text-white/70">
+                    <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
                       <tr>
                         <th className="p-3 text-left">Payment ID</th>
                         <th className="p-3 text-left">Booking Ref</th>
@@ -517,7 +517,7 @@ const AdminBilling = () => {
                           <td className="p-3 text-xs text-white/50">{pay.gateway}</td>
                           <td className="p-3 font-bold text-emerald-400">₹{pay.amount.toLocaleString()}</td>
                           <td className="p-3 text-center">
-                            <span className={`text-xs px-2.5 py-0.5 rounded-full border font-semibold ${
+                            <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
                               pay.paymentStatus === "Paid"
                                 ? "bg-green-500/10 text-green-400 border-green-500/20"
                                 : pay.paymentStatus === "Refunded"

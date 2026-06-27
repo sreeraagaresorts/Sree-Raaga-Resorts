@@ -598,7 +598,7 @@ const Amenities = () => {
               </h2>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 justify-center items-center py-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-4">
               {amenitiesList.map((item, idx) => (
                 <div key={idx} className="flex flex-col items-center text-center group cursor-default">
                   <div className="overflow-hidden">

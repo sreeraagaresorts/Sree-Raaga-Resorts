@@ -158,7 +158,7 @@ const Footer = () => {
                 info@sreeraagaresorts.in
               </a>
 
-             <div className="flex gap-2">
+             <div className="flex flex-wrap gap-2">
                <a
                 href="tel:918904561155"
                 className="block hover:text-[#c8a64d] transition duration-300"

@@ -333,7 +333,7 @@ const Rooms = () => {
         
 
             {/* Icons Row */}
-            <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6  justify-center items-center py-4 mb-32">
+            <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-4 mb-12 md:mb-32">
   {amenities.map((item, idx) => (
     <div
       key={idx}

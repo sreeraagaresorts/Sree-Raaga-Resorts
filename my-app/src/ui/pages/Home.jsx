@@ -436,7 +436,7 @@ return (
           <div className="absolute bottom-0 translate-y-1/2 w-full z-20 px-4 md:px-10">
       <form
   onSubmit={handleSearch}
-  className="max-w-5xl mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl mt-[-120px]"
+  className="max-w-5xl mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl md:mt-[-120px] mt-0"
 >
   {/* DATE */}
   <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer z-9999 group transition-all duration-300">
@@ -640,7 +640,7 @@ return (
         </section>
 
         {/* ================= SHOWCASE / ABOUT SECTION ================= */}
-        <section className="relative py-48 px-6 bg-[#fdfeff] text-[#0d2b4e] overflow-hidden">
+        <section className="relative py-20 md:py-48 px-6 bg-[#fdfeff] text-[#0d2b4e] overflow-hidden">
           
           {/* Outlined brand text behind the staggered images */}
           <div 
@@ -887,7 +887,7 @@ offer to suit your needs and elevate your experience.          </p>
         
 
             {/* Icons Row */}
-            <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6  justify-center items-center py-4 mb-32">
+            <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-4 mb-12 md:mb-32">
   {amenities.map((item, idx) => (
     <div
       key={idx}
@@ -1069,7 +1069,7 @@ offer to suit your needs and elevate your experience.          </p>
   <div className=" relative">
 
     {/* Main Center Box */}
-    <div className="bg-[#fdfeff] min-h-[700px] flex items-center justify-center px-8">
+    <div className="bg-[#fdfeff] min-h-[400px] md:min-h-[700px] flex items-center justify-center px-8">
       <div className="max-w-3xl text-center">
 
         <span className="uppercase tracking-[3px] text-sm font-jost text-[#0d2b4e]">

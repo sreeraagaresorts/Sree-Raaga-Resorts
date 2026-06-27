@@ -93,7 +93,7 @@ const About = () => {
 
         {/* ================= WELCOME & STATS SECTION ================= */}
           {/* ================= SHOWCASE / ABOUT SECTION ================= */}
-       <section className="relative py-48 px-6 bg-[#fdfeff]  text-[#0d2b4e] overflow-hidden">
+       <section className="relative py-20 md:py-48 px-6 bg-[#fdfeff]  text-[#0d2b4e] overflow-hidden">
                
                {/* Outlined brand text behind the staggered images */}
                <div 
@@ -254,7 +254,7 @@ const About = () => {
         </section>
 
             {/* Icons Row */}
-            <div className="max-w-[160vh] bg-[#fdfeff]  mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6  justify-center items-center ">
+            <div className="max-w-[160vh] bg-[#fdfeff]  mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center ">
   {amenities.map((item, idx) => (
     <div
       key={idx}

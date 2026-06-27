@@ -77,13 +77,20 @@ const AdminDashboard = () => {
   // Compute metrics
   const getMetrics = () => {
     let totalRevenue = 0;
+    let todaysRevenue = 0;
     let pendingPayments = 0;
     let checkedInCount = 0;
+
+    const todayStr = new Date().toDateString();
 
     bookings.forEach((b) => {
       const price = parseFloat(b.total_price);
       if (b.status === "confirmed" || b.status === "checked_in") {
         totalRevenue += price;
+        const bookingDate = new Date(b.created_at).toDateString();
+        if (bookingDate === todayStr) {
+          todaysRevenue += price;
+        }
       } else if (b.status === "pending") {
         pendingPayments += price;
       }
@@ -97,6 +104,7 @@ const AdminDashboard = () => {
 
     return {
       totalRevenue,
+      todaysRevenue,
       pendingPayments,
       occupancyRate,
     };
@@ -151,7 +159,7 @@ const AdminDashboard = () => {
 
   const stats = [
     // { label: "Room Occupancy", value: `${metrics.occupancyRate}%`, icon: BedDouble, trend: "+2.1%", isPositive: true },
-    { label: "Total Revenue", value: `₹${metrics.totalRevenue.toLocaleString()}`, icon: IndianRupee, trend: "+12.5%", isPositive: true },
+    { label: "Today's Revenue", value: `₹${metrics.todaysRevenue.toLocaleString()}`, icon: IndianRupee, trend: "+12.5%", isPositive: true },
     { label: "Pending Payments", value: `₹${metrics.pendingPayments.toLocaleString()}`, icon: Wallet, trend: "-8.1%", isPositive: false },
     { label: "Registered Users", value: usersCount.toString(), icon: Users, trend: "+4.3%", isPositive: true },
   ];

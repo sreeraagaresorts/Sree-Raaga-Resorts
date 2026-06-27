@@ -200,14 +200,14 @@ const Contact = () => {
                 </span>
               </div>
 
-              <div className="space-y-4 text-[24px] font-medium text-[#fefdff] leading-relaxed border-t border-white/5 pt-6 w-full">
+              <div className="space-y-4 text-lg md:text-[24px] font-medium text-[#fefdff] leading-relaxed border-t border-white/5 pt-6 w-full">
                 <p>
                   No. 1246, Budigere Bypass Road,<br />
                   Devanahalli Hobli, Taluk Chamarayapatna,<br />
                   Karnataka 562129.<br />
                 </p>
-                <p className="text-[24px]">
-                  <span className="text-white font-semibold">Email:</span><span className="text-[#c8a64d] "> info@sreeraagaresorts.in</span><br />
+                <p className="text-lg md:text-[24px]">
+                  <span className="text-white font-semibold">Email:</span><span className="text-[#c8a64d] break-all sm:break-normal"> info@sreeraagaresorts.in</span><br />
                   <span className="text-white font-semibold">Phone:</span> <span className="text-[#c8a64d] ">+91 89045 61155</span>
                 </p>
               </div>
