@@ -12,7 +12,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
+    phone: "+91",
     password: "",
     confirmPassword: "",
   });
@@ -26,6 +26,12 @@ const Register = () => {
 
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
+      return;
+    }
+
+    const phoneRegex = /^\+91\d{10}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      toast.error("Phone number must be a valid 10-digit number starting with +91");
       return;
     }
 
@@ -152,12 +158,28 @@ const Register = () => {
                   type="tel"
                   required
                   value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      phone: e.target.value,
-                    })
-                  }
+                  placeholder="+919876543210"
+                  onChange={(e) => {
+                    let val = e.target.value;
+                    if (!val.startsWith("+91")) {
+                      if (val.startsWith("91")) {
+                        val = "+" + val;
+                      } else if (val.startsWith("+")) {
+                        val = "+91" + val.slice(1).replace(/\D/g, "");
+                      } else {
+                        val = "+91" + val.replace(/\D/g, "");
+                      }
+                    } else {
+                      const rest = val.slice(3).replace(/\D/g, "");
+                      val = "+91" + rest;
+                    }
+                    if (val.length <= 13) {
+                      setFormData({
+                        ...formData,
+                        phone: val,
+                      });
+                    }
+                  }}
                   className="w-full bg-transparent border-b border-yellow-500/20 py-3 outline-none focus:border-yellow-500 transition"
                 />
               </div>

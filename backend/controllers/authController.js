@@ -13,6 +13,14 @@ exports.register = async (req, res) => {
       });
     }
 
+    const phoneRegex = /^\+91\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({
+        success: false,
+        message: "Phone number must be a valid 10-digit number starting with +91"
+      });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
