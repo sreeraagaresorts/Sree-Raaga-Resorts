@@ -51,7 +51,7 @@ const handleLogin = async (e) => {
     localStorage.setItem("user", JSON.stringify(data.user));
 
     toast.success("Welcome back! Signed in successfully.");
-    navigate("/");
+    navigate("/dashboard");
   } catch (err) {
     toast.error(err.message || "Login Failed");
   } finally {
