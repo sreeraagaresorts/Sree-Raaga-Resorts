@@ -167,10 +167,10 @@ function WaterSportsIcon({ className = "" }) {
                       className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
                     >
                       {/* Event Image */}
-                      <div className={`lg:col-span-6 w-full ${isEven ? "" : "lg:order-last"}`}>
+                      <div className={`lg:col-span-7 w-full ${isEven ? "" : "lg:order-last"}`}>
                         <Link 
                           to={`/events/${event.id || event._id}`}
-                          className="block relative overflow-hidden aspect-[4/3] bg-gray-100 group shadow-sm rounded-sm"
+                          className="block relative overflow-hidden aspect-[3/2] bg-gray-100 group shadow-sm "
                         >
                           <img
                             src={getImageUrl(event.image)}
@@ -178,19 +178,19 @@ function WaterSportsIcon({ className = "" }) {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                           />
                           {event.sqft && (
-                            <span className="absolute top-6 left-6 bg-white/95 backdrop-blur-xs text-[#0d2b4e] text-[10px] uppercase tracking-widest font-bold px-4 py-1.5 rounded-sm border border-[#c8a64d]/30 shadow-xs">
-                              {event.sqft}
+                            <span className="absolute top-6 left-6 bg-white/95 backdrop-blur-xs text-[#0d2b4e] text-[15px] uppercase tracking-widest font-medium px-6 py-3  border border-[#c8a64d]/30 shadow-xs">
+                              {event.sqft} SQft
                             </span>
                           )}
                         </Link>
                       </div>
 
                       {/* Event Details */}
-                      <div className={`lg:col-span-5 ${isEven ? "lg:offset-1" : ""} flex flex-col justify-between h-full py-4 text-left`}>
+                      <div className={`lg:col-span-5 ${isEven ? "lg:offset-1" : ""} flex flex-col justify-center h-full py-2 md:ml-22 text-left`}>
                         <div>
                           <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                             <div>
-                              <h3 className="text-3xl md:text-4xl font-medium font-corm text-[#0d2b4e]">
+                              <h3 className="text-3xl md:text-[40px] font-medium font-corm text-[#0d2b4e]">
                                 {event.name}
                               </h3>
                             </div>
@@ -204,32 +204,33 @@ function WaterSportsIcon({ className = "" }) {
                           </div>
 
                           {/* Event Specs Row */}
-                          <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px] text-gray-500 border-b border-gray-100 mb-6">
+                          <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px] text-gray-500 font-medium border-b border-gray-100 mb-6">
                             {event.sqft && (
                               <div className="flex items-center">
                                 <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                                <span>{event.sqft}</span>
+                                <span>{event.sqft} Sqft</span>
                               </div>
                             )}
                           </div>
 
                           {/* Description */}
-                          <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mb-8 font-jost">
+                          <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mb-8 font-medium font-jost">
                             {event.description}
                           </p>
                         </div>
 
                         {/* Actions CTA Link (same style as Rooms.jsx) */}
                         <div>
-                          <Link
-                            to={`/events/${event.id || event._id}`}
-                            className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d] text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
-                          >
-                            <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
-                              {event.show_price ? "Book Package" : "Enquire Now"}
-                            </span>
-                            <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
-                          </Link>
+                         <Link
+  to={`/events/${event.id || event._id}`}
+  className="inline-flex items-center gap-2 px-6 py-4 border border-black bg-transparent text-[#0d2b4e] text-sm font-bold uppercase tracking-[2px] transition-all duration-300 hover:bg-gray-700 hover:text-white hover:border-gray-700 group"
+>
+  <span>
+    {event.show_price ? "Book Package" : "Enquire Now"}
+  </span>
+
+  <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+</Link>
                         </div>
                       </div>
                     </motion.div>
