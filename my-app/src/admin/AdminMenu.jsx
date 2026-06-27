@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList,Pencil } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
 import { compressImage } from "../utils/imageCompressor";
@@ -15,7 +15,7 @@ const AdminMenu = () => {
   const [saving, setSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("All");
-
+const [editingCategory, setEditingCategory] = useState(null);
   // Dishes Modal & Form states
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingDish, setEditingDish] = useState(null);
@@ -117,6 +117,58 @@ const AdminMenu = () => {
       toast.error(err.message || "Failed to delete category.");
     }
   };
+
+ const handleUpdateCategory = async (e) => {
+  e.preventDefault();
+
+  if (!newCategoryName.trim()) return;
+
+  setAddingCategory(true);
+
+  try {
+    const response = await fetch(
+      `${API_URL}/api/categories/${encodeURIComponent(editingCategory)}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: newCategoryName.trim(),
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+      toast.success(data.message || "Category updated successfully!");
+      setEditingCategory(null);
+      setNewCategoryName("");
+      fetchCategories();
+    } else {
+      throw new Error(data.message || "Failed to update category.");
+    }
+  } catch (err) {
+    toast.error(err.message || "Failed to update category.");
+  } finally {
+    setAddingCategory(false);
+  }
+};
+
+const handleSaveCategory = () => {
+  if (editingCategory) {
+    setCategories((prev) =>
+      prev.map((cat) => (cat === editingCategory ? category : cat))
+    );
+    setEditingCategory(null);
+  } else {
+    setCategories((prev) => [...prev, category]);
+  }
+
+  setCategory("");
+};
 
   const fetchDishes = async () => {
     setLoading(true);
@@ -796,52 +848,81 @@ const AdminMenu = () => {
             </div>
             
             {/* Add Category Form */}
-            <form onSubmit={handleAddCategory} className="space-y-4 mb-6 pb-6 border-b border-white/10">
+            <form
+  onSubmit={editingCategory ? handleUpdateCategory : handleAddCategory} className="space-y-4 mb-6 pb-6 border-b border-white/10">
               <div>
-                <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Add New Category</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="e.g. Desserts, Beverages"
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    className="flex-1 bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white text-sm"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    disabled={addingCategory}
-                    className="px-5 py-3 bg-[#C8A64D] text-black font-bold rounded-lg hover:bg-[#b09141] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                  >
-                    {addingCategory ? "Adding..." : "Add"}
-                  </button>
-                </div>
+              <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+  {editingCategory ? "Edit Category" : "Add New Category"}
+</label>
+            {/* Move the Cancel button outside of the submit button */}
+<div className="flex gap-2">
+  <input
+    type="text"
+    placeholder="e.g. Desserts, Beverages"
+    value={newCategoryName}
+    onChange={(e) => setNewCategoryName(e.target.value)}
+    className="flex-1 bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white text-sm"
+    required
+  />
+  <button
+    type="submit"
+    disabled={addingCategory}
+    className="px-5 py-3 bg-[#C8A64D] text-black font-bold rounded-lg hover:bg-[#b09141] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+  >
+    {addingCategory 
+      ? (editingCategory ? "Updating..." : "Adding...") 
+      : (editingCategory ? "Update" : "Add")}
+  </button>
+  
+  {/* Cancel button moved out here! */}
+  {editingCategory && (
+    <button
+      type="button"
+      onClick={() => {
+        setEditingCategory(null);
+        setNewCategoryName("");
+      }}
+      className="px-4 py-3 border border-white/10 rounded-lg text-white hover:bg-white/5 transition cursor-pointer"
+    >
+      Cancel
+    </button>
+  )}
+</div>
               </div>
             </form>
 
             {/* List of Existing Categories */}
-            <div className="flex-1 overflow-y-auto space-y-2 pr-1 mb-4">
-              <label className="block text-white/50 text-xs uppercase tracking-widest mb-3">Existing Categories</label>
-              {categories.length === 0 ? (
-                <p className="text-white/30 text-sm py-2">No categories configured.</p>
-              ) : (
-                <div className="space-y-2">
-                  {categories.map((cat) => (
-                    <div key={cat} className="flex justify-between items-center bg-[#071524] px-4 py-2.5 rounded-lg border border-white/5">
-                      <span className="text-white text-sm font-medium">{cat}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteCategory(cat)}
-                        className="text-red-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded transition cursor-pointer bg-transparent border-0"
-                        title="Delete Category"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+         {categories.map((cat) => (
+  <div
+    key={cat}
+    className="flex justify-between items-center bg-[#071524] px-4 py-2.5 rounded-lg border border-white/5"
+  >
+    <span className="text-white text-sm font-medium">{cat}</span>
+
+    <div className="flex items-center gap-2">
+   <button 
+  type="button"
+  onClick={() => {
+    setEditingCategory(cat);
+    setNewCategoryName(cat);
+  }} 
+  className="text-blue-400 hover:text-blue-500 hover:bg-blue-500/10 p-1.5 rounded transition cursor-pointer bg-transparent border-0"
+  title="Edit Category"
+>
+  <Pencil size={16} />
+</button>
+
+      <button
+        type="button"
+        onClick={() => handleDeleteCategory(cat)}
+        className="text-red-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded transition cursor-pointer bg-transparent border-0"
+        title="Delete Category"
+      >
+        <Trash2 size={16} />
+      </button>
+    </div>
+  </div>
+))}
 
             <div className="flex justify-end pt-4 border-t border-white/10">
               <button

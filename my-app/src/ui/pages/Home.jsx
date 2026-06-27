@@ -192,32 +192,47 @@ function SunsetIcon({ className = "" }) {
   );
 }
 
-// Gastronomy Tab details (Static Constant)
+import restaurantIcon from "../../assets/icons/restaurant.png";
+import barIcon from "../../assets/icons/bar.png";
+import sportsIcon from "../../assets/icons/sports.png";
+import coffeeIcon from "../../assets/icons/coffee.png";
+
 const tabData = {
   multicuisine: {
-    title: "Multi cuisine restaurant",
-    description: "Savor a world of flavors at our exquisite multi-cuisine restaurant, offering a curated menu of delicious domestic and international dishes prepared by our expert chefs.",
-    image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200",
-    icon: <RestaurantIcon className="w-6 h-6 mb-3" />
+    title: "Multi Cuisine Restaurant",
+    description:
+      "Embark on a culinary journey with an extensive selection of Indian, Asian, and international delicacies, thoughtfully prepared by our expert chefs using the finest ingredients.",
+    image:
+      "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200",
+    iconImage: restaurantIcon,
   },
+
   barrestaurant: {
-    title: "Bar and restaurant",
-    description: "Experience the perfect blend of fine dining and premium drinks. Enjoy a cozy ambience, handcrafted cocktails, and gourmet plates with friends and family.",
-    image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=1200",
-    icon: <MartiniIcon className="w-6 h-6 mb-3" />
+    title: "Bar & Restaurant",
+    description:
+      "Unwind in an elegant setting where handcrafted cocktails, premium spirits, and gourmet cuisine come together to create the perfect dining and social experience.",
+    image:
+      "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=1200",
+    iconImage: barIcon,
   },
+
   sportsbar: {
-    title: "Sports bar",
-    description: "Catch all the live action of your favorite sports on big screens while enjoying cold beers, signature bites, and a lively atmosphere.",
-    image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200",
-    icon: <SportsBarIcon className="w-6 h-6 mb-3" />
+    title: "Sports Bar",
+    description:
+      "Feel the excitement of every match on large HD screens while enjoying refreshing beverages, signature appetizers, and an energetic atmosphere with fellow fans.",
+    image:
+      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200",
+    iconImage: sportsIcon,
   },
+
   coffeeshop: {
-    title: "Coffee shop",
-    description: "Relax with freshly brewed artisan coffee, fine teas, and a delightful selection of fresh pastries, wraps, and desserts in a warm, welcoming space.",
-    image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200",
-    icon: <CoffeeIcon className="w-6 h-6 mb-3" />
-  }
+    title: "Coffee Shop",
+    description:
+      "Relax with freshly brewed coffee, aromatic teas, freshly baked pastries, and light bites in a warm and inviting café designed for casual meetings and quiet moments.",
+    image:
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200",
+    iconImage: coffeeIcon,
+  },
 };
 
 export default function Home() {
@@ -937,11 +952,17 @@ offer to suit your needs and elevate your experience.          </p>
                     <div
                       key={key}
                       onClick={() => handleTabClick(key)}
-                      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-11 border-b border-[#0d2b4e]/5 last:border-b-0"
+                      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
                     >
-                      <div className={`transition-colors duration-300 ${tabColor}`}>
-                        {tabData[key].icon}
-                      </div>
+                     <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                        isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-[100px] opacity-30 "
+                      }`}>
+    <img
+      src={tabData[key].iconImage}
+      alt={tabData[key].title}
+      className="w-10 h-10 m-2  transition-all duration-300"
+    />
+  </div>
 
                       <h3
                         className={`text-xl md:text-4xl font-medium tracking-wide font-corm mb-1  transition-colors duration-300 ${tabColor}`}
@@ -952,7 +973,7 @@ offer to suit your needs and elevate your experience.          </p>
                       <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                         isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-0 opacity-0"
                       }`}>
-                        <p className="text-xl text-gray-500 leading-relaxed font-jost font-light font-jost mr-2">
+                        <p className="text-sm md:text-[17px] text-gray-500 leading-relaxed font-jost font-medium font-jost mr-2">
                           {tabData[key].description}
                         </p>
                       </div>
@@ -1055,7 +1076,7 @@ offer to suit your needs and elevate your experience.          </p>
           Sree Raaga Resorts
         </span>
 
-        <h2 className="font-corm text-[#0d2b4e] text-5xl md:text-7xl  leading-[1.15] font-medium mt-6 mb-10">
+        <h2 className="font-corm text-[#0d2b4e] text-5xl md:text-[60px]  leading-[1.15] font-medium mt-6 mb-10">
           DayOut Packages
           <br />
           

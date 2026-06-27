@@ -2,23 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { API_URL } from '../config/api';
 import {
   Download,
-  FileText,
   Search,
   IndianRupee,
   Wallet,
   Activity,
   Undo2,
   RefreshCw,
-  Filter,
 } from 'lucide-react';
 
 const AdminBilling = () => {
   const [activeTab, setActiveTab] = useState('invoices');
-  const [timeFilter, setTimeFilter] = useState('all');
+  const [timeFilter, setTimeFilter] = useState('monthly');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -60,9 +57,16 @@ const AdminBilling = () => {
   const filterByTime = (date) => {
     if (timeFilter === 'all') return true;
     
+    const itemDate = new Date(date);
+    
+    // Check specifically for today
+    if (timeFilter === 'today') {
+      return itemDate.toDateString() === new Date().toDateString();
+    }
+    
     if (timeFilter === 'custom') {
       if (!startDate && !endDate) return true;
-      const itemTime = new Date(date).getTime();
+      const itemTime = itemDate.getTime();
       if (startDate) {
         const start = new Date(startDate);
         start.setHours(0, 0, 0, 0);
@@ -77,7 +81,6 @@ const AdminBilling = () => {
     }
 
     const now = new Date();
-    const itemDate = new Date(date);
     const diffTime = Math.abs(now - itemDate);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
@@ -171,6 +174,40 @@ const AdminBilling = () => {
       pay.customerName.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  // Export to Excel (CSV format)
+  const exportToExcel = () => {
+    // Add BOM for UTF-8 to correctly render special characters in Excel
+    let csvContent = "\uFEFF";
+    const dateStr = new Date().toISOString().split('T')[0];
+    let filename = `Billing_${activeTab}_${dateStr}.csv`;
+
+    if (activeTab === 'invoices') {
+      csvContent += "Invoice No,Guest Name,Guest Email,Date Created,Billing Amount,Status\n";
+      filteredInvoices.forEach(inv => {
+        // Escape quotes
+        const name = (inv.customerName || "").replace(/"/g, '""');
+        const email = (inv.customerEmail || "").replace(/"/g, '""');
+        csvContent += `"${inv.invoiceNumber}","${name}","${email}","${inv.createdAt.toLocaleDateString()}","${inv.amount}","${inv.status}"\n`;
+      });
+    } else {
+      csvContent += "Payment ID,Booking Ref,Customer,Payment Gateway,Amount Transacted,Payment Status\n";
+      filteredPayments.forEach(pay => {
+        const name = (pay.customerName || "").replace(/"/g, '""');
+        csvContent += `"${pay.paymentId}","${pay.bookingId}","${name}","${pay.gateway}","${pay.amount}","${pay.paymentStatus}"\n`;
+      });
+    }
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 w-full text-white">
       {/* CSS print override styles */}
@@ -256,6 +293,7 @@ const AdminBilling = () => {
       {/* PRINT TITLE (Hidden on screen) */}
       <div className="print-title">
         SREE RAAGA RESORTS - SALES REPORT ({
+          timeFilter === 'today' ? "TODAY'S VIEW" : 
           timeFilter === 'all' ? 'ALL TIME' : 
           timeFilter === 'weekly' ? 'WEEKLY VIEW' : 
           timeFilter === 'monthly' ? 'MONTHLY VIEW' : 
@@ -264,8 +302,8 @@ const AdminBilling = () => {
         })
       </div>
 
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between gap-4 border-b border-white/5 pb-6 print:hidden">
+      {/* HEADER WITH FILTERS */}
+      <div className="flex flex-col lg:flex-row justify-between gap-4 border-b border-white/5 pb-6 print:hidden items-start lg:items-end">
         <div>
           <h1 className="text-2xl font-bold">Billing & Payments</h1>
           <p className="text-white/50 text-sm">
@@ -273,20 +311,57 @@ const AdminBilling = () => {
           </p>
         </div>
 
-        <div className="flex gap-3">
-          <button 
-            onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition cursor-pointer text-sm font-semibold ${
-              showFilters 
-                ? 'border-[#C8A64D] bg-[#C8A64D]/10 text-[#C8A64D]' 
-                : 'border-white/10 text-white hover:bg-white/5'
-            }`}
-          >
-            <Filter className="w-4 h-4" /> {showFilters ? "Hide Filters" : "Filter"}
-          </button>
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Range filter selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-white/40 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">Range:</span>
+            <select
+              value={timeFilter}
+              onChange={(e) => {
+                setTimeFilter(e.target.value);
+                // Reset custom date values when switching away
+                if (e.target.value !== 'custom') {
+                  setStartDate('');
+                  setEndDate('');
+                }
+              }}
+              className="bg-[#071524] border border-white/10 text-white rounded text-xs px-3 py-2 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+            >
+              <option value="today">Today</option>
+              <option value="all">All Time</option>
+              <option value="weekly">This Week</option>
+              <option value="monthly">This Month</option>
+              <option value="yearly">This Year</option>
+              <option value="custom">Custom Date Range</option>
+            </select>
+          </div>
+
+          {/* Custom dates input fields */}
+          {timeFilter === 'custom' && (
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
+                <span className="text-white/40 text-[10px] uppercase font-semibold">From:</span>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="bg-[#071524] border border-white/10 text-white rounded text-xs px-2 py-1.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+                />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-white/40 text-[10px] uppercase font-semibold">To:</span>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="bg-[#071524] border border-white/10 text-white rounded text-xs px-2 py-1.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
+                />
+              </div>
+            </div>
+          )}
           
           <button 
-            onClick={() => window.print()}
+            onClick={exportToExcel}
             className="flex items-center gap-2 px-4 py-2 bg-[#C8A64D] text-[#071524] rounded-lg hover:bg-[#C8A64D]/90 font-bold transition cursor-pointer text-sm"
           >
             <Download className="w-4 h-4" /> Export
@@ -341,7 +416,7 @@ const AdminBilling = () => {
       {/* TABS + SEARCH */}
       <div className="bg-[#081A2F] rounded-xl border border-white/5 overflow-hidden">
         <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-white/5 gap-4 print:hidden">
-          <div className="flex gap-6 text-sm font-bold uppercase tracking-wider">
+          <div className="flex gap-6 text-sm font-bold uppercase tracking-wider w-full sm:w-auto">
             {['invoices', 'payments'].map((tab) => (
               <button
                 key={tab}
@@ -355,67 +430,14 @@ const AdminBilling = () => {
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-start sm:items-center">
-            {showFilters && (
-              <>
-                {/* Range filter selector */}
-                <div className="flex items-center gap-2">
-                  <span className="text-white/40 text-xs font-semibold uppercase tracking-wider whitespace-nowrap">Range:</span>
-                  <select
-                    value={timeFilter}
-                    onChange={(e) => {
-                      setTimeFilter(e.target.value);
-                      // Reset custom date values when switching away
-                      if (e.target.value !== 'custom') {
-                        setStartDate('');
-                        setEndDate('');
-                      }
-                    }}
-                    className="bg-[#071524] border border-white/10 text-white rounded text-xs px-3 py-2 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
-                  >
-                    <option value="all">All Time</option>
-                    <option value="weekly">Weekly (Last 7 Days)</option>
-                    <option value="monthly">Monthly (Last 30 Days)</option>
-                    <option value="yearly">Yearly (Last 365 Days)</option>
-                    <option value="custom">Custom Date Range</option>
-                  </select>
-                </div>
-
-                {/* Custom dates input fields */}
-                {timeFilter === 'custom' && (
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-white/40 text-[10px] uppercase font-semibold">From:</span>
-                      <input
-                        type="date"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        className="bg-[#071524] border border-white/10 text-white rounded text-xs px-2 py-1.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
-                      />
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-white/40 text-[10px] uppercase font-semibold">To:</span>
-                      <input
-                        type="date"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        className="bg-[#071524] border border-white/10 text-white rounded text-xs px-2 py-1.5 focus:outline-none focus:border-[#C8A64D] cursor-pointer"
-                      />
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-
-            <div className="relative w-full sm:w-60">
-              <Search className="w-4 h-4 text-white/40 absolute left-3 top-2.5" />
-              <input
-                className="w-full bg-[#071524] border border-white/10 pl-9 pr-3 py-2 rounded text-sm text-white focus:outline-none focus:border-[#C8A64D]"
-                placeholder={`Search ${activeTab}...`}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+          <div className="relative w-full sm:w-64 lg:w-80">
+            <Search className="w-4 h-4 text-white/40 absolute left-3 top-2.5" />
+            <input
+              className="w-full bg-[#071524] border border-white/10 pl-9 pr-3 py-2 rounded text-sm text-white focus:outline-none focus:border-[#C8A64D]"
+              placeholder={`Search ${activeTab}...`}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
         </div>
 
