@@ -10,7 +10,8 @@ const {
   updateUserRole,
   deleteUser,
   changePassword,
-  deleteOwnAccount
+  deleteOwnAccount,
+  getAuditLogs
 } = require("../controllers/authController");
 
 const verifyToken = require("../middleware/authMiddleware");
@@ -40,6 +41,7 @@ router.delete(
 
 // Admin-only User Management
 router.get("/users", verifyToken, adminMiddleware, getAllUsers);
+router.get("/users/history", verifyToken, adminMiddleware, getAuditLogs);
 router.put("/users/:id/role", verifyToken, adminMiddleware, updateUserRole);
 router.delete("/users/:id", verifyToken, adminMiddleware, deleteUser);
 

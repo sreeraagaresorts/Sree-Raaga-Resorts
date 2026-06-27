@@ -11,6 +11,26 @@ const AdminUsers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("guests");
+  const [historyLogs, setHistoryLogs] = useState([]);
+
+  const loadHistoryLogs = async () => {
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API_URL}/api/auth/users/history`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setHistoryLogs(data.data);
+      } else {
+        throw new Error(data.message || "Failed to load admin history.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const fetchUsersAndBookings = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -47,10 +67,12 @@ const AdminUsers = () => {
 
   useEffect(() => {
     fetchUsersAndBookings();
+    loadHistoryLogs();
 
-    // Auto-refresh users silently every 10 seconds
+    // Auto-refresh users and logs silently every 10 seconds
     const interval = setInterval(() => {
       fetchUsersAndBookings(true);
+      loadHistoryLogs();
     }, 10000);
 
     return () => clearInterval(interval);
@@ -78,6 +100,7 @@ const AdminUsers = () => {
 
       toast.success("User role updated successfully!");
       fetchUsersAndBookings();
+      loadHistoryLogs();
     } catch (err) {
       toast.error(err.message || "Failed to change user role.");
     }
@@ -102,6 +125,7 @@ const AdminUsers = () => {
 
       toast.success("User account deleted successfully!");
       fetchUsersAndBookings();
+      loadHistoryLogs();
     } catch (err) {
       toast.error(err.message || "Failed to delete user.");
     }
@@ -190,7 +214,7 @@ const AdminUsers = () => {
 
       {/* TABS */}
       <div className="flex flex-wrap gap-3 text-base font-bold uppercase tracking-wider w-full sm:w-auto border-b border-white/5 pb-4">
-        {['guests', 'admins'].map((tab) => (
+        {['guests', 'admins', 'history'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -200,7 +224,7 @@ const AdminUsers = () => {
                 : 'bg-[#071524] text-white/50 border-white/10 hover:bg-white/5'
             }`}
           >
-            {tab === 'guests' ? 'Guests' : 'Administrators'}
+            {tab === 'guests' ? 'Guests' : tab === 'admins' ? 'Administrators' : 'Admin History'}
           </button>
         ))}
       </div>
@@ -218,6 +242,58 @@ const AdminUsers = () => {
           <RefreshCw className="animate-spin w-6 h-6 text-[#C8A64D]" />
           <span>Loading guest profiles...</span>
         </div>
+      ) : activeTab === "history" ? (
+        historyLogs.length === 0 ? (
+          <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl text-white/50">
+            No administration actions recorded yet.
+          </div>
+        ) : (
+          <div className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider">
+                  <tr>
+                    <th className="p-4 text-left font-semibold">Timestamp</th>
+                    <th className="p-4 text-left font-semibold">Administrator</th>
+                    <th className="p-4 text-left font-semibold">Action Type</th>
+                    <th className="p-4 text-left font-semibold">Details</th>
+                    <th className="p-4 text-center font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {historyLogs.map((log) => (
+                    <tr
+                      key={log.id}
+                      className="border-t border-white/5 hover:bg-white/5 transition"
+                    >
+                      <td className="p-4 text-white/50 text-xs">
+                        {new Date(log.timestamp).toLocaleString("en-IN")}
+                      </td>
+                      <td className="p-4 font-semibold text-white/90">{log.adminName}</td>
+                      <td className="p-4">
+                        <span
+                          className={`text-xs px-2.5 py-0.5 rounded border font-semibold inline-flex items-center gap-1 ${
+                            log.actionType === "User Deletion"
+                              ? "bg-red-500/10 text-red-400 border-red-500/20"
+                              : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                          }`}
+                        >
+                          {log.actionType}
+                        </span>
+                      </td>
+                      <td className="p-4 text-white/70">{log.details}</td>
+                      <td className="p-4 text-center">
+                        <span className="text-xs px-2.5 py-0.5 rounded border font-semibold bg-green-500/10 text-green-400 border-green-500/20">
+                          {log.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )
       ) : displayedUsers.length === 0 ? (
         <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl text-white/50">
           {activeTab === "admins"
@@ -233,7 +309,6 @@ const AdminUsers = () => {
                      <th className="p-4 text-center font-semibold">Guest ID</th>
                   <th className="p-4 text-center font-semibold">User Name</th>
                   <th className="p-4 text-center font-semibold">Email</th>
-                  {/* <th className="p-4 text-center font-semibold">Phone</th> */}
                   <th className="p-4 text-center font-semibold">Role</th>
                   <th className="p-4 text-center font-semibold">Registered on</th>
                   {activeTab === "guests" && <th className="p-4 text-center font-semibold">Actions</th>}
@@ -253,7 +328,6 @@ const AdminUsers = () => {
  {u.full_name}
                        </td>
                     <td className="p-4 text-white">{u.email} <br></br> {formatPhoneNumber(u.phone)}</td>
-                    {/* <td className="p-4 text-white"></td> */}
                     <td className="p-4">
                       <span
                         className={`text-xs px-6 py-2 rounded border font-semibold inline-flex items-center gap-1 ${
@@ -262,7 +336,6 @@ const AdminUsers = () => {
                             : "bg-teal-500/10 text-teal-400 border-teal-500/20"
                         }`}
                       >
-                        {/* {u.role === "admin" ? <Shield size={12} /> : <Users size={12} />} */}
                         {u.role}
                       </span>
                     </td>

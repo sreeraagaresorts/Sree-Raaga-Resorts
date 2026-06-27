@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const AuditLog = require("../models/AuditLog");
 
 exports.register = async (req, res) => {
   try {
@@ -196,6 +197,19 @@ exports.updateUserRole = async (req, res) => {
       });
     }
 
+    // Log to AuditLog
+    try {
+      const adminUser = await User.findOne({ id: req.user.id });
+      const adminName = adminUser ? adminUser.full_name : req.user.email;
+      await AuditLog.create({
+        adminName,
+        actionType: "Role Change",
+        details: `Changed role of user "${user.full_name}" (ID: #${user.id}) to ${role}`
+      });
+    } catch (logErr) {
+      console.error("[AuditLog Error] Failed to create log:", logErr);
+    }
+
     // Send role updated email in background
     const { sendRoleUpdatedEmail } = require("../utils/email");
     sendRoleUpdatedEmail(user.toObject()).catch(err => {
@@ -234,6 +248,19 @@ exports.deleteUser = async (req, res) => {
         success: false,
         message: "User not found."
       });
+    }
+
+    // Log to AuditLog
+    try {
+      const adminUser = await User.findOne({ id: req.user.id });
+      const adminName = adminUser ? adminUser.full_name : req.user.email;
+      await AuditLog.create({
+        adminName,
+        actionType: "User Deletion",
+        details: `Deleted user account "${user.full_name}" (ID: #${user.id}) and all associated bookings`
+      });
+    } catch (logErr) {
+      console.error("[AuditLog Error] Failed to create log:", logErr);
     }
 
     // Send account deleted email in background
@@ -330,6 +357,24 @@ exports.deleteOwnAccount = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to delete account"
+    });
+  }
+};
+
+// Admin-only: Get all audit logs
+exports.getAuditLogs = async (req, res) => {
+  try {
+    const logs = await AuditLog.find({}).sort({ id: -1 });
+    res.json({
+      success: true,
+      count: logs.length,
+      data: logs
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch audit logs."
     });
   }
 };
