@@ -354,7 +354,7 @@ const Menu = () => {
                         ₹{parseFloat(dish.price).toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-gray-500 text-[15px] font-light line-clamp-2 leading-relaxed ">
+                    <p className="text-gray-500 text-[15px] font-medium line-clamp-2 leading-relaxed ">
                       {dish.description || "Freshly cooked exquisite dish prepared by our resort specialty chefs."}
                     </p>
                   </div>
