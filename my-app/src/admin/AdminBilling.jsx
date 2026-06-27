@@ -498,7 +498,7 @@ const AdminBilling = () => {
       <div className="bg-[#081A2F] rounded-xl border border-white/5 overflow-hidden">
         <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-white/5 gap-4 print:hidden">
           <div className="flex flex-wrap gap-3 text-base font-bold uppercase tracking-wider w-full sm:w-auto">
-            {['invoices', 'Payments', 'Cancellations'].map((tab) => (
+            {['invoices', 'payments', 'cancellations'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
