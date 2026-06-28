@@ -216,7 +216,7 @@ body {
 }
 
 /* Make status badges match billing exactly */
-.admin-portal-wrapper span.rounded-full {
+.admin-portal-wrapper span.rounded-full:not(:empty) {
   font-size: 0.875rem !important; /* text-sm/14px */
   padding: 0.25rem 0.75rem !important; /* px-3 py-1 */
 }
