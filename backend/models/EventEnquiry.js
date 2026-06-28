@@ -8,6 +8,7 @@ const eventEnquirySchema = new mongoose.Schema({
   email: { type: String, required: true },
   eventName: { type: String, required: true },
   guests: { type: Number, required: true },
+  status: { type: String, default: "Unread" },
   created_at: { type: Date, default: Date.now }
 });
 

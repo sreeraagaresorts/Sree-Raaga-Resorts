@@ -512,7 +512,7 @@ const AdminRooms = () => {
               <div>
                 <img
                   src={getImageUrl(room.image)}
-                  className="h-48 w-full object-cover"
+                  className="h-48 w-full object-cover border-b border-white/10"
                   alt={room.name}
                 />
 
@@ -520,49 +520,49 @@ const AdminRooms = () => {
                 <div className="p-4 space-y-3">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h2 className="font-bold text-lg leading-tight">{room.name}</h2>
+                      <h2 className="font-bold text-[18px] leading-tight text-white">{room.name}</h2>
                       {room.category && (
-                        <span className="text-[10px] text-yellow-500/80 uppercase tracking-widest font-bold">
+                        <span className="text-[12px] text-white uppercase tracking-widest font-bold block mt-0.5">
                           {room.category}
                         </span>
                       )}
                     </div>
                     {room.roomNumber && (
-                      <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
+                      <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
                         Room {room.roomNumber}
                       </span>
                     )}
                   </div>
 
-                  <p className="text-[#C8A64D] font-bold text-lg">
-                    ₹{parseFloat(room.price).toLocaleString()} <span className="text-white/40 text-xs font-normal">/ night</span>
+                  <p className="text-[#C8A64D] font-bold text-[18px]">
+                    ₹{parseFloat(room.price).toLocaleString()} <span className="text-white text-[14px] font-normal">/ night</span>
                   </p>
 
-                  <p className="text-white/50 text-xs line-clamp-2">
+                  <p className="text-white text-[16px] line-clamp-2">
                     {room.description}
                   </p>
 
                   {/* INFO */}
-                  <div className="flex gap-4 text-xs text-white/60 border-t border-white/5 pt-3">
-                    <span className="flex items-center gap-1">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[14px] text-white border-t border-white/10 pt-3">
+                    <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Beds">
                       <BedDouble size={14} className="text-[#C8A64D]" />
                       {room.beds}
                     </span>
 
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Area">
                       <Maximize size={14} className="text-[#C8A64D]" />
                       {room.area}
                     </span>
 
                     {room.guests && (
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Guests Capacity">
                         <Users size={14} className="text-[#C8A64D]" />
                         {room.guests}
                       </span>
                     )}
 
                     {room.images && room.images.length > 0 && (
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20 col-span-full sm:col-span-1" title="Gallery Images">
                         <Upload size={14} className="text-[#C8A64D]" />
                         {room.images.length} Extra
                       </span>

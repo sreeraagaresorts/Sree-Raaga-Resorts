@@ -214,7 +214,13 @@ exports.getEnquiries = async (req, res) => {
 
 exports.deleteEnquiry = async (req, res) => {
   try {
-    const enquiry = await EventEnquiry.findOneAndDelete({ id: Number(req.params.id) });
+    const paramId = req.params.id;
+    const mongoose = require("mongoose");
+    const query = mongoose.Types.ObjectId.isValid(paramId)
+      ? { _id: paramId }
+      : { id: Number(paramId) };
+
+    const enquiry = await EventEnquiry.findOneAndDelete(query);
     if (!enquiry) {
       return res.status(404).json({
         success: false,
@@ -231,6 +237,40 @@ exports.deleteEnquiry = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to delete enquiry"
+    });
+  }
+};
+
+exports.markEnquiryAsRead = async (req, res) => {
+  try {
+    const paramId = req.params.id;
+    const mongoose = require("mongoose");
+    const query = mongoose.Types.ObjectId.isValid(paramId)
+      ? { _id: paramId }
+      : { id: Number(paramId) };
+
+    const enquiry = await EventEnquiry.findOneAndUpdate(
+      query,
+      { status: "Read" },
+      { returnDocument: "after" }
+    );
+    if (!enquiry) {
+      return res.status(404).json({
+        success: false,
+        message: "Enquiry not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Enquiry marked as read successfully",
+      data: enquiry
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to mark enquiry as read"
     });
   }
 };

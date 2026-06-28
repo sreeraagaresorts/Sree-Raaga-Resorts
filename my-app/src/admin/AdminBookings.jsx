@@ -286,12 +286,12 @@ const AdminBookings = () => {
   });
 
   return (
-    <div className="space-y-6 text-white max-w-7xl mx-auto">
+    <div className="space-y-6 text-white max-w-[200vh] mx-auto">
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 border-b border-white/5 pb-6">
         <div>
           <h1 className="text-2xl font-bold">Bookings Manager</h1>
-          <p className="text-white/50 text-sm">
+          <p className="text-white text-sm">
             Manage reservations and guest stays
           </p>
         </div>
@@ -343,21 +343,21 @@ const AdminBookings = () => {
           <span>Loading bookings...</span>
         </div>
       ) : filteredBookings.length === 0 ? (
-        <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl text-white/50">
+        <div className="bg-[#081A2F]  p-12 text-center rounded-xl text-white">
           No bookings found.
         </div>
       ) : (
-        <div className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+        <div className="bg-[#081A2F] border border-white/10  rounded-xl overflow-hidden shadow-2xl">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider">
+            <table className="w-full text-base border-collapse">
+              <thead className="bg-[#071524] text-white/60 text-sm uppercase tracking-wider border-b border-white/10">
                 <tr>
-                  <th className="p-4 text-left font-semibold">Guest Details</th>
-                  <th className="p-4 text-left font-semibold">Room booked</th>
-                  <th className="p-4 text-left font-semibold">Reservation Dates</th>
-                  <th className="p-4 text-left font-semibold">Amount</th>
-                  <th className="p-4 text-left font-semibold">Payment</th>
-                  <th className="p-4 text-left font-semibold">Status</th>
+                  <th className="p-4 text-left font-semibold ">Guest Details</th>
+                  <th className="p-4 text-left font-semibold ">Room booked</th>
+                  <th className="p-4 text-left font-semibold ">Reservation Dates</th>
+                  <th className="p-4 text-left font-semibold ">Amount</th>
+                  <th className="p-4 text-left font-semibold ">Payment</th>
+                  <th className="p-4 text-left font-semibold ">Status</th>
                   <th className="p-4 text-center font-semibold">Actions</th>
                 </tr>
               </thead>
@@ -365,44 +365,44 @@ const AdminBookings = () => {
                 {filteredBookings.map((b) => (
                   <tr
                     key={b.id}
-                    className="border-t border-white/5 hover:bg-white/5 transition"
+                    className="border-b border-white/10 hover:bg-white/5 transition"
                   >
                     {/* GUEST */}
-                    <td className="p-4">
-                      <div className="font-semibold">{b.guest_name}</div>
-                      <div className="text-xs text-white/40">{b.guest_email}</div>
-                      {b.guest_phone && <div className="text-[10px] text-white/30">{formatPhoneNumber(b.guest_phone)}</div>}
+                    <td className="p-4 ">
+                      <div className="font-semibold text-[16px]">{b.guest_name}</div>
+                      <div className="text-[16px] text-white mt-0.5">{b.guest_email}</div>
+                      {b.guest_phone && <div className="text-[16px] text-white mt-0.5">{formatPhoneNumber(b.guest_phone)}</div>}
                     </td>
 
                     {/* ROOM */}
-                    <td className="p-4">
-                      <div className="text-white/70 font-medium">{b.room_name}</div>
-                      <div className="text-xs text-white/40">ID: BK-{b.id.toString().padStart(4, "0")}</div>
+                    <td className="p-4 ">
+                      <div className="text-white font-medium text-[16px]">{b.room_name}</div>
+                      <div className="text-[16px] text-white mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
                     </td>
 
                     {/* DATES */}
-                    <td className="p-4 text-xs">
-                      <div className="flex items-center gap-2 text-white/70">
+                    <td className="p-4 text-[16px] ">
+                      <div className="flex items-center gap-">
                         <span>{new Date(b.check_in).toLocaleDateString()}</span>
-                        <ArrowRight className="w-3 h-3 text-white/30" />
+                        <ArrowRight className="w-3.5 h-3.5 text-white/30" />
                         <span>{new Date(b.check_out).toLocaleDateString()}</span>
                       </div>
-                      <div className="text-[10px] text-white/40 mt-1">
+                      <div className="text-[16px] text-white mt-1">
                         Guests: {b.adults} Adults {b.children > 0 && `, ${b.children} Children`}
                       </div>
                     </td>
 
                     {/* AMOUNT */}
-                    <td className="p-4 text-[#C8A64D] font-bold text-base">
+                    <td className="p-4 text-[#C8A64D] font-bold text-[18px] ">
                       ₹{parseFloat(b.total_price).toLocaleString()}
                     </td>
 
                     {/* PAYMENT METHOD */}
-                    <td className="p-4">
+                    <td className="p-4 ">
                       <select
                         value={b.payment_method || "cash"}
                         onChange={(e) => handleUpdatePaymentMethod(b.id, e.target.value)}
-                        className={`text-xs px-2 py-1 bg-[#071524] rounded border font-semibold outline-none focus:border-[#C8A64D] uppercase cursor-pointer ${
+                        className={`text-[16px] px-3 py-1.5 bg-[#071524] rounded-lg border font-semibold outline-none focus:border-[#C8A64D] uppercase cursor-pointer ${
                           b.payment_method === "online"
                             ? "text-indigo-400 border-indigo-500/20"
                             : "text-[#C8A64D] border-[#C8A64D]/20"
@@ -414,9 +414,9 @@ const AdminBookings = () => {
                     </td>
 
                     {/* STATUS */}
-                    <td className="p-4">
+                    <td className="p-4 ">
                       <span
-                        className={`text-xs px-2.5 py-1 rounded-full border font-semibold ${
+                        className={`text-[16px] px-3 py-1.5 rounded-full border font-semibold ${
                           b.status === "confirmed"
                             ? "bg-green-500/10 text-green-400 border-green-500/20"
                             : b.status === "checked_in"

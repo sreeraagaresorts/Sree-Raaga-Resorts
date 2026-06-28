@@ -52,7 +52,7 @@ const EventDetails = () => {
 
   // Form states
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+91");
   const [email, setEmail] = useState("");
   const [guests, setGuests] = useState("");
 
@@ -112,6 +112,13 @@ const EventDetails = () => {
   };
 const handleEnquiry = async (e) => {
   e.preventDefault();
+
+  const phoneRegex = /^\+91\d{10}$/;
+  if (!phoneRegex.test(phone)) {
+    toast.error("Phone number must be a valid 10-digit number starting with +91");
+    return;
+  }
+
   setEnquireLoading(true);
 
   try {
@@ -140,7 +147,7 @@ const handleEnquiry = async (e) => {
 
     // Reset Form
     setName("");
-    setPhone("");
+    setPhone("+91");
     setEmail("");
     setGuests("");
 
@@ -388,9 +395,16 @@ const handleEnquiry = async (e) => {
                     <input 
                       type="tel" 
                       required 
-                      placeholder="PHONE" 
+                      placeholder="PHONE (e.g. +91 90000 00000)" 
                       value={phone} 
-                      onChange={(e) => setPhone(e.target.value)} 
+                      onChange={(e) => {
+                        let val = e.target.value;
+                        if (!val.startsWith("+91")) {
+                          val = "+91";
+                        }
+                        const digits = val.slice(3).replace(/\D/g, "").slice(0, 10);
+                        setPhone("+91" + digits);
+                      }} 
                       className="w-full bg-white border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition-all font-jost"
                     />
                   </div>

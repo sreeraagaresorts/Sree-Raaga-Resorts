@@ -7,6 +7,7 @@ import {
   Upload,
   Calendar,
   RefreshCw,
+  Check,
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
@@ -22,7 +23,7 @@ const AdminEvents = () => {
   const [editingEvent, setEditingEvent] = useState(null);
 
   // Enquiries states
-  const [activeTab, setActiveTab] = useState("packages"); // "packages" or "enquiries"
+  const [activeTab, setActiveTab] = useState("enquiries"); // "packages" or "enquiries"
   const [enquiries, setEnquiries] = useState([]);
   const [enquiriesLoading, setEnquiriesLoading] = useState(false);
 
@@ -98,6 +99,28 @@ const AdminEvents = () => {
       fetchEnquiries();
     } catch (err) {
       toast.error(err.message || "Failed to delete enquiry.");
+    }
+  };
+
+  const handleMarkAsRead = async (enquiryId) => {
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API_URL}/api/events/enquiries/admin/${enquiryId}/read`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to mark enquiry as read.");
+      }
+
+      toast.success("Enquiry marked as read!");
+      fetchEnquiries();
+    } catch (err) {
+      toast.error(err.message || "Failed to mark enquiry as read.");
     }
   };
 
@@ -265,16 +288,7 @@ const AdminEvents = () => {
 
       {/* TABS */}
       <div className="flex gap-6 border-b border-white/10 pb-1">
-        <button
-          onClick={() => setActiveTab("packages")}
-          className={`pb-3 px-1 font-bold text-sm tracking-wider uppercase transition-all duration-200 cursor-pointer ${
-            activeTab === "packages"
-              ? "text-[#C8A64D] border-b-2 border-[#C8A64D]"
-              : "text-white/40 hover:text-white/80"
-          }`}
-        >
-          Event Packages
-        </button>
+      
         <button
           onClick={() => setActiveTab("enquiries")}
           className={`pb-3 px-1 font-bold text-sm tracking-wider uppercase transition-all duration-200 cursor-pointer ${
@@ -284,6 +298,16 @@ const AdminEvents = () => {
           }`}
         >
           Event Enquiries ({enquiries.length})
+        </button>
+          <button
+          onClick={() => setActiveTab("packages")}
+          className={`pb-3 px-1 font-bold text-sm tracking-wider uppercase transition-all duration-200 cursor-pointer ${
+            activeTab === "packages"
+              ? "text-[#C8A64D] border-b-2 border-[#C8A64D]"
+              : "text-white/40 hover:text-white/80"
+          }`}
+        >
+          Event & Packages
         </button>
       </div>
 
@@ -510,24 +534,24 @@ const AdminEvents = () => {
                   <tr>
                     <th className="px-6 py-4">ID</th>
                     <th className="px-6 py-4">Client Name</th>
-                    <th className="px-6 py-4">Phone</th>
-                    <th className="px-6 py-4">Email</th>
+                    <th className="px-6 py-4">Contact</th>
                     <th className="px-6 py-4">Event Package</th>
                     <th className="px-6 py-4 text-center">Guests</th>
                     <th className="px-6 py-4">Submitted At</th>
+                    <th className="px-6 py-4 text-center">Status</th>
                     <th className="px-6 py-4 text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {enquiries.map((enquiry) => (
-                    <tr key={enquiry.id || enquiry._id} className="hover:bg-white/2 transition">
+                    <tr key={enquiry.id || enquiry._id} className="hover:bg-white/2 text-white transition">
                       <td className="px-6 py-4 font-bold text-[#C8A64D]">#{enquiry.id}</td>
                       <td className="px-6 py-4 font-semibold text-white">{enquiry.name}</td>
-                      <td className="px-6 py-4">{formatPhoneNumber(enquiry.phone)}</td>
-                      <td className="px-6 py-4 text-white/60">{enquiry.email}</td>
+                      <td className="px-6 py-4">{formatPhoneNumber(enquiry.phone)} <br></br> {enquiry.email}</td>
+                      {/* <td className="px-6 py-4 text-white"></td> */}
                       <td className="px-6 py-4 font-medium text-white">{enquiry.eventName}</td>
                       <td className="px-6 py-4 text-center font-bold">{enquiry.guests}</td>
-                      <td className="px-6 py-4 text-white/40">
+                      <td className="px-6 py-4 text-white">
                         {new Date(enquiry.created_at).toLocaleDateString("en-IN", {
                           day: "2-digit",
                           month: "short",
@@ -537,13 +561,33 @@ const AdminEvents = () => {
                         })}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <button
-                          onClick={() => handleDeleteEnquiry(enquiry.id || enquiry._id)}
-                          className="bg-red-500/10 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 mx-auto transition cursor-pointer font-bold text-xs"
-                          title="Delete Enquiry"
-                        >
-                          <Trash size={12} /> Delete
-                        </button>
+                        <span className={`text-xs px-2.5 py-1 rounded-full border font-semibold ${
+                          enquiry.status === "Read"
+                            ? "bg-green-500/10 text-green-400 border-green-500/20"
+                            : "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                        }`}>
+                          {enquiry.status || "Unread"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex justify-center items-center gap-2 mx-auto">
+                          {enquiry.status !== "Read" && (
+                            <button
+                              onClick={() => handleMarkAsRead(enquiry.id || enquiry._id)}
+                              className="bg-green-500/10 text-green-400 hover:bg-green-500/20 px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer font-bold text-xs border-0 whitespace-nowrap"
+                              title="Mark as Read"
+                            >
+                              <Check size={12} /> Mark Read
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleDeleteEnquiry(enquiry.id || enquiry._id)}
+                            className="bg-red-500/10 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer font-bold text-xs border-0 whitespace-nowrap"
+                            title="Delete Enquiry"
+                          >
+                            <Trash size={12} /> Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

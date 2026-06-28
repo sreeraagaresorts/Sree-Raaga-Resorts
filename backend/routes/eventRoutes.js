@@ -19,7 +19,8 @@ const {
   deleteEvent,
   createEnquiry,
   getEnquiries,
-  deleteEnquiry
+  deleteEnquiry,
+  markEnquiryAsRead
 } = require("../controllers/eventController");
 
 /*
@@ -68,6 +69,13 @@ router.get(
   verifyToken,
   adminMiddleware,
   getEnquiries
+);
+
+router.put(
+  "/enquiries/admin/:id/read",
+  verifyToken,
+  adminMiddleware,
+  markEnquiryAsRead
 );
 
 router.delete(
