@@ -499,7 +499,7 @@ const handleSaveCategory = () => {
                       />
                       {/* Veg indicator badge */}
                       <div className="absolute top-3 left-3 z-20 bg-black/80 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-white/5">
-                        <span className={`w-2 h-2 rounded-full shrink-0 ${(dish.isVegetarian === true || dish.isVegetarian === "true") ? "bg-green-500" : "bg-red-600"}`}></span>
+                        <span className={`w-2 h-2 rounded-full shrink-0 aspect-square ${(dish.isVegetarian === true || dish.isVegetarian === "true") ? "bg-green-500" : "bg-red-600"}`}></span>
                         <span>{(dish.isVegetarian === true || dish.isVegetarian === "true") ? "Veg" : "Non-Veg"}</span>
                       </div>
 

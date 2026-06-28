@@ -517,11 +517,11 @@ const RoomDetails = () => {
               <hr className="border-gray-200/60" />
 
               {/* About accommodation */}
-              <div className="space-y-4">
+              <div className="space-y-4 max-w-3xl">
                 <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e]">
                   About accommodation
                 </h3>
-                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed ">
+                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed whitespace-pre-line line-clamp-2 break-words">
                   {room.description}
                 </p>
                 <p className="text-gray-500 text-xs md:text-[17px] leading-relaxed ">

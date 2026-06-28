@@ -572,7 +572,7 @@ const  AdminLayout=()=> {
             >
               <Bell className="w-4 h-4" />
               {notifications.filter(n => !n.read).length > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shrink-0 aspect-square"></span>
               )}
             </button>
 
@@ -617,7 +617,7 @@ const  AdminLayout=()=> {
                           <p className="text-[11px] text-white/60 mt-0.5 line-clamp-2 leading-snug">{n.message}</p>
                         </div>
                         {!n.read && (
-                          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full self-center shrink-0"></span>
+                          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full self-center shrink-0 aspect-square"></span>
                         )}
                       </div>
                     ))

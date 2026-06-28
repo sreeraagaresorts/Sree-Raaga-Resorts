@@ -45,6 +45,7 @@ const EventDetails = () => {
   const toast = useToast();
 
   const [event, setEvent] = useState(null);
+  const [allEvents, setAllEvents] = useState([]);
   const [similarEvents, setSimilarEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,6 +55,7 @@ const EventDetails = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("+91");
   const [email, setEmail] = useState("");
+  const [selectedEventName, setSelectedEventName] = useState("");
   const [guests, setGuests] = useState("");
 
   // Slider State
@@ -71,6 +73,7 @@ const EventDetails = () => {
         const data = await response.json();
         if (data.success) {
           setEvent(data.data);
+          setSelectedEventName(data.data.name);
         } else {
           throw new Error(data.message || "Failed to load event details");
         }
@@ -80,6 +83,7 @@ const EventDetails = () => {
         if (allRes.ok) {
           const allData = await allRes.json();
           if (allData.success) {
+            setAllEvents(allData.data);
             setSimilarEvents(allData.data.filter(e => e.id !== Number(id) && e.id !== id));
           }
         }
@@ -87,6 +91,8 @@ const EventDetails = () => {
         console.warn("API Offline or event not found, using fallback details:", err.message);
         const mockEvent = fallbackEventDetails[id] || fallbackEventDetails["1"];
         setEvent(mockEvent);
+        setSelectedEventName(mockEvent.name);
+        setAllEvents(Object.values(fallbackEventDetails));
       } finally {
         setLoading(false);
       }
@@ -131,7 +137,7 @@ const handleEnquiry = async (e) => {
         name,
         phone,
         email,
-        eventName: event.name,
+        eventName: selectedEventName,
         guests: Number(guests),
       }),
     });
@@ -271,11 +277,11 @@ const handleEnquiry = async (e) => {
               <hr className="border-gray-200/60" />
 
               {/* About event */}
-              <div className="space-y-4">
+              <div className="space-y-4 max-w-3xl">
                 <h3 className="text-3xl font-medium font-corm text-[#0d2b4e]">
                   About Event & Celebration
                 </h3>
-                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed">
+                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed whitespace-pre-line line-clamp-2 break-words">
                   {event.description}
                 </p>
                 <p className="text-gray-500 text-xs md:text-[17px] leading-relaxed">
@@ -421,13 +427,17 @@ const handleEnquiry = async (e) => {
                   </div>
                   
                   <div>
-                    <input 
-                      type="text" 
-                      disabled 
-                      value={event?.name || ""} 
-                      placeholder="EVENT NAME"
-                      className="w-full border border-gray-200 bg-gray-50 px-4 py-5 text-[17px] text-gray-400 outline-none font-jost cursor-not-allowed uppercase"
-                    />
+                    <select 
+                      value={selectedEventName} 
+                      onChange={(e) => setSelectedEventName(e.target.value)} 
+                      className="w-full bg-white border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition-all font-jost uppercase cursor-pointer"
+                    >
+                      {allEvents.map((evt) => (
+                        <option key={evt.id || evt._id} value={evt.name}>
+                          {evt.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   
                   <div>

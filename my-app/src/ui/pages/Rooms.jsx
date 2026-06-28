@@ -291,7 +291,7 @@ const Rooms = () => {
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed  mt-6 mb-8 flex-grow">
+                  <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mt-6 mb-8 flex-grow whitespace-pre-line line-clamp-2">
                     {room.description}
                   </p>
 
