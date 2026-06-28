@@ -5,6 +5,7 @@ exports.sendMessage = async (req, res) => {
     const {
       name,
       email,
+      phone,
       subject,
       message
     } = req.body;
@@ -24,6 +25,7 @@ exports.sendMessage = async (req, res) => {
     const contact = new Contact({
       name,
       email,
+      phone,
       subject,
       message
     });

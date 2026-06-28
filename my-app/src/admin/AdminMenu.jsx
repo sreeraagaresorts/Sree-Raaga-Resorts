@@ -228,8 +228,8 @@ const handleSaveCategory = () => {
     setPrice(dish.price);
     setCategory(dish.category);
     setDescription(dish.description || "");
-    setIsVegetarian(dish.isVegetarian);
-    setIsAvailable(dish.isAvailable);
+    setIsVegetarian(dish.isVegetarian === true || dish.isVegetarian === "true");
+    setIsAvailable(dish.isAvailable === true || dish.isAvailable === "true");
     setImageFile(null);
     setImagePreview(dish.image ? (dish.image.startsWith("http") ? dish.image : `${API_URL}/uploads/${dish.image}`) : "");
     setIsFormOpen(true);
@@ -499,8 +499,8 @@ const handleSaveCategory = () => {
                       />
                       {/* Veg indicator badge */}
                       <div className="absolute top-3 left-3 z-20 bg-black/80 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-white/5">
-                        <span className={`w-2 h-2 rounded-full ${dish.isVegetarian ? "bg-green-500" : "bg-red-600"}`}></span>
-                        <span>{dish.isVegetarian ? "Veg" : "Non-Veg"}</span>
+                        <span className={`w-2 h-2 rounded-full shrink-0 ${(dish.isVegetarian === true || dish.isVegetarian === "true") ? "bg-green-500" : "bg-red-600"}`}></span>
+                        <span>{(dish.isVegetarian === true || dish.isVegetarian === "true") ? "Veg" : "Non-Veg"}</span>
                       </div>
 
                       {/* Availability badge */}

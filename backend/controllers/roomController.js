@@ -1,5 +1,21 @@
 const mongoose = require("mongoose");
 const Room = require("../models/Room");
+const User = require("../models/User");
+const AuditLog = require("../models/AuditLog");
+
+const logAction = async (userId, actionType, details) => {
+  try {
+    const adminUser = await User.findOne({ id: userId });
+    const adminName = adminUser ? adminUser.full_name : "System / Unknown Admin";
+    await AuditLog.create({
+      adminName,
+      actionType,
+      details
+    });
+  } catch (err) {
+    console.error("[AuditLog Error] Failed to log admin action:", err);
+  }
+};
 
 exports.getRooms = async (req, res) => {
   try {
@@ -105,6 +121,15 @@ exports.createRoom = async (req, res) => {
       description
     });
     await room.save();
+
+    // Log to AuditLog
+    if (req.user) {
+      logAction(
+        req.user.id,
+        "Room Creation",
+        `Created room "${room.name}" (Room Number: ${room.roomNumber})`
+      );
+    }
 
     res.status(201).json({
       success: true,
@@ -215,6 +240,15 @@ exports.updateRoom = async (req, res) => {
       });
     }
 
+    // Log to AuditLog
+    if (req.user) {
+      logAction(
+        req.user.id,
+        "Room Update",
+        `Updated room "${room.name}" (Room Number: ${room.roomNumber})`
+      );
+    }
+
     res.json({
       success: true,
       message: "Room Updated"
@@ -243,6 +277,15 @@ exports.deleteRoom = async (req, res) => {
         success: false,
         message: "Room Not Found"
       });
+    }
+
+    // Log to AuditLog
+    if (req.user) {
+      logAction(
+        req.user.id,
+        "Room Deletion",
+        `Deleted room "${room.name}" (Room Number: ${room.roomNumber})`
+      );
     }
 
     res.json({

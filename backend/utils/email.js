@@ -423,6 +423,7 @@ exports.sendContactSubmissionEmail = async (contact) => {
       <strong>Inquiry Details:</strong><br>
       • Name: <strong>${contact.name}</strong><br>
       • Email: <strong>${contact.email}</strong><br>
+      ${contact.phone ? `• Phone: <strong>${contact.phone}</strong><br>` : ""}
       • Subject: ${contact.subject || "N/A"}<br>
       • Date/Time: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
     </div>
@@ -435,7 +436,7 @@ exports.sendContactSubmissionEmail = async (contact) => {
     to: "info@sreeraagaresorts.in",
     subject: `New Contact Inquiry: ${contact.subject || "No Subject"}`,
     html: getEmailShell("New Contact Submission", content),
-    text: `New contact form submission from ${contact.name} (${contact.email}): ${contact.message}`,
+    text: `New contact form submission from ${contact.name} (${contact.email})${contact.phone ? ` [Phone: ${contact.phone}]` : ""}: ${contact.message}`,
     allowAdminDesk: true
   });
 };

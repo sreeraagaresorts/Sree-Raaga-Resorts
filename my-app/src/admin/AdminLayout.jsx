@@ -13,11 +13,12 @@ import {
   Settings,
   LogOut,
   Bell,
-  Sun,
   CreditCard,
   UtensilsCrossed,
   Menu,
   X,
+  MessageSquare,
+  ShoppingBag,
 } from "lucide-react";
 
 const navItems = [
@@ -48,6 +49,49 @@ const  AdminLayout=()=> {
   const seenBookings = React.useRef(new Set());
   const seenOrders = React.useRef(new Set());
   const seenMessages = React.useRef(new Set());
+
+  const [notifications, setNotifications] = React.useState([]);
+  const [isNotifDropdownOpen, setIsNotifDropdownOpen] = React.useState(false);
+  const dropdownRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsNotifDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
+  const markAllAsRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  };
+
+  const clearAllNotifs = () => {
+    setNotifications([]);
+  };
+
+  const handleNotifClick = (n) => {
+    setNotifications((prev) => prev.map((item) => item.id === n.id ? { ...item, read: true } : item));
+    setIsNotifDropdownOpen(false);
+    if (n.path) {
+      navigate(n.path);
+    }
+  };
+
+  const getNotifIcon = (type) => {
+    switch (type) {
+      case "booking":
+        return <Calendar className="w-3.5 h-3.5" />;
+      case "order":
+        return <ShoppingBag className="w-3.5 h-3.5" />;
+      case "content":
+        return <MessageSquare className="w-3.5 h-3.5" />;
+      default:
+        return <Bell className="w-3.5 h-3.5" />;
+    }
+  };
 
   const triggerPopLeft = (title, message, icon) => {
     const id = Date.now().toString() + Math.random().toString();
@@ -103,10 +147,22 @@ const  AdminLayout=()=> {
         });
         const dataB = await resB.json();
         let pendingBookingsCount = 0;
+        const initialNotifs = [];
         if (dataB.success && dataB.data) {
           dataB.data.forEach((b) => {
             seenBookings.current.add(b.id);
-            if (b.status === "pending") pendingBookingsCount++;
+            if (b.status === "pending") {
+              pendingBookingsCount++;
+              initialNotifs.push({
+                id: `b-${b.id}`,
+                title: "Pending Booking",
+                message: `Booking #${b.id} for ${b.guest_name || "Guest"} is pending.`,
+                time: new Date(b.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                read: false,
+                type: "booking",
+                path: "/admin/bookings"
+              });
+            }
           });
         }
 
@@ -119,7 +175,18 @@ const  AdminLayout=()=> {
         if (dataO.success && dataO.data) {
           dataO.data.forEach((o) => {
             seenOrders.current.add(o.id);
-            if (o.status === "pending" || o.status === "preparing") pendingOrdersCount++;
+            if (o.status === "pending" || o.status === "preparing") {
+              pendingOrdersCount++;
+              initialNotifs.push({
+                id: `o-${o.id}`,
+                title: "Active Food Order",
+                message: `Order #${o.id} for ${o.dishName} in Room ${o.roomNumber}.`,
+                time: new Date(o.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                read: false,
+                type: "order",
+                path: "/admin/menu"
+              });
+            }
           });
         }
 
@@ -129,8 +196,24 @@ const  AdminLayout=()=> {
         });
         const dataM = await resM.json();
         if (dataM.success && dataM.data) {
-          dataM.data.forEach((m) => seenMessages.current.add(m.id));
+          dataM.data.forEach((m) => {
+            seenMessages.current.add(m.id);
+          });
+          dataM.data.slice(0, 5).forEach((m) => {
+            initialNotifs.push({
+              id: `m-${m.id}`,
+              title: "Contact Inquiry",
+              message: `Message from "${m.name}": "${m.subject}".`,
+              time: new Date(m.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+              read: false,
+              type: "content",
+              path: "/admin/content"
+            });
+          });
         }
+
+        initialNotifs.sort((x, y) => y.id.localeCompare(x.id));
+        setNotifications((prev) => [...initialNotifs, ...prev].slice(0, 20));
 
         // Seed initial unread counts if we are not currently active on those pages
         setUnreadCounts((prev) => {
@@ -165,6 +248,19 @@ const  AdminLayout=()=> {
                 React.createElement(Calendar, { className: "w-5 h-5" })
               );
 
+              setNotifications((prev) => [
+                {
+                  id: `b-${b.id}-${Date.now()}`,
+                  title: "New Booking Request",
+                  message: `Guest "${b.guest_name || "Guest"}" requested Room "${b.room_name}" (Total: ₹${b.total_price}).`,
+                  time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                  read: false,
+                  type: "booking",
+                  path: "/admin/bookings"
+                },
+                ...prev
+              ].slice(0, 20));
+
               // Increment unread bookings count if not currently viewed
               const isBookingsActive = location.pathname === "/admin/bookings" || location.pathname.startsWith("/admin/bookings/");
               if (!isBookingsActive) {
@@ -192,6 +288,19 @@ const  AdminLayout=()=> {
                 React.createElement(UtensilsCrossed, { className: "w-5 h-5" })
               );
 
+              setNotifications((prev) => [
+                {
+                  id: `o-${o.id}-${Date.now()}`,
+                  title: "New Food Order",
+                  message: `Room ${o.roomNumber} (${o.guestName}) ordered ${o.quantity}x "${o.dishName}".`,
+                  time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                  read: false,
+                  type: "order",
+                  path: "/admin/menu"
+                },
+                ...prev
+              ].slice(0, 20));
+
               // Increment unread menu orders count if not currently viewed
               const isMenuActive = location.pathname === "/admin/menu" || location.pathname.startsWith("/admin/menu/");
               if (!isMenuActive) {
@@ -218,6 +327,19 @@ const  AdminLayout=()=> {
                 `Message from "${m.name}": "${m.subject}".`,
                 React.createElement(Bell, { className: "w-5 h-5" })
               );
+
+              setNotifications((prev) => [
+                {
+                  id: `m-${m.id}-${Date.now()}`,
+                  title: "New CMS Message",
+                  message: `Message from "${m.name}": "${m.subject}".`,
+                  time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                  read: false,
+                  type: "content",
+                  path: "/admin/content"
+                },
+                ...prev
+              ].slice(0, 20));
 
               // Increment unread CMS messages count if not currently viewed
               const isContentActive = location.pathname === "/admin/content" || location.pathname.startsWith("/admin/content/");
@@ -441,16 +563,80 @@ const  AdminLayout=()=> {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 relative" ref={dropdownRef}>
 
-            <button className="p-2 rounded-full hover:bg-white/5">
-              <Sun className="w-4 h-4 text-white/40" />
+            <button 
+              onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
+              className={`p-2 rounded-full transition relative ${isNotifDropdownOpen ? "bg-white/10 text-white" : "hover:bg-white/5 text-white/60 hover:text-white"} cursor-pointer`}
+              title="Notifications"
+            >
+              <Bell className="w-4 h-4" />
+              {notifications.filter(n => !n.read).length > 0 && (
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
+              )}
             </button>
 
-            <button className="p-2 rounded-full hover:bg-white/5 relative">
-              <Bell className="w-4 h-4 text-white/40" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            {isNotifDropdownOpen && (
+              <div className="absolute right-0 top-12 w-80 bg-[#081A2F] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden text-sm">
+                {/* Header */}
+                <div className="p-4 border-b border-white/5 flex justify-between items-center bg-[#071524]">
+                  <h3 className="font-bold text-white flex items-center gap-1.5">
+                    <Bell className="w-4 h-4 text-[#C8A64D]" /> Notifications
+                  </h3>
+                  {notifications.filter(n => !n.read).length > 0 && (
+                    <button 
+                      onClick={markAllAsRead}
+                      className="text-[10px] text-[#C8A64D] hover:underline uppercase font-bold tracking-wider cursor-pointer bg-transparent border-0"
+                    >
+                      Mark all read
+                    </button>
+                  )}
+                </div>
+
+                {/* List */}
+                <div className="max-h-72 overflow-y-auto divide-y divide-white/5">
+                  {notifications.length === 0 ? (
+                    <div className="p-8 text-center text-white/40 text-xs">
+                      No notifications
+                    </div>
+                  ) : (
+                    notifications.map((n) => (
+                      <div 
+                        key={n.id} 
+                        onClick={() => handleNotifClick(n)}
+                        className={`p-3 flex gap-3 hover:bg-white/2 transition cursor-pointer ${n.read ? "opacity-60" : "bg-white/2"}`}
+                      >
+                        <div className="mt-0.5 text-[#C8A64D]">
+                          {getNotifIcon(n.type)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-start gap-1">
+                            <span className="font-semibold text-xs text-white truncate">{n.title}</span>
+                            <span className="text-[9px] text-white/40 shrink-0">{n.time}</span>
+                          </div>
+                          <p className="text-[11px] text-white/60 mt-0.5 line-clamp-2 leading-snug">{n.message}</p>
+                        </div>
+                        {!n.read && (
+                          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full self-center shrink-0"></span>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Footer */}
+                {notifications.length > 0 && (
+                  <div className="p-2 border-t border-white/5 text-center bg-[#071524]">
+                    <button 
+                      onClick={clearAllNotifs}
+                      className="text-[10px] text-red-400 hover:text-red-300 uppercase font-bold tracking-wider cursor-pointer bg-transparent border-0"
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
           </div>
         </header>

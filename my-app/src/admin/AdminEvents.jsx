@@ -373,7 +373,7 @@ const AdminEvents = () => {
                     className="w-4 h-4 text-yellow-500 bg-[#071524] border-white/10 rounded focus:ring-yellow-500 focus:ring-2 cursor-pointer"
                   />
                   <label htmlFor="showPrice" className="text-white/80 text-sm font-semibold select-none cursor-pointer">
-                    Show Price on Public Website (Toggle off to show "Enquire Now" only)
+                    Toggle ON to show the Price
                   </label>
                 </div>
               </div>

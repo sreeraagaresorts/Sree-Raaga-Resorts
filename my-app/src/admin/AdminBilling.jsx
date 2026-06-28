@@ -508,7 +508,7 @@ const AdminBilling = () => {
                     : 'bg-[#071524] text-white/50 border-white/10 hover:bg-white/5'
                 }`}
               >
-                {tab}
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>
             ))}
           </div>

@@ -1,4 +1,20 @@
 const Dish = require("../models/Dish");
+const User = require("../models/User");
+const AuditLog = require("../models/AuditLog");
+
+const logAction = async (userId, actionType, details) => {
+  try {
+    const adminUser = await User.findOne({ id: userId });
+    const adminName = adminUser ? adminUser.full_name : "System / Unknown Admin";
+    await AuditLog.create({
+      adminName,
+      actionType,
+      details
+    });
+  } catch (err) {
+    console.error("[AuditLog Error] Failed to log admin action:", err);
+  }
+};
 
 exports.getDishes = async (req, res) => {
   try {
@@ -58,6 +74,15 @@ exports.createDish = async (req, res) => {
     });
     await dish.save();
 
+    // Log to AuditLog
+    if (req.user) {
+      logAction(
+        req.user.id,
+        "Dish Creation",
+        `Created dish "${dish.name}" (Category: ${dish.category}, Price: ₹${dish.price})`
+      );
+    }
+
     res.status(201).json({
       success: true,
       message: "Dish created successfully",
@@ -102,6 +127,15 @@ exports.updateDish = async (req, res) => {
       });
     }
 
+    // Log to AuditLog
+    if (req.user) {
+      logAction(
+        req.user.id,
+        "Dish Update",
+        `Updated dish "${dish.name}" (Category: ${dish.category}, Price: ₹${dish.price})`
+      );
+    }
+
     res.json({
       success: true,
       message: "Dish updated successfully"
@@ -123,6 +157,15 @@ exports.deleteDish = async (req, res) => {
         success: false,
         message: "Dish not found"
       });
+    }
+
+    // Log to AuditLog
+    if (req.user) {
+      logAction(
+        req.user.id,
+        "Dish Deletion",
+        `Deleted dish "${dish.name}" (ID: #${dish.id})`
+      );
     }
 
     res.json({

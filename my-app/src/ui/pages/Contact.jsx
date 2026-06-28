@@ -24,8 +24,33 @@ const Contact = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
+
+  const handlePhoneChange = (e) => {
+    const input = e.target.value;
+    if (!input) {
+      setPhone("");
+      return;
+    }
+
+    let cleaned = input;
+    if (input.startsWith("+91")) {
+      cleaned = input.slice(3);
+    }
+    const digits = cleaned.replace(/\D/g, "").slice(0, 10);
+
+    let formatted = "";
+    if (digits.length > 0) {
+      if (digits.length <= 5) {
+        formatted = `+91 ${digits}`;
+      } else {
+        formatted = `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;
+      }
+    }
+    setPhone(formatted);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,6 +70,7 @@ const Contact = () => {
         body: JSON.stringify({
           name: `${firstName} ${lastName}`,
           email,
+          phone,
           subject: "Contact Form Submission",
           message: comment,
         }),
@@ -59,6 +85,7 @@ const Contact = () => {
       setFirstName("");
       setLastName("");
       setEmail("");
+      setPhone("");
       setComment("");
       setStatus("");
     } catch (err) {
@@ -142,6 +169,17 @@ const Contact = () => {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-[17px]"
+                />
+              </div>
+
+              <div>
+                <input
+                  type="tel"
+                  required
+                  placeholder="Phone Number"
+                  value={phone}
+                  onChange={handlePhoneChange}
                   className="w-full bg-white border border-gray-200 px-5 py-4 text-[#0d2b4e] outline-none focus:border-[#c8a64d] transition text-[17px]"
                 />
               </div>

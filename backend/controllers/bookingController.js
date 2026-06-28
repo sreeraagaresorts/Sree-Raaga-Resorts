@@ -1,6 +1,21 @@
 const Booking = require("../models/Booking");
 const Room = require("../models/Room");
 const User = require("../models/User");
+const AuditLog = require("../models/AuditLog");
+
+const logAction = async (userId, actionType, details) => {
+  try {
+    const adminUser = await User.findOne({ id: userId });
+    const adminName = adminUser ? adminUser.full_name : "System / Unknown Admin";
+    await AuditLog.create({
+      adminName,
+      actionType,
+      details
+    });
+  } catch (err) {
+    console.error("[AuditLog Error] Failed to log admin action:", err);
+  }
+};
 
 // 1. Create a booking
 exports.createBooking = async (req, res) => {
@@ -237,6 +252,15 @@ exports.updateBookingStatus = async (req, res) => {
       console.error("[Email] Failed to fetch booking details for update notification:", err);
     }
 
+    // Log to AuditLog
+    if (req.user) {
+      logAction(
+        req.user.id,
+        "Booking Update",
+        `Updated booking #${booking.id} (Status: ${booking.status})`
+      );
+    }
+
     res.json({
       success: true,
       message: "Booking updated successfully."
@@ -283,6 +307,15 @@ exports.deleteBooking = async (req, res) => {
       });
     } catch (err) {
       console.error("[Email] Failed to fetch booking details for deletion notification:", err);
+    }
+
+    // Log to AuditLog
+    if (req.user) {
+      logAction(
+        req.user.id,
+        "Booking Deletion",
+        `Deleted booking #${booking.id} for guest ID #${booking.user_id}`
+      );
     }
 
     res.json({
