@@ -209,7 +209,7 @@ const AdminEnquiries = () => {
   });
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white">Enquiries Dashboard</h1>
@@ -230,7 +230,7 @@ const AdminEnquiries = () => {
                   : "text-white/40 hover:text-white/80"
               }`}
             >
-              Event Enquiries ({eventEnquiries.filter(e => e.status !== "Read").length} Unread)
+              Event Enquiries ({eventEnquiries.filter(e => e.status !== "Read").length})
             </button>
             <button
               onClick={() => handleTabChange("contact")}
@@ -240,7 +240,7 @@ const AdminEnquiries = () => {
                   : "text-white/40 hover:text-white/80"
               }`}
             >
-              Contact Form Enquiries ({contactEnquiries.filter(c => c.status !== "Read").length} Unread)
+              Contact Form Enquiries ({contactEnquiries.filter(c => c.status !== "Read").length})
             </button>
           </div>
 
@@ -377,72 +377,76 @@ const AdminEnquiries = () => {
                 {filteredContactEnquiries.map((inq) => (
                   <div
                     key={inq.id || inq._id}
-                    className="bg-[#081A2F] border border-white/10 p-5 rounded-xl hover:border-[#C8A64D]/30 transition flex flex-col md:flex-row justify-between gap-6 items-start shadow-md"
+                    className="bg-[#081A2F] border border-white/10 p-5 rounded-xl hover:border-[#C8A64D]/30 transition flex flex-col gap-4 shadow-md"
                   >
-                    <div className="space-y-3 flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center gap-2.5">
-                        <span className="font-bold text-white text-base">{inq.name}</span>
-                        <span className="text-xs text-white/30">•</span>
-                        <span className="text-xs text-white/50">
-                          {new Date(inq.created_at || Date.now()).toLocaleString()}
-                        </span>
-                        <span
-                          className={`text-xs px-2.5 py-0.5 rounded-full border font-semibold ml-2 ${
-                            inq.status === "Read"
-                              ? "bg-green-500/10 text-green-400 border-green-500/20"
-                              : "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
-                          }`}
-                        >
-                          {inq.status || "Unread"}
-                        </span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-white/60">
-                        <a
-                          href={`mailto:${inq.email}`}
-                          className="hover:text-[#C8A64D] flex items-center gap-1.5 transition"
-                        >
-                          <Mail className="w-3.5 h-3.5" /> {inq.email}
-                        </a>
-                        {inq.phone && (
-                          <a
-                            href={`tel:${inq.phone}`}
-                            className="hover:text-[#C8A64D] flex items-center gap-1.5 transition"
+                    {/* Header Row: client details on left, action buttons on right */}
+                    <div className="flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center">
+                      <div className="space-y-2 flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2.5">
+                          <span className="font-bold text-white text-base">{inq.name}</span>
+                          <span className="text-xs text-white/30">•</span>
+                          <span className="text-xs text-white/50">
+                            {new Date(inq.created_at || Date.now()).toLocaleString()}
+                          </span>
+                          <span
+                            className={`text-xs px-2.5 py-0.5 rounded-full border font-semibold ml-2 ${
+                              inq.status === "Read"
+                                ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                : "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                            }`}
                           >
-                            <Phone className="w-3.5 h-3.5" /> {formatPhoneNumber(inq.phone)}
+                            {inq.status || "Unread"}
+                          </span>
+                        </div>
+
+                        <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-white/60">
+                          <a
+                            href={`mailto:${inq.email}`}
+                            className="text-white text-[16px] flex items-center gap-1.5 transition"
+                          >
+                            <Mail className="w-3.5 h-3.5" /> {inq.email}
                           </a>
-                        )}
+                          {inq.phone && (
+                            <a
+                              href={`tel:${inq.phone}`}
+                              className="text-white text-[16px] flex items-center gap-1.5 transition"
+                            >
+                              <Phone className="w-3.5 h-3.5" /> {formatPhoneNumber(inq.phone)}
+                            </a>
+                          )}
+                        </div>
                       </div>
 
-                      <div className="border-t border-white/5 pt-3 mt-3">
-                        <p className="text-xs text-[#C8A64D] font-bold uppercase tracking-wider">
-                          Subject: {inq.subject}
-                        </p>
-                        <p className="text-white/80 text-sm mt-1.5 leading-relaxed bg-[#071524] p-4 rounded-lg border border-white/5 whitespace-pre-line">
-                          {inq.message}
-                        </p>
+                      <div className="flex flex-row gap-2 shrink-0 self-stretch sm:self-auto justify-end">
+                        {inq.status !== "Read" && (
+                          <button
+                            type="button"
+                            onClick={() => handleMarkContactEnquiryAsRead(inq.id || inq._id)}
+                            className="bg-green-500/10 text-green-400 hover:bg-green-500/20 px-3 py-1.5 rounded-lg transition cursor-pointer font-bold text-xs border-0 whitespace-nowrap"
+                            title="Mark as Read"
+                          >
+                            Mark Read
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteContactEnquiry(inq.id || inq._id)}
+                          className="bg-red-500/10 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-lg transition cursor-pointer font-bold text-xs border-0 whitespace-nowrap"
+                          title="Delete Inquiry"
+                        >
+                          Delete
+                        </button>
                       </div>
                     </div>
 
-                    <div className="flex flex-row md:flex-col gap-2 w-full md:w-auto justify-end self-stretch md:self-start shrink-0">
-                      {inq.status !== "Read" && (
-                        <button
-                          type="button"
-                          onClick={() => handleMarkContactEnquiryAsRead(inq.id || inq._id)}
-                          className="flex-1 md:flex-initial bg-green-500/10 text-green-400 hover:bg-green-500/20 px-3 py-1.5 rounded-lg transition cursor-pointer font-bold text-xs border-0 whitespace-nowrap text-center"
-                          title="Mark as Read"
-                        >
-                          Mark Read
-                        </button>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteContactEnquiry(inq.id || inq._id)}
-                        className="flex-1 md:flex-initial bg-red-500/10 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-lg transition cursor-pointer font-bold text-xs border-0 whitespace-nowrap text-center"
-                        title="Delete Inquiry"
-                      >
-                        Delete
-                      </button>
+                    {/* Subject and Message details stretch fully below */}
+                    <div className="border-t border-white/5 pt-3">
+                      <p className="text-xs text-[#C8A64D] font-bold uppercase tracking-wider">
+                        Subject: {inq.subject}
+                      </p>
+                      <p className="text-white/90 text-[16px] mt-1.5 leading-relaxed bg-[#071524] p-4 rounded-lg border border-white/5 whitespace-pre-line w-full">
+                        {inq.message}
+                      </p>
                     </div>
                   </div>
                 ))}

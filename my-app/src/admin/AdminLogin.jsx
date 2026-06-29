@@ -49,7 +49,7 @@ const AdminLogin = () => {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center bg-cover bg-center relative p-4"
+      className="h-screen overflow-hidden flex items-center justify-center bg-cover bg-center relative p-4"
       style={{
         backgroundImage: "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000')"
       }}
@@ -61,13 +61,13 @@ const AdminLogin = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="w-full max-w-md bg-zinc-950/90 border border-yellow-500/20 p-8 shadow-2xl relative z-10"
+        className="w-full max-w-md bg-zinc-950/90 border border-yellow-500/20 p-6 sm:p-8 shadow-2xl relative z-10"
       >
       
 
         {/* Brand/Header */}
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-full border border-yellow-500/20 bg-yellow-500/5 flex items-center justify-center mx-auto mb-4">
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 rounded-full border border-yellow-500/20 bg-yellow-500/5 flex items-center justify-center mx-auto mb-3">
             <ShieldCheck className="text-yellow-500 w-6 h-6" />
           </div>
           <p className="text-yellow-500 text-[10px] uppercase tracking-[4px] mb-1 font-semibold">
@@ -83,16 +83,16 @@ const AdminLogin = () => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-none text-xs mb-6 text-center tracking-wider"
+            className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-2.5 rounded-none text-xs mb-4 text-center tracking-wider"
           >
             {error}
           </motion.div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-4">
           {/* Email */}
           <div>
-            <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-2 font-medium">
+            <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1.5 font-medium">
                Email
             </label>
             <input
@@ -101,13 +101,13 @@ const AdminLogin = () => {
               placeholder="Enter Your Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-zinc-900/50 border border-yellow-500/15 py-3 px-4 outline-none focus:border-yellow-500 text-white transition text-sm rounded-none"
+              className="w-full bg-zinc-900/50 border border-yellow-500/15 py-2.5 px-4 outline-none focus:border-yellow-500 text-white transition text-sm rounded-none"
             />
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-2 font-medium">
+            <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1.5 font-medium">
               Password
             </label>
             <input
@@ -116,7 +116,7 @@ const AdminLogin = () => {
               placeholder="Enter your Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-zinc-900/50 border border-yellow-500/15 py-3 px-4 outline-none focus:border-yellow-500 text-white transition text-sm rounded-none"
+              className="w-full bg-zinc-900/50 border border-yellow-500/15 py-2.5 px-4 outline-none focus:border-yellow-500 text-white transition text-sm rounded-none"
             />
           </div>
 
@@ -124,7 +124,7 @@ const AdminLogin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-yellow-500 text-black hover:bg-yellow-400 font-bold transition disabled:bg-yellow-500/50 uppercase tracking-widest text-xs cursor-pointer rounded-none"
+            className="w-full py-3 bg-yellow-500 text-black hover:bg-yellow-400 font-bold transition disabled:bg-yellow-500/50 uppercase tracking-widest text-xs cursor-pointer rounded-none"
           >
             {loading ? "Authorizing access..." : "Enter Portal"}
           </button>
@@ -132,13 +132,13 @@ const AdminLogin = () => {
           {/* Back Link */}
         <Link 
           to="/" 
-          className="flex items-center pt-8 justify-center gap-2 text-xs text-gray-100 hover:text-yellow-500 transition mb-6 uppercase tracking-wider"
+          className="flex items-center pt-4 justify-center gap-2 text-xs text-gray-100 hover:text-yellow-500 transition mb-4 uppercase tracking-wider"
         >
           <ArrowLeft size={12} /> Back to Homepage
         </Link>
 
-        <p className="text-[14px] text-center text-gray-400 mt-8 uppercase tracking-widest">
- Restricted area. Admin access only.
+        <p className="text-[12px] text-center text-gray-400 mt-4 uppercase tracking-widest">
+          Restricted area. Admin access only.
         </p>
       </motion.div>
     </div>

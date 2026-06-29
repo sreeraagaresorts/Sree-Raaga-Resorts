@@ -116,7 +116,38 @@ const  AdminLayout=()=> {
     }
   };
 
+  const playNotificationSound = () => {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      
+      const playTone = (freq, startTime, duration) => {
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, startTime);
+        
+        gainNode.gain.setValueAtTime(0.1, startTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+      };
+
+      const now = audioCtx.currentTime;
+      // High-end premium chime: dual note arpeggio (C5 and E5)
+      playTone(523.25, now, 0.4);
+      playTone(659.25, now + 0.08, 0.5);
+    } catch (err) {
+      console.warn("Web Audio API notification sound failed:", err);
+    }
+  };
+
   const triggerPopLeft = (title, message, icon) => {
+    playNotificationSound();
     const id = Date.now().toString() + Math.random().toString();
     setPopNotifications((prev) => [...prev, { id, title, message, icon }]);
     setTimeout(() => {
@@ -402,7 +433,7 @@ const  AdminLayout=()=> {
               seenMessages.current.add(m.id);
               if (m.status !== "Read" && !clearedNotifIds.has(`m-${m.id}`)) {
                 triggerPopLeft(
-                  "New CMS Message",
+                  "New Message",
                   `Message from "${m.name}": "${m.subject}".`,
                   React.createElement(Bell, { className: "w-5 h-5" })
                 );
@@ -410,7 +441,7 @@ const  AdminLayout=()=> {
                 setNotifications((prev) => [
                   {
                     id: `m-${m.id}`,
-                    title: "New CMS Message",
+                    title: "New Message",
                     message: `Message from "${m.name}": "${m.subject}".`,
                     time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
                     read: false,
@@ -745,10 +776,10 @@ const  AdminLayout=()=> {
 
             <button 
               onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
-              className={`p-2 rounded-full transition relative ${isNotifDropdownOpen ? "bg-white/10 text-white" : "hover:bg-white/5 text-white/60 hover:text-white"} cursor-pointer`}
+              className={`p-3 mt-2 rounded-full transition relative ${isNotifDropdownOpen ? "bg-white/10 text-white" : "hover:bg-white/5 text-[#C8A64D] hover:text-white "} cursor-pointer`}
               title="Notifications"
             >
-              <Bell className="w-4 h-4" />
+              <Bell className="w-6 h-6" />
               {notifications.filter(n => !n.read).length > 0 && (
                 <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shrink-0 aspect-square"></span>
               )}
