@@ -296,13 +296,13 @@ const AdminEnquiries = () => {
                       <tr key={enquiry.id || enquiry._id} className="hover:bg-white/2 text-white transition">
                         <td className="px-6 py-4 font-bold text-[#C8A64D]">#{enquiry.id}</td>
                         <td className="px-6 py-4 font-semibold text-white">{enquiry.name}</td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 text-white">
                           {formatPhoneNumber(enquiry.phone)} <br />
-                          <span className="text-xs text-white/40">{enquiry.email}</span>
+                          <span className="text-xs text-white">{enquiry.email}</span>
                         </td>
                         <td className="px-6 py-4 font-medium text-white">{enquiry.eventName}</td>
                         <td className="px-6 py-4 text-center font-bold">{enquiry.guests}</td>
-                        <td className="px-6 py-4 text-white/60">
+                        <td className="px-6 py-4 text-white">
                           {new Date(enquiry.created_at).toLocaleDateString("en-IN", {
                             day: "2-digit",
                             month: "short",
