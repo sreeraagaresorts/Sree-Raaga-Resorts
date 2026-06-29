@@ -118,31 +118,10 @@ const  AdminLayout=()=> {
 
   const playNotificationSound = () => {
     try {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      
-      const playTone = (freq, startTime, duration) => {
-        const osc = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(freq, startTime);
-        
-        gainNode.gain.setValueAtTime(0.1, startTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-        
-        osc.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        
-        osc.start(startTime);
-        osc.stop(startTime + duration);
-      };
-
-      const now = audioCtx.currentTime;
-      // High-end premium chime: dual note arpeggio (C5 and E5)
-      playTone(523.25, now, 0.4);
-      playTone(659.25, now + 0.08, 0.5);
+      const audio = new Audio("/device_disconnect.mp3");
+      audio.play();
     } catch (err) {
-      console.warn("Web Audio API notification sound failed:", err);
+      console.warn("Failed to play notification sound from public folder:", err);
     }
   };
 
