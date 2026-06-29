@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Trash, Shield, ShieldAlert, RefreshCw, Users, TrendingUp, TrendingDown } from "lucide-react";
+import { Shield, ShieldAlert, RefreshCw, Users, TrendingUp, TrendingDown } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
 import { formatPhoneNumber } from "../utils/phoneFormatter";
@@ -352,13 +352,13 @@ const AdminUsers = () => {
                           >
                             <ShieldAlert size={14} />
                           </button>
-                          <button
-                            onClick={() => handleDelete(u.id)}
-                            className="p-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded cursor-pointer transition"
-                            title="Delete User Account"
-                          >
-                            <Trash size={14} />
-                          </button>
+                           <button
+                             onClick={() => handleDelete(u.id)}
+                             className="px-2.5 py-1 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded cursor-pointer transition text-xs font-semibold"
+                             title="Delete User Account"
+                           >
+                             Delete
+                           </button>
                         </div>
                       </td>
                     )}

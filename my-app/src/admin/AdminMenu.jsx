@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList,Pencil } from "lucide-react";
+import { Plus, Edit2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList,Pencil } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
 import { compressImage } from "../utils/imageCompressor";
@@ -534,10 +534,10 @@ const handleSaveCategory = () => {
                     </button>
                     <button
                       onClick={() => handleDelete(dish.id)}
-                      className="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded transition cursor-pointer"
+                      className="px-3 py-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded transition cursor-pointer text-xs font-semibold"
                       title="Delete Dish"
                     >
-                      <Trash2 size={16} />
+                      Delete
                     </button>
                   </div>
                 </div>
@@ -668,10 +668,10 @@ const handleSaveCategory = () => {
                         <td className="p-4 text-right">
                           <button
                             onClick={() => handleDeleteOrder(order.id)}
-                            className="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded transition cursor-pointer bg-transparent border-0"
+                            className="px-3 py-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded transition cursor-pointer bg-transparent border-0 text-xs font-semibold"
                             title="Delete Order"
                           >
-                            <Trash2 size={15} />
+                            Delete
                           </button>
                         </td>
                       </tr>
@@ -915,10 +915,10 @@ const handleSaveCategory = () => {
       <button
         type="button"
         onClick={() => handleDeleteCategory(cat)}
-        className="text-red-400 hover:text-red-500 hover:bg-red-500/10 p-1.5 rounded transition cursor-pointer bg-transparent border-0"
+        className="text-red-400 hover:text-red-500 hover:bg-red-500/10 px-2 py-1 rounded transition cursor-pointer bg-transparent border-0 text-xs font-semibold"
         title="Delete Category"
       >
-        <Trash2 size={16} />
+        Delete
       </button>
     </div>
   </div>

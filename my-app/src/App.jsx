@@ -55,6 +55,7 @@ import AdminUsers from "./admin/AdminUsers";
 import AdminBilling from "./admin/AdminBilling";
 import AdminSettings from "./admin/AdminSettings";
 import AdminContent from "./admin/AdminContent";
+import AdminEnquiries from "./admin/AdminEnquiries";
 
 const App = () => {
   return (
@@ -128,6 +129,7 @@ const App = () => {
         <Route path="rooms" element={<AdminRooms />} />
         <Route path="menu" element={<AdminMenu />} />
         <Route path="events" element={<AdminEvents />} />
+        <Route path="enquiries" element={<AdminEnquiries />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="billing" element={<AdminBilling />} />
         <Route path="settings" element={<AdminSettings />} />

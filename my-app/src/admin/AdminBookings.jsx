@@ -3,7 +3,6 @@ import {
   Edit,
   CheckCircle,
   XCircle,
-  Trash,
   Plus,
   X,
   Search,
@@ -481,10 +480,10 @@ const AdminBookings = () => {
                         {/* Delete Button */}
                         <button
                           onClick={() => handleDelete(b.id)}
-                          className="p-1.5 bg-white/10 text-white/60 hover:bg-red-500/20 hover:text-red-400 rounded cursor-pointer transition"
+                          className="px-2.5 py-1.5 bg-white/10 text-white/60 hover:bg-red-500/20 hover:text-red-400 rounded cursor-pointer transition text-xs font-semibold"
                           title="Delete Booking Record"
                         >
-                          <Trash size={14} />
+                          Delete
                         </button>
                       </div>
                     </td>

@@ -29,6 +29,7 @@ const navItems = [
   { name: "Room Inventory", path: "/admin/rooms", icon: BedDouble },
   { name: "Restaurant Menu", path: "/admin/menu", icon: UtensilsCrossed },
   { name: "Events & Packages", path: "/admin/events", icon: CalendarDays },
+  { name: "Enquiries", path: "/admin/enquiries", icon: MessageSquare },
   { name: "CMS", path: "/admin/content", icon: Edit3 },
   { name: "Settings", path: "/admin/settings", icon: Settings },
 ];
@@ -43,12 +44,13 @@ const  AdminLayout=()=> {
   const [unreadCounts, setUnreadCounts] = React.useState({
     "/admin/bookings": 0,
     "/admin/menu": 0,
-    "/admin/content": 0,
+    "/admin/enquiries": 0,
   });
 
   const seenBookings = React.useRef(new Set());
   const seenOrders = React.useRef(new Set());
   const seenMessages = React.useRef(new Set());
+  const seenEventEnquiries = React.useRef(new Set());
 
   const [notifications, setNotifications] = React.useState([]);
   const [isNotifDropdownOpen, setIsNotifDropdownOpen] = React.useState(false);
@@ -66,11 +68,22 @@ const  AdminLayout=()=> {
 
 
   const clearAllNotifs = () => {
+    try {
+      const clearedIds = JSON.parse(localStorage.getItem("clearedNotificationIds") || "[]");
+      notifications.forEach((n) => {
+        if (!clearedIds.includes(n.id)) {
+          clearedIds.push(n.id);
+        }
+      });
+      localStorage.setItem("clearedNotificationIds", JSON.stringify(clearedIds));
+    } catch (err) {
+      console.warn("Failed to clear notifications in localStorage:", err);
+    }
     setNotifications([]);
   };
 
   const handleNotifClick = (n) => {
-    setNotifications((prev) => prev.map((item) => item.id === n.id ? { ...item, read: true } : item));
+    setNotifications((prev) => prev.filter((item) => item.id !== n.id));
     setIsNotifDropdownOpen(false);
 
     // Save read state to localStorage
@@ -96,6 +109,7 @@ const  AdminLayout=()=> {
       case "order":
         return <ShoppingBag className="w-3.5 h-3.5" />;
       case "content":
+      case "event-enquiry":
         return <MessageSquare className="w-3.5 h-3.5" />;
       default:
         return <Bell className="w-3.5 h-3.5" />;
@@ -151,8 +165,11 @@ const  AdminLayout=()=> {
     const seedInitialNotifications = async () => {
       try {
         const readNotifIds = new Set(JSON.parse(localStorage.getItem("readNotificationIds") || "[]"));
+        const clearedNotifIds = new Set(JSON.parse(localStorage.getItem("clearedNotificationIds") || "[]"));
         const initialNotifs = [];
         let pendingBookingsCount = 0;
+        let pendingOrdersCount = 0;
+        let unreadEnquiriesCount = 0;
 
         // Bookings
         const resB = await fetch(`${API_URL}/api/bookings`, {
@@ -164,15 +181,18 @@ const  AdminLayout=()=> {
             seenBookings.current.add(b.id);
             if (b.status === "pending") {
               pendingBookingsCount++;
-              initialNotifs.push({
-                id: `b-${b.id}`,
-                title: "Pending Booking",
-                message: `Booking #${b.id} for ${b.guest_name || "Guest"} is pending.`,
-                time: new Date(b.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-                read: readNotifIds.has(`b-${b.id}`),
-                type: "booking",
-                path: "/admin/bookings"
-              });
+              const notifId = `b-${b.id}`;
+              if (!clearedNotifIds.has(notifId)) {
+                initialNotifs.push({
+                  id: notifId,
+                  title: "Pending Booking",
+                  message: `Booking #${b.id} for ${b.guest_name || "Guest"} is pending.`,
+                  time: new Date(b.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                  read: readNotifIds.has(notifId),
+                  type: "booking",
+                  path: "/admin/bookings"
+                });
+              }
             }
           });
         }
@@ -182,21 +202,23 @@ const  AdminLayout=()=> {
           headers: { Authorization: `Bearer ${token}` }
         });
         const dataO = await resO.json();
-        let pendingOrdersCount = 0;
         if (dataO.success && dataO.data) {
           dataO.data.forEach((o) => {
             seenOrders.current.add(o.id);
             if (o.status === "pending" || o.status === "preparing") {
               pendingOrdersCount++;
-              initialNotifs.push({
-                id: `o-${o.id}`,
-                title: "Active Food Order",
-                message: `Order #${o.id} for ${o.dishName} in Room ${o.roomNumber}.`,
-                time: new Date(o.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-                read: readNotifIds.has(`o-${o.id}`),
-                type: "order",
-                path: "/admin/menu"
-              });
+              const notifId = `o-${o.id}`;
+              if (!clearedNotifIds.has(notifId)) {
+                initialNotifs.push({
+                  id: notifId,
+                  title: "Active Food Order",
+                  message: `Order #${o.id} for ${o.dishName} in Room ${o.roomNumber}.`,
+                  time: new Date(o.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                  read: readNotifIds.has(notifId),
+                  type: "order",
+                  path: "/admin/menu"
+                });
+              }
             }
           });
         }
@@ -209,31 +231,67 @@ const  AdminLayout=()=> {
         if (dataM.success && dataM.data) {
           dataM.data.forEach((m) => {
             seenMessages.current.add(m.id);
+            if (m.status !== "Read") {
+              unreadEnquiriesCount++;
+              const notifId = `m-${m.id}`;
+              if (!clearedNotifIds.has(notifId)) {
+                initialNotifs.push({
+                  id: notifId,
+                  title: "Contact Inquiry",
+                  message: `Message from "${m.name}": "${m.subject}".`,
+                  time: new Date(m.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                  read: readNotifIds.has(notifId),
+                  type: "content",
+                  path: "/admin/enquiries?tab=contact"
+                });
+              }
+            }
           });
-          dataM.data.slice(0, 5).forEach((m) => {
-            initialNotifs.push({
-              id: `m-${m.id}`,
-              title: "Contact Inquiry",
-              message: `Message from "${m.name}": "${m.subject}".`,
-              time: new Date(m.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-              read: readNotifIds.has(`m-${m.id}`),
-              type: "content",
-              path: "/admin/content?tab=inquiries"
-            });
+        }
+
+        // Event enquiries
+        const resEE = await fetch(`${API_URL}/api/events/enquiries/admin`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const dataEE = await resEE.json();
+        if (dataEE.success && dataEE.data) {
+          dataEE.data.forEach((ee) => {
+            seenEventEnquiries.current.add(ee.id || ee._id);
+            if (ee.status !== "Read") {
+              unreadEnquiriesCount++;
+              const notifId = `ee-${ee.id || ee._id}`;
+              if (!clearedNotifIds.has(notifId)) {
+                initialNotifs.push({
+                  id: notifId,
+                  title: "Event Enquiry",
+                  message: `Enquiry from "${ee.name}" for "${ee.eventName}".`,
+                  time: new Date(ee.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                  read: readNotifIds.has(notifId),
+                  type: "event-enquiry",
+                  path: "/admin/enquiries?tab=event"
+                });
+              }
+            }
           });
         }
 
         initialNotifs.sort((x, y) => y.id.localeCompare(x.id));
-        setNotifications((prev) => [...initialNotifs, ...prev].slice(0, 20));
+        setNotifications((prev) => {
+          const cleared = new Set(JSON.parse(localStorage.getItem("clearedNotificationIds") || "[]"));
+          const merged = [...initialNotifs, ...prev].filter(n => !cleared.has(n.id));
+          return merged.slice(0, 20);
+        });
 
         // Seed initial unread counts if we are not currently active on those pages
         setUnreadCounts((prev) => {
           const isBookingsActive = location.pathname === "/admin/bookings" || location.pathname.startsWith("/admin/bookings/");
           const isMenuActive = location.pathname === "/admin/menu" || location.pathname.startsWith("/admin/menu/");
+          const isEnquiriesActive = location.pathname === "/admin/enquiries" || location.pathname.startsWith("/admin/enquiries/");
           return {
             ...prev,
             "/admin/bookings": isBookingsActive ? 0 : pendingBookingsCount,
-            "/admin/menu": isMenuActive ? 0 : pendingOrdersCount
+            "/admin/menu": isMenuActive ? 0 : pendingOrdersCount,
+            "/admin/enquiries": isEnquiriesActive ? 0 : unreadEnquiriesCount
           };
         });
       } catch (err) {
@@ -244,41 +302,45 @@ const  AdminLayout=()=> {
     const pollNewRequests = async () => {
       if (!isMounted) return;
       try {
+        const clearedNotifIds = new Set(JSON.parse(localStorage.getItem("clearedNotificationIds") || "[]"));
+        let pendingBookingsCount = 0;
+        let pendingOrdersCount = 0;
+        let unreadEnquiriesCount = 0;
+
         // Bookings
         const resB = await fetch(`${API_URL}/api/bookings`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const dataB = await resB.json();
+        const nonPendingBookingIds = new Set();
         if (dataB.success && dataB.data) {
           dataB.data.forEach((b) => {
+            if (b.status === "pending") {
+              pendingBookingsCount++;
+            } else {
+              nonPendingBookingIds.add(`b-${b.id}`);
+            }
             if (!seenBookings.current.has(b.id)) {
               seenBookings.current.add(b.id);
-              triggerPopLeft(
-                "New Booking Request",
-                `Guest "${b.guest_name || "Guest"}" requested Room "${b.room_name}" (Total: ₹${b.total_price}).`,
-                React.createElement(Calendar, { className: "w-5 h-5" })
-              );
+              if (b.status === "pending" && !clearedNotifIds.has(`b-${b.id}`)) {
+                triggerPopLeft(
+                  "New Booking Request",
+                  `Guest "${b.guest_name || "Guest"}" requested Room "${b.room_name}" (Total: ₹${b.total_price}).`,
+                  React.createElement(Calendar, { className: "w-5 h-5" })
+                );
 
-              setNotifications((prev) => [
-                {
-                  id: `b-${b.id}`,
-                  title: "New Booking Request",
-                  message: `Guest "${b.guest_name || "Guest"}" requested Room "${b.room_name}" (Total: ₹${b.total_price}).`,
-                  time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-                  read: false,
-                  type: "booking",
-                  path: "/admin/bookings"
-                },
-                ...prev
-              ].slice(0, 20));
-
-              // Increment unread bookings count if not currently viewed
-              const isBookingsActive = location.pathname === "/admin/bookings" || location.pathname.startsWith("/admin/bookings/");
-              if (!isBookingsActive) {
-                setUnreadCounts((prev) => ({
-                  ...prev,
-                  "/admin/bookings": prev["/admin/bookings"] + 1,
-                }));
+                setNotifications((prev) => [
+                  {
+                    id: `b-${b.id}`,
+                    title: "New Booking Request",
+                    message: `Guest "${b.guest_name || "Guest"}" requested Room "${b.room_name}" (Total: ₹${b.total_price}).`,
+                    time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                    read: false,
+                    type: "booking",
+                    path: "/admin/bookings"
+                  },
+                  ...prev
+                ].slice(0, 20));
               }
             }
           });
@@ -289,36 +351,35 @@ const  AdminLayout=()=> {
           headers: { Authorization: `Bearer ${token}` }
         });
         const dataO = await resO.json();
+        const nonActiveOrderIds = new Set();
         if (dataO.success && dataO.data) {
           dataO.data.forEach((o) => {
+            if (o.status === "pending" || o.status === "preparing") {
+              pendingOrdersCount++;
+            } else {
+              nonActiveOrderIds.add(`o-${o.id}`);
+            }
             if (!seenOrders.current.has(o.id)) {
               seenOrders.current.add(o.id);
-              triggerPopLeft(
-                "New Food Order",
-                `Room ${o.roomNumber} (${o.guestName}) ordered ${o.quantity}x "${o.dishName}".`,
-                React.createElement(UtensilsCrossed, { className: "w-5 h-5" })
-              );
+              if ((o.status === "pending" || o.status === "preparing") && !clearedNotifIds.has(`o-${o.id}`)) {
+                triggerPopLeft(
+                  "New Food Order",
+                  `Room ${o.roomNumber} (${o.guestName}) ordered ${o.quantity}x "${o.dishName}".`,
+                  React.createElement(UtensilsCrossed, { className: "w-5 h-5" })
+                );
 
-              setNotifications((prev) => [
-                {
-                  id: `o-${o.id}`,
-                  title: "New Food Order",
-                  message: `Room ${o.roomNumber} (${o.guestName}) ordered ${o.quantity}x "${o.dishName}".`,
-                  time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-                  read: false,
-                  type: "order",
-                  path: "/admin/menu"
-                },
-                ...prev
-              ].slice(0, 20));
-
-              // Increment unread menu orders count if not currently viewed
-              const isMenuActive = location.pathname === "/admin/menu" || location.pathname.startsWith("/admin/menu/");
-              if (!isMenuActive) {
-                setUnreadCounts((prev) => ({
-                  ...prev,
-                  "/admin/menu": prev["/admin/menu"] + 1,
-                }));
+                setNotifications((prev) => [
+                  {
+                    id: `o-${o.id}`,
+                    title: "New Food Order",
+                    message: `Room ${o.roomNumber} (${o.guestName}) ordered ${o.quantity}x "${o.dishName}".`,
+                    time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                    read: false,
+                    type: "order",
+                    path: "/admin/menu"
+                  },
+                  ...prev
+                ].slice(0, 20));
               }
             }
           });
@@ -329,40 +390,104 @@ const  AdminLayout=()=> {
           headers: { Authorization: `Bearer ${token}` }
         });
         const dataM = await resM.json();
+        const readMessageIds = new Set();
         if (dataM.success && dataM.data) {
           dataM.data.forEach((m) => {
+            if (m.status !== "Read") {
+              unreadEnquiriesCount++;
+            } else {
+              readMessageIds.add(`m-${m.id}`);
+            }
             if (!seenMessages.current.has(m.id)) {
               seenMessages.current.add(m.id);
-              triggerPopLeft(
-                "New CMS Message",
-                `Message from "${m.name}": "${m.subject}".`,
-                React.createElement(Bell, { className: "w-5 h-5" })
-              );
+              if (m.status !== "Read" && !clearedNotifIds.has(`m-${m.id}`)) {
+                triggerPopLeft(
+                  "New CMS Message",
+                  `Message from "${m.name}": "${m.subject}".`,
+                  React.createElement(Bell, { className: "w-5 h-5" })
+                );
 
-              setNotifications((prev) => [
-                {
-                  id: `m-${m.id}`,
-                  title: "New CMS Message",
-                  message: `Message from "${m.name}": "${m.subject}".`,
-                  time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-                  read: false,
-                  type: "content",
-                  path: "/admin/content?tab=inquiries"
-                },
-                ...prev
-              ].slice(0, 20));
-
-              // Increment unread CMS messages count if not currently viewed
-              const isContentActive = location.pathname === "/admin/content" || location.pathname.startsWith("/admin/content/");
-              if (!isContentActive) {
-                setUnreadCounts((prev) => ({
-                  ...prev,
-                  "/admin/content": prev["/admin/content"] + 1,
-                }));
+                setNotifications((prev) => [
+                  {
+                    id: `m-${m.id}`,
+                    title: "New CMS Message",
+                    message: `Message from "${m.name}": "${m.subject}".`,
+                    time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                    read: false,
+                    type: "content",
+                    path: "/admin/enquiries?tab=contact"
+                  },
+                  ...prev
+                ].slice(0, 20));
               }
             }
           });
         }
+
+        // Event enquiries
+        const resEE = await fetch(`${API_URL}/api/events/enquiries/admin`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const dataEE = await resEE.json();
+        const readEventEnquiryIds = new Set();
+        if (dataEE.success && dataEE.data) {
+          dataEE.data.forEach((ee) => {
+            if (ee.status !== "Read") {
+              unreadEnquiriesCount++;
+            } else {
+              readEventEnquiryIds.add(`ee-${ee.id || ee._id}`);
+            }
+            const key = ee.id || ee._id;
+            if (!seenEventEnquiries.current.has(key)) {
+              seenEventEnquiries.current.add(key);
+              const notifId = `ee-${key}`;
+              if (ee.status !== "Read" && !clearedNotifIds.has(notifId)) {
+                triggerPopLeft(
+                  "New Event Enquiry",
+                  `Enquiry from "${ee.name}" for package "${ee.eventName}".`,
+                  React.createElement(MessageSquare, { className: "w-5 h-5" })
+                );
+
+                setNotifications((prev) => [
+                  {
+                    id: notifId,
+                    title: "New Event Enquiry",
+                    message: `Enquiry from "${ee.name}" for package "${ee.eventName}".`,
+                    time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                    read: false,
+                    type: "event-enquiry",
+                    path: "/admin/enquiries?tab=event"
+                  },
+                  ...prev
+                ].slice(0, 20));
+              }
+            }
+          });
+        }
+
+        // Auto remove notifications that are no longer active/pending/unread
+        setNotifications((prev) =>
+          prev.filter((n) => {
+            if (nonPendingBookingIds.has(n.id)) return false;
+            if (nonActiveOrderIds.has(n.id)) return false;
+            if (readMessageIds.has(n.id)) return false;
+            if (readEventEnquiryIds.has(n.id)) return false;
+            return true;
+          })
+        );
+
+        // Update counts
+        setUnreadCounts((prev) => {
+          const isBookingsActive = location.pathname === "/admin/bookings" || location.pathname.startsWith("/admin/bookings/");
+          const isMenuActive = location.pathname === "/admin/menu" || location.pathname.startsWith("/admin/menu/");
+          const isEnquiriesActive = location.pathname === "/admin/enquiries" || location.pathname.startsWith("/admin/enquiries/");
+          return {
+            ...prev,
+            "/admin/bookings": isBookingsActive ? 0 : pendingBookingsCount,
+            "/admin/menu": isMenuActive ? 0 : pendingOrdersCount,
+            "/admin/enquiries": isEnquiriesActive ? 0 : unreadEnquiriesCount
+          };
+        });
       } catch (err) {
         console.warn("Notification polling check failed:", err.message);
       }
@@ -375,6 +500,48 @@ const  AdminLayout=()=> {
 
     return () => {
       isMounted = false;
+    };
+  }, [location.pathname]);
+
+  React.useEffect(() => {
+    const handleInquiryMarkedRead = (e) => {
+      const { id } = e.detail;
+      setNotifications((prev) => prev.filter((n) => n.id !== `m-${id}`));
+      setUnreadCounts((prev) => ({
+        ...prev,
+        "/admin/enquiries": Math.max(0, prev["/admin/enquiries"] - 1)
+      }));
+    };
+
+    const handleEventEnquiryMarkedRead = (e) => {
+      const { id } = e.detail;
+      setNotifications((prev) => prev.filter((n) => n.id !== `ee-${id}`));
+      setUnreadCounts((prev) => ({
+        ...prev,
+        "/admin/enquiries": Math.max(0, prev["/admin/enquiries"] - 1)
+      }));
+    };
+
+    const handleInquiryDeleted = (e) => {
+      const { id } = e.detail;
+      setNotifications((prev) => prev.filter((n) => n.id !== `m-${id}`));
+    };
+
+    const handleEventEnquiryDeleted = (e) => {
+      const { id } = e.detail;
+      setNotifications((prev) => prev.filter((n) => n.id !== `ee-${id}`));
+    };
+
+    window.addEventListener("inquiryMarkedRead", handleInquiryMarkedRead);
+    window.addEventListener("eventEnquiryMarkedRead", handleEventEnquiryMarkedRead);
+    window.addEventListener("inquiryDeleted", handleInquiryDeleted);
+    window.addEventListener("eventEnquiryDeleted", handleEventEnquiryDeleted);
+
+    return () => {
+      window.removeEventListener("inquiryMarkedRead", handleInquiryMarkedRead);
+      window.removeEventListener("eventEnquiryMarkedRead", handleEventEnquiryMarkedRead);
+      window.removeEventListener("inquiryDeleted", handleInquiryDeleted);
+      window.removeEventListener("eventEnquiryDeleted", handleEventEnquiryDeleted);
     };
   }, []);
 

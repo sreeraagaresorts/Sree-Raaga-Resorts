@@ -90,3 +90,37 @@ exports.deleteMessage = async (req, res) => {
     });
   }
 };
+
+exports.markMessageAsRead = async (req, res) => {
+  try {
+    const paramId = req.params.id;
+    const mongoose = require("mongoose");
+    const query = mongoose.Types.ObjectId.isValid(paramId)
+      ? { _id: paramId }
+      : { id: Number(paramId) };
+
+    const contact = await Contact.findOneAndUpdate(
+      query,
+      { status: "Read" },
+      { returnDocument: "after" }
+    );
+    if (!contact) {
+      return res.status(404).json({
+        success: false,
+        message: "Message not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Message marked as read successfully",
+      data: contact
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to mark message as read"
+    });
+  }
+};

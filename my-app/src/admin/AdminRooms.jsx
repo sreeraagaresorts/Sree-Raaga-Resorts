@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Edit,
-  Trash,
   Plus,
   X,
   Upload,
@@ -586,7 +585,7 @@ const AdminRooms = () => {
                   className="flex-1 bg-red-500/10 text-red-400 py-2 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition cursor-pointer"
                   title="Delete Room"
                 >
-                  <Trash size={14} className="mr-1" /> Delete
+                  Delete
                 </button>
               </div>
             </div>

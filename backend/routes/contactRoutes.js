@@ -11,7 +11,8 @@ require("../middleware/adminMiddleware");
 const {
   sendMessage,
   getAllMessages,
-  deleteMessage
+  deleteMessage,
+  markMessageAsRead
 } = require("../controllers/contactController");
 
 /*
@@ -33,6 +34,13 @@ router.get(
   verifyToken,
   adminMiddleware,
   getAllMessages
+);
+
+router.put(
+  "/:id/read",
+  verifyToken,
+  adminMiddleware,
+  markMessageAsRead
 );
 
 router.delete(
