@@ -3,6 +3,7 @@ import { API_URL } from '../config/api';
 import * as XLSX from 'xlsx';
 import DatePicker from 'react-datepicker';
 import { formatPhoneNumber } from '../utils/phoneFormatter';
+import { useToast } from '../ui/components/Toast';
 import {
   Download,
   Search,
@@ -12,9 +13,11 @@ import {
   Undo2,
   RefreshCw,
   Calendar,
+  Copy,
 } from 'lucide-react';
 
 const AdminBilling = () => {
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState('invoices');
   const [timeFilter, setTimeFilter] = useState('monthly');
   const [startDate, setStartDate] = useState('');
@@ -599,7 +602,21 @@ const AdminBilling = () => {
                     <tbody>
                       {filteredPayments.map((pay) => (
                         <tr key={pay.id} className="border-t border-white/5 hover:bg-white/5 transition">
-                          <td className="p-3 font-semibold text-white">{pay.paymentId}</td>
+                          <td className="p-3 font-semibold text-white">
+                            <div className="flex items-center justify-center gap-2">
+                              <span>{pay.paymentId}</span>
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(pay.paymentId);
+                                  toast.success("Payment ID copied to clipboard!");
+                                }}
+                                className="p-1 text-white/50 hover:text-[#C8A64D] hover:bg-white/5 rounded transition cursor-pointer bg-transparent border-0"
+                                title="Copy Payment ID"
+                              >
+                                <Copy className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </td>
                           <td className="p-3 font-semibold text-white/50">{pay.bookingId}</td>
                           <td className="p-3">{pay.customerName}</td>
                           <td className="p-3 text-xs text-white/50">{pay.gateway}</td>

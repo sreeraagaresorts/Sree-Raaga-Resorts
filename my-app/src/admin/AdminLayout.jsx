@@ -64,9 +64,6 @@ const  AdminLayout=()=> {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  };
 
   const clearAllNotifs = () => {
     setNotifications([]);
@@ -75,6 +72,18 @@ const  AdminLayout=()=> {
   const handleNotifClick = (n) => {
     setNotifications((prev) => prev.map((item) => item.id === n.id ? { ...item, read: true } : item));
     setIsNotifDropdownOpen(false);
+
+    // Save read state to localStorage
+    try {
+      const readIds = JSON.parse(localStorage.getItem("readNotificationIds") || "[]");
+      if (!readIds.includes(n.id)) {
+        readIds.push(n.id);
+        localStorage.setItem("readNotificationIds", JSON.stringify(readIds));
+      }
+    } catch (err) {
+      console.warn("Failed to save read state to localStorage:", err);
+    }
+
     if (n.path) {
       navigate(n.path);
     }
@@ -139,15 +148,17 @@ const  AdminLayout=()=> {
 
     let isMounted = true;
 
-    const fetchInitialBaselines = async () => {
+    const seedInitialNotifications = async () => {
       try {
+        const readNotifIds = new Set(JSON.parse(localStorage.getItem("readNotificationIds") || "[]"));
+        const initialNotifs = [];
+        let pendingBookingsCount = 0;
+
         // Bookings
         const resB = await fetch(`${API_URL}/api/bookings`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const dataB = await resB.json();
-        let pendingBookingsCount = 0;
-        const initialNotifs = [];
         if (dataB.success && dataB.data) {
           dataB.data.forEach((b) => {
             seenBookings.current.add(b.id);
@@ -158,7 +169,7 @@ const  AdminLayout=()=> {
                 title: "Pending Booking",
                 message: `Booking #${b.id} for ${b.guest_name || "Guest"} is pending.`,
                 time: new Date(b.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-                read: false,
+                read: readNotifIds.has(`b-${b.id}`),
                 type: "booking",
                 path: "/admin/bookings"
               });
@@ -182,7 +193,7 @@ const  AdminLayout=()=> {
                 title: "Active Food Order",
                 message: `Order #${o.id} for ${o.dishName} in Room ${o.roomNumber}.`,
                 time: new Date(o.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-                read: false,
+                read: readNotifIds.has(`o-${o.id}`),
                 type: "order",
                 path: "/admin/menu"
               });
@@ -205,9 +216,9 @@ const  AdminLayout=()=> {
               title: "Contact Inquiry",
               message: `Message from "${m.name}": "${m.subject}".`,
               time: new Date(m.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-              read: false,
+              read: readNotifIds.has(`m-${m.id}`),
               type: "content",
-              path: "/admin/content"
+              path: "/admin/content?tab=inquiries"
             });
           });
         }
@@ -250,7 +261,7 @@ const  AdminLayout=()=> {
 
               setNotifications((prev) => [
                 {
-                  id: `b-${b.id}-${Date.now()}`,
+                  id: `b-${b.id}`,
                   title: "New Booking Request",
                   message: `Guest "${b.guest_name || "Guest"}" requested Room "${b.room_name}" (Total: ₹${b.total_price}).`,
                   time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
@@ -290,7 +301,7 @@ const  AdminLayout=()=> {
 
               setNotifications((prev) => [
                 {
-                  id: `o-${o.id}-${Date.now()}`,
+                  id: `o-${o.id}`,
                   title: "New Food Order",
                   message: `Room ${o.roomNumber} (${o.guestName}) ordered ${o.quantity}x "${o.dishName}".`,
                   time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
@@ -330,13 +341,13 @@ const  AdminLayout=()=> {
 
               setNotifications((prev) => [
                 {
-                  id: `m-${m.id}-${Date.now()}`,
+                  id: `m-${m.id}`,
                   title: "New CMS Message",
                   message: `Message from "${m.name}": "${m.subject}".`,
                   time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
                   read: false,
                   type: "content",
-                  path: "/admin/content"
+                  path: "/admin/content?tab=inquiries"
                 },
                 ...prev
               ].slice(0, 20));
@@ -357,7 +368,7 @@ const  AdminLayout=()=> {
       }
     };
 
-    fetchInitialBaselines().then(() => {
+    seedInitialNotifications().then(() => {
       const interval = setInterval(pollNewRequests, 5000);
       return () => clearInterval(interval);
     });
@@ -583,14 +594,7 @@ const  AdminLayout=()=> {
                   <h3 className="font-bold text-white flex items-center gap-1.5">
                     <Bell className="w-4 h-4 text-[#C8A64D]" /> Notifications
                   </h3>
-                  {notifications.filter(n => !n.read).length > 0 && (
-                    <button 
-                      onClick={markAllAsRead}
-                      className="text-[10px] text-[#C8A64D] hover:underline uppercase font-bold tracking-wider cursor-pointer bg-transparent border-0"
-                    >
-                      Mark all read
-                    </button>
-                  )}
+
                 </div>
 
                 {/* List */}
