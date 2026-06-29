@@ -521,12 +521,10 @@ const RoomDetails = () => {
                 <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e]">
                   About accommodation
                 </h3>
-                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed whitespace-pre-line line-clamp-2 break-words">
+                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed text-justify ">
                   {room.description}
                 </p>
-                <p className="text-gray-500 text-xs md:text-[17px] leading-relaxed ">
-                  Experience premium resort living with custom services tailored specifically for you. Sree Raaga Resorts prioritizes design excellence and clean spaces to make your vacation peaceful and relaxing.
-                </p>
+              
               </div>
 
               <hr className="border-gray-200/60" />
