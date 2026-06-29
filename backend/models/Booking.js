@@ -12,6 +12,7 @@ const bookingSchema = new mongoose.Schema({
   total_price: { type: Number, required: true },
   status: { type: String, default: "pending" },
   payment_method: { type: String, default: "online" },
+  razorpay_payment_id: { type: String, default: null },
   created_at: { type: Date, default: Date.now }
 });
 

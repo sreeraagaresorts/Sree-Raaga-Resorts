@@ -161,11 +161,11 @@ const AdminBilling = () => {
   // Map bookings to payment records
   const payments = bookings.map((b) => ({
     id: b.id.toString(),
-    paymentId: `PAY-${b.id.toString().padStart(4, "0")}`,
+    paymentId: b.razorpay_payment_id || `PAY-${b.id.toString().padStart(4, "0")}`,
     bookingId: `BK-${b.id.toString().padStart(4, "0")}`,
     customerName: b.guest_name,
     amount: parseFloat(b.total_price),
-    gateway: b.id % 2 === 0 ? "Razorpay" : "Stripe",
+    gateway: b.payment_method === "online" ? "Razorpay" : "Offline (Cash)",
     paymentStatus: b.status === "confirmed" || b.status === "checked_in" ? "Paid" : b.status === "cancelled" ? "Refunded" : "Pending",
     createdAt: new Date(b.created_at)
   }));

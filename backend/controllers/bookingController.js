@@ -476,7 +476,8 @@ exports.verifyRazorpayPayment = async (req, res) => {
       children: children || 0,
       total_price,
       status: 'confirmed',
-      payment_method: 'online'
+      payment_method: 'online',
+      razorpay_payment_id: razorpay_payment_id
     });
     await booking.save();
 
