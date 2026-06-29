@@ -168,24 +168,18 @@ const AdminEnquiries = () => {
     }
   };
 
-  // Fetch initial data based on active tab and run periodic syncs
+  // Fetch initial data for both categories on mount and run periodic syncs
   useEffect(() => {
-    if (activeTab === "event") {
-      fetchEventEnquiries();
-    } else {
-      fetchContactEnquiries();
-    }
+    fetchEventEnquiries();
+    fetchContactEnquiries();
 
     const interval = setInterval(() => {
-      if (activeTab === "event") {
-        fetchEventEnquiries(true);
-      } else {
-        fetchContactEnquiries(true);
-      }
+      fetchEventEnquiries(true);
+      fetchContactEnquiries(true);
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [activeTab]);
+  }, []);
 
   // Filter lists
   const filteredEventEnquiries = eventEnquiries.filter((enq) => {
