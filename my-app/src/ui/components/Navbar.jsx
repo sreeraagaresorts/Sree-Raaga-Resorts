@@ -317,7 +317,7 @@ const Navbar = () => {
             {/* Telephone Line */}
             <div className={`hidden md:flex items-center gap-2.5 text-white/80 hover:text-white transition-all duration-500 ${isOpen ? "opacity-0 pointer-events-none blur-sm" : ""}`}>
               <Phone size={14} className="text-white shrink-0" />
-              <span className="text-xs lg:text-[16px]  tracking-widest font-jost text-white">+91 89045 61155</span>
+              <span className="text-xs lg:text-[16px]  tracking-widest font-jost text-white">+91 890 456 1155</span>
             </div>
           </div>
 

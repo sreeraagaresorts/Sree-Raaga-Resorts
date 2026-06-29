@@ -41,15 +41,19 @@ const Contact = () => {
     }
     const digits = cleaned.replace(/\D/g, "").slice(0, 10);
 
-    let formatted = "";
-    if (digits.length > 0) {
-      if (digits.length <= 5) {
-        formatted = `+91 ${digits}`;
-      } else {
-        formatted = `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;
-      }
-    }
-    setPhone(formatted);
+   let formatted = "";
+
+if (digits.length > 0) {
+  if (digits.length <= 3) {
+    formatted = `+91 ${digits}`;
+  } else if (digits.length <= 6) {
+    formatted = `+91 ${digits.slice(0, 3)} ${digits.slice(3)}`;
+  } else {
+    formatted = `+91 ${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 10)}`;
+  }
+}
+
+setPhone(formatted);
   };
 
   const handleSubmit = async (e) => {
