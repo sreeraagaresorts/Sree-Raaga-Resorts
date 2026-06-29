@@ -254,4 +254,34 @@ body {
   padding-top: 0.85rem !important;
   padding-bottom: 0.85rem !important;
   font-size: 1rem !important;
+}
+
+/* User Dashboard Portal Overrides */
+.user-dashboard-wrapper p {
+  font-size: 17px !important;
+}
+
+.user-dashboard-wrapper .bg-white {
+  background-color: #ffffff !important;
+}
+
+.user-dashboard-wrapper .focus\:bg-white:focus {
+  background-color: #ffffff !important;
+}
+
+/* Force border-radius matching modern dashboard design */
+.user-dashboard-wrapper .rounded-none {
+  border-radius: 10px !important;
+}
+
+.user-dashboard-wrapper input,
+.user-dashboard-wrapper select,
+.user-dashboard-wrapper textarea {
+  border-radius: 8px !important;
+}
+
+.user-dashboard-wrapper button,
+.user-dashboard-wrapper a.bg-\[\#c8a64d\],
+.user-dashboard-wrapper button.bg-red-600 {
+  border-radius: 8px !important;
 }
