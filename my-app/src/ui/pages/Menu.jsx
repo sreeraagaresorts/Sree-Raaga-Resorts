@@ -230,13 +230,13 @@ const Menu = () => {
           </div>
 
           {/* Category Tabs */}
-          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center items-center  text-[24px] uppercase  text-gray-400 select-none mb-8">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center items-center text-sm uppercase text-gray-400 select-none mb-8 font-medium tracking-wider font-corm">
             {categories.map((cat, idx) => (
               <React.Fragment key={cat}>
-                {idx > 0 && <span className="hidden md:inline text-[#c8a64d]/60 text-5xl mt-2">•</span>}
+                {idx > 0 && <span className="hidden md:inline text-[#c8a64d]/60 text-lg mt-0.5">•</span>}
                 <button
                   onClick={() => setSelectedCategory(cat)}
-                  className={`hover:text-[#c8a64d] transition  font-corm font-medium cursor-pointer ${
+                  className={`hover:text-[#c8a64d] transition font-corm cursor-pointer ${
                     selectedCategory === cat ? "text-[#c8a64d]" : "text-gray-800"
                   }`}
                 >

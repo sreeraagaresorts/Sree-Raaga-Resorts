@@ -191,18 +191,18 @@ const  AdminLayout=()=> {
             seenBookings.current.add(b.id);
             if (b.status === "pending") {
               pendingBookingsCount++;
-              const notifId = `b-${b.id}`;
-              if (!clearedNotifIds.has(notifId)) {
-                initialNotifs.push({
-                  id: notifId,
-                  title: "Pending Booking",
-                  message: `Booking #${b.id} for ${b.guest_name || "Guest"} is pending.`,
-                  time: new Date(b.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
-                  read: readNotifIds.has(notifId),
-                  type: "booking",
-                  path: "/admin/bookings"
-                });
-              }
+            }
+            const notifId = `b-${b.id}`;
+            if (!clearedNotifIds.has(notifId)) {
+              initialNotifs.push({
+                id: notifId,
+                title: `${b.status.charAt(0).toUpperCase() + b.status.slice(1)} Booking`,
+                message: `Booking #${b.id} for ${b.guest_name || "Guest"} is ${b.status}.`,
+                time: new Date(b.created_at || Date.now()).toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
+                read: readNotifIds.has(notifId),
+                type: "booking",
+                path: "/admin/bookings"
+              });
             }
           });
         }
@@ -322,20 +322,17 @@ const  AdminLayout=()=> {
           headers: { Authorization: `Bearer ${token}` }
         });
         const dataB = await resB.json();
-        const nonPendingBookingIds = new Set();
         if (dataB.success && dataB.data) {
           dataB.data.forEach((b) => {
             if (b.status === "pending") {
               pendingBookingsCount++;
-            } else {
-              nonPendingBookingIds.add(`b-${b.id}`);
             }
             if (!seenBookings.current.has(b.id)) {
               seenBookings.current.add(b.id);
-              if (b.status === "pending" && !clearedNotifIds.has(`b-${b.id}`)) {
+              if (!clearedNotifIds.has(`b-${b.id}`)) {
                 triggerPopLeft(
                   "New Booking Request",
-                  `Guest "${b.guest_name || "Guest"}" requested Room "${b.room_name}" (Total: ₹${b.total_price}).`,
+                  `Guest "${b.guest_name || "Guest"}" booked Room "${b.room_name}" (Status: ${b.status}).`,
                   React.createElement(Calendar, { className: "w-5 h-5" })
                 );
 
@@ -343,7 +340,7 @@ const  AdminLayout=()=> {
                   {
                     id: `b-${b.id}`,
                     title: "New Booking Request",
-                    message: `Guest "${b.guest_name || "Guest"}" requested Room "${b.room_name}" (Total: ₹${b.total_price}).`,
+                    message: `Guest "${b.guest_name || "Guest"}" booked Room "${b.room_name}" (Status: ${b.status}).`,
                     time: new Date().toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }),
                     read: false,
                     type: "booking",
@@ -478,7 +475,6 @@ const  AdminLayout=()=> {
         // Auto remove notifications that are no longer active/pending/unread
         setNotifications((prev) =>
           prev.filter((n) => {
-            if (nonPendingBookingIds.has(n.id)) return false;
             if (nonActiveOrderIds.has(n.id)) return false;
             if (readMessageIds.has(n.id)) return false;
             if (readEventEnquiryIds.has(n.id)) return false;

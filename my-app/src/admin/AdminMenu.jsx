@@ -447,8 +447,8 @@ const handleSaveCategory = () => {
       {activeTab === "dishes" && (
         <>
           {/* FILTER BAR */}
-          <div className="bg-[#081A2F] border border-white/10 p-4 rounded-xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
-            <div className="flex-1 flex items-center bg-[#071524] px-3 rounded-lg border border-white/5 w-full">
+          <div className="bg-[#081A2F] border border-white/10 p-4 rounded-xl flex flex-col gap-4 shadow-md">
+            <div className="flex items-center bg-[#071524] px-3 rounded-lg border border-white/5 w-full">
               <Search className="text-white/40 mr-2" size={18} />
               <input
                 type="text"
@@ -459,12 +459,12 @@ const handleSaveCategory = () => {
               />
             </div>
 
-            <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+            <div className="flex gap-2 w-full overflow-x-auto pb-1">
               {["All", ...categories].map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategoryFilter(cat)}
-                  className={`px-4 py-2 text-xs uppercase tracking-wider transition rounded shrink-0 font-medium cursor-pointer ${
+                  className={`px-4 py-2 text-sm uppercase tracking-wider transition rounded shrink-0 font-medium cursor-pointer ${
                     selectedCategoryFilter === cat
                       ? "bg-[#C8A64D] text-black font-bold"
                       : "bg-[#071524] border border-white/10 text-white hover:border-yellow-500/50"
