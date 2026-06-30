@@ -20,7 +20,7 @@ const logAction = async (userId, actionType, details) => {
 // 1. Create a booking
 exports.createBooking = async (req, res) => {
   try {
-    const { room_id, check_in, check_out, adults, children, user_id: bodyUserId, payment_method } = req.body;
+    const { room_id, check_in, check_out, adults, children, user_id: bodyUserId, payment_method, rooms } = req.body;
     let user_id = req.user.id;
 
     if (req.user.role === "admin" && bodyUserId) {
@@ -68,7 +68,8 @@ exports.createBooking = async (req, res) => {
       });
     }
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-    const total_price = nights * roomPrice;
+    const roomCount = Number(rooms) || 1;
+    const total_price = nights * roomPrice * roomCount;
 
     const booking = new Booking({
       user_id: Number(user_id),
@@ -77,6 +78,7 @@ exports.createBooking = async (req, res) => {
       check_out: end,
       adults: adults || 1,
       children: children || 0,
+      rooms: roomCount,
       total_price,
       status: 'pending',
       payment_method: payment_method || 'online'
@@ -341,7 +343,7 @@ exports.createRazorpayOrder = async (req, res) => {
       });
     }
 
-    const { room_id, check_in, check_out } = req.body;
+    const { room_id, check_in, check_out, rooms } = req.body;
     if (!room_id || !check_in || !check_out) {
       return res.status(400).json({
         success: false,
@@ -370,7 +372,8 @@ exports.createRazorpayOrder = async (req, res) => {
       });
     }
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-    const total_price = nights * roomPrice;
+    const roomCount = Number(rooms) || 1;
+    const total_price = nights * roomPrice * roomCount;
 
     const Razorpay = require("razorpay");
     const key_id = process.env.RAZORPAY_KEY_ID || "rzp_test_mockkeyid12";
@@ -423,7 +426,8 @@ exports.verifyRazorpayPayment = async (req, res) => {
       check_in,
       check_out,
       adults,
-      children
+      children,
+      rooms
     } = req.body;
 
     if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature || !room_id || !check_in || !check_out) {
@@ -465,7 +469,8 @@ exports.verifyRazorpayPayment = async (req, res) => {
     const end = new Date(check_out);
     const differenceInTime = end.getTime() - start.getTime();
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-    const total_price = nights * roomPrice;
+    const roomCount = Number(rooms) || 1;
+    const total_price = nights * roomPrice * roomCount;
 
     const booking = new Booking({
       user_id: Number(user_id),
@@ -474,6 +479,7 @@ exports.verifyRazorpayPayment = async (req, res) => {
       check_out: end,
       adults: adults || 1,
       children: children || 0,
+      rooms: roomCount,
       total_price,
       status: 'confirmed',
       payment_method: 'online',

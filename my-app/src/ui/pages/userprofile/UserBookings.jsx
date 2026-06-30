@@ -136,7 +136,7 @@ const UserBookings = () => {
           <tbody>
             <tr>
               <td style="padding: 15px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e; line-height: 1.5;">
-                <strong>${booking.room_name} Room Stay</strong><br />
+                <strong>${booking.rooms || 1} x ${booking.room_name} Room Stay</strong><br />
                 <span style="font-size: 13px; color: rgba(13, 43, 78, 0.7); font-weight: normal; display: block; margin-top: 3px;">
                   ${formattedCheckIn} to ${formattedCheckOut} (${nights} Nights)
                 </span>
@@ -215,7 +215,15 @@ const UserBookings = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-[#0d2b4e]">
-      <h1 className="text-3xl  font-medium mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Bookings</h1>
+      <div className="flex justify-between items-center border-b border-gray-200/50 pb-3 mb-6">
+        <h1 className="text-3xl font-medium text-[#0d2b4e]">My Bookings</h1>
+        <Link
+          to="/rooms"
+          className="bg-[#c8a64d] text-white px-5 py-3 font-semibold text-xs uppercase tracking-widest hover:bg-[#b09141] transition cursor-pointer"
+        >
+          Browse Rooms
+        </Link>
+      </div>
 
       {bookings.length === 0 ? (
         <div className="bg-white border border-gray-200/50 rounded-none p-12 text-center text-gray-500 font-light shadow-sm flex flex-col items-center justify-center">
@@ -263,8 +271,10 @@ const UserBookings = () => {
                       <p className="font-semibold mt-1  text-[#0d2b4e]">{new Date(booking.check_out).toLocaleDateString("en-GB")}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500 text-[11px] uppercase tracking-widest font-medium">Guests</p>
-                      <p className="font-semibold mt-1 text-[#0d2b4e]">{booking.adults} Adults {booking.children > 0 && `, ${booking.children} Children`}</p>
+                      <p className="text-gray-500 text-[11px] uppercase tracking-widest font-medium">Rooms</p>
+                      <p className="font-semibold mt-1 text-[#0d2b4e]">
+                        {booking.rooms || 1} {(booking.rooms || 1) === 1 ? "Room" : "Rooms"} + {booking.adults} Adults{booking.children > 0 ? `, ${booking.children} Children` : ""}
+                      </p>
                     </div>
                     <div>
                       <p className="text-gray-500 text-center text-[10px] uppercase tracking-widest font-medium">Total Price</p>

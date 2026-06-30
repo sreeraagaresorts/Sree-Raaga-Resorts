@@ -331,7 +331,8 @@ const RoomDetails = () => {
                   check_in: checkIn,
                   check_out: checkOut,
                   adults,
-                  children
+                  children,
+                  rooms
                 })
               });
 
