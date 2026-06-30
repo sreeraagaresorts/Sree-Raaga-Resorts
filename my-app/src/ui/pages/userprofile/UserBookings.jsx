@@ -55,6 +55,10 @@ const UserBookings = () => {
     const totalPrice = parseFloat(booking.total_price || 0);
     const basePrice = totalPrice / 1.18;
     const gstAmount = totalPrice - basePrice;
+    const amountDue = (booking.payment_method === "online" || booking.status === "confirmed" || booking.status === "checked_in") ? 0 : totalPrice;
+    const paidDate = (booking.payment_method === "online" || booking.status === "confirmed" || booking.status === "checked_in")
+      ? new Date(booking.created_at).toLocaleDateString("en-GB")
+      : "N/A";
 
     const formattedCreated = new Date(booking.created_at).toLocaleDateString("en-GB");
     const formattedCheckIn = new Date(booking.check_in).toLocaleDateString("en-GB");
@@ -152,9 +156,21 @@ const UserBookings = () => {
               </td>
             </tr>
             <tr style="background-color: #f9fafb; font-weight: bold; font-size: 15px;">
-              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Total Due</td>
+              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Total</td>
               <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e;">
                 ₹${totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              </td>
+            </tr>
+            <tr style="background-color: #f9fafb; font-weight: bold; font-size: 15px;">
+              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Paid Date</td>
+              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e; font-weight: normal;">
+                ${paidDate}
+              </td>
+            </tr>
+            <tr style="background-color: #f9fafb; font-weight: bold; font-size: 15px;">
+              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Amount Due</td>
+              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e;">
+                ₹${amountDue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
               </td>
             </tr>
           </tbody>

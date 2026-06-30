@@ -102,7 +102,7 @@ const UserLayout = () => {
         <div className="border-t border-white/10 p-4 space-y-2">
           <button 
             onClick={() => navigate("/")}
-            className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-white/70 hover:text-[#c8a64d] hover:bg-white/5 rounded transition cursor-pointer uppercase tracking-wider bg-transparent border-0"
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-white font-medium text-[14px] hover:text-[#c8a64d] hover:bg-white/5 rounded transition cursor-pointer uppercase tracking-wider bg-transparent border-0"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Home
@@ -110,7 +110,7 @@ const UserLayout = () => {
 
           <button 
             onClick={handleSignOut}
-            className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-white/70 hover:text-red-400 hover:bg-red-500/10 rounded transition cursor-pointer uppercase tracking-wider bg-transparent border-0"
+            className="w-full flex items-center gap-2 px-4 py-2.5 font-medium text-[14px] text-xs text-white hover:text-red-400 hover:bg-red-500/10 rounded transition cursor-pointer uppercase tracking-wider bg-transparent border-0"
           >
             <LogOut className="w-3.5 h-3.5" />
             Sign Out

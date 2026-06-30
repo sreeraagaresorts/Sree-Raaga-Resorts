@@ -90,6 +90,10 @@ const InvoicePage = () => {
   const totalPrice = parseFloat(booking.total_price || 0);
   const basePrice = totalPrice / 1.18;
   const gstAmount = totalPrice - basePrice;
+  const amountDue = (booking.payment_method === "online" || booking.status === "confirmed" || booking.status === "checked_in") ? 0 : totalPrice;
+  const paidDate = (booking.payment_method === "online" || booking.status === "confirmed" || booking.status === "checked_in")
+    ? new Date(booking.created_at).toLocaleDateString("en-GB")
+    : "N/A";
 
   return (
     <div className="min-h-screen bg-[#f9f8f6] flex flex-col items-center py-10 px-4 text-[#0d2b4e]">
@@ -217,7 +221,7 @@ const InvoicePage = () => {
               <tbody className="text-[16px] font-normal text-[#0d2b4e]">
                 <tr>
                   <td className="py-4 px-4 leading-relaxed border border-gray-300">
-                    {booking.room_name} Room Stay<br />
+                    {booking.rooms || 1} x {booking.room_name} Room Stay<br />
                     <span className="text-[15px] text-[#0d2b4e]/90 mt-1 block font-medium">
                       {new Date(booking.check_in).toLocaleDateString("en-GB")} to {new Date(booking.check_out).toLocaleDateString("en-GB")} ({nights} Nights)
                     </span>
@@ -234,9 +238,23 @@ const InvoicePage = () => {
                 </tr>
                 {/* Subtotal row */}
                 <tr className="font-bold text-[18px] bg-gray-50/50">
-                  <td className="py-4 px-4 border border-gray-300" colSpan="2">Total Due</td>
+                  <td className="py-4 px-4 border border-gray-300" colSpan="2">Total</td>
                   <td className="py-4 px-4 text-right border border-gray-300" colSpan="2">
                     ₹{totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                  </td>
+                </tr>
+                {/* Paid Date row */}
+                <tr className="font-bold text-[18px] bg-gray-50/50">
+                  <td className="py-4 px-4 border border-gray-300" colSpan="2">Paid Date</td>
+                  <td className="py-4 px-4 text-right border border-gray-300 font-medium" colSpan="2">
+                    {paidDate}
+                  </td>
+                </tr>
+                {/* Amount Due row */}
+                <tr className="font-bold text-[18px] bg-gray-50/50">
+                  <td className="py-4 px-4 border border-gray-300" colSpan="2">Amount Due</td>
+                  <td className="py-4 px-4 text-right border border-gray-300" colSpan="2">
+                    ₹{amountDue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
                 </tr>
               </tbody>
