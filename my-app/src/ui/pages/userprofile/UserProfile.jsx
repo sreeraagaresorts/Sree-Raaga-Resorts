@@ -108,14 +108,14 @@ const UserProfile = () => {
 
         {/* DETAILS LIST CARD */}
         <form onSubmit={handleSave} className="lg:col-span-2 bg-white border border-gray-200/50 p-6 rounded-none shadow-sm space-y-6">
-          <h3 className="text-lg font-medium text-[#0d2b4e] border-b border-gray-200/50 pb-2">Profile Details</h3>
+          <h3 className="text-xl font-medium text-[#0d2b4e] border-b border-gray-200/50 pb-2">Profile Details</h3>
 
           {isEditing ? (
             <div className="space-y-4">
               
               {/* EDIT MODE: FULL NAME */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-gray-500 text-[10px] uppercase tracking-widest font-semibold flex items-center gap-1">
+                <label className="text-gray-500 text-[14px] uppercase tracking-widest font-semibold flex items-center gap-1">
                   <User size={12} className="text-[#c8a64d]" /> Full Name
                 </label>
                 <input 
@@ -129,7 +129,7 @@ const UserProfile = () => {
 
               {/* EDIT MODE: EMAIL */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-gray-500 text-[10px] uppercase tracking-widest font-semibold flex items-center gap-1">
+                <label className="text-gray-500 text-[14px] uppercase tracking-widest font-semibold flex items-center gap-1">
                   <Mail size={12} className="text-[#c8a64d]" /> Email Address
                 </label>
                 <input 
@@ -143,7 +143,7 @@ const UserProfile = () => {
 
               {/* EDIT MODE: PHONE */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-gray-500 text-[10px] uppercase tracking-widest font-semibold flex items-center gap-1">
+                <label className="text-gray-500 text-[14px] uppercase tracking-widest font-semibold flex items-center gap-1">
                   <Phone size={12} className="text-[#c8a64d]" /> Phone Number
                 </label>
                 <input 
@@ -228,7 +228,7 @@ const UserProfile = () => {
                 <button 
                   type="submit"
                   disabled={saving}
-                  className="bg-[#c8a64d] text-white px-5 py-2 rounded-none text-xs font-semibold uppercase tracking-widest hover:bg-[#b09141] transition cursor-pointer flex items-center gap-1.5 disabled:bg-[#c8a64d]/60"
+                  className="bg-[#c8a64d] text-white px-5 py-4 rounded-none text-xs font-semibold uppercase tracking-widest hover:bg-[#b09141] transition cursor-pointer flex items-center gap-1.5 disabled:bg-[#c8a64d]/60"
                 >
                   {saving ? (
                     <>

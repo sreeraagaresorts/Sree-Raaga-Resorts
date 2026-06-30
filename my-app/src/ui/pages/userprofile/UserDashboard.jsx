@@ -89,7 +89,7 @@ const UserDashboard = () => {
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Total Stays</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">{bookings.length}</h2>
+            <h2 className="text-[#0d2b4e] text-3xl font-medium mt-1 ">{bookings.length}</h2>
           </div>
           <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Calendar className="w-5 h-5 text-[#c8a64d]" />
@@ -99,7 +99,7 @@ const UserDashboard = () => {
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Active Bookings</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">{activeBookings}</h2>
+            <h2 className="text-[#0d2b4e] text-3xl font-medium mt-1 ">{activeBookings}</h2>
           </div>
           <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Shield className="w-5 h-5 text-[#c8a64d]" />
@@ -109,7 +109,7 @@ const UserDashboard = () => {
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Pending Approvals</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">{pendingBookings}</h2>
+            <h2 className="text-[#0d2b4e] text-3xl font-medium mt-1 ">{pendingBookings}</h2>
           </div>
           <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Clock className="w-5 h-5 text-[#c8a64d]" />
@@ -119,7 +119,7 @@ const UserDashboard = () => {
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
             <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Saved Rooms</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-light mt-1 ">1</h2>
+            <h2 className="text-[#0d2b4e] text-3xl font-medium mt-1 ">1</h2>
           </div>
           <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
             <Heart className="w-5 h-5 text-[#c8a64d]" />
@@ -131,8 +131,8 @@ const UserDashboard = () => {
       {/* RECENT STAYS */}
       <div className="bg-white border border-gray-200/50 p-6 rounded-none flex flex-col justify-between shadow-sm">
         <div className="space-y-4">
-          <h3 className="text-xl  font-light text-[#0d2b4e] flex items-center gap-2">
-            <span className="w-1.5 h-6 bg-[#c8a64d] inline-block"></span> Recent Stays
+          <h3 className="text-xl  font-medium text-[#0d2b4e] flex items-center gap-2">
+            <span className="w-1.5 h-6 bg-[#c8a64d]  inline-block"></span> Recent Stays
           </h3>
           
           <div className="space-y-3">
@@ -140,7 +140,7 @@ const UserDashboard = () => {
               <div key={b.id} className="p-4 bg-[#fdfeff] rounded-none border border-gray-200/30 flex justify-between items-center text-xs">
                 <div className="space-y-1">
                   <h4 className="font-semibold text-[#0d2b4e] tracking-wide text-[17px]">{b.room_name}</h4>
-                  <p className="text-gray-500 font-light">{new Date(b.check_in).toLocaleDateString()}</p>
+                  <p className="text-gray-500 font-medium">{new Date(b.check_in).toLocaleDateString()}</p>
                 </div>
                 <div className="text-right space-y-1">
                   <span className="font-bold text-[#c8a64d] block text-[17px]">₹{parseFloat(b.total_price).toLocaleString()}</span>

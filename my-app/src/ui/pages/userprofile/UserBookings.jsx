@@ -115,7 +115,7 @@ const UserBookings = () => {
               <div className="flex-1 p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
-                    <h2 className="text-2xl  font-light text-[#0d2b4e]">{booking.room_name}</h2>
+                    <h2 className="text-2xl  font-medium text-[#0d2b4e]">{booking.room_name}</h2>
                     <span className={`px-2.5 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded border w-fit ${getStatusBadgeClass(booking.status)}`}>
                       {booking.status}
                     </span>
@@ -123,25 +123,25 @@ const UserBookings = () => {
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-xs text-gray-500">
                     <div>
-                      <p className="text-gray-400 text-[10px] uppercase tracking-widest font-medium">Check In</p>
+                      <p className="text-gray-500 text-[10px] uppercase tracking-widest font-medium">Check In</p>
                       <p className="font-semibold mt-1 text-[#0d2b4e]">{new Date(booking.check_in).toLocaleDateString()}</p>
                     </div>
                     <div>
-                      <p className="text-gray-400 text-[10px] uppercase tracking-widest font-medium">Check Out</p>
+                      <p className="text-gray-500 text-[10px] uppercase tracking-widest font-medium">Check Out</p>
                       <p className="font-semibold mt-1 text-[#0d2b4e]">{new Date(booking.check_out).toLocaleDateString()}</p>
                     </div>
                     <div>
-                      <p className="text-gray-400 text-[10px] uppercase tracking-widest font-medium">Guests</p>
+                      <p className="text-gray-500 text-[10px] uppercase tracking-widest font-medium">Guests</p>
                       <p className="font-semibold mt-1 text-[#0d2b4e]">{booking.adults} Adults {booking.children > 0 && `, ${booking.children} Children`}</p>
                     </div>
                     <div>
-                      <p className="text-gray-400 text-[10px] uppercase tracking-widest font-medium">Total Price</p>
+                      <p className="text-gray-500 text-[10px] uppercase tracking-widest font-medium">Total Price</p>
                       <p className="font-bold mt-1 text-[#c8a64d] text-sm">₹{parseFloat(booking.total_price).toLocaleString()}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="border-t border-gray-200/50 pt-4 mt-6 flex justify-between items-center text-[10px] text-gray-500">
+                <div className="border-t border-gray-200/50 pt-4 mt-6 flex justify-between items-center text-[14px] text-gray-500">
                   <span>Booking ID: BK-{booking.id.toString().padStart(4, "0")}</span>
                   <span>Booked on: {new Date(booking.created_at).toLocaleDateString()}</span>
                 </div>
@@ -159,7 +159,7 @@ const UserBookings = () => {
                 disabled={currentPage === 1}
                 className={`px-4 py-2 border text-xs font-semibold uppercase tracking-wider transition ${
                   currentPage === 1
-                    ? "border-gray-200 text-gray-400 cursor-not-allowed bg-gray-50/50"
+                    ? "border-gray-200 text-gray-500 cursor-not-allowed bg-gray-50/50"
                     : "border-[#0d2b4e]/20 text-[#0d2b4e] hover:border-[#c8a64d] hover:text-[#c8a64d] cursor-pointer bg-white"
                 }`}
               >
@@ -185,7 +185,7 @@ const UserBookings = () => {
                 disabled={currentPage === totalPages}
                 className={`px-4 py-2 border text-xs font-semibold uppercase tracking-wider transition ${
                   currentPage === totalPages
-                    ? "border-gray-200 text-gray-400 cursor-not-allowed bg-gray-50/50"
+                    ? "border-gray-200 text-gray-500 cursor-not-allowed bg-gray-50/50"
                     : "border-[#0d2b4e]/20 text-[#0d2b4e] hover:border-[#c8a64d] hover:text-[#c8a64d] cursor-pointer bg-white"
                 }`}
               >
