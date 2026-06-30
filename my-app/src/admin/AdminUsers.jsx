@@ -345,13 +345,6 @@ const AdminUsers = () => {
                     {activeTab === "guests" && (
                       <td className="p-4 text-center">
                         <div className="flex items-center justify-center gap-2">
-                          <button
-                            onClick={() => handleToggleRole(u)}
-                            className="p-1.5 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 rounded cursor-pointer transition"
-                            title={`Toggle role to ${u.role === "admin" ? "user" : "admin"}`}
-                          >
-                            <ShieldAlert size={14} />
-                          </button>
                            <button
                              onClick={() => handleDelete(u.id)}
                              className="px-2.5 py-1 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded cursor-pointer transition text-xs font-semibold"

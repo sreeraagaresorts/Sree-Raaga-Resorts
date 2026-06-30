@@ -233,7 +233,7 @@ const Menu = () => {
           <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center items-center text-sm uppercase text-gray-400 select-none mb-8 font-medium tracking-wider font-corm">
             {categories.map((cat, idx) => (
               <React.Fragment key={cat}>
-                {idx > 0 && <span className="hidden md:inline text-[#c8a64d]/60 text-lg mt-0.5">•</span>}
+                {idx > 0 && <span className="hidden md:inline text-[#c8a64d]/60 text-[24px] mt-0.5">•</span>}
                 <button
                   onClick={() => setSelectedCategory(cat)}
                   className={`hover:text-[#c8a64d] transition font-corm cursor-pointer ${
