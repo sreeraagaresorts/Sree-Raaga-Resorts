@@ -41,6 +41,7 @@ import UserWishlist from "./ui/pages/userprofile/UserWishlist";
 import UserNotifications from "./ui/pages/userprofile/UserNotifications";
 import UserSettings from "./ui/pages/userprofile/UserSettings";
 import UserLayout from "./ui/pages/userprofile/UserLayout";
+import InvoicePage from "./ui/pages/userprofile/InvoicePage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminLogin from "./admin/AdminLogin";
@@ -111,9 +112,16 @@ const App = () => {
           <Route path="settings" element={<UserSettings />} />
         </Route>
 
+        <Route
+          path="/invoice/:bookingId"
+          element={
+            <ProtectedRoute>
+              <InvoicePage />
+            </ProtectedRoute>
+          }
+        />
 
-
-          <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
 
       {/* ADMIN PANEL (PROTECTED) */}
       <Route

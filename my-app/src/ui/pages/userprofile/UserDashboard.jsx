@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Calendar,
-  Heart,
+  CreditCard,
   ArrowRight,
   Shield,
   RefreshCw,
-  Clock,
 } from "lucide-react";
 import axios from "axios";
 import { API_URL } from "../../../config/api";
@@ -49,7 +48,9 @@ const UserDashboard = () => {
   }, []);
 
   const activeBookings = bookings.filter(b => b.status === "confirmed" || b.status === "checked_in").length;
-  const pendingBookings = bookings.filter(b => b.status === "pending").length;
+  const totalPayments = bookings
+    .filter(b => b.status === "confirmed" || b.status === "checked_in")
+    .reduce((sum, b) => sum + parseFloat(b.total_price || 0), 0);
 
   if (loading) {
     return (
@@ -84,7 +85,7 @@ const UserDashboard = () => {
       </div>
 
       {/* STATS CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
@@ -108,21 +109,11 @@ const UserDashboard = () => {
 
         <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
           <div>
-            <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Pending Approvals</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-medium mt-1 ">{pendingBookings}</h2>
+            <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Total Payments</p>
+            <h2 className="text-[#0d2b4e] text-3xl font-medium mt-1 ">₹{totalPayments.toLocaleString()}</h2>
           </div>
           <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
-            <Clock className="w-5 h-5 text-[#c8a64d]" />
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-none border border-gray-200/50 flex items-center justify-between shadow-sm">
-          <div>
-            <p className="text-gray-500 text-[10px] uppercase tracking-wider font-medium">Saved Rooms</p>
-            <h2 className="text-[#0d2b4e] text-3xl font-medium mt-1 ">1</h2>
-          </div>
-          <div className="w-10 h-10 bg-[#fdfeff] rounded-none flex items-center justify-center border border-[#c8a64d]/20">
-            <Heart className="w-5 h-5 text-[#c8a64d]" />
+            <CreditCard className="w-5 h-5 text-[#c8a64d]" />
           </div>
         </div>
 
@@ -143,8 +134,8 @@ const UserDashboard = () => {
                   <p className="text-gray-500 font-medium">{new Date(b.check_in).toLocaleDateString()}</p>
                 </div>
                 <div className="text-right space-y-1">
-                  <span className="font-bold text-[#c8a64d] block text-[17px]">₹{parseFloat(b.total_price).toLocaleString()}</span>
-                  <span className={`text-[9px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded border ${
+                  <span className="font-bold text-[#c8a64d] block text-[22px] py-1">₹{parseFloat(b.total_price).toLocaleString()}</span>
+                  <span className={`text-[11px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded border ${
                     b.status === "confirmed" ? "bg-green-50 text-green-700 border-green-200" :
                     b.status === "checked_in" ? "bg-blue-50 text-blue-700 border-blue-200" :
                     b.status === "cancelled" ? "bg-red-50 text-red-700 border-red-200" :
