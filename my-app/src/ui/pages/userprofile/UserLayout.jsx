@@ -86,7 +86,7 @@ const UserLayout = () => {
             <Link
               key={item.name}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded text-sm transition tracking-wider uppercase text-xs ${
+              className={`flex items-center gap-3 px-4 py-4 rounded text-sm transition tracking-wider uppercase text-xs ${
                 isActive(item.path)
                   ? "bg-[#c8a64d] text-white font-semibold shadow-md"
                   : "text-white/70 hover:text-[#c8a64d] hover:bg-white/5"

@@ -87,7 +87,7 @@ const UserProfile = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 text-[#0d2b4e]">
-      <h1 className="text-3xl font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Profile</h1>
+      <h1 className="text-3xl font-medium mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Profile</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
@@ -98,7 +98,7 @@ const UserProfile = () => {
           </div>
           <h2 className="text-xl font-medium text-[#0d2b4e] truncate max-w-full">{user.full_name}</h2>
           <p className="text-[#c8a64d] text-[10px] uppercase tracking-widest mt-2 font-medium">
-            {user.role === "admin" ? "Resort Admin" : "Gold Guest Member"}
+            {user.role === "admin" ? "Resort Admin" : "Member"}
           </p>
           <div className="w-full border-t border-gray-200/50 mt-6 pt-4 text-[11px] text-gray-500 flex justify-center gap-1.5 items-center uppercase tracking-wider font-medium">
             <ShieldCheck size={14} className="text-[#c8a64d]" />
@@ -108,7 +108,7 @@ const UserProfile = () => {
 
         {/* DETAILS LIST CARD */}
         <form onSubmit={handleSave} className="lg:col-span-2 bg-white border border-gray-200/50 p-6 rounded-none shadow-sm space-y-6">
-          <h3 className="text-lg font-light text-[#0d2b4e] border-b border-gray-200/50 pb-2">Profile Details</h3>
+          <h3 className="text-lg font-medium text-[#0d2b4e] border-b border-gray-200/50 pb-2">Profile Details</h3>
 
           {isEditing ? (
             <div className="space-y-4">

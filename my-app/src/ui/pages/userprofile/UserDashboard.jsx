@@ -77,7 +77,7 @@ const UserDashboard = () => {
 
         <Link
           to="/rooms"
-          className="bg-[#c8a64d] text-white px-6 py-3 rounded-none font-semibold uppercase tracking-widest text-xs hover:bg-[#b09141] transition w-fit shrink-0 shadow-sm"
+          className="bg-[#c8a64d] text-white px-6 py-4 rounded-none font-semibold uppercase tracking-widest text-xs hover:bg-[#b09141] transition w-fit shrink-0 shadow-sm"
         >
           Book Your Stay
         </Link>

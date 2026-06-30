@@ -83,15 +83,15 @@ const UserBookings = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-[#0d2b4e]">
-      <h1 className="text-3xl  font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Bookings</h1>
+      <h1 className="text-3xl  font-medium mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Bookings</h1>
 
       {bookings.length === 0 ? (
         <div className="bg-white border border-gray-200/50 rounded-none p-12 text-center text-gray-500 font-light shadow-sm flex flex-col items-center justify-center">
           <p className="text-lg">No bookings yet.</p>
-          <p className="text-xs mt-1 text-gray-400">Ready to experience luxury? Go book your favorite room!</p>
+          <p className="text-xs mt-1 text-gray-500">Ready to experience luxury? Go book your favorite room!</p>
           <Link
             to="/rooms"
-            className="mt-6 inline-block bg-[#c8a64d] text-white px-6 py-2.5 rounded-none font-semibold text-xs uppercase tracking-widest hover:bg-[#b09141] transition shadow-sm cursor-pointer"
+            className="mt-6 inline-block bg-[#c8a64d] text-white px-6 py-4 rounded-none font-semibold text-xs uppercase tracking-widest hover:bg-[#b09141] transition shadow-sm cursor-pointer"
           >
             Book Your Stay
           </Link>
