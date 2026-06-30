@@ -211,10 +211,10 @@ const UserLayout = () => {
             >
               <Menu className="w-6 h-6" />
             </button>
-            <div className="text-sm text-[#0d2b4e]/70 tracking-wide font-medium hidden sm:block">
+            <div className="text-sm text-[#0d2b4e]/70 tracking-wide font-bold hidden sm:block">
               Welcome back, <span className="text-[#c8a64d] font-semibold">{user ? user.full_name : "Valued Guest"}</span>
             </div>
-            <div className="text-sm text-[#0d2b4e]/70 tracking-wide font-light sm:hidden">
+            <div className="text-sm text-[#0d2b4e]/70 tracking-wide font-medium sm:hidden">
               Welcome, <span className="text-[#c8a64d] font-semibold">{user ? user.full_name.split(" ")[0] : "Guest"}</span>
             </div>
           </div>
