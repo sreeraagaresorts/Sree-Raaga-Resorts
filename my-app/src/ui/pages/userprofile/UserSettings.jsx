@@ -221,41 +221,7 @@ const UserSettings = () => {
             </form>
           </div>
 
-          {/* NOTIFICATION PREFERENCES */}
-          <div className="bg-white border border-gray-200/50 p-6 rounded-none shadow-sm space-y-6">
-            <h3 className="text-xs font-bold text-[#c8a64d] uppercase tracking-widest flex items-center gap-2 border-b border-gray-200/50 pb-3">
-              <Bell size={14} /> Notification Channels
-            </h3>
-
-            <div className="space-y-4 text-xs font-light">
-              <div className="flex justify-between items-center">
-                <div className="space-y-1">
-                  <h4 className="font-semibold text-[#0d2b4e] tracking-wide uppercase text-xs">Email Subscriptions</h4>
-                  <p className="text-gray-500 text-[14px] font-medium leading-relaxed">Receive booking confirmations, itinerary invoices, and receipt updates via email.</p>
-                </div>
-                <input 
-                  type="checkbox" 
-                  checked={emailAlerts}
-                  onChange={() => setEmailAlerts(!emailAlerts)}
-                  className="w-4 h-4 accent-[#c8a64d] cursor-pointer"
-                />
-              </div>
-
-              {/* <div className="flex justify-between items-center border-t border-gray-200/50 pt-4">
-                <div className="space-y-1">
-                  <h4 className="font-semibold text-[#0d2b4e] tracking-wide uppercase text-xs">SMS Booking Updates</h4>
-                  <p className="text-gray-500 text-[10px] leading-relaxed">Receive SMS text notifications on status updates (Confirmations, Cancellations, Check-ins).</p>
-                </div>
-                <input 
-                  type="checkbox" 
-                  checked={smsAlerts}
-                  onChange={() => setSmsAlerts(!smsAlerts)}
-                  className="w-4 h-4 accent-[#c8a64d] cursor-pointer"
-                />
-              </div> */}
-            </div>
-          </div>
-
+      
           {/* DANGER ZONE */}
           <div className="bg-red-50/50 border border-red-200 p-6 rounded-none shadow-sm space-y-4">
             <h3 className="text-xs font-bold text-red-600 uppercase tracking-widest flex items-center gap-2 border-b border-red-200 pb-3">

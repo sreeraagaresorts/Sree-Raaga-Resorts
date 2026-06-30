@@ -69,15 +69,15 @@ const UserLayout = () => {
         
         {/* BRANDING */}
         <div className="p-6">
-          <Link to="/" className="block">
-            <h1 className="text-2xl text-[#c8a64d] tracking-wide font-semibold">
+          <Link to="/" className="flex items-baseline gap-2">
+            <h1 className="text-2xl text-[#c8a64d] font-semibold whitespace-nowrap">
               Sree Raaga
             </h1>
-            <span className="text-[9px] tracking-[3px] uppercase text-white/50 block mt-0.5">
+            <span className="text-2xl text-[#c8a64d] font-semibold whitespace-nowrap">
               Resorts
             </span>
           </Link>
-          <p className="text-[10px] text-[#c8a64d] uppercase tracking-[2px] mt-4 font-light">Guest Portal</p>
+          <p className="text-[10px] text-white uppercase tracking-[2px] mt-4 font-light">Guest Portal</p>
         </div>
 
         {/* NAVIGATION */}
@@ -141,11 +141,11 @@ const UserLayout = () => {
             >
               {/* BRANDING / HEADER */}
               <div className="p-6 flex items-center justify-between border-b border-white/5">
-                <Link to="/" className="block">
-                  <h1 className="text-2xl text-[#c8a64d] tracking-wide font-semibold">
+                <Link to="/" className="flex items-baseline gap-2">
+                  <h1 className="text-2xl text-[#c8a64d] tracking-wide font-semibold whitespace-nowrap">
                     Sree Raaga
                   </h1>
-                  <span className="text-[9px] tracking-[3px] uppercase text-white/50 block mt-0.5">
+                  <span className="text-[9px] tracking-[3px] uppercase text-white/50 whitespace-nowrap">
                     Resorts
                   </span>
                 </Link>
@@ -211,7 +211,7 @@ const UserLayout = () => {
             >
               <Menu className="w-6 h-6" />
             </button>
-            <div className="text-sm text-[#0d2b4e]/70 tracking-wide font-light hidden sm:block">
+            <div className="text-sm text-[#0d2b4e]/70 tracking-wide font-medium hidden sm:block">
               Welcome back, <span className="text-[#c8a64d] font-semibold">{user ? user.full_name : "Valued Guest"}</span>
             </div>
             <div className="text-sm text-[#0d2b4e]/70 tracking-wide font-light sm:hidden">

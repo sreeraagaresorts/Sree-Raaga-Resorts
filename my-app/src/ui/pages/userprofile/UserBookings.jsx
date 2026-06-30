@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { RefreshCw, Calendar, Users, Maximize } from "lucide-react";
 import { API_URL } from "../../../config/api";
@@ -7,6 +8,12 @@ const UserBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const bookingsPerPage = 5;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -69,18 +76,30 @@ const UserBookings = () => {
     );
   }
 
+  const indexOfLastBooking = currentPage * bookingsPerPage;
+  const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
+  const currentBookings = bookings.slice(indexOfFirstBooking, indexOfLastBooking);
+  const totalPages = Math.ceil(bookings.length / bookingsPerPage);
+
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-[#0d2b4e]">
       <h1 className="text-3xl  font-light mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Bookings</h1>
 
       {bookings.length === 0 ? (
-        <div className="bg-white border border-gray-200/50 rounded-none p-12 text-center text-gray-500 font-light shadow-sm">
+        <div className="bg-white border border-gray-200/50 rounded-none p-12 text-center text-gray-500 font-light shadow-sm flex flex-col items-center justify-center">
           <p className="text-lg">No bookings yet.</p>
           <p className="text-xs mt-1 text-gray-400">Ready to experience luxury? Go book your favorite room!</p>
+          <Link
+            to="/rooms"
+            className="mt-6 inline-block bg-[#c8a64d] text-white px-6 py-2.5 rounded-none font-semibold text-xs uppercase tracking-widest hover:bg-[#b09141] transition shadow-sm cursor-pointer"
+          >
+            Book Your Stay
+          </Link>
         </div>
       ) : (
-        <div className="grid gap-6">
-          {bookings.map((booking) => (
+        <div className="space-y-6">
+          <div className="grid gap-6">
+            {currentBookings.map((booking) => (
             <div key={booking.id} className="bg-white border border-gray-200/50 rounded-none overflow-hidden shadow-sm flex flex-col md:flex-row hover:border-[#c8a64d]/40 transition duration-300">
               
               {/* Room Image */}
@@ -130,6 +149,50 @@ const UserBookings = () => {
 
             </div>
           ))}
+          </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-8 pt-4">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 border text-xs font-semibold uppercase tracking-wider transition ${
+                  currentPage === 1
+                    ? "border-gray-200 text-gray-400 cursor-not-allowed bg-gray-50/50"
+                    : "border-[#0d2b4e]/20 text-[#0d2b4e] hover:border-[#c8a64d] hover:text-[#c8a64d] cursor-pointer bg-white"
+                }`}
+              >
+                Prev
+              </button>
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-10 h-10 border text-xs font-semibold transition ${
+                    currentPage === page
+                      ? "bg-[#c8a64d] border-[#c8a64d] text-white"
+                      : "border-[#0d2b4e]/20 text-[#0d2b4e] hover:border-[#c8a64d] hover:text-[#c8a64d] cursor-pointer bg-white"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 border text-xs font-semibold uppercase tracking-wider transition ${
+                  currentPage === totalPages
+                    ? "border-gray-200 text-gray-400 cursor-not-allowed bg-gray-50/50"
+                    : "border-[#0d2b4e]/20 text-[#0d2b4e] hover:border-[#c8a64d] hover:text-[#c8a64d] cursor-pointer bg-white"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
