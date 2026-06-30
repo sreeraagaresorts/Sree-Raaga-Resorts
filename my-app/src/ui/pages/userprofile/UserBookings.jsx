@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { RefreshCw, Calendar, Users, Maximize } from "lucide-react";
+import { RefreshCw, Calendar, Users, Maximize, Download } from "lucide-react";
 import { API_URL } from "../../../config/api";
 
 const UserBookings = () => {
@@ -152,9 +152,9 @@ const UserBookings = () => {
                       href={`/invoice/${booking.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-5 py-3 bg-[#c8a64d] text-white font-semibold uppercase tracking-wider text-[11px] hover:bg-[#b09141] transition inline-block"
+                      className="px-5 py-3 bg-[#c8a64d] text-white font-bold uppercase tracking-wider text-[10px] hover:bg-[#b09141] transition inline-flex items-center gap-1.5"
                     >
-                      Invoice
+                      <Download className="w-3.5 h-3.5" /> Download Invoice
                     </a>
                   )}
                 </div>

@@ -48,6 +48,16 @@ const InvoicePage = () => {
     fetchData();
   }, [bookingId]);
 
+  useEffect(() => {
+    if (!loading && booking) {
+      const timer = setTimeout(() => {
+        window.print();
+        window.close();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, booking]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f5f6fa] flex items-center justify-center text-[#0d2b4e]/60">
@@ -86,6 +96,9 @@ const InvoicePage = () => {
       <style>
         {`
           @media print {
+            @page {
+              margin: 0 !important;
+            }
             body {
               background: white !important;
               color: black !important;
@@ -98,7 +111,7 @@ const InvoicePage = () => {
             #invoice-print-area {
               border: none !important;
               box-shadow: none !important;
-              padding: 40px !important;
+              padding: 1.2cm !important;
               margin: 0 !important;
               width: 100% !important;
               max-width: 100% !important;
@@ -124,16 +137,16 @@ const InvoicePage = () => {
           onClick={() => window.print()}
           className="flex items-center gap-2 bg-[#0d2b4e] text-white px-5 py-2.5 text-xs uppercase tracking-widest font-semibold hover:bg-black transition cursor-pointer border-0"
         >
-          <Printer className="w-4 h-4" /> Print This Invoice
+          <Printer className="w-4 h-4" /> Download Invoice
         </button>
       </div>
 
       {/* INVOICE CARD */}
       <div 
         id="invoice-print-area" 
-        className="bg-white w-full max-w-3xl p-12 md:p-16 border border-gray-200/50 shadow-sm print-color-adjust text-[15px]"
+        className="bg-white w-full max-w-3xl p-8 md:p-12 border border-gray-200/50 shadow-sm print-color-adjust text-[15px]"
       >
-        <div className="space-y-12">
+        <div className="space-y-8">
           {/* Brand & Invoice Number */}
           <div className="flex justify-between items-start">
             <div>
@@ -155,35 +168,35 @@ const InvoicePage = () => {
           </div>
 
           {/* Dates */}
-          <div className="flex justify-between items-start pt-6 border-t border-gray-300">
+          <div className="flex justify-between items-start pt-4 border-t border-gray-300">
             <div>
               <p className="text-[15px] uppercase tracking-wider text-[#0d2b4e]/70 font-semibold">Invoice date:</p>
-              <p className="text-[17px] font-bold text-[#0d2b4e] mt-1.5">
+              <p className="text-[17px] font-bold text-[#0d2b4e] mt-1">
                 {new Date(booking.created_at).toLocaleDateString()}
               </p>
             </div>
             <div className="text-right">
               <p className="text-[15px] uppercase tracking-wider text-[#0d2b4e]/70 font-semibold">Due date:</p>
-              <p className="text-[17px] font-bold text-[#0d2b4e] mt-1.5">
+              <p className="text-[17px] font-bold text-[#0d2b4e] mt-1">
                 {new Date(booking.check_in).toLocaleDateString()}
               </p>
             </div>
           </div>
 
           {/* Supplier & Customer */}
-          <div className="grid grid-cols-2 gap-8 pt-6 border-t border-gray-300">
+          <div className="grid grid-cols-2 gap-8 pt-4 border-t border-gray-300">
             <div>
-              <h4 className="text-[20px] font-serif text-[#0d2b4e] font-light mb-3">Supplier</h4>
+              <h4 className="text-[20px] font-serif text-[#0d2b4e] font-light mb-2">Supplier</h4>
               <p className="text-[17px] font-semibold text-[#0d2b4e]">Sree Raaga Resorts</p>
-              <p className="text-[15px] font-normal text-[#0d2b4e]/80 mt-1.5 leading-relaxed">
+              <p className="text-[15px] font-normal text-[#0d2b4e]/80 mt-1 leading-relaxed">
                 123 Luxury Road, SRM District,<br />
                 Karnataka, 560001, India
               </p>
             </div>
             <div className="text-right">
-              <h4 className="text-[20px] font-serif text-[#0d2b4e] font-light mb-3">Customer</h4>
+              <h4 className="text-[20px] font-serif text-[#0d2b4e] font-light mb-2">Customer</h4>
               <p className="text-[17px] font-semibold text-[#0d2b4e]">{user ? user.full_name : "Valued Guest"}</p>
-              <p className="text-[15px] font-normal text-[#0d2b4e]/80 mt-1.5 leading-relaxed">
+              <p className="text-[15px] font-normal text-[#0d2b4e]/80 mt-1 leading-relaxed">
                 {user ? user.email : ""}<br />
                 {user ? user.phone : ""}
               </p>
@@ -191,38 +204,38 @@ const InvoicePage = () => {
           </div>
 
           {/* Billing Table */}
-          <div className="pt-6">
+          <div className="pt-4">
             <table className="w-full text-left border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-[#f8f5ee] text-[15px] uppercase tracking-wider font-bold text-[#0d2b4e]">
-                  <th className="py-3.5 px-4 border border-gray-300">Description</th>
-                  <th className="py-3.5 px-4 text-right border border-gray-300">Price</th>
-                  <th className="py-3.5 px-4 text-right border border-gray-300">GST (18%)</th>
-                  <th className="py-3.5 px-4 text-right border border-gray-300">Total</th>
+                  <th className="py-2.5 px-4 border border-gray-300">Description</th>
+                  <th className="py-2.5 px-4 text-right border border-gray-300">Price</th>
+                  <th className="py-2.5 px-4 text-right border border-gray-300">GST (18%)</th>
+                  <th className="py-2.5 px-4 text-right border border-gray-300">Total</th>
                 </tr>
               </thead>
               <tbody className="text-[16px] font-normal text-[#0d2b4e]">
                 <tr>
-                  <td className="py-6 px-4 leading-relaxed border border-gray-300">
+                  <td className="py-4 px-4 leading-relaxed border border-gray-300">
                     {booking.room_name} Room Stay<br />
                     <span className="text-[15px] text-[#0d2b4e]/90 mt-1 block font-medium">
                       {new Date(booking.check_in).toLocaleDateString()} to {new Date(booking.check_out).toLocaleDateString()} ({nights} Nights)
                     </span>
                   </td>
-                  <td className="py-6 px-4 text-right border border-gray-300">
+                  <td className="py-4 px-4 text-right border border-gray-300">
                     ₹{basePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
-                  <td className="py-6 px-4 text-right border border-gray-300">
+                  <td className="py-4 px-4 text-right border border-gray-300">
                     ₹{gstAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
-                  <td className="py-6 px-4 text-right font-bold border border-gray-300">
+                  <td className="py-4 px-4 text-right font-bold border border-gray-300">
                     ₹{totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
                 </tr>
                 {/* Subtotal row */}
                 <tr className="font-bold text-[18px] bg-gray-50/50">
-                  <td className="py-6 px-4 border border-gray-300" colSpan="2">Total Due</td>
-                  <td className="py-6 px-4 text-right border border-gray-300" colSpan="2">
+                  <td className="py-4 px-4 border border-gray-300" colSpan="2">Total Due</td>
+                  <td className="py-4 px-4 text-right border border-gray-300" colSpan="2">
                     ₹{totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
                 </tr>
@@ -231,7 +244,7 @@ const InvoicePage = () => {
           </div>
 
           {/* Footer details */}
-          <div className="pt-8 border-t border-gray-300 text-[15px] text-[#0d2b4e]/80 font-semibold text-center flex flex-wrap justify-center items-center gap-x-4 md:gap-x-6 gap-y-2">
+          <div className="pt-6 border-t border-gray-300 text-[15px] text-[#0d2b4e]/80 font-semibold text-center flex flex-wrap justify-center items-center gap-x-4 md:gap-x-6 gap-y-2">
             <span>www.sreeraagaresorts.com</span>
             <span className="text-[#c8a64d] font-normal no-print">|</span>
             <span>info@sreeraagaresorts.com</span>
