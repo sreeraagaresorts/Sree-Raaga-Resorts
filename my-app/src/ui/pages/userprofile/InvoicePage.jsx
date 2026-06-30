@@ -131,7 +131,7 @@ const InvoicePage = () => {
       {/* INVOICE CARD */}
       <div 
         id="invoice-print-area" 
-        className="bg-white w-full max-w-3xl p-12 md:p-16 border border-gray-200/50 shadow-sm print-color-adjust"
+        className="bg-white w-full max-w-3xl p-12 md:p-16 border border-gray-200/50 shadow-sm print-color-adjust text-[15px]"
       >
         <div className="space-y-12">
           {/* Brand & Invoice Number */}
@@ -140,7 +140,7 @@ const InvoicePage = () => {
               <h2 className="text-4xl font-serif text-[#0d2b4e] tracking-widest uppercase font-semibold leading-none">
                 Sree Raaga
               </h2>
-              <span className="text-[12px] tracking-[4px] uppercase text-[#c8a64d] font-bold block mt-1.5">
+              <span className="text-[15px] tracking-[4px] uppercase text-[#c8a64d] font-bold block mt-1.5">
                 Resorts
               </span>
             </div>
@@ -148,7 +148,7 @@ const InvoicePage = () => {
               <h3 className="text-3xl font-serif text-[#0d2b4e] font-light">
                 Invoice #
               </h3>
-              <p className="text-base font-semibold tracking-wider text-gray-700 mt-1.5">
+              <p className="text-[17px] font-semibold tracking-wider text-[#0d2b4e] mt-1.5">
                 BK-{booking.id.toString().padStart(6, "0")}
               </p>
             </div>
@@ -157,14 +157,14 @@ const InvoicePage = () => {
           {/* Dates */}
           <div className="flex justify-between items-start pt-6 border-t border-gray-300">
             <div>
-              <p className="text-xs uppercase tracking-wider text-gray-400 font-medium">Invoice date:</p>
-              <p className="text-base font-semibold text-[#0d2b4e] mt-1.5">
+              <p className="text-[15px] uppercase tracking-wider text-[#0d2b4e]/70 font-semibold">Invoice date:</p>
+              <p className="text-[17px] font-bold text-[#0d2b4e] mt-1.5">
                 {new Date(booking.created_at).toLocaleDateString()}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-xs uppercase tracking-wider text-gray-400 font-medium">Due date:</p>
-              <p className="text-base font-semibold text-[#0d2b4e] mt-1.5">
+              <p className="text-[15px] uppercase tracking-wider text-[#0d2b4e]/70 font-semibold">Due date:</p>
+              <p className="text-[17px] font-bold text-[#0d2b4e] mt-1.5">
                 {new Date(booking.check_in).toLocaleDateString()}
               </p>
             </div>
@@ -173,17 +173,17 @@ const InvoicePage = () => {
           {/* Supplier & Customer */}
           <div className="grid grid-cols-2 gap-8 pt-6 border-t border-gray-300">
             <div>
-              <h4 className="text-lg font-serif text-[#0d2b4e] font-light mb-3">Supplier</h4>
-              <p className="text-sm font-semibold text-[#0d2b4e]">Sree Raaga Resorts</p>
-              <p className="text-xs font-light text-gray-500 mt-1.5 leading-relaxed">
+              <h4 className="text-[20px] font-serif text-[#0d2b4e] font-light mb-3">Supplier</h4>
+              <p className="text-[17px] font-semibold text-[#0d2b4e]">Sree Raaga Resorts</p>
+              <p className="text-[15px] font-normal text-[#0d2b4e]/80 mt-1.5 leading-relaxed">
                 123 Luxury Road, SRM District,<br />
                 Karnataka, 560001, India
               </p>
             </div>
             <div className="text-right">
-              <h4 className="text-lg font-serif text-[#0d2b4e] font-light mb-3">Customer</h4>
-              <p className="text-sm font-semibold text-[#0d2b4e]">{user ? user.full_name : "Valued Guest"}</p>
-              <p className="text-xs font-light text-gray-500 mt-1.5 leading-relaxed">
+              <h4 className="text-[20px] font-serif text-[#0d2b4e] font-light mb-3">Customer</h4>
+              <p className="text-[17px] font-semibold text-[#0d2b4e]">{user ? user.full_name : "Valued Guest"}</p>
+              <p className="text-[15px] font-normal text-[#0d2b4e]/80 mt-1.5 leading-relaxed">
                 {user ? user.email : ""}<br />
                 {user ? user.phone : ""}
               </p>
@@ -194,18 +194,18 @@ const InvoicePage = () => {
           <div className="pt-6">
             <table className="w-full text-left border-collapse border border-gray-300">
               <thead>
-                <tr className="bg-[#f8f5ee] text-xs uppercase tracking-wider font-semibold text-gray-600">
+                <tr className="bg-[#f8f5ee] text-[15px] uppercase tracking-wider font-bold text-[#0d2b4e]">
                   <th className="py-3.5 px-4 border border-gray-300">Description</th>
                   <th className="py-3.5 px-4 text-right border border-gray-300">Price</th>
                   <th className="py-3.5 px-4 text-right border border-gray-300">GST (18%)</th>
                   <th className="py-3.5 px-4 text-right border border-gray-300">Total</th>
                 </tr>
               </thead>
-              <tbody className="text-sm font-light text-gray-600">
+              <tbody className="text-[16px] font-normal text-[#0d2b4e]">
                 <tr>
-                  <td className="py-6 px-4 font-normal text-[#0d2b4e] leading-relaxed border border-gray-300">
+                  <td className="py-6 px-4 leading-relaxed border border-gray-300">
                     {booking.room_name} Room Stay<br />
-                    <span className="text-xs text-gray-400 font-light mt-1 block">
+                    <span className="text-[15px] text-[#0d2b4e]/90 mt-1 block font-medium">
                       {new Date(booking.check_in).toLocaleDateString()} to {new Date(booking.check_out).toLocaleDateString()} ({nights} Nights)
                     </span>
                   </td>
@@ -215,14 +215,14 @@ const InvoicePage = () => {
                   <td className="py-6 px-4 text-right border border-gray-300">
                     ₹{gstAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
-                  <td className="py-6 px-4 text-right font-medium text-[#0d2b4e] border border-gray-300">
+                  <td className="py-6 px-4 text-right font-bold border border-gray-300">
                     ₹{totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
                 </tr>
                 {/* Subtotal row */}
-                <tr className="font-semibold text-base text-[#0d2b4e]">
-                  <td className="py-6 px-4 border border-gray-300 bg-gray-50/50" colSpan="2">Total Due</td>
-                  <td className="py-6 px-4 text-right border border-gray-300 bg-gray-50/50" colSpan="2">
+                <tr className="font-bold text-[18px] bg-gray-50/50">
+                  <td className="py-6 px-4 border border-gray-300" colSpan="2">Total Due</td>
+                  <td className="py-6 px-4 text-right border border-gray-300" colSpan="2">
                     ₹{totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
                 </tr>
@@ -231,10 +231,12 @@ const InvoicePage = () => {
           </div>
 
           {/* Footer details */}
-          <div className="flex justify-between items-center pt-8 border-t border-gray-300 text-xs text-gray-500 font-medium">
+          <div className="pt-8 border-t border-gray-300 text-[15px] text-[#0d2b4e]/80 font-semibold text-center flex flex-wrap justify-center items-center gap-x-4 md:gap-x-6 gap-y-2">
             <span>www.sreeraagaresorts.com</span>
-            <span>bookings@sreeraagaresorts.com</span>
-            <span>+91 99000 11550</span>
+            <span className="text-[#c8a64d] font-normal no-print">|</span>
+            <span>info@sreeraagaresorts.com</span>
+            <span className="text-[#c8a64d] font-normal no-print">|</span>
+            <span className="whitespace-nowrap">+91 89045 61155 | +91 89043 81155</span>
           </div>
         </div>
       </div>

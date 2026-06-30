@@ -142,20 +142,21 @@ const UserBookings = () => {
                 </div>
 
                 <div className="border-t border-gray-200/50 pt-4 mt-6 font-medium flex justify-between items-center text-[12px] sm:text-[14px] text-gray-500">
-                  <span>Booking ID: BK-{booking.id.toString().padStart(4, "0")}</span>
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                    <span>Booking ID: BK-{booking.id.toString().padStart(4, "0")}</span>
+                    <span className="text-gray-300 hidden sm:inline">|</span>
                     <span>Booked on: {new Date(booking.created_at).toLocaleDateString()}</span>
-                    {(booking.status === "confirmed" || booking.status === "checked_in") && (
-                      <a
-                        href={`/invoice/${booking.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 bg-[#c8a64d] text-white font-semibold uppercase tracking-wider text-[10px] hover:bg-[#b09141] transition inline-block"
-                      >
-                        Invoice
-                      </a>
-                    )}
                   </div>
+                  {(booking.status === "confirmed" || booking.status === "checked_in") && (
+                    <a
+                      href={`/invoice/${booking.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-5 py-3 bg-[#c8a64d] text-white font-semibold uppercase tracking-wider text-[11px] hover:bg-[#b09141] transition inline-block"
+                    >
+                      Invoice
+                    </a>
+                  )}
                 </div>
               </div>
 
