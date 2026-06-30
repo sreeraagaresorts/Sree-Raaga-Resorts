@@ -177,8 +177,9 @@ const UserBookings = () => {
         </table>
 
         <!-- Footer -->
-        <div style="border-top: 1px solid #d1d5db; padding-top: 15px; text-align: center; font-size: 14px; color: rgba(13, 43, 78, 0.8); font-weight: bold;">
-          www.sreeraagaresorts.com &nbsp;&nbsp;|&nbsp;&nbsp; info@sreeraagaresorts.com &nbsp;&nbsp;|&nbsp;&nbsp; +91 89045 61155 | +91 89043 81155
+        <div style="border-top: 1px solid #d1d5db; padding-top: 15px; text-align: center; font-size: 14px; color: rgba(13, 43, 78, 0.8); font-weight: bold; line-height: 1.6;">
+          <div>www.sreeraagaresorts.com &nbsp;&nbsp;|&nbsp;&nbsp; info@sreeraagaresorts.com</div>
+          <div style="margin-top: 5px;">+91 89045 61155 &nbsp;&nbsp;|&nbsp;&nbsp; +91 89043 81155</div>
         </div>
       </div>
     `;
