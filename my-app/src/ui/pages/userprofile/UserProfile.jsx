@@ -243,7 +243,7 @@ const UserProfile = () => {
               <button 
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="bg-transparent border border-[#c8a64d] text-[#c8a64d] hover:bg-[#c8a64d] hover:text-white px-4 py-2 rounded-none text-xs font-semibold uppercase tracking-widest transition cursor-pointer"
+                className="bg-[#c8a64d] border border-[#c8a64d] text-white py-4 hover:bg-[#b09141] hover:text-white px-4 py-2 rounded-none text-xs font-semibold uppercase tracking-widest transition cursor-pointer"
               >
                 Edit Profile Details
               </button>
