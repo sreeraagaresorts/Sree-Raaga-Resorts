@@ -3,15 +3,10 @@ import { Link } from "react-router-dom";
 import {
   Calendar,
   Heart,
-  Bell,
-  User,
   ArrowRight,
   Shield,
-  Coffee,
-  MapPin,
   RefreshCw,
   Clock,
-  Settings,
 } from "lucide-react";
 import axios from "axios";
 import { API_URL } from "../../../config/api";
@@ -133,83 +128,46 @@ const UserDashboard = () => {
 
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* PRIVILEGES SECTION */}
-        <div className="lg:col-span-2 space-y-6">
+      {/* RECENT STAYS */}
+      <div className="bg-white border border-gray-200/50 p-6 rounded-none flex flex-col justify-between shadow-sm">
+        <div className="space-y-4">
+          <h3 className="text-xl  font-light text-[#0d2b4e] flex items-center gap-2">
+            <span className="w-1.5 h-6 bg-[#c8a64d] inline-block"></span> Recent Stays
+          </h3>
           
-
-          {/* QUICK LINKS */}
-          <div className="bg-white border border-gray-200/50 p-6 rounded-none shadow-sm">
-            <h3 className="text-xl  font-light text-[#0d2b4e] mb-6 flex items-center gap-2">
-              <span className="w-1.5 h-6 bg-[#c8a64d] inline-block"></span> Quick Actions
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Link to="/dashboard/profile" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
-                <User className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
-                <span className="text-[11px] tracking-wider uppercase font-semibold text-gray-600 block">Edit Profile</span>
-              </Link>
-
-              <Link to="/dashboard/bookings" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
-                <Calendar className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
-                <span className="text-[11px] tracking-wider uppercase font-semibold text-gray-600 block">My Stays</span>
-              </Link>
-
-              <Link to="/dashboard/notifications" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
-                <Bell className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
-                <span className="text-[11px] tracking-wider uppercase font-semibold text-gray-600 block">Alerts</span>
-              </Link>
-
-              <Link to="/dashboard/settings" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
-                <Settings className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
-                <span className="text-[11px] tracking-wider uppercase font-semibold text-gray-600 block">Account</span>
-              </Link>
-            </div>
+          <div className="space-y-3">
+            {bookings.slice(0, 3).map((b) => (
+              <div key={b.id} className="p-4 bg-[#fdfeff] rounded-none border border-gray-200/30 flex justify-between items-center text-xs">
+                <div className="space-y-1">
+                  <h4 className="font-semibold text-[#0d2b4e] tracking-wide text-[17px]">{b.room_name}</h4>
+                  <p className="text-gray-500 font-light">{new Date(b.check_in).toLocaleDateString()}</p>
+                </div>
+                <div className="text-right space-y-1">
+                  <span className="font-bold text-[#c8a64d] block text-[17px]">₹{parseFloat(b.total_price).toLocaleString()}</span>
+                  <span className={`text-[9px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded border ${
+                    b.status === "confirmed" ? "bg-green-50 text-green-700 border-green-200" :
+                    b.status === "checked_in" ? "bg-blue-50 text-blue-700 border-blue-200" :
+                    b.status === "cancelled" ? "bg-red-50 text-red-700 border-red-200" :
+                    "bg-amber-50 text-amber-700 border-amber-200"
+                  }`}>
+                    {b.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+            {bookings.length === 0 && (
+              <div className="text-center py-12 text-gray-500 font-light text-sm">
+                You have no recent booking activities.
+              </div>
+            )}
           </div>
         </div>
 
-        {/* RIGHT COLUMN: RECENT ACTIVITY */}
-        <div className="bg-white border border-gray-200/50 p-6 rounded-none flex flex-col justify-between shadow-sm">
-          <div className="space-y-4">
-            <h3 className="text-xl  font-light text-[#0d2b4e] flex items-center gap-2">
-              <span className="w-1.5 h-6 bg-[#c8a64d] inline-block"></span> Recent Stays
-            </h3>
-            
-            <div className="space-y-3">
-              {bookings.slice(0, 3).map((b) => (
-                <div key={b.id} className="p-4 bg-[#fdfeff] rounded-none border border-gray-200/30 flex justify-between items-center text-xs">
-                  <div className="space-y-1">
-                    <h4 className="font-semibold text-[#0d2b4e] truncate max-w-[120px] sm:max-w-[180px] md:max-w-[220px] tracking-wide text-[17px]">{b.room_name}</h4>
-                    <p className="text-gray-500 font-light">{new Date(b.check_in).toLocaleDateString()}</p>
-                  </div>
-                  <div className="text-right space-y-1">
-                    <span className="font-bold text-[#c8a64d] block text-[17px]">₹{parseFloat(b.total_price).toLocaleString()}</span>
-                    <span className={`text-[9px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded border ${
-                      b.status === "confirmed" ? "bg-green-50 text-green-700 border-green-200" :
-                      b.status === "checked_in" ? "bg-blue-50 text-blue-700 border-blue-200" :
-                      b.status === "cancelled" ? "bg-red-50 text-red-700 border-red-200" :
-                      "bg-amber-50 text-amber-700 border-amber-200"
-                    }`}>
-                      {b.status}
-                    </span>
-                  </div>
-                </div>
-              ))}
-              {bookings.length === 0 && (
-                <div className="text-center py-12 text-gray-500 font-light text-sm">
-                  You have no recent booking activities.
-                </div>
-              )}
-            </div>
-          </div>
-
-          {bookings.length > 0 && (
-            <Link to="/dashboard/bookings" className="text-xs text-[#c8a64d] hover:text-[#b09141] hover:underline flex items-center justify-center gap-1 mt-6 font-semibold uppercase tracking-wider">
-              View All Bookings <ArrowRight size={12} />
-            </Link>
-          )}
-        </div>
-
+        {bookings.length > 0 && (
+          <Link to="/dashboard/bookings" className="text-xs text-[#c8a64d] hover:text-[#b09141] hover:underline flex items-center justify-center gap-1 mt-6 font-semibold uppercase tracking-wider">
+            View All Bookings <ArrowRight size={12} />
+          </Link>
+        )}
       </div>
 
     </div>
