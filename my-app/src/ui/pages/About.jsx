@@ -298,7 +298,7 @@ const About = () => {
               <div key={idx} className="relative overflow-hidden group aspect-[3/4] shadow-md">
                 <WindowReveal src={act.image} alt={act.title} className="w-full h-full" delay={idx * 0.1} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10"></div>
-                <div className="absolute bottom-8 left-0 right-0 z-20 flex flex-col items-center justify-center gap-3 text-center">
+                <div className="absolute bottom-8 left-0 right-0 z-20 flex flex-col items-center justify-center gap-3 text-center text-[#c8a64d]">
                   <img src={act.icon} alt={act.title} className="w-8 h-8 group-hover:scale-110  transition-transform duration-300 object-contain" />
                   <h3 className="text-xl md:text-3xl font-medium font-corm text-white  tracking-wide">
                     {act.title}

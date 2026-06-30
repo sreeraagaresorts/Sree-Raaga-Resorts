@@ -351,13 +351,13 @@ const AdminBookings = () => {
             <table className="w-full text-base border-collapse">
               <thead className="bg-[#071524] text-white/60 text-sm uppercase tracking-wider border-b border-white/10">
                 <tr>
-                  <th className="p-4 text-left font-semibold ">Guest Details</th>
-                  <th className="p-4 text-left font-semibold ">Room booked</th>
-                  <th className="p-4 text-left font-semibold ">Reservation Dates</th>
-                  <th className="p-4 text-left font-semibold ">Amount</th>
-                  <th className="p-4 text-left font-semibold ">Payment</th>
-                  <th className="p-4 text-left font-semibold ">Status</th>
-                  <th className="p-4 text-center font-semibold">Actions</th>
+                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Guest Details</th>
+                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Room booked</th>
+                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Reservation Dates</th>
+                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Amount</th>
+                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Payment</th>
+                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Status</th>
+                  <th className="p-4 text-center font-semibold text-[#c8a64d]">Actions</th>
                 </tr>
               </thead>
               <tbody>

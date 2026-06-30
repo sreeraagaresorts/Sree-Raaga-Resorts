@@ -544,12 +544,12 @@ const AdminBilling = () => {
                   <table className="w-full text-base text-white/70">
                     <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
                       <tr>
-                        <th className="p-3 text-center">Invoice No</th>
-                        <th className="p-3 text-center">Guest Name</th>
-                        <th className="p-3 text-center">Guest Contact</th>
-                        <th className="p-3 text-center">Date Created</th>
-                        <th className="p-3 text-center">Billing Amount</th>
-                        <th className="p-3 text-center">Status</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Invoice No</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Guest Name</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Guest Contact</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Date Created</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Billing Amount</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -564,8 +564,8 @@ const AdminBilling = () => {
                             )}
                           </td>
                           <td className="p-3 text-xs text-white">{inv.createdAt.toLocaleDateString("en-GB")}</td>
-                          <td className="p-3 font-bold text-[#C8A64D]">₹{inv.amount.toLocaleString()}</td>
-                          <td className="p-3 text-center">
+                          <td className="p-3 font-bold text-green-400">₹{inv.amount.toLocaleString()}</td>
+                          <td className="p-3 text-center text-[#c8a64d]">
                             <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
                               inv.status === "Paid Invoice"
                                 ? "bg-green-500/10 text-green-400 border-green-500/20"
@@ -591,18 +591,18 @@ const AdminBilling = () => {
                   <table className="w-full text-base text-white/70">
                     <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
                       <tr>
-                        <th className="p-3 text-center">Payment ID</th>
-                        <th className="p-3 text-center">Booking Ref</th>
-                        <th className="p-3 text-center">Customer</th>
-                        <th className="p-3 text-center">Payment Gateway</th>
-                        <th className="p-3 text-center">Amount Transacted</th>
-                        <th className="p-3 text-center">Payment Status</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Payment ID</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Booking Ref</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Customer</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Payment Gateway</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Amount Transacted</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Payment Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredPayments.map((pay) => (
                         <tr key={pay.id} className="border-t border-white/5 hover:bg-white/5 transition">
-                          <td className="p-3 font-semibold text-white">
+                          <td className="p-3 text-center text-white">
                             <div className="flex items-center justify-center gap-2">
                               <span>{pay.paymentId}</span>
                               <button
@@ -617,11 +617,11 @@ const AdminBilling = () => {
                               </button>
                             </div>
                           </td>
-                          <td className="p-3 font-semibold text-white/50">{pay.bookingId}</td>
-                          <td className="p-3">{pay.customerName}</td>
-                          <td className="p-3 text-xs text-white/50">{pay.gateway}</td>
-                          <td className="p-3 font-bold text-emerald-400">₹{pay.amount.toLocaleString()}</td>
-                          <td className="p-3 text-center">
+                          <td className="p-3 text-center text-white">{pay.bookingId}</td>
+                          <td className="p-3 text-center text-white">{pay.customerName}</td>
+                          <td className="p-3 text-xs text-white text-center">{pay.gateway}</td>
+                          <td className="p-3 font-bold text-center  text-emerald-400">₹{pay.amount.toLocaleString()}</td>
+                          <td className="p-3 text-center text-[#c8a64d]">
                             <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
                               pay.paymentStatus === "Paid"
                                 ? "bg-green-500/10 text-green-400 border-green-500/20"
@@ -647,12 +647,12 @@ const AdminBilling = () => {
                   <table className="w-full text-base text-white/70">
                     <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
                       <tr>
-                        <th className="p-3 text-left">Booking Ref</th>
-                        <th className="p-3 text-left">Guest Name</th>
-                        <th className="p-3 text-left">Guest Contact</th>
-                        <th className="p-3 text-left">Date Created</th>
-                        <th className="p-3 text-left">Amount</th>
-                        <th className="p-3 text-center">Status</th>
+                        <th className="p-3 text-left text-[#c8a64d]">Booking Ref</th>
+                        <th className="p-3 text-left text-[#c8a64d]">Guest Name</th>
+                        <th className="p-3 text-left text-[#c8a64d]">Guest Contact</th>
+                        <th className="p-3 text-left text-[#c8a64d]">Date Created</th>
+                        <th className="p-3 text-left text-[#c8a64d]">Amount</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -661,14 +661,14 @@ const AdminBilling = () => {
                           <td className="p-3 font-semibold text-white">{cancel.bookingId}</td>
                           <td className="p-3">{cancel.customerName}</td>
                           <td className="p-3 text-[16px]">
-                            <div className="text-white/70">{cancel.customerEmail}</div>
+                            <div className="text-white">{cancel.customerEmail}</div>
                             {cancel.customerPhone && (
-                              <div className="text-white/40 mt-1">{formatPhoneNumber(cancel.customerPhone)}</div>
+                              <div className="text-white mt-1">{formatPhoneNumber(cancel.customerPhone)}</div>
                             )}
                           </td>
-                          <td className="p-3 text-xs">{cancel.createdAt.toLocaleDateString("en-GB")}</td>
+                          <td className="p-3 text-xs text-white">{cancel.createdAt.toLocaleDateString("en-GB")}</td>
                           <td className="p-3 font-bold text-red-400">₹{cancel.amount.toLocaleString()}</td>
-                          <td className="p-3 text-center">
+                          <td className="p-3 text-center text-[#c8a64d]">
                             <span className="text-sm px-3 py-1 rounded-full border font-semibold bg-red-500/10 text-red-400 border-red-500/20">
                               Cancelled
                             </span>

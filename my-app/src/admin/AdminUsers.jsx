@@ -253,11 +253,11 @@ const AdminUsers = () => {
               <table className="w-full text-sm">
                 <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider">
                   <tr>
-                    <th className="p-4 text-left font-semibold">Timestamp</th>
-                    <th className="p-4 text-left font-semibold">Administrator</th>
-                    <th className="p-4 text-left font-semibold">Action Type</th>
-                    <th className="p-4 text-left font-semibold">Details</th>
-                    <th className="p-4 text-center font-semibold">Status</th>
+                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Timestamp</th>
+                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Administrator</th>
+                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Action Type</th>
+                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Details</th>
+                    <th className="p-4 text-center font-semibold text-[#c8a64d]">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -266,7 +266,7 @@ const AdminUsers = () => {
                       key={log.id}
                       className="border-t border-white/5 hover:bg-white/5 transition"
                     >
-                      <td className="p-4 text-white/50 text-xs">
+                      <td className="p-4 text-white text-xs">
                         {new Date(log.timestamp).toLocaleString("en-IN")}
                       </td>
                       <td className="p-4 font-semibold text-white/90">{log.adminName}</td>
@@ -281,7 +281,7 @@ const AdminUsers = () => {
                           {log.actionType}
                         </span>
                       </td>
-                      <td className="p-4 text-white/70">{log.details}</td>
+                      <td className="p-4 text-white">{log.details}</td>
                       <td className="p-4 text-center">
                         <span className="text-xs px-2.5 py-0.5 rounded border font-semibold bg-green-500/10 text-green-400 border-green-500/20">
                           {log.status}
@@ -306,12 +306,12 @@ const AdminUsers = () => {
             <table className="w-full text-sm">
               <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider">
                 <tr className="text-center">
-                     <th className="p-4 text-center font-semibold">Guest ID</th>
-                  <th className="p-4 text-center font-semibold">User Name</th>
-                  <th className="p-4 text-center font-semibold">Email</th>
-                  <th className="p-4 text-center font-semibold">Role</th>
-                  <th className="p-4 text-center font-semibold">Registered on</th>
-                  {activeTab === "guests" && <th className="p-4 text-center font-semibold">Actions</th>}
+                     <th className="p-4 text-center font-semibold text-[#c8a64d]">Guest ID</th>
+                  <th className="p-4 text-center font-semibold text-[#c8a64d]">User Name</th>
+                  <th className="p-4 text-center font-semibold text-[#c8a64d]">Email</th>
+                  <th className="p-4 text-center font-semibold text-[#c8a64d]">Role</th>
+                  <th className="p-4 text-center font-semibold text-[#c8a64d]">Registered on</th>
+                  {activeTab === "guests" && <th className="p-4 text-center font-semibold text-[#c8a64d]">Actions</th>}
                 </tr>
               </thead>
               <tbody>
