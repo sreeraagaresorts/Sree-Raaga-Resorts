@@ -56,9 +56,9 @@ const UserBookings = () => {
     const basePrice = totalPrice / 1.18;
     const gstAmount = totalPrice - basePrice;
 
-    const formattedCreated = new Date(booking.created_at).toLocaleDateString();
-    const formattedCheckIn = new Date(booking.check_in).toLocaleDateString();
-    const formattedCheckOut = new Date(booking.check_out).toLocaleDateString();
+    const formattedCreated = new Date(booking.created_at).toLocaleDateString("en-GB");
+    const formattedCheckIn = new Date(booking.check_in).toLocaleDateString("en-GB");
+    const formattedCheckOut = new Date(booking.check_out).toLocaleDateString("en-GB");
 
     const storedUser = localStorage.getItem("user");
     const userObj = storedUser ? JSON.parse(storedUser) : null;
@@ -256,11 +256,11 @@ const UserBookings = () => {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-xs text-gray-500">
                     <div>
                       <p className="text-gray-500 text-[11px] uppercase tracking-widest font-medium">Check In</p>
-                      <p className="font-semibold mt-1  text-[#0d2b4e]">{new Date(booking.check_in).toLocaleDateString()}</p>
+                      <p className="font-semibold mt-1  text-[#0d2b4e]">{new Date(booking.check_in).toLocaleDateString("en-GB")}</p>
                     </div>
                     <div>
                       <p className="text-gray-500 text-[11px] uppercase tracking-widest font-medium">Check Out</p>
-                      <p className="font-semibold mt-1  text-[#0d2b4e]">{new Date(booking.check_out).toLocaleDateString()}</p>
+                      <p className="font-semibold mt-1  text-[#0d2b4e]">{new Date(booking.check_out).toLocaleDateString("en-GB")}</p>
                     </div>
                     <div>
                       <p className="text-gray-500 text-[11px] uppercase tracking-widest font-medium">Guests</p>
@@ -277,7 +277,7 @@ const UserBookings = () => {
                   <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                     <span>Booking ID: BK-{booking.id.toString().padStart(4, "0")}</span>
                     <span className="text-gray-300 hidden sm:inline">|</span>
-                    <span>Booked on: {new Date(booking.created_at).toLocaleDateString()}</span>
+                    <span>Booked on: {new Date(booking.created_at).toLocaleDateString("en-GB")}</span>
                   </div>
                   {(booking.status === "confirmed" || booking.status === "checked_in") && (
                     <button

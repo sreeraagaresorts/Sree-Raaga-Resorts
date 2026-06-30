@@ -172,13 +172,13 @@ const InvoicePage = () => {
             <div>
               <p className="text-[15px] uppercase tracking-wider text-[#0d2b4e]/70 font-semibold">Invoice date:</p>
               <p className="text-[17px] font-bold text-[#0d2b4e] mt-1">
-                {new Date(booking.created_at).toLocaleDateString()}
+                {new Date(booking.created_at).toLocaleDateString("en-GB")}
               </p>
             </div>
             <div className="text-right">
               <p className="text-[15px] uppercase tracking-wider text-[#0d2b4e]/70 font-semibold">Due date:</p>
               <p className="text-[17px] font-bold text-[#0d2b4e] mt-1">
-                {new Date(booking.check_in).toLocaleDateString()}
+                {new Date(booking.check_in).toLocaleDateString("en-GB")}
               </p>
             </div>
           </div>
@@ -219,7 +219,7 @@ const InvoicePage = () => {
                   <td className="py-4 px-4 leading-relaxed border border-gray-300">
                     {booking.room_name} Room Stay<br />
                     <span className="text-[15px] text-[#0d2b4e]/90 mt-1 block font-medium">
-                      {new Date(booking.check_in).toLocaleDateString()} to {new Date(booking.check_out).toLocaleDateString()} ({nights} Nights)
+                      {new Date(booking.check_in).toLocaleDateString("en-GB")} to {new Date(booking.check_out).toLocaleDateString("en-GB")} ({nights} Nights)
                     </span>
                   </td>
                   <td className="py-4 px-4 text-right border border-gray-300">

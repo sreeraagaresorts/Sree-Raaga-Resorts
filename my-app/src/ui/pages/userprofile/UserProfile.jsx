@@ -200,7 +200,7 @@ const UserProfile = () => {
                 <div>
                   <p className="text-gray-500 text-[10px] uppercase tracking-widest font-medium">Member Since</p>
                   <p className="text-[#0d2b4e] font-medium mt-0.5">
-                    {new Date(user.created_at).toLocaleDateString()}
+                    {new Date(user.created_at).toLocaleDateString("en-GB")}
                   </p>
                 </div>
               </div>

@@ -222,7 +222,7 @@ const AdminBilling = () => {
       "Guest Name": inv.customerName,
       "Guest Email": inv.customerEmail,
       "Guest Phone": inv.customerPhone ? formatPhoneNumber(inv.customerPhone) : "N/A",
-      "Date Created": inv.createdAt.toLocaleDateString(),
+      "Date Created": inv.createdAt.toLocaleDateString("en-GB"),
       "Billing Amount (INR)": inv.amount,
       "Status": inv.status
     }));
@@ -241,7 +241,7 @@ const AdminBilling = () => {
       "Guest Name": cancel.customerName,
       "Guest Email": cancel.customerEmail,
       "Guest Phone": cancel.customerPhone ? formatPhoneNumber(cancel.customerPhone) : "N/A",
-      "Date Created": cancel.createdAt.toLocaleDateString(),
+      "Date Created": cancel.createdAt.toLocaleDateString("en-GB"),
       "Amount (INR)": cancel.amount,
       "Status": "Cancelled"
     }));
@@ -563,7 +563,7 @@ const AdminBilling = () => {
                               <div className="text-white mt-1">{formatPhoneNumber(inv.customerPhone)}</div>
                             )}
                           </td>
-                          <td className="p-3 text-xs text-white">{inv.createdAt.toLocaleDateString()}</td>
+                          <td className="p-3 text-xs text-white">{inv.createdAt.toLocaleDateString("en-GB")}</td>
                           <td className="p-3 font-bold text-[#C8A64D]">₹{inv.amount.toLocaleString()}</td>
                           <td className="p-3 text-center">
                             <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
@@ -666,7 +666,7 @@ const AdminBilling = () => {
                               <div className="text-white/40 mt-1">{formatPhoneNumber(cancel.customerPhone)}</div>
                             )}
                           </td>
-                          <td className="p-3 text-xs">{cancel.createdAt.toLocaleDateString()}</td>
+                          <td className="p-3 text-xs">{cancel.createdAt.toLocaleDateString("en-GB")}</td>
                           <td className="p-3 font-bold text-red-400">₹{cancel.amount.toLocaleString()}</td>
                           <td className="p-3 text-center">
                             <span className="text-sm px-3 py-1 rounded-full border font-semibold bg-red-500/10 text-red-400 border-red-500/20">

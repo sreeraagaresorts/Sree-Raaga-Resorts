@@ -131,7 +131,7 @@ const UserDashboard = () => {
               <div key={b.id} className="p-4 bg-[#fdfeff] rounded-none border border-gray-200/30 flex justify-between items-center text-xs">
                 <div className="space-y-1">
                   <h4 className="font-semibold text-[#0d2b4e] tracking-wide text-[17px]">{b.room_name}</h4>
-                  <p className="text-gray-500 font-medium">{new Date(b.check_in).toLocaleDateString()}</p>
+                  <p className="text-gray-500 font-medium">{new Date(b.check_in).toLocaleDateString("en-GB")}</p>
                 </div>
                 <div className="text-right space-y-1">
                   <span className="font-bold text-[#c8a64d] block text-[22px] py-1">₹{parseFloat(b.total_price).toLocaleString()}</span>

@@ -340,7 +340,7 @@ const AdminUsers = () => {
                       </span>
                     </td>
                     <td className="p-4 text-white  text-xs">
-                      {new Date(u.created_at).toLocaleDateString()}
+                      {new Date(u.created_at).toLocaleDateString("en-GB")}
                     </td>
                     {activeTab === "guests" && (
                       <td className="p-4 text-center">

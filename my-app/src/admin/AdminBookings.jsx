@@ -382,9 +382,9 @@ const AdminBookings = () => {
                     {/* DATES */}
                     <td className="p-4 text-[16px] ">
                       <div className="flex items-center gap-">
-                        <span>{new Date(b.check_in).toLocaleDateString()}</span>
+                        <span>{new Date(b.check_in).toLocaleDateString("en-GB")}</span>
                         <ArrowRight className="w-3.5 h-3.5 text-white/30" />
-                        <span>{new Date(b.check_out).toLocaleDateString()}</span>
+                        <span>{new Date(b.check_out).toLocaleDateString("en-GB")}</span>
                       </div>
                       <div className="text-[16px] text-white mt-1">
                         Guests: {b.adults} Adults {b.children > 0 && `, ${b.children} Children`}

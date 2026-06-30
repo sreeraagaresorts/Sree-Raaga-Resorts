@@ -207,7 +207,7 @@ const AdminDashboard = () => {
     room: b.room_name,
     amount: parseFloat(b.total_price),
     status: b.status,
-    date: new Date(b.created_at).toLocaleDateString(),
+    date: new Date(b.created_at).toLocaleDateString("en-GB"),
   }));
 
   if (loading) {
