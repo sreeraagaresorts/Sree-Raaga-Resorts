@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { RefreshCw, Calendar, Users, Maximize, Download } from "lucide-react";
 import { API_URL } from "../../../config/api";
+import html2pdf from "html2pdf.js";
 
 const UserBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -43,7 +44,137 @@ const UserBookings = () => {
   const getImageUrl = (image) => {
     if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
     if (image.startsWith("http")) return image;
-    return `${API_URL}/uploads/${image}`;
+    return `${API_URL}${image}`;
+  };
+
+  const handleDownloadInvoice = (booking) => {
+    const start = new Date(booking.check_in);
+    const end = new Date(booking.check_out);
+    const nights = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) || 1;
+    const totalPrice = parseFloat(booking.total_price || 0);
+    const basePrice = totalPrice / 1.18;
+    const gstAmount = totalPrice - basePrice;
+
+    const formattedCreated = new Date(booking.created_at).toLocaleDateString();
+    const formattedCheckIn = new Date(booking.check_in).toLocaleDateString();
+    const formattedCheckOut = new Date(booking.check_out).toLocaleDateString();
+
+    const storedUser = localStorage.getItem("user");
+    const userObj = storedUser ? JSON.parse(storedUser) : null;
+    const customerName = userObj ? userObj.full_name : "Valued Guest";
+    const customerEmail = userObj ? userObj.email : "";
+    const customerPhone = userObj ? userObj.phone : "";
+
+    const element = document.createElement("div");
+    element.innerHTML = `
+      <div style="font-family: Arial, sans-serif; color: #0d2b4e; padding: 30px; line-height: 1.6; font-size: 15px; background: white;">
+        <!-- Brand & Invoice Number -->
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
+          <tr>
+            <td style="vertical-align: top;">
+              <h2 style="font-family: Georgia, serif; font-size: 34px; color: #0d2b4e; margin: 0; text-transform: uppercase; font-weight: bold; letter-spacing: 2px;">Sree Raaga</h2>
+              <span style="font-size: 14px; text-transform: uppercase; color: #c8a64d; font-weight: bold; letter-spacing: 4px; display: block; margin-top: 5px;">Resorts</span>
+            </td>
+            <td style="text-align: right; vertical-align: top;">
+              <h3 style="font-family: Georgia, serif; font-size: 26px; color: #0d2b4e; margin: 0; font-weight: 300;">Invoice #</h3>
+              <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">BK-${booking.id.toString().padStart(6, "0")}</p>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Dates divider -->
+        <div style="border-top: 1px solid #d1d5db; padding-top: 15px; margin-bottom: 25px;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="vertical-align: top; width: 50%;">
+                <p style="font-size: 13px; color: rgba(13, 43, 78, 0.7); margin: 0; text-transform: uppercase; font-weight: bold;">Invoice date:</p>
+                <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">${formattedCreated}</p>
+              </td>
+              <td style="text-align: right; vertical-align: top; width: 50%;">
+                <p style="font-size: 13px; color: rgba(13, 43, 78, 0.7); margin: 0; text-transform: uppercase; font-weight: bold;">Due date:</p>
+                <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">${formattedCheckIn}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Supplier & Customer -->
+        <div style="border-top: 1px solid #d1d5db; padding-top: 15px; margin-bottom: 30px;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="vertical-align: top; width: 50%;">
+                <h4 style="font-family: Georgia, serif; font-size: 18px; margin: 0 0 8px 0; font-weight: normal; color: #0d2b4e;">Supplier</h4>
+                <p style="font-size: 15px; font-weight: bold; margin: 0; color: #0d2b4e;">Sree Raaga Resorts</p>
+                <p style="font-size: 14px; color: rgba(13, 43, 78, 0.8); margin: 5px 0 0 0; line-height: 1.5;">
+                  123 Luxury Road, SRM District,<br />
+                  Karnataka, 560001, India
+                </p>
+              </td>
+              <td style="text-align: right; vertical-align: top; width: 50%;">
+                <h4 style="font-family: Georgia, serif; font-size: 18px; margin: 0 0 8px 0; font-weight: normal; color: #0d2b4e;">Customer</h4>
+                <p style="font-size: 15px; font-weight: bold; margin: 0; color: #0d2b4e;">${customerName}</p>
+                <p style="font-size: 14px; color: rgba(13, 43, 78, 0.8); margin: 5px 0 0 0; line-height: 1.5;">
+                  ${customerEmail}<br />
+                  ${customerPhone}
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Billing Table -->
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid #d1d5db; margin-bottom: 30px;">
+          <thead>
+            <tr style="background-color: #f8f5ee;">
+              <th style="padding: 10px; border: 1px solid #d1d5db; text-align: left; font-size: 14px; font-weight: bold; color: #0d2b4e; text-transform: uppercase;">Description</th>
+              <th style="padding: 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; font-weight: bold; color: #0d2b4e; text-transform: uppercase;">Price</th>
+              <th style="padding: 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; font-weight: bold; color: #0d2b4e; text-transform: uppercase;">GST (18%)</th>
+              <th style="padding: 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; font-weight: bold; color: #0d2b4e; text-transform: uppercase;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 15px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e; line-height: 1.5;">
+                <strong>${booking.room_name} Room Stay</strong><br />
+                <span style="font-size: 13px; color: rgba(13, 43, 78, 0.7); font-weight: normal; display: block; margin-top: 3px;">
+                  ${formattedCheckIn} to ${formattedCheckOut} (${nights} Nights)
+                </span>
+              </td>
+              <td style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e;">
+                ₹${basePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              </td>
+              <td style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e;">
+                ₹${gstAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              </td>
+              <td style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; font-weight: bold; color: #0d2b4e;">
+                ₹${totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              </td>
+            </tr>
+            <tr style="background-color: #f9fafb; font-weight: bold; font-size: 15px;">
+              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Total Due</td>
+              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e;">
+                ₹${totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Footer -->
+        <div style="border-top: 1px solid #d1d5db; padding-top: 15px; text-align: center; font-size: 14px; color: rgba(13, 43, 78, 0.8); font-weight: bold;">
+          www.sreeraagaresorts.com &nbsp;&nbsp;|&nbsp;&nbsp; info@sreeraagaresorts.com &nbsp;&nbsp;|&nbsp;&nbsp; +91 89045 61155 | +91 89043 81155
+        </div>
+      </div>
+    `;
+
+    const opt = {
+      margin:       15,
+      filename:     `Invoice-BK-${booking.id.toString().padStart(6, '0')}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().from(element).set(opt).save();
   };
 
   const getStatusBadgeClass = (status) => {
@@ -148,14 +279,12 @@ const UserBookings = () => {
                     <span>Booked on: {new Date(booking.created_at).toLocaleDateString()}</span>
                   </div>
                   {(booking.status === "confirmed" || booking.status === "checked_in") && (
-                    <a
-                      href={`/invoice/${booking.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-5 py-3 bg-[#c8a64d] text-white font-bold uppercase tracking-wider text-[10px] hover:bg-[#b09141] transition inline-flex items-center gap-1.5"
+                    <button
+                      onClick={() => handleDownloadInvoice(booking)}
+                      className="px-4 py-2 bg-[#c8a64d] text-white font-semibold uppercase tracking-wider text-[12px] hover:bg-[#b09141] transition inline-flex items-center gap-1.5 cursor-pointer border-0"
                     >
                       <Download className="w-3.5 h-3.5" /> Download Invoice
-                    </a>
+                    </button>
                   )}
                 </div>
               </div>
