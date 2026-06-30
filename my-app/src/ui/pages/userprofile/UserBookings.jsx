@@ -81,8 +81,8 @@ const UserBookings = () => {
               <span style="font-size: 14px; text-transform: uppercase; color: #c8a64d; font-weight: bold; letter-spacing: 4px; display: block; margin-top: 5px;">Resorts</span>
             </td>
             <td style="text-align: right; vertical-align: top;">
-              <h3 style="font-family: Georgia, serif; font-size: 26px; color: #0d2b4e; margin: 0; font-weight: 300;">Invoice #</h3>
-              <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">BK-${booking.id.toString().padStart(6, "0")}</p>
+              <h3 style="font-family: Georgia, serif; font-size: 26px; color: #0d2b4e; margin: 0; font-weight: 300;">Invoice</h3>
+              <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">#BK-${booking.id.toString().padStart(6, "0")}</p>
             </td>
           </tr>
         </table>
