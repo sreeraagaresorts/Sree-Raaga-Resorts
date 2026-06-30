@@ -28,7 +28,6 @@ const ToastCard = ({ id, type, message, duration = 3000, onClose }) => {
       setTimeLeft((prev) => {
         if (prev <= intervalStep) {
           clearInterval(timerRef.current);
-          onClose(id);
           return 0;
         }
         return prev - intervalStep;
@@ -38,7 +37,13 @@ const ToastCard = ({ id, type, message, duration = 3000, onClose }) => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isHovered, id, onClose, duration]);
+  }, [isHovered, duration]);
+
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      onClose(id);
+    }
+  }, [timeLeft, id, onClose]);
 
   // Color config based on the user screenshot
   const config = {

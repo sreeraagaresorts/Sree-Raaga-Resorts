@@ -378,3 +378,62 @@ exports.getAuditLogs = async (req, res) => {
     });
   }
 };
+
+// Get logged in user's wishlist rooms
+exports.getWishlist = async (req, res) => {
+  try {
+    const user = await User.findOne({ id: Number(req.user.id) });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    const Room = require("../models/Room");
+    const wishlistRoomIds = user.wishlist || [];
+    const rooms = await Room.find({ id: { $in: wishlistRoomIds } });
+    res.json({
+      success: true,
+      data: rooms
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Failed to fetch wishlist" });
+  }
+};
+
+// Toggle a room in user's wishlist
+exports.toggleWishlist = async (req, res) => {
+  try {
+    const user = await User.findOne({ id: Number(req.user.id) });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    const roomId = Number(req.body.roomId);
+    if (!roomId) {
+      return res.status(400).json({ success: false, message: "Room ID is required" });
+    }
+
+    if (!user.wishlist) {
+      user.wishlist = [];
+    }
+
+    let added = false;
+    if (user.wishlist.includes(roomId)) {
+      user.wishlist = user.wishlist.filter(id => id !== roomId);
+    } else {
+      user.wishlist.push(roomId);
+      added = true;
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      added,
+      wishlist: user.wishlist,
+      message: added ? "Added to wishlist" : "Removed from wishlist"
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Failed to update wishlist" });
+  }
+};

@@ -11,7 +11,9 @@ const {
   deleteUser,
   changePassword,
   deleteOwnAccount,
-  getAuditLogs
+  getAuditLogs,
+  getWishlist,
+  toggleWishlist
 } = require("../controllers/authController");
 
 const verifyToken = require("../middleware/authMiddleware");
@@ -38,6 +40,9 @@ router.delete(
   verifyToken,
   deleteOwnAccount
 );
+
+router.get("/wishlist", verifyToken, getWishlist);
+router.post("/wishlist/toggle", verifyToken, toggleWishlist);
 
 // Admin-only User Management
 router.get("/users", verifyToken, adminMiddleware, getAllUsers);

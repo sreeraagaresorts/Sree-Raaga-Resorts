@@ -17,10 +17,10 @@ import { motion, AnimatePresence } from "motion/react";
 
 const navItems = [
   { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-  { name: "Profile", path: "/dashboard/profile", icon: User },
-  { name: "My Bookings", path: "/dashboard/bookings", icon: Calendar },
+    { name: "My Bookings", path: "/dashboard/bookings", icon: Calendar },
   { name: "Wishlist", path: "/dashboard/wishlist", icon: Heart },
   { name: "Notifications", path: "/dashboard/notifications", icon: Bell },
+    { name: "Profile", path: "/dashboard/profile", icon: User },
   { name: "Settings", path: "/dashboard/settings", icon: Settings },
 ];
 
@@ -65,7 +65,7 @@ const UserLayout = () => {
     <div className="min-h-screen bg-[#f5f6fa] flex text-[#0d2b4e] user-dashboard-wrapper">
       
       {/* SIDEBAR (Desktop) */}
-      <aside className="w-64 border-r border-[#0d2b4e]/10 hidden lg:flex flex-col bg-[#0d2b4e] min-h-screen sticky top-0">
+      <aside className="w-64 border-r border-[#0d2b4e]/10 hidden lg:flex flex-col bg-[#0d2b4e] h-screen fixed left-0 top-0 z-20">
         
         {/* BRANDING */}
         <div className="p-6">
@@ -199,7 +199,7 @@ const UserLayout = () => {
       </AnimatePresence>
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 flex flex-col min-h-screen">
+      <main className="flex-1 flex flex-col min-h-screen lg:pl-64">
         
         {/* HEADER */}
         <header className="h-16 border-b border-[#0d2b4e]/10 flex items-center justify-between px-4 sm:px-6 bg-white sticky top-0 z-30">

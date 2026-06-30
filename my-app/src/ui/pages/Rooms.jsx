@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "motion/react";
-import { Maximize, Users, Bed, Bath, ArrowRight } from "lucide-react";
+import { Maximize, Users, Bed, Bath, ArrowRight, Heart } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useToast } from "../components/Toast";
 
 import { API_URL } from "../../config/api";
 
@@ -100,9 +101,66 @@ const amenities = [
 ];
 
 const Rooms = () => {
+  const toast = useToast();
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [wishlist, setWishlist] = useState([]);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchUserWishlist = async () => {
+      if (!token) return;
+      try {
+        const response = await fetch(`${API_URL}/api/auth/wishlist`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        if (data.success) {
+          setWishlist(data.data.map(r => r.id));
+        }
+      } catch (err) {
+        console.warn("Failed to fetch user wishlist in Rooms catalog:", err.message);
+      }
+    };
+    fetchUserWishlist();
+  }, [token]);
+
+  const handleWishlistToggle = async (roomId) => {
+    if (!token) {
+      toast.error("Please sign in to add rooms to your wishlist!");
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/api/auth/wishlist/toggle`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ roomId })
+      });
+      const data = await response.json();
+      if (data.success) {
+        if (data.added) {
+          setWishlist(prev => [...prev, roomId]);
+          toast.success("Room added to wishlist!");
+        } else {
+          setWishlist(prev => prev.filter(id => id !== roomId));
+          toast.success("Room removed from wishlist.");
+        }
+      } else {
+        throw new Error(data.message || "Failed to update wishlist");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not update wishlist.");
+    }
+  };
+
+  const isInWishlist = (roomId) => wishlist.includes(roomId);
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -228,24 +286,38 @@ const Rooms = () => {
                 className="group flex flex-col"
               >
                 {/* Room Image Container with Centered Hover circle */}
-                <Link 
-                  to={`/rooms/${room.id || room._id}`} 
-                  className="block relative overflow-hidden  aspect-[76/62] mb-6 shadow-md"
-                >
-                  {/* Subtle overlay */}
-                  <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
-                  
-                  {/* Hover centered circular gold button */}
-                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
-                    <span className="text-sm font-semibold  tracking-[3px]">BOOK NOW</span>
-                  </div>
+                <div className="relative overflow-hidden aspect-[76/62] mb-6 shadow-md">
+                  <Link 
+                    to={`/rooms/${room.id || room._id}`} 
+                    className="block w-full h-full animate-none"
+                  >
+                    {/* Subtle overlay */}
+                    <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
+                    
+                    {/* Hover centered circular gold button */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
+                      <span className="text-sm font-semibold  tracking-[3px]">BOOK NOW</span>
+                    </div>
 
-                  <img
-                    src={getImageUrl(room.image)}
-                    alt={room.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </Link>
+                    <img
+                      src={getImageUrl(room.image)}
+                      alt={room.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </Link>
+
+                  {/* Heart / Wishlist Toggle */}
+                  <button 
+                    onClick={() => handleWishlistToggle(room.id)}
+                    className="absolute top-4 right-4 p-2 bg-white/70 hover:bg-white rounded-full text-[#0d2b4e] hover:text-[#c8a64d] transition-all duration-300 z-30 shadow-sm cursor-pointer border-0"
+                    title={isInWishlist(room.id) ? "Remove from Wishlist" : "Add to Wishlist"}
+                  >
+                    <Heart 
+                      size={18} 
+                      className={isInWishlist(room.id) ? "fill-rose-500 text-rose-500" : "text-[#0d2b4e]"} 
+                    />
+                  </button>
+                </div>
 
                 {/* Card Text Content */}
                 <div className="flex flex-col flex-grow select-none">
@@ -358,7 +430,7 @@ const Rooms = () => {
         {/* ================= FOLLOW US ON INSTAGRAM SECTION ================= */}
         <section className=" bg-[#fdfeff]">
           <div className="py-10 text-center mb-16 select-none">
-           <span class="text-[#c8a64d] uppercase tracking-[4px] text-xs font-jost font-semibold block mb-2">Social Media</span>
+           <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-jost font-semibold block mb-2">Social Media</span>
             <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
               Follow us on Instagram
             </h2>
