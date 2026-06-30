@@ -456,3 +456,52 @@ exports.toggleWishlist = async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to update wishlist" });
   }
 };
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { full_name, email, phone } = req.body;
+    const userId = Number(req.user.id);
+
+    if (email) {
+      const existingUser = await User.findOne({ email, id: { $ne: userId } });
+      if (existingUser) {
+        return res.status(400).json({
+          success: false,
+          message: "Email address is already in use by another account."
+        });
+      }
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { id: userId },
+      { $set: { full_name, email, phone } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Profile updated successfully.",
+      user: {
+        id: updatedUser.id,
+        full_name: updatedUser.full_name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        role: updatedUser.role,
+        created_at: updatedUser.created_at
+      }
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update profile."
+    });
+  }
+};

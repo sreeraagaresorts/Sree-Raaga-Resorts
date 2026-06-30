@@ -6,6 +6,7 @@ const {
   register,
   login,
   getProfile,
+  updateProfile,
   getAllUsers,
   updateUserRole,
   deleteUser,
@@ -27,6 +28,12 @@ router.get(
   "/profile",
   verifyToken,
   getProfile
+);
+
+router.put(
+  "/profile",
+  verifyToken,
+  updateProfile
 );
 
 router.put(
