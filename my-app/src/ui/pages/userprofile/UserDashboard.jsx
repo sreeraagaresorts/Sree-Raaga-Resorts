@@ -67,8 +67,8 @@ const UserDashboard = () => {
       {/* WELCOME HERO */}
       <div className="bg-white border border-[#0d2b4e]/10 p-8 rounded-none flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm relative">
         <div className="space-y-2">
-          <span className="text-[#c8a64d] text-[14px] uppercase tracking-[2px] font-medium block">Guest Privileges</span>
-          <h1 className="text-3xl md:text-4xl  font-bold text-[#0d2b4e]">
+      
+          <h1 className="text-3xl md:text-4xl   text-[#0d2b4e]">
             Welcome Back, <span className="italic text-[#c8a64d] font-normal">{user ? user.full_name : "Guest"}</span>
           </h1>
           <p className="text-gray-500 text-sm max-w-2xl font-medium leading-relaxed">
