@@ -334,13 +334,32 @@ exports.changePassword = async (req, res) => {
 
 exports.deleteOwnAccount = async (req, res) => {
   try {
-    const user = await User.findOneAndDelete({ id: Number(req.user.id) });
+    const { password } = req.body;
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is required to delete your account."
+      });
+    }
+
+    const user = await User.findOne({ id: Number(req.user.id) });
     if (!user) {
       return res.status(404).json({
         success: false,
         message: "User not found"
       });
     }
+
+    const bcrypt = require("bcryptjs");
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect password. Account deletion aborted."
+      });
+    }
+
+    await User.findOneAndDelete({ id: Number(req.user.id) });
 
     // Send account deleted email in background
     const { sendAccountDeletedEmail } = require("../utils/email");

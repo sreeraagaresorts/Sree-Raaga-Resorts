@@ -75,7 +75,7 @@ const UserDashboard = () => {
           <h1 className="text-3xl md:text-4xl  font-light text-[#0d2b4e]">
             Welcome Back, <span className="italic text-[#c8a64d] font-normal">{user ? user.full_name : "Guest"}</span>
           </h1>
-          <p className="text-gray-500 text-sm max-w-2xl font-light leading-relaxed">
+          <p className="text-gray-500 text-sm max-w-2xl font-medium leading-relaxed">
             Welcome to your personal sanctuary. Manage your premium resort stays, coordinate upcoming events, and access exclusive member amenities.
           </p>
         </div>
@@ -147,22 +147,22 @@ const UserDashboard = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Link to="/dashboard/profile" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
                 <User className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
-                <span className="text-[10px] tracking-wider uppercase font-semibold text-gray-600 block">Edit Profile</span>
+                <span className="text-[11px] tracking-wider uppercase font-semibold text-gray-600 block">Edit Profile</span>
               </Link>
 
               <Link to="/dashboard/bookings" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
                 <Calendar className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
-                <span className="text-[10px] tracking-wider uppercase font-semibold text-gray-600 block">My Stays</span>
+                <span className="text-[11px] tracking-wider uppercase font-semibold text-gray-600 block">My Stays</span>
               </Link>
 
               <Link to="/dashboard/notifications" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
                 <Bell className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
-                <span className="text-[10px] tracking-wider uppercase font-semibold text-gray-600 block">Alerts</span>
+                <span className="text-[11px] tracking-wider uppercase font-semibold text-gray-600 block">Alerts</span>
               </Link>
 
               <Link to="/dashboard/settings" className="p-5 bg-[#fdfeff] border border-gray-200/30 rounded-none text-center hover:border-[#c8a64d]/40 transition group">
                 <Settings className="mx-auto text-[#c8a64d] mb-2 group-hover:scale-110 transition" />
-                <span className="text-[10px] tracking-wider uppercase font-semibold text-gray-600 block">Account</span>
+                <span className="text-[11px] tracking-wider uppercase font-semibold text-gray-600 block">Account</span>
               </Link>
             </div>
           </div>
@@ -179,11 +179,11 @@ const UserDashboard = () => {
               {bookings.slice(0, 3).map((b) => (
                 <div key={b.id} className="p-4 bg-[#fdfeff] rounded-none border border-gray-200/30 flex justify-between items-center text-xs">
                   <div className="space-y-1">
-                    <h4 className="font-semibold text-[#0d2b4e] truncate max-w-[120px] sm:max-w-[180px] md:max-w-[220px] tracking-wide">{b.room_name}</h4>
+                    <h4 className="font-semibold text-[#0d2b4e] truncate max-w-[120px] sm:max-w-[180px] md:max-w-[220px] tracking-wide text-[17px]">{b.room_name}</h4>
                     <p className="text-gray-500 font-light">{new Date(b.check_in).toLocaleDateString()}</p>
                   </div>
                   <div className="text-right space-y-1">
-                    <span className="font-bold text-[#c8a64d] block">₹{parseFloat(b.total_price).toLocaleString()}</span>
+                    <span className="font-bold text-[#c8a64d] block text-[17px]">₹{parseFloat(b.total_price).toLocaleString()}</span>
                     <span className={`text-[9px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded border ${
                       b.status === "confirmed" ? "bg-green-50 text-green-700 border-green-200" :
                       b.status === "checked_in" ? "bg-blue-50 text-blue-700 border-blue-200" :

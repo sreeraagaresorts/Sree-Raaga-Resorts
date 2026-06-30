@@ -112,13 +112,13 @@ const Register = () => {
             </p>
           </div>
 
-          <h2 className="text-2xl font-light text-center mb-6 hidden md:block text-white">
+          <h2 className="text-3xl font-light text-center mb-6 hidden md:block text-white">
             Create Account
           </h2>
 
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
-              <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1 font-semibold">
+              <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1 font-semibold">
                 Full Name
               </label>
               <input
@@ -136,7 +136,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1 font-semibold">
+              <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1 font-semibold">
                 Email Address
               </label>
               <input
@@ -154,7 +154,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1 font-semibold">
+              <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1 font-semibold">
                 Phone Number
               </label>
               <input
@@ -188,7 +188,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1 font-semibold">
+              <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1 font-semibold">
                 Password
               </label>
               <div className="relative">
@@ -215,7 +215,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1 font-semibold">
+              <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1 font-semibold">
                 Confirm Password
               </label>
               <div className="relative">
@@ -250,7 +250,7 @@ const Register = () => {
             </button>
           </form>
 
-          <div className="mt-6 text-center text-gray-400 text-xs">
+          <div className="mt-6 text-center text-gray-400 text-lg">
             Already have an account?{" "}
             <Link to="/login" className="text-yellow-500 hover:underline">
               Sign In

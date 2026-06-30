@@ -83,7 +83,7 @@ const UserWishlist = () => {
         <div className="bg-white border border-gray-200/50 rounded-none p-12 text-center text-gray-500 font-light shadow-sm">
           <Heart size={40} className="mx-auto text-rose-500/50 mb-3" />
           <p className="text-lg font-medium">Your wishlist is empty.</p>
-          <p className="text-xs mt-1 text-gray-400">Explore our luxury rooms and save your favorites here!</p>
+          <p className="text-xs mt-1 text-gray-600 font-medium">Explore our luxury rooms and save your favorites here!</p>
           <Link to="/rooms" className="mt-4 inline-block bg-[#c8a64d] text-white px-6 py-2.5 rounded-none font-semibold text-xs uppercase tracking-widest hover:bg-[#b09141] transition shadow-sm">
             Browse Rooms
           </Link>

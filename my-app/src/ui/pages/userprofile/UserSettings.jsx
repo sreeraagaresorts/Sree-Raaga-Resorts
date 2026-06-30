@@ -18,6 +18,7 @@ const UserSettings = () => {
 
   const [updatingPassword, setUpdatingPassword] = useState(false);
   const [deletingAccount, setDeletingAccount] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
 
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -62,6 +63,11 @@ const UserSettings = () => {
   };
 
   const handleDeleteAccount = async () => {
+    if (!deletePassword) {
+      toast.error("Please enter your password to deactivate your account.");
+      return;
+    }
+
     const confirmDelete = window.confirm(
       "Are you sure you want to permanently delete your account? This action is irreversible, and your profile and bookings will be deleted."
     );
@@ -75,8 +81,12 @@ const UserSettings = () => {
       const response = await fetch(`${API_URL}/api/auth/delete-account`, {
         method: "DELETE",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
-        }
+        },
+        body: JSON.stringify({
+          password: deletePassword
+        })
       });
 
       const data = await response.json();
@@ -108,7 +118,7 @@ const UserSettings = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* SETTINGS LINKS/TABS */}
+        {/* SETTINGS LINKS/TABS
         <div className="bg-white border border-gray-200/50 p-5 rounded-none shadow-sm h-fit space-y-3">
           <p className="text-[10px] text-[#c8a64d] uppercase tracking-widest px-3 font-semibold">Preferences</p>
           <div className="text-xs text-gray-500 space-y-1">
@@ -116,21 +126,21 @@ const UserSettings = () => {
             <p className="px-3 py-2.5 hover:bg-[#fdfeff] hover:text-[#c8a64d] rounded-none cursor-pointer uppercase tracking-wider text-[10px]">Notification Subscriptions</p>
             <p className="px-3 py-2.5 hover:bg-[#fdfeff] hover:text-[#c8a64d] rounded-none cursor-pointer uppercase tracking-wider text-[10px]">Privacy & Data</p>
           </div>
-        </div>
+        </div> */}
 
         {/* FORMS */}
         <div className="lg:col-span-2 space-y-6">
           
           {/* PASSWORD RESET CARD */}
           <div className="bg-white border border-gray-200/50 p-6 rounded-none shadow-sm space-y-6">
-            <h3 className="text-xs font-bold text-[#c8a64d] uppercase tracking-widest flex items-center gap-2 border-b border-gray-200/50 pb-3">
+            <h3 className="text-sm font-bold text-[#c8a64d] uppercase tracking-widest flex items-center gap-2 border-b border-gray-200/50 pb-3">
               <Lock size={14} /> Change Password
             </h3>
 
             <form onSubmit={handlePasswordChange} className="space-y-4 text-xs font-light">
               
               <div>
-                <label className="block text-gray-500 mb-2 uppercase tracking-wider text-[10px]">Current Password</label>
+                <label className="block text-gray-500 mb-2 uppercase tracking-wider text-[12px] font-medium">Current Password</label>
                 <div className="relative">
                   <input 
                     type={showCurrent ? "text" : "password"} 
@@ -151,7 +161,7 @@ const UserSettings = () => {
               </div>
 
               <div>
-                <label className="block text-gray-500 mb-2 uppercase tracking-wider text-[10px]">New Password</label>
+                <label className="block text-gray-500 mb-2 uppercase tracking-wider text-[12px] font-medium">New Password</label>
                 <div className="relative">
                   <input 
                     type={showNew ? "text" : "password"} 
@@ -172,7 +182,7 @@ const UserSettings = () => {
               </div>
 
               <div>
-                <label className="block text-gray-500 mb-2 uppercase tracking-wider text-[10px]">Confirm New Password</label>
+                <label className="block text-gray-500 mb-2 uppercase tracking-wider text-[12px] font-medium">Confirm New Password</label>
                 <div className="relative">
                   <input 
                     type={showConfirm ? "text" : "password"} 
@@ -196,7 +206,7 @@ const UserSettings = () => {
                 <button 
                   type="submit" 
                   disabled={updatingPassword}
-                  className="bg-[#c8a64d] text-white px-6 py-3 rounded-none font-semibold uppercase tracking-widest text-[10px] hover:bg-[#b09141] transition cursor-pointer shadow-sm flex items-center gap-2 disabled:bg-[#c8a64d]/60"
+                  className="bg-[#c8a64d] text-white px-6 py-3 rounded-none font-semibold uppercase tracking-widest text-[14px] hover:bg-[#b09141] transition cursor-pointer shadow-sm flex items-center gap-2 disabled:bg-[#c8a64d]/60"
                 >
                   {updatingPassword ? (
                     <>
@@ -221,7 +231,7 @@ const UserSettings = () => {
               <div className="flex justify-between items-center">
                 <div className="space-y-1">
                   <h4 className="font-semibold text-[#0d2b4e] tracking-wide uppercase text-xs">Email Subscriptions</h4>
-                  <p className="text-gray-500 text-[10px] leading-relaxed">Receive booking confirmations, itinerary invoices, and receipt updates via email.</p>
+                  <p className="text-gray-500 text-[14px] font-medium leading-relaxed">Receive booking confirmations, itinerary invoices, and receipt updates via email.</p>
                 </div>
                 <input 
                   type="checkbox" 
@@ -231,7 +241,7 @@ const UserSettings = () => {
                 />
               </div>
 
-              <div className="flex justify-between items-center border-t border-gray-200/50 pt-4">
+              {/* <div className="flex justify-between items-center border-t border-gray-200/50 pt-4">
                 <div className="space-y-1">
                   <h4 className="font-semibold text-[#0d2b4e] tracking-wide uppercase text-xs">SMS Booking Updates</h4>
                   <p className="text-gray-500 text-[10px] leading-relaxed">Receive SMS text notifications on status updates (Confirmations, Cancellations, Check-ins).</p>
@@ -242,7 +252,7 @@ const UserSettings = () => {
                   onChange={() => setSmsAlerts(!smsAlerts)}
                   className="w-4 h-4 accent-[#c8a64d] cursor-pointer"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -251,24 +261,38 @@ const UserSettings = () => {
             <h3 className="text-xs font-bold text-red-600 uppercase tracking-widest flex items-center gap-2 border-b border-red-200 pb-3">
               <AlertTriangle size={14} /> Danger Zone
             </h3>
-            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 text-xs font-light">
+            <div className="space-y-4 text-xs font-light">
               <div className="space-y-1">
                 <h4 className="font-semibold text-red-800 tracking-wide uppercase text-xs">Deactivate Guest Account</h4>
-                <p className="text-gray-500 text-[10px]">Permanently remove your profile details and archive booking logs.</p>
+                <p className="text-gray-500 font-medium text-[14px]">Permanently remove your profile details and archive booking logs.</p>
               </div>
-              <button 
-                onClick={handleDeleteAccount}
-                disabled={deletingAccount}
-                className="bg-red-600 text-white px-5 py-2.5 rounded-none font-bold uppercase tracking-widest text-[10px] hover:bg-red-700 transition cursor-pointer shadow-sm flex items-center gap-2 disabled:bg-red-600/60"
-              >
-                {deletingAccount ? (
-                  <>
-                    <RefreshCw size={12} className="animate-spin" /> Deleting...
-                  </>
-                ) : (
-                  "Delete Account"
-                )}
-              </button>
+              
+              <div className="pt-3 border-t border-red-200/50 space-y-2">
+                <label className="block text-red-800 uppercase tracking-wider text-[12px] font-semibold">Confirm Password to Delete Account</label>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input 
+                    type="password" 
+                    required
+                    placeholder="Enter your current password"
+                    value={deletePassword}
+                    onChange={(e) => setDeletePassword(e.target.value)}
+                    className="flex-1 bg-white border border-red-200 rounded-none p-3 text-[#0d2b4e] outline-none focus:border-red-500 transition text-xs"
+                  />
+                  <button 
+                    onClick={handleDeleteAccount}
+                    disabled={deletingAccount || !deletePassword}
+                    className="bg-red-600 text-white px-6 py-3 rounded-none font-bold uppercase tracking-widest text-[12px] hover:bg-red-700 transition cursor-pointer shadow-sm flex items-center justify-center gap-2 disabled:bg-red-600/40 shrink-0"
+                  >
+                    {deletingAccount ? (
+                      <>
+                        <RefreshCw size={12} className="animate-spin" /> Deleting...
+                      </>
+                    ) : (
+                      "Confirm Delete"
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 

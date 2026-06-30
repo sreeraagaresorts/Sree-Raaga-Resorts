@@ -102,13 +102,13 @@ const handleLogin = async (e) => {
             </p>
           </div>
 
-          <h2 className="text-2xl font-light text-center mb-6 hidden md:block text-white">
+          <h2 className="text-3xl font-light text-center mb-6 hidden md:block text-white">
             User Login
           </h2>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1.5 font-semibold">
+              <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1.5 font-semibold">
                 Email Address
               </label>
               <input
@@ -121,7 +121,7 @@ const handleLogin = async (e) => {
             </div>
 
             <div>
-              <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1.5 font-semibold">
+              <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1.5 font-semibold">
                 Password
               </label>
               <div className="relative">
@@ -151,7 +151,7 @@ const handleLogin = async (e) => {
             </button>
           </form>
 
-          <div className="mt-6 text-center text-gray-400 text-xs">
+          <div className="mt-6 text-center text-gray-400 text-lg">
             Don't have an account?{" "}
             <Link to="/register" className="text-yellow-500 hover:underline">
               Sign Up
@@ -161,7 +161,7 @@ const handleLogin = async (e) => {
           <div className="mt-3 text-center">
             <Link
               to="/forgot-password"
-              className="text-xs text-gray-500 hover:text-yellow-500 transition"
+              className="text-sm text-gray-100 hover:text-yellow-500 transition"
             >
               Forgot Password?
             </Link>

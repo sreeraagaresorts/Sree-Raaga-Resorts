@@ -58,11 +58,11 @@ const UserProfile = () => {
           <div className="w-24 h-24 rounded-full bg-[#c8a64d] text-white flex items-center justify-center font-bold text-3xl shadow-md mb-4">
             {user.full_name.charAt(0).toUpperCase()}
           </div>
-          <h2 className="text-xl  font-light text-[#0d2b4e] truncate max-w-full">{user.full_name}</h2>
+          <h2 className="text-xl  font-medium text-[#0d2b4e] truncate max-w-full">{user.full_name}</h2>
           <p className="text-[#c8a64d] text-[10px] uppercase tracking-widest mt-2 font-medium">
             {user.role === "admin" ? "Resort Admin" : "Gold Guest Member"}
           </p>
-          <div className="w-full border-t border-gray-200/50 mt-6 pt-4 text-[10px] text-gray-500 flex justify-center gap-1.5 items-center uppercase tracking-wider font-light">
+          <div className="w-full border-t border-gray-200/50 mt-6 pt-4 text-[11px] text-gray-500 flex justify-center gap-1.5 items-center uppercase tracking-wider font-medium">
             <ShieldCheck size={14} className="text-[#c8a64d]" />
             <span>Account Verified</span>
           </div>

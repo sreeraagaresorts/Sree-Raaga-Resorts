@@ -19,7 +19,7 @@ const navItems = [
   { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "My Bookings", path: "/dashboard/bookings", icon: Calendar },
   { name: "Wishlist", path: "/dashboard/wishlist", icon: Heart },
-  { name: "Notifications", path: "/dashboard/notifications", icon: Bell },
+  // { name: "Notifications", path: "/dashboard/notifications", icon: Bell },
     { name: "Profile", path: "/dashboard/profile", icon: User },
   { name: "Settings", path: "/dashboard/settings", icon: Settings },
 ];
