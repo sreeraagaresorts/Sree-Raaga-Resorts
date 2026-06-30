@@ -236,7 +236,7 @@ const Menu = () => {
                 {idx > 0 && <span className="hidden md:inline text-[#c8a64d]/60 text-[24px] mt-0.5">•</span>}
                 <button
                   onClick={() => setSelectedCategory(cat)}
-                  className={`hover:text-[#c8a64d] transition font-corm cursor-pointer ${
+                  className={`hover:text-[#c8a64d] transition font-corm text-[24px] cursor-pointer ${
                     selectedCategory === cat ? "text-[#c8a64d]" : "text-gray-800"
                   }`}
                 >
@@ -265,7 +265,7 @@ const Menu = () => {
               <button
                 type="button"
                 onClick={() => setDietFilter("all")}
-                className={`px-4 py-2 rounded-full border text-[10px] uppercase tracking-wider font-bold transition flex items-center gap-1 cursor-pointer ${
+                className={`px-4 py-2 rounded-full border text-[14px] uppercase tracking-wider font-bold transition flex items-center gap-1 cursor-pointer ${
                   dietFilter === "all"
                     ? "bg-[#c8a64d] text-black border-[#c8a64d]"
                     : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
@@ -276,7 +276,7 @@ const Menu = () => {
               <button
                 type="button"
                 onClick={() => setDietFilter("veg")}
-                className={`px-4 py-2 rounded-full border text-[10px] uppercase tracking-wider font-bold transition flex items-center gap-2 cursor-pointer ${
+                className={`px-4 py-2 rounded-full border text-[14px] uppercase tracking-wider font-bold transition flex items-center gap-2 cursor-pointer ${
                   dietFilter === "veg"
                     ? "bg-green-50 text-green-700 border-green-300"
                     : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
@@ -288,7 +288,7 @@ const Menu = () => {
               <button
                 type="button"
                 onClick={() => setDietFilter("nonveg")}
-                className={`px-4 py-2 rounded-full border text-[10px] uppercase tracking-wider font-bold transition flex items-center gap-2 cursor-pointer ${
+                className={`px-4 py-2 rounded-full border text-[14px] uppercase tracking-wider font-bold transition flex items-center gap-2 cursor-pointer ${
                   dietFilter === "nonveg"
                     ? "bg-red-50 text-red-700 border-red-300"
                     : "bg-white text-gray-500 border-gray-200 hover:border-gray-400"
