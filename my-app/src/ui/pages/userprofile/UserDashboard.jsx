@@ -137,29 +137,7 @@ const UserDashboard = () => {
         
         {/* PRIVILEGES SECTION */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white border border-gray-200/50 p-6 rounded-none space-y-6 shadow-sm">
-            <h3 className="text-xl  font-light text-[#0d2b4e] flex items-center gap-2">
-              <span className="w-1.5 h-6 bg-[#c8a64d] inline-block"></span> Guest Privileges & Amenities
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-[#fdfeff] p-5 rounded-none border border-gray-200/30 flex gap-4 items-start">
-                <Coffee className="text-[#c8a64d] shrink-0 mt-0.5" />
-                <div className="space-y-1">
-                  <h4 className="font-semibold text-sm text-[#c8a64d] tracking-wide uppercase text-xs">Complimentary Breakfast</h4>
-                  <p className="text-xs text-gray-500 leading-relaxed font-light">Every premium suite reservation includes a gourmet buffet breakfast curated by our executive culinary team.</p>
-                </div>
-              </div>
-
-              <div className="bg-[#fdfeff] p-5 rounded-none border border-gray-200/30 flex gap-4 items-start">
-                <MapPin className="text-[#c8a64d] shrink-0 mt-0.5" />
-                <div className="space-y-1">
-                  <h4 className="font-semibold text-sm text-[#c8a64d] tracking-wide uppercase text-xs">Airport Shuttle Pickup</h4>
-                  <p className="text-xs text-gray-500 leading-relaxed font-light">Arrange direct airport transport to/from Kochi International Airport. Coordinate shuttle times via profile settings.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          
 
           {/* QUICK LINKS */}
           <div className="bg-white border border-gray-200/50 p-6 rounded-none shadow-sm">
