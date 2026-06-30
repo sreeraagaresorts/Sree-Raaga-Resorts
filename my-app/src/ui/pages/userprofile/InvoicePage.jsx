@@ -139,7 +139,7 @@ const InvoicePage = () => {
         </button>
         <button
           onClick={() => window.print()}
-          className="flex items-center gap-2 bg-[#0d2b4e] text-white px-5 py-2.5 text-xs uppercase tracking-widest font-semibold hover:bg-black transition cursor-pointer border-0"
+          className="flex items-center gap-2 bg-[#0d2b4e] text-white px-5 py-3 text-xs uppercase tracking-widest font-semibold hover:bg-black transition cursor-pointer border-0"
         >
           <Printer className="w-4 h-4" /> Download Invoice
         </button>
