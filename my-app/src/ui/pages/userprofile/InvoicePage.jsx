@@ -262,7 +262,7 @@ const InvoicePage = () => {
           </div>
 
           {/* Footer details */}
-          <div className="pt-6 border-t border-gray-300 text-[15px] text-[#0d2b4e]/80 font-semibold text-center flex flex-wrap justify-center items-center gap-x-4 md:gap-x-6 gap-y-2">
+          <div className="pt-6 border-t border-gray-300 text-[14px] text-[#0d2b4e]/80 font-semibold text-center flex flex-wrap justify-center items-center gap-x-4 md:gap-x-6 gap-y-2">
             <span>www.sreeraagaresorts.com</span>
             <span className="text-[#c8a64d] font-normal no-print">|</span>
             <span>info@sreeraagaresorts.com</span>
