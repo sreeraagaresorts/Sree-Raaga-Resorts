@@ -159,10 +159,10 @@ const InvoicePage = () => {
             </div>
             <div className="text-right">
               <h3 className="text-3xl font-serif text-[#0d2b4e] font-light">
-                Invoice #
+                Invoice 
               </h3>
               <p className="text-[17px] font-semibold tracking-wider text-[#0d2b4e] mt-1.5">
-                BK-{booking.id.toString().padStart(6, "0")}
+                #BK-{booking.id.toString().padStart(6, "0")}
               </p>
             </div>
           </div>
