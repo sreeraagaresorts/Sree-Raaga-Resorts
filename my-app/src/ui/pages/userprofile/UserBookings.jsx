@@ -44,7 +44,8 @@ const UserBookings = () => {
   const getImageUrl = (image) => {
     if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
     if (image.startsWith("http")) return image;
-    return `${API_URL}${image}`;
+    if (image.startsWith("/uploads/")) return `${API_URL}${image}`;
+    return `${API_URL}/uploads/${image}`;
   };
 
   const handleDownloadInvoice = (booking) => {
