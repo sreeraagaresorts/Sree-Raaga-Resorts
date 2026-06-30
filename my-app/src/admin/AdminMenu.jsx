@@ -524,17 +524,17 @@ const handleSaveCategory = () => {
                   </div>
 
                   {/* ACTION BUTTONS */}
-                  <div className="p-5 pt-0 border-t border-white/5 flex justify-end gap-2 mt-4">
+                  <div className="flex gap-2 p-5 border-t border-white/5 mt-4">
                     <button
                       onClick={() => openEditModal(dish)}
-                      className="p-2 bg-yellow-500/10 text-[#C8A64D] hover:bg-yellow-500/20 rounded transition cursor-pointer"
+                      className="flex-1 bg-white/10 py-2 rounded-lg flex items-center justify-center hover:bg-white/20 transition cursor-pointer text-sm text-[#C8A64D]"
                       title="Edit Dish"
                     >
-                      <Edit2 size={16} />
+                      <Edit2 size={14} className="mr-1" /> Edit
                     </button>
                     <button
                       onClick={() => handleDelete(dish.id)}
-                      className="px-3 py-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded transition cursor-pointer text-xs font-semibold"
+                      className="flex-1 bg-red-500/10 text-red-400 py-2 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition cursor-pointer text-sm"
                       title="Delete Dish"
                     >
                       Delete
