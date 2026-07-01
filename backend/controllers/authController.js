@@ -103,6 +103,19 @@ exports.login = async (req, res) => {
       console.error("[Email Error] Failed to send login alert:", err);
     });
 
+    // Log admin login to AuditLog
+    if (user.role === "admin") {
+      try {
+        await AuditLog.create({
+          adminName: user.full_name,
+          actionType: "Login",
+          details: `Logged in successfully`
+        });
+      } catch (logErr) {
+        console.error("[AuditLog Error] Failed to log admin login:", logErr);
+      }
+    }
+
     res.json({
       success: true,
       token,

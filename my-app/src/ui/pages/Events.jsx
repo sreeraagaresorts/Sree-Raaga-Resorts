@@ -214,7 +214,7 @@ function WaterSportsIcon({ className = "" }) {
                           </div>
 
                           {/* Description */}
-                          <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mb-8 font-medium font-jost whitespace-pre-line line-clamp-2">
+                          <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mb-8 font-medium font-jost whitespace-pre-line line-clamp-3">
                             {event.description}
                           </p>
                         </div>

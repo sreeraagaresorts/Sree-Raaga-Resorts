@@ -275,6 +275,8 @@ const AdminUsers = () => {
                           className={`text-xs px-2.5 py-0.5 rounded border font-semibold inline-flex items-center gap-1 ${
                             log.actionType === "User Deletion"
                               ? "bg-red-500/10 text-red-400 border-red-500/20"
+                              : log.actionType === "Login"
+                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                               : "bg-amber-500/10 text-amber-400 border-amber-500/20"
                           }`}
                         >
@@ -306,7 +308,7 @@ const AdminUsers = () => {
             <table className="w-full text-sm">
               <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider">
                 <tr className="text-center">
-                     <th className="p-4 text-center font-semibold text-[#c8a64d]">Guest ID</th>
+                  <th className="p-4 text-center font-semibold text-[#c8a64d]">Guest ID</th>
                   <th className="p-4 text-center font-semibold text-[#c8a64d]">User Name</th>
                   <th className="p-4 text-center font-semibold text-[#c8a64d]">Email</th>
                   <th className="p-4 text-center font-semibold text-[#c8a64d]">Role</th>
@@ -321,12 +323,11 @@ const AdminUsers = () => {
                     className="border-t border-white/5 text-center hover:bg-white/5 transition"
                   >
                     <td className="p-4 font-semibold text-white">
-                     
                       <span className="text-[16px] text-white block"> #{u.id}</span>
                     </td>
-                       <td className="p-4 font-semibold text-white">
- {u.full_name}
-                       </td>
+                    <td className="p-4 font-semibold text-white">
+                      {u.full_name}
+                    </td>
                     <td className="p-4 text-white">{u.email} <br></br> {formatPhoneNumber(u.phone)}</td>
                     <td className="p-4">
                       <span

@@ -281,12 +281,10 @@ const handleEnquiry = async (e) => {
                 <h3 className="text-3xl font-medium font-corm text-[#0d2b4e]">
                   About Event & Celebration
                 </h3>
-                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed whitespace-pre-line line-clamp-2 break-words">
+                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed text-justify ">
                   {event.description}
                 </p>
-                <p className="text-gray-500 text-xs md:text-[17px] leading-relaxed">
-                  Make your celebrations extraordinary at Sree Raaga Resorts. We specialize in custom decorations, bespoke seating arrangements, high-speed audio-visual setups, and delicious catering systems designed to ensure your guests have an unforgettable resort experience.
-                </p>
+        
               </div>
 
               <hr className="border-gray-200/60" />
