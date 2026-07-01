@@ -21,6 +21,7 @@ const AdminDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [roomsCount, setRoomsCount] = useState(0);
   const [usersCount, setUsersCount] = useState(0);
+  const [users, setUsers] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,7 @@ const AdminDashboard = () => {
       });
       const uData = await uRes.json();
       if (uData.success) {
+        setUsers(uData.data);
         setUsersCount(uData.data.length);
       }
     } catch (err) {
@@ -78,29 +80,117 @@ const AdminDashboard = () => {
   const getMetrics = () => {
     let totalRevenue = 0;
     let todaysRevenue = 0;
+    let yesterdaysRevenue = 0;
     let pendingPayments = 0;
     let checkedInCount = 0;
 
     const todayStr = new Date().toDateString();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toDateString();
+    const now = new Date();
+
+    const getDaysAgo = (n) => {
+      const d = new Date();
+      d.setDate(d.getDate() - n);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    };
+
+    const sevenDaysAgo = getDaysAgo(7);
+    const fourteenDaysAgo = getDaysAgo(14);
+
+    let occupancyLastWeek = 0;
+
+    let pendingThisWeek = 0;
+    let pendingLastWeek = 0;
 
     bookings.forEach((b) => {
-      const price = parseFloat(b.total_price);
+      const price = parseFloat(b.total_price) || 0;
       if (b.status === "confirmed" || b.status === "checked_in") {
         totalRevenue += price;
         const bookingDate = new Date(b.created_at).toDateString();
         if (bookingDate === todayStr) {
           todaysRevenue += price;
+        } else if (bookingDate === yesterdayStr) {
+          yesterdaysRevenue += price;
         }
       } else if (b.status === "pending") {
         pendingPayments += price;
+
+        // Pending trends
+        const createdDate = new Date(b.created_at);
+        if (createdDate >= sevenDaysAgo && createdDate <= now) {
+          pendingThisWeek += price;
+        } else if (createdDate >= fourteenDaysAgo && createdDate < sevenDaysAgo) {
+          pendingLastWeek += price;
+        }
       }
 
       if (b.status === "checked_in") {
         checkedInCount += 1;
       }
+
+      // Occupancy 7 days ago (confirmed/checked_in/completed bookings active 7 days ago)
+      if (b.status === "confirmed" || b.status === "checked_in" || b.status === "completed") {
+        const checkInDate = new Date(b.check_in);
+        const checkOutDate = new Date(b.check_out);
+        if (checkInDate <= sevenDaysAgo && checkOutDate >= sevenDaysAgo) {
+          occupancyLastWeek += 1;
+        }
+      }
     });
 
     const occupancyRate = roomsCount > 0 ? Math.round((checkedInCount / roomsCount) * 100) : 0;
+
+    // Calculate trends
+    // 1. Revenue (Today's Revenue vs Yesterday's Revenue)
+    let revenueTrendVal = 0;
+    if (yesterdaysRevenue > 0) {
+      revenueTrendVal = ((todaysRevenue - yesterdaysRevenue) / yesterdaysRevenue) * 100;
+    } else if (todaysRevenue > 0) {
+      revenueTrendVal = 100;
+    }
+    const revenueTrend = `${revenueTrendVal >= 0 ? "+" : ""}${revenueTrendVal.toFixed(1)}%`;
+    const revenueTrendPositive = revenueTrendVal >= 0;
+
+    // 2. Occupancy
+    let occupancyTrendVal = 0;
+    if (occupancyLastWeek > 0) {
+      occupancyTrendVal = ((checkedInCount - occupancyLastWeek) / occupancyLastWeek) * 100;
+    } else if (checkedInCount > 0) {
+      occupancyTrendVal = 100;
+    }
+    const occupancyTrend = `${occupancyTrendVal >= 0 ? "+" : ""}${occupancyTrendVal.toFixed(1)}%`;
+    const occupancyTrendPositive = occupancyTrendVal >= 0;
+
+    // 3. Pending
+    let pendingTrendVal = 0;
+    if (pendingLastWeek > 0) {
+      pendingTrendVal = ((pendingThisWeek - pendingLastWeek) / pendingLastWeek) * 100;
+    } else if (pendingThisWeek > 0) {
+      pendingTrendVal = 100;
+    }
+    const pendingTrend = `${pendingTrendVal >= 0 ? "+" : ""}${pendingTrendVal.toFixed(1)}%`;
+    const pendingTrendPositive = pendingTrendVal >= 0;
+
+    // 4. Users
+    let usersLastWeek = 0;
+    users.forEach((u) => {
+      const createdDate = new Date(u.created_at);
+      if (createdDate < sevenDaysAgo) {
+        usersLastWeek += 1;
+      }
+    });
+    let usersTrendVal = 0;
+    const usersThisWeek = users.length;
+    if (usersLastWeek > 0) {
+      usersTrendVal = ((usersThisWeek - usersLastWeek) / usersLastWeek) * 100;
+    } else if (usersThisWeek > 0) {
+      usersTrendVal = 100;
+    }
+    const usersTrend = `${usersTrendVal >= 0 ? "+" : ""}${usersTrendVal.toFixed(1)}%`;
+    const usersTrendPositive = usersTrendVal >= 0;
 
     return {
       totalRevenue,
@@ -108,6 +198,14 @@ const AdminDashboard = () => {
       pendingPayments,
       occupancyRate,
       checkedInCount,
+      revenueTrend,
+      revenueTrendPositive,
+      occupancyTrend,
+      occupancyTrendPositive,
+      pendingTrend,
+      pendingTrendPositive,
+      usersTrend,
+      usersTrendPositive
     };
   };
 
@@ -163,8 +261,9 @@ const AdminDashboard = () => {
       label: "Today's Revenue", 
       value: `₹${metrics.todaysRevenue.toLocaleString()}`, 
       icon: IndianRupee, 
-      trend: "+12.5%", 
-      isPositive: true,
+      trend: metrics.revenueTrend, 
+      isPositive: metrics.revenueTrendPositive,
+      trendLabel: "vs yesterday",
       bgClass: "bg-[#062419]/80 border border-green-500/20",
       iconBgClass: "bg-green-500/10 border border-green-500/10",
       iconColorClass: "text-green-400"
@@ -173,8 +272,8 @@ const AdminDashboard = () => {
       label: "Room Occupancy", 
       value: `${metrics.checkedInCount} ${metrics.checkedInCount === 1 ? 'Room' : 'Rooms'}`, 
       icon: BedDouble, 
-      trend: "-2.1%", 
-      isPositive: false,
+      trend: metrics.occupancyTrend, 
+      isPositive: metrics.occupancyTrendPositive,
       bgClass: "bg-[#061f24]/80 border border-cyan-500/20",
       iconBgClass: "bg-cyan-500/10 border border-cyan-500/10",
       iconColorClass: "text-cyan-400"
@@ -183,8 +282,8 @@ const AdminDashboard = () => {
       label: "Pending Payments", 
       value: `₹${metrics.pendingPayments.toLocaleString()}`, 
       icon: Wallet, 
-      trend: "-8.1%", 
-      isPositive: false,
+      trend: metrics.pendingTrend, 
+      isPositive: metrics.pendingTrendPositive,
       bgClass: "bg-[#241a06]/80 border border-amber-500/20",
       iconBgClass: "bg-amber-500/10 border border-amber-500/10",
       iconColorClass: "text-amber-400"
@@ -193,8 +292,8 @@ const AdminDashboard = () => {
       label: "Registered Users", 
       value: usersCount.toString(), 
       icon: Users, 
-      trend: "+4.3%", 
-      isPositive: true,
+      trend: metrics.usersTrend, 
+      isPositive: metrics.usersTrendPositive,
       bgClass: "bg-[#061f24]/80 border border-cyan-500/20",
       iconBgClass: "bg-cyan-500/10 border border-cyan-500/10",
       iconColorClass: "text-cyan-400"
@@ -252,7 +351,7 @@ const AdminDashboard = () => {
                   ) : (
                     <TrendingDown className="w-3 h-3" />
                   )}
-                  {stat.trend} <span className="text-white/40 ml-1">vs last week</span>
+                  {stat.trend} <span className="text-white/40 ml-1">{stat.trendLabel || "vs last week"}</span>
                 </div>
               </div>
 
