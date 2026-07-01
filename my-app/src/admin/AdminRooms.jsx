@@ -278,7 +278,7 @@ const AdminRooms = () => {
   };
 
   return (
-    <div className="space-y-6 text-white max-w-7xl mx-auto">
+    <div className="space-y-6 text-white max-w-[180vh] mx-auto">
       {/* HEADER */}
       <div className="flex justify-between items-center border-b border-white/5 pb-6">
         <div>
@@ -322,7 +322,7 @@ const AdminRooms = () => {
         {/* Changed grid to lg:grid-cols-4 to spread inputs horizontally and reduce height */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Total Rooms</label>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Number of Rooms</label>
             <input 
               required 
               placeholder="e.g. 40" 
@@ -600,6 +600,10 @@ const AdminRooms = () => {
                       <p className="text-white text-[16px] line-clamp-2">
                         {room.description}
                       </p>
+
+                      <div className="text-[14px] text-white/80 font-medium">
+                        Number of Rooms: <span className="text-[#C8A64D] font-bold">{room.totalRooms || room.roomNumber}</span>
+                      </div>
 
                       {/* INFO */}
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[14px] text-white border-t border-white/10 pt-3">
