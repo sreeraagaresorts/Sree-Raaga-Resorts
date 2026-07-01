@@ -604,22 +604,22 @@ const AdminBilling = () => {
                         <tr key={pay.id} className="border-t border-white/5 hover:bg-white/5 transition">
                           <td className="p-3 text-center text-white">
                             <div className="flex items-center justify-center gap-2">
-                              <span>{pay.paymentId}</span>
+                              <span className='text-[16px]'>{pay.paymentId}</span>
                               <button
                                 onClick={() => {
                                   navigator.clipboard.writeText(pay.paymentId);
                                   toast.success("Payment ID copied to clipboard!");
                                 }}
-                                className="p-1 text-white/50 hover:text-[#C8A64D] hover:bg-white/5 rounded transition cursor-pointer bg-transparent border-0"
+                                className="p-1 text-white/50  hover:text-[#C8A64D] hover:bg-white/5 rounded transition cursor-pointer bg-transparent border-0"
                                 title="Copy Payment ID"
                               >
                                 <Copy className="w-3.5 h-3.5" />
                               </button>
                             </div>
                           </td>
-                          <td className="p-3 text-center text-white">{pay.bookingId}</td>
+                          <td className="p-3 text-center text-[16px] text-white">{pay.bookingId}</td>
                           <td className="p-3 text-center text-white">{pay.customerName}</td>
-                          <td className="p-3 text-xs text-white text-center">{pay.gateway}</td>
+                          <td className="p-3 text-[16px] text-white text-center">{pay.gateway}</td>
                           <td className="p-3 font-bold text-center  text-emerald-400">₹{pay.amount.toLocaleString()}</td>
                           <td className="p-3 text-center text-[#c8a64d]">
                             <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
