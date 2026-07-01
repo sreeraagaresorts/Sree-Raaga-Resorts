@@ -149,7 +149,7 @@ exports.createBooking = async (req, res) => {
       const emailPayload = {
         ...booking.toObject(),
         room_name: room ? room.name : null,
-        room_number: room ? room.roomNumber : null,
+        room_number: booking.room_number || "Not Assigned",
         guest_name: user ? user.full_name : null,
         guest_email: user ? user.email : null
       };
@@ -368,7 +368,7 @@ exports.updateBookingStatus = async (req, res) => {
       const emailPayload = {
         ...updatedBooking.toObject(),
         room_name: room ? room.name : null,
-        room_number: room ? room.roomNumber : null,
+        room_number: updatedBooking.room_number || "Not Assigned",
         guest_name: user ? user.full_name : null,
         guest_email: user ? user.email : null
       };
@@ -417,6 +417,11 @@ exports.deleteBooking = async (req, res) => {
     }
 
     await Booking.findOneAndDelete({ id: Number(id) });
+
+    // Release physical room status back to Available
+    if (booking.room_number) {
+      await syncRoomUnitStatus(booking.room_id, booking.room_number, "cancelled");
+    }
 
     // Send cancel notification email in background
     try {
@@ -669,7 +674,7 @@ exports.verifyRazorpayPayment = async (req, res) => {
       const emailPayload = {
         ...booking.toObject(),
         room_name: room ? room.name : null,
-        room_number: room ? room.roomNumber : null,
+        room_number: booking.room_number || "Not Assigned",
         guest_name: user ? user.full_name : null,
         guest_email: user ? user.email : null
       };
