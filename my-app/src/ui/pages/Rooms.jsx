@@ -162,28 +162,35 @@ const Rooms = () => {
 
   const isInWishlist = (roomId) => wishlist.includes(roomId);
 
-  useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/rooms`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch rooms");
-        }
-        const data = await response.json();
-        if (data.success) {
-          setRooms(data.data);
-        } else {
-          throw new Error(data.message || "Failed to fetch rooms");
-        }
-      } catch (err) {
-        // Fallback gracefully without showing error banner to users
-        console.warn("API offline, falling back to mock rooms:", err.message);
-      } finally {
-        setLoading(false);
+  const fetchRooms = async (silent = false) => {
+    if (!silent) setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/api/rooms`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch rooms");
       }
-    };
+      const data = await response.json();
+      if (data.success) {
+        setRooms(data.data);
+      } else {
+        throw new Error(data.message || "Failed to fetch rooms");
+      }
+    } catch (err) {
+      console.warn("API offline, falling back to mock rooms:", err.message);
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchRooms();
+
+    // Auto-refresh rooms silently every 10 seconds
+    const interval = setInterval(() => {
+      fetchRooms(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const getImageUrl = (image) => {
@@ -296,7 +303,7 @@ const Rooms = () => {
                     
                     {/* Hover centered circular gold button */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
-                      <span className="text-sm font-semibold  tracking-[3px]">BOOK NOW</span>
+                      <span className="text-sm font-semibold  tracking-[3px]">{room.availableRooms === 0 ? "SOLD OUT" : "BOOK NOW"}</span>
                     </div>
 
                     <img
@@ -327,9 +334,16 @@ const Rooms = () => {
                         {room.name}
                       </h3>
                       {room.category && (
-                        <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block mt-1.5 uppercase">
-                          {room.category}
-                        </span>
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block uppercase">
+                            {room.category}
+                          </span>
+                          {room.availableRooms === 0 && (
+                            <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                              Sold Out
+                            </span>
+                          )}
+                        </div>
                       )}
                     </div>
                     <div className="text-right ">
@@ -350,7 +364,7 @@ const Rooms = () => {
                     </div>
                     <div className="flex items-center">
                       <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.guests || "2 Guests"} Guests</span>
+                      <span>{room.guests || "2 Guests"} </span>
                     </div>
                     <div className="flex items-center">
                       <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
@@ -358,7 +372,7 @@ const Rooms = () => {
                     </div>
                     <div className="flex items-center">
                       <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.bathrooms || "1 Bath"} Bathroom</span>
+                      <span>{room.bathrooms || "1 Bath"} </span>
                     </div>
                   </div>
 
@@ -374,7 +388,7 @@ const Rooms = () => {
                       className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d]  text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
                     >
                       <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
-                        Book now
+                        {room.availableRooms === 0 ? "Sold Out" : "Book now"}
                       </span>
                       <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
                     </Link>

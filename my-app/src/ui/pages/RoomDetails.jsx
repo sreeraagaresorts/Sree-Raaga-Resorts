@@ -128,6 +128,9 @@ const RoomDetails = () => {
   const [extraService1, setExtraService1] = useState(false); // Service per Booking (₹1000)
   const [extraService2, setExtraService2] = useState(false); // Service per Person Daily (₹1200)
   
+  const [availability, setAvailability] = useState(null);
+  const [checkingAvailability, setCheckingAvailability] = useState(false);
+  
   // Custom dropdown open states
   const [isRoomsOpen, setIsRoomsOpen] = useState(false);
   const [isAdultsOpen, setIsAdultsOpen] = useState(false);
@@ -173,6 +176,37 @@ const RoomDetails = () => {
 
     fetchRoomDetails();
   }, [id]);
+
+  useEffect(() => {
+    const checkRoomAvailability = async (silent = false) => {
+      if (!checkIn || !checkOut || !room) {
+        setAvailability(null);
+        return;
+      }
+      if (!silent) setCheckingAvailability(true);
+      try {
+        const response = await fetch(`${API_URL}/api/rooms/${room.id || room._id}/availability?check_in=${checkIn}&check_out=${checkOut}`);
+        const data = await response.json();
+        if (data.success) {
+          setAvailability(data);
+        } else {
+          setAvailability(null);
+        }
+      } catch (err) {
+        console.warn("Failed to check availability:", err.message);
+        setAvailability(null);
+      } finally {
+        if (!silent) setCheckingAvailability(false);
+      }
+    };
+    checkRoomAvailability();
+
+    const interval = setInterval(() => {
+      checkRoomAvailability(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [checkIn, checkOut, room]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -271,6 +305,12 @@ const RoomDetails = () => {
     const end = new Date(checkOut);
     if (end <= start) {
       toast.error("Check-out date must be after check-in date.");
+      return;
+    }
+
+    const isSoldOut = availability && (availability.available === false || rooms > availability.remainingRooms);
+    if (isSoldOut) {
+      toast.error("Booking failed. This room type is fully booked for the selected dates.");
       return;
     }
 
@@ -502,7 +542,7 @@ const RoomDetails = () => {
                   </div>
                   <div className="flex items-center">
                     <Users className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                    <span>{room.guests || "2 Guests"} Guests</span>
+                    <span>{room.guests || "2 Guests"} </span>
                   </div>
                   <div className="flex items-center">
                     <Bed className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
@@ -972,6 +1012,19 @@ const RoomDetails = () => {
                         For {totals.nights} Nights Stay
                       </span>
                     )}
+                    {checkingAvailability ? (
+                      <span className="text-gray-400 text-xs block text-right">Checking availability...</span>
+                    ) : availability ? (
+                      availability.available && availability.remainingRooms >= rooms ? (
+                        <span className="text-emerald-600 text-xs font-semibold block text-right">
+                          Available! ({availability.remainingRooms} of {availability.totalRooms} rooms left)
+                        </span>
+                      ) : (
+                        <span className="text-rose-600 text-xs font-semibold block text-right">
+                          Sold Out / Booking Full for these dates!
+                        </span>
+                      )
+                    ) : null}
                   </div>
 
                   {/* Booking Trigger CTA */}
@@ -982,10 +1035,10 @@ const RoomDetails = () => {
                   ) : (
                     <button
                       onClick={handleBooking}
-                      disabled={bookingLoading}
+                      disabled={bookingLoading || (availability && (availability.available === false || rooms > availability.remainingRooms))}
                       className="w-full mt-4 py-5 bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-[17px] shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
                     >
-                      {bookingLoading ? "Processing..." : `BOOK YOUR STAY NOW`}
+                      {bookingLoading ? "Processing..." : availability && (availability.available === false || rooms > availability.remainingRooms) ? "BOOKING FULL" : `BOOK YOUR STAY NOW`}
                     </button>
                   )}
 
@@ -1072,7 +1125,7 @@ const RoomDetails = () => {
                       </div>
                       <div className="flex items-center">
                         <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                        <span className="text-black">{item.bathrooms || "1 Bath"} Bathroom</span>
+                        <span className="text-black">{item.bathrooms || "1 Bath"} </span>
                       </div>
                     </div>
                   </div>

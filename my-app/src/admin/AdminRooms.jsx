@@ -198,6 +198,7 @@ const AdminRooms = () => {
 
       const formData = new FormData();
       formData.append("roomNumber", roomNumber);
+      formData.append("totalRooms", roomNumber);
       formData.append("name", name);
       formData.append("price", price);
       formData.append("category", category);
@@ -321,10 +322,10 @@ const AdminRooms = () => {
         {/* Changed grid to lg:grid-cols-4 to spread inputs horizontally and reduce height */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Number</label>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Total Rooms</label>
             <input 
               required 
-              placeholder="e.g. 101" 
+              placeholder="e.g. 40" 
               value={roomNumber} 
               onChange={(e) => setRoomNumber(e.target.value)} 
               className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
@@ -587,11 +588,9 @@ const AdminRooms = () => {
                             </span>
                           )}
                         </div>
-                        {room.roomNumber && (
-                          <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
-                            Room {room.roomNumber}
-                          </span>
-                        )}
+                        <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
+                          {room.availableRooms !== undefined ? `Available: ${room.availableRooms}/${room.totalRooms}` : `Rooms: ${room.roomNumber}`}
+                        </span>
                       </div>
 
                       <p className="text-[#C8A64D] font-bold text-[18px]">

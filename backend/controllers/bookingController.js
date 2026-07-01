@@ -69,6 +69,31 @@ exports.createBooking = async (req, res) => {
     }
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     const roomCount = Number(rooms) || 1;
+
+
+    // Check availability
+    const totalRooms = room.totalRooms || 1;
+
+    const overlappingBookings = await Booking.find({
+      room_id: room.id,
+      status: { $ne: "cancelled" },
+      $or: [
+        { check_in: { $lt: end }, check_out: { $gt: start } }
+      ]
+    });
+
+    let bookedRoomsCount = 0;
+    overlappingBookings.forEach(b => {
+      bookedRoomsCount += b.rooms || 1;
+    });
+
+    if (bookedRoomsCount + roomCount > totalRooms) {
+      return res.status(400).json({
+        success: false,
+        message: `Only ${Math.max(0, totalRooms - bookedRoomsCount)} room(s) of type "${room.name}" are available for these dates.`
+      });
+    }
+
     const total_price = nights * roomPrice * roomCount;
 
     const booking = new Booking({
@@ -372,12 +397,37 @@ exports.createRazorpayOrder = async (req, res) => {
       });
     }
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-    const roomCount = Number(rooms) || 1;
-    const total_price = nights * roomPrice * roomCount;
 
     const Razorpay = require("razorpay");
     const key_id = process.env.RAZORPAY_KEY_ID || "rzp_test_mockkeyid12";
     const key_secret = process.env.RAZORPAY_KEY_SECRET || "rzp_test_mocksecret12";
+
+    const roomCount = Number(rooms) || 1;
+
+    // Check availability
+    const totalRooms = room.totalRooms || 1;
+
+    const overlappingBookings = await Booking.find({
+      room_id: room.id,
+      status: { $ne: "cancelled" },
+      $or: [
+        { check_in: { $lt: end }, check_out: { $gt: start } }
+      ]
+    });
+
+    let bookedRoomsCount = 0;
+    overlappingBookings.forEach(b => {
+      bookedRoomsCount += b.rooms || 1;
+    });
+
+    if (bookedRoomsCount + roomCount > totalRooms) {
+      return res.status(400).json({
+        success: false,
+        message: `Only ${Math.max(0, totalRooms - bookedRoomsCount)} room(s) of type "${room.name}" are available for these dates.`
+      });
+    }
+
+    const total_price = nights * roomPrice * roomCount;
 
     const razorpay = new Razorpay({
       key_id,
@@ -470,6 +520,30 @@ exports.verifyRazorpayPayment = async (req, res) => {
     const differenceInTime = end.getTime() - start.getTime();
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     const roomCount = Number(rooms) || 1;
+
+    // Check availability
+    const totalRooms = room.totalRooms || 1;
+
+    const overlappingBookings = await Booking.find({
+      room_id: room.id,
+      status: { $ne: "cancelled" },
+      $or: [
+        { check_in: { $lt: end }, check_out: { $gt: start } }
+      ]
+    });
+
+    let bookedRoomsCount = 0;
+    overlappingBookings.forEach(b => {
+      bookedRoomsCount += b.rooms || 1;
+    });
+
+    if (bookedRoomsCount + roomCount > totalRooms) {
+      return res.status(400).json({
+        success: false,
+        message: `Only ${Math.max(0, totalRooms - bookedRoomsCount)} room(s) of type "${room.name}" are available for these dates.`
+      });
+    }
+
     const total_price = nights * roomPrice * roomCount;
 
     const booking = new Booking({

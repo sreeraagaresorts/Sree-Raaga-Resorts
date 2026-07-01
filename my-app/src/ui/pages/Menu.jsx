@@ -46,6 +46,12 @@ const Menu = () => {
     fetchRooms();
     fetchCategories();
     
+    // Auto-refresh menu silently every 10 seconds
+    const interval = setInterval(() => {
+      fetchDishes(true);
+      fetchRooms();
+    }, 10000);
+    
     // Autofill name and email from logged in user if available
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -57,6 +63,8 @@ const Menu = () => {
         }
       } catch (e) {}
     }
+
+    return () => clearInterval(interval);
   }, []);
 
   const fetchCategories = async () => {
@@ -71,8 +79,8 @@ const Menu = () => {
     }
   };
 
-  const fetchDishes = async () => {
-    setLoading(true);
+  const fetchDishes = async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const response = await fetch(`${API_URL}/api/dishes`);
       if (!response.ok) {
@@ -87,7 +95,7 @@ const Menu = () => {
     } catch (e) {
       setError(e.message);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 

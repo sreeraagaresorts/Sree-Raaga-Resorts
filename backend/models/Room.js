@@ -9,6 +9,7 @@ const roomSchema = new mongoose.Schema({
   image: { type: String },
   images: { type: [String], default: [] },
   category: { type: String, default: "Executive Rooms" },
+  totalRooms: { type: Number, default: 1 },
   area: { type: String },
   beds: { type: String },
   bathrooms: { type: String },

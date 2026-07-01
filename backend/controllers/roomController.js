@@ -21,10 +21,33 @@ exports.getRooms = async (req, res) => {
   try {
     const rooms = await Room.find({}).sort({ id: -1 });
 
+    const Booking = require("../models/Booking");
+    const populatedRooms = await Promise.all(
+      rooms.map(async (room) => {
+        // Find active bookings (pending, confirmed, checked_in) where checkout has not passed
+        const activeBookings = await Booking.find({
+          room_id: room.id,
+          status: { $in: ["pending", "confirmed", "checked_in"] },
+          check_out: { $gte: new Date() }
+        });
+
+        let bookedRoomsCount = 0;
+        activeBookings.forEach((b) => {
+          bookedRoomsCount += b.rooms || 1;
+        });
+
+        return {
+          ...room.toObject(),
+          bookedRoomsCount,
+          availableRooms: Math.max(0, (room.totalRooms || 1) - bookedRoomsCount)
+        };
+      })
+    );
+
     res.json({
       success: true,
-      count: rooms.length,
-      data: rooms
+      count: populatedRooms.length,
+      data: populatedRooms
     });
   } catch (error) {
     console.log(error);
@@ -53,9 +76,27 @@ exports.getRoom = async (req, res) => {
       });
     }
 
+    const Booking = require("../models/Booking");
+    const activeBookings = await Booking.find({
+      room_id: room.id,
+      status: { $in: ["pending", "confirmed", "checked_in"] },
+      check_out: { $gte: new Date() }
+    });
+
+    let bookedRoomsCount = 0;
+    activeBookings.forEach((b) => {
+      bookedRoomsCount += b.rooms || 1;
+    });
+
+    const roomData = {
+      ...room.toObject(),
+      bookedRoomsCount,
+      availableRooms: Math.max(0, (room.totalRooms || 1) - bookedRoomsCount)
+    };
+
     res.json({
       success: true,
-      data: room
+      data: roomData
     });
   } catch (error) {
     res.status(500).json({
@@ -76,7 +117,8 @@ exports.createRoom = async (req, res) => {
       beds,
       bathrooms,
       guests,
-      description
+      description,
+      totalRooms
     } = req.body;
 
     if (!roomNumber) {
@@ -114,6 +156,7 @@ exports.createRoom = async (req, res) => {
       image,
       images: extraImages,
       category: category || "Executive Rooms",
+      totalRooms: Number(totalRooms) || 1,
       area: area || null,
       beds: beds || null,
       bathrooms: bathrooms || null,
@@ -156,7 +199,8 @@ exports.updateRoom = async (req, res) => {
       beds,
       bathrooms,
       guests,
-      description
+      description,
+      totalRooms
     } = req.body;
 
     if (!roomNumber) {
@@ -187,6 +231,7 @@ exports.updateRoom = async (req, res) => {
       name,
       price: parseFloat(price),
       category: category || "Executive Rooms",
+      totalRooms: Number(totalRooms) || 1,
       area: area || null,
       beds: beds || null,
       bathrooms: bathrooms || null,
@@ -296,6 +341,91 @@ exports.deleteRoom = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Delete Failed"
+    });
+  }
+};
+
+exports.getRoomAvailability = async (req, res) => {
+  try {
+    const idParam = req.params.id;
+    const { check_in, check_out } = req.query;
+
+    if (!check_in || !check_out) {
+      return res.status(400).json({
+        success: false,
+        message: "check_in and check_out dates are required"
+      });
+    }
+
+    const start = new Date(check_in);
+    const end = new Date(check_out);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid date format"
+      });
+    }
+
+    if (end <= start) {
+      return res.status(400).json({
+        success: false,
+        message: "check_out must be after check_in"
+      });
+    }
+
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(idParam)) {
+      query = { $or: [{ _id: idParam }, { id: isNaN(Number(idParam)) ? null : Number(idParam) }] };
+    } else {
+      query = { id: isNaN(Number(idParam)) ? null : Number(idParam) };
+    }
+    const room = await Room.findOne(query);
+
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        message: "Room not found"
+      });
+    }
+
+    const Booking = require("../models/Booking");
+
+    // Count how many total rooms exist in database with the same name
+    const totalRooms = await Room.countDocuments({ name: room.name });
+
+    // Find all overlapping bookings for rooms with this name
+    const matchingRooms = await Room.find({ name: room.name });
+    const roomIds = matchingRooms.map(r => r.id);
+
+    const overlappingBookings = await Booking.find({
+      room_id: { $in: roomIds },
+      status: { $ne: "cancelled" },
+      $or: [
+        { check_in: { $lt: end }, check_out: { $gt: start } }
+      ]
+    });
+
+    let bookedRoomsCount = 0;
+    overlappingBookings.forEach(booking => {
+      bookedRoomsCount += booking.rooms || 1;
+    });
+
+    const isAvailable = bookedRoomsCount < totalRooms;
+
+    res.json({
+      success: true,
+      name: room.name,
+      totalRooms,
+      bookedRoomsCount,
+      remainingRooms: Math.max(0, totalRooms - bookedRoomsCount),
+      available: isAvailable
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error checking availability"
     });
   }
 };
