@@ -70,6 +70,7 @@ app.use("/api/settings", require("./routes/settingsRoutes"));
 app.use("/api/dishes", require("./routes/dishRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/categories", require("./routes/categoryRoutes"));
+app.use("/api/room-categories", require("./routes/roomCategoryRoutes"));
 
 // Add your remaining routes here
 

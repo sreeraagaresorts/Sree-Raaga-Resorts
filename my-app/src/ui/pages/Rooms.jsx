@@ -103,6 +103,7 @@ const amenities = [
 const Rooms = () => {
   const toast = useToast();
   const [rooms, setRooms] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [wishlist, setWishlist] = useState([]);
@@ -185,9 +186,23 @@ const Rooms = () => {
   useEffect(() => {
     fetchRooms();
 
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/room-categories`);
+        const data = await res.json();
+        if (data.success) {
+          setCategories(data.data);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch room categories:", err.message);
+      }
+    };
+    fetchCategories();
+
     // Auto-refresh rooms silently every 10 seconds
     const interval = setInterval(() => {
       fetchRooms(true);
+      fetchCategories();
     }, 10000);
 
     return () => clearInterval(interval);
@@ -225,6 +240,30 @@ const Rooms = () => {
       return roomCat.includes(lowerParam) || lowerParam.includes(roomCat);
     });
   }, [displayRooms, categoryParam]);
+
+  const villasRooms = React.useMemo(() => {
+    return filteredRooms.filter((room) => {
+      const lowerCat = (room.category || "").toLowerCase().trim();
+      if (lowerCat === "villas" || lowerCat === "villa") return true;
+      const cat = categories.find(c => c.name.toLowerCase() === lowerCat);
+      if (cat) {
+        return (cat.parent || "").toLowerCase() === "villas" || cat.name.toLowerCase() === "villas";
+      }
+      return lowerCat.includes("villa") || lowerCat.includes("cottage");
+    });
+  }, [filteredRooms, categories]);
+
+  const roomsRooms = React.useMemo(() => {
+    return filteredRooms.filter((room) => {
+      const lowerCat = (room.category || "").toLowerCase().trim();
+      if (lowerCat === "rooms" || lowerCat === "room") return true;
+      const cat = categories.find(c => c.name.toLowerCase() === lowerCat);
+      if (cat) {
+        return (cat.parent || "").toLowerCase() === "rooms" || cat.name.toLowerCase() === "rooms";
+      }
+      return !villasRooms.some(v => (v.id || v._id) === (room.id || room._id));
+    });
+  }, [filteredRooms, categories, villasRooms]);
 
   const getCategoryTitle = () => {
     if (!categoryParam) return "Rooms & Suites";
@@ -277,126 +316,265 @@ const Rooms = () => {
             </div>
           </div>
 
-          {/* Rooms Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-24">
-            {filteredRooms.map((room, idx) => (
-              <motion.div
-                key={room.id || room._id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
-                transition={{
-                  duration: 0.8,
-                  delay: (idx % 2) * 0.1,
-                  ease: [0.25, 1, 0.35, 1]
-                }}
-                className="group flex flex-col"
-              >
-                {/* Room Image Container with Centered Hover circle */}
-                <div className="relative overflow-hidden aspect-[76/62] mb-6 shadow-md">
-                  <Link 
-                    to={`/rooms/${room.id || room._id}`} 
-                    className="block w-full h-full animate-none"
-                  >
-                    {/* Subtle overlay */}
-                    <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
-                    
-                    {/* Hover centered circular gold button */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
-                      <span className="text-sm font-semibold  tracking-[3px]">{room.availableRooms === 0 ? "SOLD OUT" : "BOOK NOW"}</span>
-                    </div>
-
-                    <img
-                      src={getImageUrl(room.image)}
-                      alt={room.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  </Link>
-
-                  {/* Heart / Wishlist Toggle */}
-                  <button 
-                    onClick={() => handleWishlistToggle(room.id)}
-                    className="absolute top-4 right-4 p-2 bg-white/70 hover:bg-white rounded-full text-[#0d2b4e] hover:text-[#c8a64d] transition-all duration-300 z-30 shadow-sm cursor-pointer border-0"
-                    title={isInWishlist(room.id) ? "Remove from Wishlist" : "Add to Wishlist"}
-                  >
-                    <Heart 
-                      size={18} 
-                      className={isInWishlist(room.id) ? "fill-rose-500 text-rose-500" : "text-[#0d2b4e]"} 
-                    />
-                  </button>
+          {/* Grouped Rooms Grid */}
+          <div className="space-y-20">
+            {/* Villas Group */}
+            {villasRooms.length > 0 && (
+              <div>
+                <div className="border-b border-[#0d2b4e]/10 pb-4 mb-12 select-none">
+                  <h3 className="text-3xl font-medium font-corm text-[#0d2b4e] tracking-wider uppercase">Villas</h3>
                 </div>
-
-                {/* Card Text Content */}
-                <div className="flex flex-col flex-grow select-none">
-                  <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
-                    <div>
-                      <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
-                        {room.name}
-                      </h3>
-                      {room.category && (
-                        <div className="flex items-center gap-2 mt-1.5">
-                          <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block uppercase">
-                            {room.category}
-                          </span>
-                          {room.availableRooms === 0 && (
-                            <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
-                              Sold Out
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    <div className="text-right ">
-                      <span className="text-lg md:text-xl  font-semibold text-gray-800">
-                        ₹{parseFloat(room.price).toLocaleString()}
-                      </span>
-                      <span className="text-xs text-gray-800    uppercase font-semibold">
-                        / NIGHT
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Room Specs Row */}
-                  <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px]  text-gray-500 border-b border-gray-100">
-                    <div className="flex items-center">
-                      <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.area || "30 M²"} Sqft</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.guests || "2 Guests"} </span>
-                    </div>
-                    <div className="flex items-center">
-                      <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.beds || "1 Bed"} Bed</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                      <span>{room.bathrooms || "1 Bath"} </span>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mt-6 mb-8 flex-grow whitespace-pre-line line-clamp-2">
-                    {room.description}
-                  </p>
-
-                  {/* Action Link */}
-                  <div>
-                    <Link
-                      to={`/rooms/${room.id || room._id}`}
-                      className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d]  text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-24">
+                  {villasRooms.map((room, idx) => (
+                    <motion.div
+                      key={room.id || room._id}
+                      initial={{ opacity: 0, y: 40 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+                      transition={{
+                        duration: 0.8,
+                        delay: (idx % 2) * 0.1,
+                        ease: [0.25, 1, 0.35, 1]
+                      }}
+                      className="group flex flex-col"
                     >
-                      <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
-                        {room.availableRooms === 0 ? "Sold Out" : "Book now"}
-                      </span>
-                      <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
+                      {/* Room Image Container with Centered Hover circle */}
+                      <div className="relative overflow-hidden aspect-[76/62] mb-6 shadow-md">
+                        <Link 
+                          to={`/rooms/${room.id || room._id}`} 
+                          className="block w-full h-full animate-none"
+                        >
+                          {/* Subtle overlay */}
+                          <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
+                          
+                          {/* Hover centered circular gold button */}
+                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
+                            <span className="text-sm font-semibold  tracking-[3px]">{room.availableRooms === 0 ? "SOLD OUT" : "BOOK NOW"}</span>
+                          </div>
 
-              </motion.div>
-            ))}
+                          <img
+                            src={getImageUrl(room.image)}
+                            alt={room.name}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                        </Link>
+
+                        {/* Heart / Wishlist Toggle */}
+                        <button 
+                          onClick={() => handleWishlistToggle(room.id)}
+                          className="absolute top-4 right-4 p-2 bg-white/70 hover:bg-white rounded-full text-[#0d2b4e] hover:text-[#c8a64d] transition-all duration-300 z-30 shadow-sm cursor-pointer border-0"
+                          title={isInWishlist(room.id) ? "Remove from Wishlist" : "Add to Wishlist"}
+                        >
+                          <Heart
+                            className={`w-5 h-5 transition-colors duration-300 ${
+                              isInWishlist(room.id) ? "fill-[#c8a64d] text-[#c8a64d]" : "text-gray-400 hover:text-[#c8a64d]"
+                            }`}
+                          />
+                        </button>
+                      </div>
+
+                      {/* Room Metadata */}
+                      <div className="flex flex-col flex-grow select-none">
+                        <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
+                          <div>
+                            <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                              {room.name}
+                            </h3>
+                            {room.category && (
+                              <div className="flex items-center gap-2 mt-1.5">
+                                <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block uppercase">
+                                  {room.category}
+                                </span>
+                                {room.availableRooms === 0 && (
+                                  <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                                    Sold Out
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <span className="text-lg md:text-xl font-semibold text-gray-800">
+                              ₹{parseFloat(room.price).toLocaleString()}
+                            </span>
+                            <span className="text-xs text-gray-800 uppercase font-semibold">
+                              / NIGHT
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Details Pills */}
+                        <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px] text-gray-500 border-b border-gray-100">
+                          <div className="flex items-center">
+                            <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.area || "30 M²"} Sqft</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.guests || "2 Guests"} </span>
+                          </div>
+                          <div className="flex items-center">
+                            <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.beds || "1 Bed"} Bed</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.bathrooms || "1 Bath"} </span>
+                          </div>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mt-6 mb-8 flex-grow whitespace-pre-line line-clamp-2">
+                          {room.description}
+                        </p>
+
+                        {/* Action Link */}
+                        <div>
+                          <Link
+                            to={`/rooms/${room.id || room._id}`}
+                            className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d]  text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
+                          >
+                            <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
+                              {room.availableRooms === 0 ? "Sold Out" : "Book now"}
+                            </span>
+                            <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
+                          </Link>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Rooms Group */}
+            {roomsRooms.length > 0 && (
+              <div>
+                <div className="border-b border-[#0d2b4e]/10 pb-4 mb-12 select-none">
+                  <h3 className="text-3xl font-medium font-corm text-[#0d2b4e] tracking-wider uppercase">Rooms</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-24">
+                  {roomsRooms.map((room, idx) => (
+                    <motion.div
+                      key={room.id || room._id}
+                      initial={{ opacity: 0, y: 40 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+                      transition={{
+                        duration: 0.8,
+                        delay: (idx % 2) * 0.1,
+                        ease: [0.25, 1, 0.35, 1]
+                      }}
+                      className="group flex flex-col"
+                    >
+                      {/* Room Image Container with Centered Hover circle */}
+                      <div className="relative overflow-hidden aspect-[76/62] mb-6 shadow-md">
+                        <Link 
+                          to={`/rooms/${room.id || room._id}`} 
+                          className="block w-full h-full animate-none"
+                        >
+                          {/* Subtle overlay */}
+                          <div className="absolute inset-0 bg-[#0d2b4e]/10 group-hover:bg-[#0d2b4e]/40 transition-all duration-500 z-10"></div>
+                          
+                          {/* Hover centered circular gold button */}
+                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
+                            <span className="text-sm font-semibold  tracking-[3px]">{room.availableRooms === 0 ? "SOLD OUT" : "BOOK NOW"}</span>
+                          </div>
+
+                          <img
+                            src={getImageUrl(room.image)}
+                            alt={room.name}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                        </Link>
+
+                        {/* Heart / Wishlist Toggle */}
+                        <button 
+                          onClick={() => handleWishlistToggle(room.id)}
+                          className="absolute top-4 right-4 p-2 bg-white/70 hover:bg-white rounded-full text-[#0d2b4e] hover:text-[#c8a64d] transition-all duration-300 z-30 shadow-sm cursor-pointer border-0"
+                          title={isInWishlist(room.id) ? "Remove from Wishlist" : "Add to Wishlist"}
+                        >
+                          <Heart
+                            className={`w-5 h-5 transition-colors duration-300 ${
+                              isInWishlist(room.id) ? "fill-[#c8a64d] text-[#c8a64d]" : "text-gray-400 hover:text-[#c8a64d]"
+                            }`}
+                          />
+                        </button>
+                      </div>
+
+                      {/* Room Metadata */}
+                      <div className="flex flex-col flex-grow select-none">
+                        <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
+                          <div>
+                            <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                              {room.name}
+                            </h3>
+                            {room.category && (
+                              <div className="flex items-center gap-2 mt-1.5">
+                                <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block uppercase">
+                                  {room.category}
+                                </span>
+                                {room.availableRooms === 0 && (
+                                  <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                                    Sold Out
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <span className="text-lg md:text-xl font-semibold text-gray-800">
+                              ₹{parseFloat(room.price).toLocaleString()}
+                            </span>
+                            <span className="text-xs text-gray-800 uppercase font-semibold">
+                              / NIGHT
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Details Pills */}
+                        <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px] text-gray-500 border-b border-gray-100">
+                          <div className="flex items-center">
+                            <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.area || "30 M²"} Sqft</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.guests || "2 Guests"} </span>
+                          </div>
+                          <div className="flex items-center">
+                            <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.beds || "1 Bed"} Bed</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.bathrooms || "1 Bath"} </span>
+                          </div>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mt-6 mb-8 flex-grow whitespace-pre-line line-clamp-2">
+                          {room.description}
+                        </p>
+
+                        {/* Action Link */}
+                        <div>
+                          <Link
+                            to={`/rooms/${room.id || room._id}`}
+                            className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d]  text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
+                          >
+                            <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
+                              {room.availableRooms === 0 ? "Sold Out" : "Book now"}
+                            </span>
+                            <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
+                          </Link>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
 

@@ -208,6 +208,14 @@ const RoomDetails = () => {
     return () => clearInterval(interval);
   }, [checkIn, checkOut, room]);
 
+  const maxAvailable = availability ? availability.remainingRooms : (room ? room.totalRooms : 5);
+
+  useEffect(() => {
+    if (rooms > maxAvailable) {
+      setRooms(maxAvailable || 1);
+    }
+  }, [maxAvailable, rooms]);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.target.closest(".booking-field")) {
@@ -835,7 +843,7 @@ const RoomDetails = () => {
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                if (rooms < 5) setRooms(rooms + 1);
+                                if (rooms < maxAvailable) setRooms(rooms + 1);
                               }}
                               className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
                             >

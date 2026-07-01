@@ -24,22 +24,50 @@ const AdminRooms = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isManageCategoryModalOpen, setIsManageCategoryModalOpen] = useState(false);
 
-  // Dynamically extract unique categories from the rooms list
+  // Room category list state
+  const [roomCategories, setRoomCategories] = useState([]);
+
+  // Category form modal state
+  const [isCatFormOpen, setIsCatFormOpen] = useState(false);
+  const [catName, setCatName] = useState("");
+  const [catParent, setCatParent] = useState("Villas");
+  const [editingCategory, setEditingCategory] = useState(null);
+
+  // Dynamically extract unique categories from the loaded categories list
   const categories = React.useMemo(() => {
-    const cats = new Set();
-    rooms.forEach((room) => {
-      if (room.category) {
-        cats.add(room.category);
-      }
-    });
-    return ["All", ...Array.from(cats)];
-  }, [rooms]);
+    const subcats = roomCategories.filter(c => c.parent !== null && c.parent !== "");
+    return ["All", ...subcats.map(c => c.name)];
+  }, [roomCategories]);
 
   // Filter rooms based on the selected category
   const filteredRooms = React.useMemo(() => {
     if (selectedCategory === "All") return rooms;
     return rooms.filter((room) => room.category === selectedCategory);
   }, [rooms, selectedCategory]);
+
+  const villasRooms = React.useMemo(() => {
+    return filteredRooms.filter((room) => {
+      const lowerCat = (room.category || "").toLowerCase().trim();
+      if (lowerCat === "villas" || lowerCat === "villa") return true;
+      const cat = roomCategories.find(c => c.name.toLowerCase() === lowerCat);
+      if (cat) {
+        return (cat.parent || "").toLowerCase() === "villas" || cat.name.toLowerCase() === "villas";
+      }
+      return lowerCat.includes("villa") || lowerCat.includes("cottage");
+    });
+  }, [filteredRooms, roomCategories]);
+
+  const roomsRooms = React.useMemo(() => {
+    return filteredRooms.filter((room) => {
+      const lowerCat = (room.category || "").toLowerCase().trim();
+      if (lowerCat === "rooms" || lowerCat === "room") return true;
+      const cat = roomCategories.find(c => c.name.toLowerCase() === lowerCat);
+      if (cat) {
+        return (cat.parent || "").toLowerCase() === "rooms" || cat.name.toLowerCase() === "rooms";
+      }
+      return !villasRooms.some(v => (v._id || v.id) === (room._id || room.id));
+    });
+  }, [filteredRooms, roomCategories, villasRooms]);
 
   // Reset selected category to "All" if it is no longer in the categories list
   useEffect(() => {
@@ -87,12 +115,26 @@ const AdminRooms = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/room-categories`);
+      const data = await response.json();
+      if (data.success) {
+        setRoomCategories(data.data);
+      }
+    } catch (err) {
+      console.warn("Failed to fetch room categories:", err.message);
+    }
+  };
+
   useEffect(() => {
     fetchRooms();
+    fetchCategories();
 
     // Auto-refresh rooms silently every 10 seconds
     const interval = setInterval(() => {
       fetchRooms(true);
+      fetchCategories();
     }, 10000);
 
     return () => clearInterval(interval);
@@ -104,7 +146,8 @@ const AdminRooms = () => {
     setTotalRooms("1");
     setName("");
     setPrice("");
-    setCategory("Executive Rooms");
+    const subcats = roomCategories.filter(c => c.parent !== null && c.parent !== "");
+    setCategory(subcats.length > 0 ? subcats[0].name : "Executive Rooms");
     setArea("");
     setBeds("");
     setBathrooms("");
@@ -276,6 +319,77 @@ const AdminRooms = () => {
     }
   };
 
+  const handleSaveCategory = async (e) => {
+    e.preventDefault();
+    if (!catName || catName.trim() === "") {
+      toast.warning("Category name is required.");
+      return;
+    }
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    const payload = {
+      name: catName.trim(),
+      parent: catParent || null
+    };
+
+    try {
+      let response;
+      if (editingCategory) {
+        response = await fetch(`${API_URL}/api/room-categories/${editingCategory._id || editingCategory.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        response = await fetch(`${API_URL}/api/room-categories`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+      }
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to save category.");
+      }
+
+      toast.success(editingCategory ? "Category updated successfully!" : "Category created successfully!");
+      setIsCatFormOpen(false);
+      setEditingCategory(null);
+      setCatName("");
+      setCatParent("");
+      fetchCategories();
+    } catch (err) {
+      toast.error(err.message || "Failed to save category.");
+    }
+  };
+
+  const handleDeleteCategory = async (cat) => {
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API_URL}/api/room-categories/${cat._id || cat.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete category.");
+      }
+
+      toast.success("Category deleted successfully!");
+      fetchCategories();
+    } catch (err) {
+      toast.error(err.message || "Failed to delete category.");
+    }
+  };
+
   const getImageUrl = (image) => {
     if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32";
     if (image.startsWith("http")) return image;
@@ -417,14 +531,20 @@ const AdminRooms = () => {
             />
           </div>
           <div>
-            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Category Name</label>
-            <input 
-              required 
-              placeholder="e.g. Executive Rooms" 
-              value={category} 
-              onChange={(e) => setCategory(e.target.value)} 
-              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
-            />
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Category</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
+            >
+              {roomCategories
+                .filter(c => c.parent !== null && c.parent !== "")
+                .map((c) => (
+                  <option key={c._id || c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
+            </select>
           </div>
         </div>
 
@@ -584,104 +704,204 @@ const AdminRooms = () => {
               </button>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredRooms.map((room) => (
-                <div
-                  key={room.id || room._id}
-                  className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden hover:scale-[1.02] transition duration-300 flex flex-col justify-between"
-                >
-                  {/* IMAGE */}
-                  <div>
-                    <img
-                      src={getImageUrl(room.image)}
-                      className="h-48 w-full object-cover border-b border-white/10"
-                      alt={room.name}
-                    />
-
-                    {/* CONTENT */}
-                    <div className="p-4 space-y-3">
-                      <div className="flex justify-between items-start">
+            <div className="space-y-12">
+              {/* Villas Segment */}
+              {villasRooms.length > 0 && (
+                <div>
+                  <div className="border-b border-white/10 pb-2 mb-6">
+                    <h2 className="text-xl font-semibold text-[#C8A64D] uppercase tracking-wider">Villas</h2>
+                  </div>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {villasRooms.map((room) => (
+                      <div
+                        key={room.id || room._id}
+                        className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden hover:scale-[1.02] transition duration-300 flex flex-col justify-between"
+                      >
+                        {/* IMAGE */}
                         <div>
-                          <h2 className="font-bold text-[18px] leading-tight text-white">{room.name}</h2>
-                          <div className="flex items-center gap-2 mt-1">
-                            {room.category && (
-                              <span className="text-[12px] text-white/60 uppercase tracking-widest font-bold block">
-                                {room.category}
+                          <img
+                            src={getImageUrl(room.image)}
+                            className="h-48 w-full object-cover border-b border-white/10"
+                            alt={room.name}
+                          />
+
+                          {/* CONTENT */}
+                          <div className="p-4 space-y-3">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <h2 className="font-bold text-[18px] leading-tight text-white">{room.name}</h2>
+                                <div className="flex items-center gap-2 mt-1">
+                                  {room.category && (
+                                    <span className="text-[12px] text-white/60 uppercase tracking-widest font-bold block">
+                                      {room.category}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
+                                {room.availableRooms !== undefined ? `Available: ${room.availableRooms}/${room.totalRooms}` : `Rooms: ${room.roomNumber}`}
                               </span>
-                            )}
-                            {/* {room.roomNumber && (
-                              <span className="text-[10px] bg-white/10 text-white px-1.5 py-0.5 rounded font-semibold uppercase">
-                                #{room.roomNumber}
+                            </div>
+
+                            <p className="text-[#C8A64D] font-bold text-[18px]">
+                              ₹{parseFloat(room.price).toLocaleString()} <span className="text-white text-[14px] font-normal">/ night</span>
+                            </p>
+
+                            <div className="text-[14px] text-white/80 font-medium">
+                              Number of Rooms: <span className="text-[#C8A64D] font-bold">{room.totalRooms}</span>
+                            </div>
+
+                            {/* INFO */}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[14px] text-white border-t border-white/10 pt-3">
+                              <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Beds">
+                                <BedDouble size={14} className="text-[#C8A64D]" />
+                                {room.beds}
                               </span>
-                            )} */}
+
+                              <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Area">
+                                <Maximize size={14} className="text-[#C8A64D]" />
+                                {room.area}
+                              </span>
+
+                              {room.guests && (
+                                <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Guests Capacity">
+                                  <Users size={14} className="text-[#C8A64D]" />
+                                  {room.guests}
+                                </span>
+                              )}
+
+                              {room.images && room.images.length > 0 && (
+                                <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20 col-span-full sm:col-span-1" title="Gallery Images">
+                                  <Upload size={14} className="text-[#C8A64D]" />
+                                  {room.images.length} Extra
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
-                        <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
-                          {room.availableRooms !== undefined ? `Available: ${room.availableRooms}/${room.totalRooms}` : `Rooms: ${room.roomNumber}`}
-                        </span>
+
+                        {/* ACTIONS */}
+                        <div className="flex gap-2 p-4 border-t border-white/5">
+                          <button 
+                            onClick={() => openEditModal(room)}
+                            className="flex-1 bg-white/10 py-2 rounded-lg flex items-center justify-center hover:bg-white/20 transition cursor-pointer text-white border-0"
+                            title="Edit Room"
+                          >
+                            <Edit size={14} className="mr-1" /> Edit
+                          </button>
+
+                          <button 
+                            onClick={() => handleDelete(room.id || room._id)}
+                            className="flex-1 bg-red-500/10 text-red-400 py-2 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition cursor-pointer border-0"
+                            title="Delete Room"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
-
-                      <p className="text-[#C8A64D] font-bold text-[18px]">
-                        ₹{parseFloat(room.price).toLocaleString()} <span className="text-white text-[14px] font-normal">/ night</span>
-                      </p>
-
-                      {/* <p className="text-white text-[16px] line-clamp-2">
-                        {room.description}
-                      </p> */}
-
-                      <div className="text-[14px] text-white/80 font-medium">
-                        Number of Rooms: <span className="text-[#C8A64D] font-bold">{room.totalRooms}</span>
-                      </div>
-
-                      {/* INFO */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[14px] text-white border-t border-white/10 pt-3">
-                        <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Beds">
-                          <BedDouble size={14} className="text-[#C8A64D]" />
-                          {room.beds}
-                        </span>
-
-                        <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Area">
-                          <Maximize size={14} className="text-[#C8A64D]" />
-                          {room.area}
-                        </span>
-
-                        {room.guests && (
-                          <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Guests Capacity">
-                            <Users size={14} className="text-[#C8A64D]" />
-                            {room.guests}
-                          </span>
-                        )}
-
-                        {room.images && room.images.length > 0 && (
-                          <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20 col-span-full sm:col-span-1" title="Gallery Images">
-                            <Upload size={14} className="text-[#C8A64D]" />
-                            {room.images.length} Extra
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* ACTIONS */}
-                  <div className="flex gap-2 p-4 border-t border-white/5">
-                    <button 
-                      onClick={() => openEditModal(room)}
-                      className="flex-1 bg-white/10 py-2 rounded-lg flex items-center justify-center hover:bg-white/20 transition cursor-pointer text-white border-0"
-                      title="Edit Room"
-                    >
-                      <Edit size={14} className="mr-1" /> Edit
-                    </button>
-
-                    <button 
-                      onClick={() => handleDelete(room.id || room._id)}
-                      className="flex-1 bg-red-500/10 text-red-400 py-2 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition cursor-pointer border-0"
-                      title="Delete Room"
-                    >
-                      Delete
-                    </button>
+                    ))}
                   </div>
                 </div>
-              ))}
+              )}
+
+              {/* Rooms Segment */}
+              {roomsRooms.length > 0 && (
+                <div>
+                  <div className="border-b border-white/10 pb-2 mb-6">
+                    <h2 className="text-xl font-semibold text-[#C8A64D] uppercase tracking-wider">Rooms</h2>
+                  </div>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {roomsRooms.map((room) => (
+                      <div
+                        key={room.id || room._id}
+                        className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden hover:scale-[1.02] transition duration-300 flex flex-col justify-between"
+                      >
+                        {/* IMAGE */}
+                        <div>
+                          <img
+                            src={getImageUrl(room.image)}
+                            className="h-48 w-full object-cover border-b border-white/10"
+                            alt={room.name}
+                          />
+
+                          {/* CONTENT */}
+                          <div className="p-4 space-y-3">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <h2 className="font-bold text-[18px] leading-tight text-white">{room.name}</h2>
+                                <div className="flex items-center gap-2 mt-1">
+                                  {room.category && (
+                                    <span className="text-[12px] text-white/60 uppercase tracking-widest font-bold block">
+                                      {room.category}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
+                                {room.availableRooms !== undefined ? `Available: ${room.availableRooms}/${room.totalRooms}` : `Rooms: ${room.roomNumber}`}
+                              </span>
+                            </div>
+
+                            <p className="text-[#C8A64D] font-bold text-[18px]">
+                              ₹{parseFloat(room.price).toLocaleString()} <span className="text-white text-[14px] font-normal">/ night</span>
+                            </p>
+
+                            <div className="text-[14px] text-white/80 font-medium">
+                              Number of Rooms: <span className="text-[#C8A64D] font-bold">{room.totalRooms}</span>
+                            </div>
+
+                            {/* INFO */}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[14px] text-white border-t border-white/10 pt-3">
+                              <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Beds">
+                                <BedDouble size={14} className="text-[#C8A64D]" />
+                                {room.beds}
+                              </span>
+
+                              <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Area">
+                                <Maximize size={14} className="text-[#C8A64D]" />
+                                {room.area}
+                              </span>
+
+                              {room.guests && (
+                                <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Guests Capacity">
+                                  <Users size={14} className="text-[#C8A64D]" />
+                                  {room.guests}
+                                </span>
+                              )}
+
+                              {room.images && room.images.length > 0 && (
+                                <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20 col-span-full sm:col-span-1" title="Gallery Images">
+                                  <Upload size={14} className="text-[#C8A64D]" />
+                                  {room.images.length} Extra
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* ACTIONS */}
+                        <div className="flex gap-2 p-4 border-t border-white/5">
+                          <button 
+                            onClick={() => openEditModal(room)}
+                            className="flex-1 bg-white/10 py-2 rounded-lg flex items-center justify-center hover:bg-white/20 transition cursor-pointer text-white border-0"
+                            title="Edit Room"
+                          >
+                            <Edit size={14} className="mr-1" /> Edit
+                          </button>
+
+                          <button 
+                            onClick={() => handleDelete(room.id || room._id)}
+                            className="flex-1 bg-red-500/10 text-red-400 py-2 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition cursor-pointer border-0"
+                            title="Delete Room"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </>
@@ -704,8 +924,10 @@ const AdminRooms = () => {
               <span className="text-xs text-white/50">List of all room categories registered in the system.</span>
               <button
                 onClick={() => {
-                  setIsManageCategoryModalOpen(false);
-                  openAddModal();
+                  setEditingCategory(null);
+                  setCatName("");
+                  setCatParent("");
+                  setIsCatFormOpen(true);
                 }}
                 className="bg-[#C8A64D] text-black px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold cursor-pointer text-xs hover:bg-[#b09141]"
               >
@@ -718,33 +940,37 @@ const AdminRooms = () => {
                 <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider border-b border-white/10 font-bold">
                   <tr>
                     <th className="p-3 text-[#c8a64d]">Category Name</th>
-                    <th className="p-3 text-[#c8a64d]">Base Rate</th>
-                    <th className="p-3 text-[#c8a64d]">Capacity</th>
+                    <th className="p-3 text-[#c8a64d]">Parent Category</th>
+                    <th className="p-3 text-[#c8a64d]">Created Date</th>
                     <th className="p-3 text-[#c8a64d] text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
-                  {rooms.map((room) => (
-                    <tr key={room.id || room._id} className="hover:bg-white/5 transition">
-                      <td className="p-3 font-semibold text-white">{room.name}</td>
-                      <td className="p-3 text-[#C8A64D] font-bold">₹{parseFloat(room.price).toLocaleString()}</td>
-                      <td className="p-3 text-white/80">{room.guests || "N/A"} Guests</td>
+                  {roomCategories.map((cat) => (
+                    <tr key={cat._id || cat.id} className="hover:bg-white/5 transition">
+                      <td className="p-3 font-semibold text-white">{cat.name}</td>
+                      <td className="p-3 text-white/70">{cat.parent || <span className="text-white/30 italic">None (Top-Level)</span>}</td>
+                      <td className="p-3 text-white/50 text-xs">
+                        {new Date(cat.created_at || Date.now()).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric"
+                        })}
+                      </td>
                       <td className="p-3 text-center flex justify-center gap-2">
                         <button
                           onClick={() => {
-                            setIsManageCategoryModalOpen(false);
-                            openEditModal(room);
+                            setEditingCategory(cat);
+                            setCatName(cat.name);
+                            setCatParent(cat.parent || "");
+                            setIsCatFormOpen(true);
                           }}
                           className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded text-xs font-semibold cursor-pointer border-0"
                         >
                           Edit
                         </button>
                         <button
-                          onClick={() => {
-                            if (window.confirm(`Are you sure you want to delete category "${room.name}"?`)) {
-                              handleDelete(room.id || room._id);
-                            }
-                          }}
+                          onClick={() => handleDeleteCategory(cat)}
                           className="px-2.5 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded text-xs font-semibold cursor-pointer border-0"
                         >
                           Delete
@@ -756,6 +982,79 @@ const AdminRooms = () => {
               </table>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ADD/EDIT CATEGORY MODAL OVERLAY */}
+      {isCatFormOpen && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4">
+          <form onSubmit={handleSaveCategory} className="bg-[#081A2F] w-full max-w-md rounded-xl p-6 border border-white/10 space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-white/5 pb-3">
+              <h3 className="text-md font-bold text-white">
+                {editingCategory ? "Edit Room Category" : "Add Room Category"}
+              </h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsCatFormOpen(false);
+                  setEditingCategory(null);
+                  setCatName("");
+                  setCatParent("");
+                }}
+                className="text-white/60 hover:text-white cursor-pointer bg-transparent border-0"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5 font-bold">Category Name</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Duplex Villas"
+                  value={catName}
+                  onChange={(e) => setCatName(e.target.value)}
+                  className="w-full bg-[#071524] border border-white/10 text-white rounded-lg p-2.5 text-sm outline-none focus:border-yellow-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5 font-bold">Parent Category</label>
+                <select
+                  value={catParent}
+                  onChange={(e) => setCatParent(e.target.value)}
+                  className="w-full bg-[#071524] border border-white/10 text-white rounded-lg p-2.5 text-sm outline-none focus:border-yellow-500"
+                >
+                  <option value="">None (Top-Level)</option>
+                  <option value="Villas">Villas</option>
+                  <option value="Rooms">Rooms</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-3 border-t border-white/5">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsCatFormOpen(false);
+                  setEditingCategory(null);
+                  setCatName("");
+                  setCatParent("");
+                }}
+                className="px-4 py-2 bg-white/5 text-white text-xs font-semibold rounded hover:bg-white/10 border-0 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-[#C8A64D] text-black text-xs font-bold rounded hover:bg-[#b09141] border-0 cursor-pointer"
+              >
+                Save Category
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </div>

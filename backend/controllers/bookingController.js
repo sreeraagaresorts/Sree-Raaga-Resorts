@@ -120,9 +120,10 @@ exports.createBooking = async (req, res) => {
     });
 
     if (bookedRoomsCount + roomCount > totalRooms) {
+      const availableCount = Math.max(0, totalRooms - bookedRoomsCount);
       return res.status(400).json({
         success: false,
-        message: `Only ${Math.max(0, totalRooms - bookedRoomsCount)} room(s) of type "${room.name}" are available for these dates.`
+        message: `Only ${availableCount} rooms are available for this category.`
       });
     }
 
