@@ -28,7 +28,7 @@ const navItems = [
   { name: "Guests", path: "/admin/users", icon: Users },
   { name: "Rooms & Bookings", path: "/admin/bookings", icon: Calendar },
   { name: "Rooms Management", path: "/admin/rooms-mgmt", icon: BedDouble },
-  { name: "Hotel Management", path: "/admin/hotel-mgmt", icon: CalendarDays },
+  { name: "Manage Hotel", path: "/admin/hotel-mgmt", icon: CalendarDays },
   { name: "Restaurant Menu", path: "/admin/menu", icon: UtensilsCrossed },
   { name: "Enquiries", path: "/admin/enquiries", icon: MessageSquare },
   { name: "CMS", path: "/admin/content", icon: Edit3 },

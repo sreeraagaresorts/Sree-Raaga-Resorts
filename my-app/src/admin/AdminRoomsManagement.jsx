@@ -8,7 +8,8 @@ import {
   Wrench, 
   CheckCircle,
   HelpCircle,
-  Eye
+  Eye,
+  MoreVertical
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
@@ -45,6 +46,15 @@ const AdminRoomsManagement = () => {
   const [editFloor, setEditFloor] = useState("1");
   const [editStatus, setEditStatus] = useState("Available");
   const [editSaving, setEditSaving] = useState(false);
+
+  // Dropdown Menu State
+  const [activeMenuRoom, setActiveMenuRoom] = useState(null);
+
+  useEffect(() => {
+    const closeMenu = () => setActiveMenuRoom(null);
+    window.addEventListener("click", closeMenu);
+    return () => window.removeEventListener("click", closeMenu);
+  }, []);
 
   const fetchRooms = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -263,6 +273,33 @@ const AdminRoomsManagement = () => {
     }
   };
 
+  const toggleCardMenu = (roomNo) => {
+    setActiveMenuRoom((prev) => (prev === roomNo ? null : roomNo));
+  };
+
+  const handleDeleteUnit = async (roomCategory, roomNumber) => {
+    if (!window.confirm(`Are you sure you want to delete room ${roomNumber}?`)) {
+      return;
+    }
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API_URL}/api/rooms/${roomCategory.id || roomCategory._id}/unit/${roomNumber}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete room unit.");
+      }
+      toast.success(`Room ${roomNumber} deleted successfully!`);
+      fetchRooms();
+    } catch (err) {
+      toast.error(err.message || "Failed to delete room unit.");
+    }
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case "Occupied":
@@ -284,20 +321,21 @@ const AdminRoomsManagement = () => {
         <div>
           <h1 className="text-2xl font-bold">Rooms Management</h1>
           <p className="text-white text-sm">
-            Live status grid of all resort rooms and suites
+            {/* Live status grid of all resort rooms and suites */}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
+        
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-white/5 text-white border border-white/10 px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-white/10"
+            className="bg-[#C8A64D] text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition text-sm"
           >
             <Plus size={16} /> Add Room
           </button>
           <Link
             to="/admin/bookings"
-            className="bg-[#C8A64D] text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
+            className="bg-[#C8A64D] text-black px-4 py-3 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
           >
             <Plus size={16} /> New Booking
           </Link>
@@ -374,8 +412,7 @@ const AdminRoomsManagement = () => {
           {filteredUnits.map(({ room, unit, floor }) => (
             <div
               key={unit.roomNumber}
-              onClick={() => openEditModal(room, unit)}
-              className="bg-[#081A2F] border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-[#C8A64D]/50 hover:scale-[1.02] cursor-pointer transition-all duration-300"
+              className="bg-[#081A2F] border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-[#C8A64D]/50 transition-all duration-300 relative group"
             >
               {/* Header */}
               <div className="flex justify-between items-start">
@@ -389,9 +426,50 @@ const AdminRoomsManagement = () => {
                   </div>
                 </div>
 
-                <span className={`text-[10px] px-2 py-0.5 rounded border font-semibold uppercase ${getStatusColor(unit.status)}`}>
-                  {unit.status}
-                </span>
+                <div className="flex items-center gap-1.5 relative">
+                  <span className={`text-[10px] px-2 py-0.5 rounded border font-semibold uppercase ${getStatusColor(unit.status)}`}>
+                    {unit.status}
+                  </span>
+
+                  <div className="relative">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleCardMenu(unit.roomNumber);
+                      }}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded text-white/60 hover:text-white cursor-pointer bg-transparent border-0 flex items-center justify-center shrink-0"
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+
+                    {activeMenuRoom === unit.roomNumber && (
+                      <div className="absolute right-0 mt-1 w-32 bg-[#071524] border border-white/10 rounded-lg shadow-xl z-20 py-1 overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveMenuRoom(null);
+                            openEditModal(room, unit);
+                          }}
+                          className="w-full text-left px-3 py-1.5 hover:bg-white/5 text-[11px] font-semibold text-white cursor-pointer bg-transparent border-0 whitespace-nowrap"
+                        >
+                          Edit Room
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveMenuRoom(null);
+                            handleDeleteUnit(room, unit.roomNumber);
+                          }}
+                          className="w-full text-left px-3 py-1.5 hover:bg-white/5 text-[11px] font-semibold text-red-400 cursor-pointer bg-transparent border-0 whitespace-nowrap"
+                        >
+                          Delete Room
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
 
               {/* Specs */}

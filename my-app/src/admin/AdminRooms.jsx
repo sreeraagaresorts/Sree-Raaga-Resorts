@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Edit,
   Plus,
@@ -21,6 +22,7 @@ const AdminRooms = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingRoom, setEditingRoom] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isManageCategoryModalOpen, setIsManageCategoryModalOpen] = useState(false);
 
   // Dynamically extract unique categories from the rooms list
   const categories = React.useMemo(() => {
@@ -285,18 +287,26 @@ const AdminRooms = () => {
       {/* HEADER */}
       <div className="flex justify-between items-center border-b border-white/5 pb-6">
         <div>
-          <h1 className="text-2xl font-bold">Rooms Management</h1>
+          <h1 className="text-2xl font-bold">Rooms Inventory</h1>
           <p className="text-white/50 text-sm">
-            Manage hotel rooms & inventory
+            Manage hotel room categories & details
           </p>
         </div>
 
-        <button
-          onClick={openAddModal}
-          className="bg-[#C8A64D] text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition"
-        >
-          <Plus size={16} /> Add Room
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsManageCategoryModalOpen(true)}
+            className="bg-white/5 text-white border border-white/10 px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-white/10 transition text-sm"
+          >
+            Manage Category
+          </button>
+          <button
+            onClick={openAddModal}
+            className="bg-[#C8A64D] text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition text-sm"
+          >
+            <Plus size={16} /> Add Room
+          </button>
+        </div>
       </div>
 
       {/* ERROR DISPLAY */}
@@ -311,7 +321,7 @@ const AdminRooms = () => {
     <div className="bg-[#081A2F] w-full max-w-5xl rounded-xl p-6 lg:p-8 border border-white/10 shadow-2xl">
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold">{editingRoom ? "Edit Room" : "Add Room"}</h2>
+        <h2 className="text-xl font-bold">{editingRoom ? "Edit Category" : "Add Category"}</h2>
         <button 
           onClick={() => setIsFormOpen(false)}
           className="text-white/60 hover:text-white cursor-pointer bg-transparent border-0"
@@ -407,17 +417,14 @@ const AdminRooms = () => {
             />
           </div>
           <div>
-            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Category</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
-            >
-              <option value="Executive Rooms">Executive Rooms</option>
-              <option value="Luxury Villas">Luxury Villas</option>
-              <option value="Compact Villas">Compact Villas</option>
-              <option value="Duplex Villa">Duplex Villa</option>
-            </select>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Category Name</label>
+            <input 
+              required 
+              placeholder="e.g. Executive Rooms" 
+              value={category} 
+              onChange={(e) => setCategory(e.target.value)} 
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
+            />
           </div>
         </div>
 
@@ -517,7 +524,7 @@ const AdminRooms = () => {
             disabled={saving}
             className="px-6 py-2.5 bg-[#C8A64D] text-black font-bold rounded-lg hover:bg-[#b09141] transition disabled:bg-yellow-600/50 cursor-pointer border-0 text-sm"
           >
-            {saving ? "Saving..." : "Save Room"}
+            {saving ? "Saving..." : "Save Category"}
           </button>
         </div>
       </form>
@@ -678,6 +685,78 @@ const AdminRooms = () => {
             </div>
           )}
         </>
+      )}
+      {/* MANAGE CATEGORY MODAL */}
+      {isManageCategoryModalOpen && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#081A2F] w-full max-w-3xl rounded-xl p-6 border border-white/10 space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-white/5 pb-3">
+              <h2 className="text-lg font-bold">Manage Room Categories</h2>
+              <button
+                onClick={() => setIsManageCategoryModalOpen(false)}
+                className="text-white/60 hover:text-white cursor-pointer bg-transparent border-0"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-white/50">List of all room categories registered in the system.</span>
+              <button
+                onClick={() => {
+                  setIsManageCategoryModalOpen(false);
+                  openAddModal();
+                }}
+                className="bg-[#C8A64D] text-black px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold cursor-pointer text-xs hover:bg-[#b09141]"
+              >
+                <Plus size={14} /> Add Category
+              </button>
+            </div>
+
+            <div className="overflow-x-auto max-h-96">
+              <table className="w-full text-sm border-collapse text-left">
+                <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider border-b border-white/10 font-bold">
+                  <tr>
+                    <th className="p-3 text-[#c8a64d]">Category Name</th>
+                    <th className="p-3 text-[#c8a64d]">Base Rate</th>
+                    <th className="p-3 text-[#c8a64d]">Capacity</th>
+                    <th className="p-3 text-[#c8a64d] text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {rooms.map((room) => (
+                    <tr key={room.id || room._id} className="hover:bg-white/5 transition">
+                      <td className="p-3 font-semibold text-white">{room.name}</td>
+                      <td className="p-3 text-[#C8A64D] font-bold">₹{parseFloat(room.price).toLocaleString()}</td>
+                      <td className="p-3 text-white/80">{room.guests || "N/A"} Guests</td>
+                      <td className="p-3 text-center flex justify-center gap-2">
+                        <button
+                          onClick={() => {
+                            setIsManageCategoryModalOpen(false);
+                            openEditModal(room);
+                          }}
+                          className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded text-xs font-semibold cursor-pointer border-0"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (window.confirm(`Are you sure you want to delete category "${room.name}"?`)) {
+                              handleDelete(room.id || room._id);
+                            }
+                          }}
+                          className="px-2.5 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded text-xs font-semibold cursor-pointer border-0"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

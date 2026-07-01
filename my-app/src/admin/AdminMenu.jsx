@@ -420,7 +420,7 @@ const handleSaveCategory = () => {
       <div className="flex border-b border-white/10 gap-6">
         <button
           onClick={() => setActiveTab("dishes")}
-          className={`pb-4 text-sm font-medium tracking-wider uppercase cursor-pointer transition ${
+          className={`pb-4 text-sm font-bold tracking-wider uppercase cursor-pointer transition ${
             activeTab === "dishes"
               ? "text-[#C8A64D] border-b-2 border-[#C8A64D]"
               : "text-white/40 hover:text-white"

@@ -628,3 +628,57 @@ exports.updateRoomUnit = async (req, res) => {
     });
   }
 };
+
+exports.deleteRoomUnit = async (req, res) => {
+  try {
+    const idParam = req.params.id;
+    const { roomNumber } = req.params;
+
+    if (!roomNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "roomNumber is required"
+      });
+    }
+
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(idParam)) {
+      query = { $or: [{ _id: idParam }, { id: isNaN(Number(idParam)) ? null : Number(idParam) }] };
+    } else {
+      query = { id: isNaN(Number(idParam)) ? null : Number(idParam) };
+    }
+
+    const room = await Room.findOne(query);
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        message: "Room category not found"
+      });
+    }
+
+    const originalLength = room.roomStatuses.length;
+    room.roomStatuses = room.roomStatuses.filter(u => u.roomNumber !== roomNumber);
+
+    if (room.roomStatuses.length === originalLength) {
+      return res.status(404).json({
+        success: false,
+        message: `Room unit ${roomNumber} not found in category`
+      });
+    }
+
+    room.totalRooms = Math.max(0, room.totalRooms - 1);
+    await room.save();
+
+    res.json({
+      success: true,
+      message: `Room unit ${roomNumber} deleted successfully`,
+      data: room
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete room unit"
+    });
+  }
+};
