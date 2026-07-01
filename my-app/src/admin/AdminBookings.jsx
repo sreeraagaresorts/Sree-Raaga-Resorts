@@ -33,6 +33,7 @@ const AdminBookings = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedRoom, setSelectedRoom] = useState("");
+  const [selectedRoomNumber, setSelectedRoomNumber] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [adults, setAdults] = useState(1);
@@ -109,10 +110,63 @@ const AdminBookings = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const availableRoomNumbers = React.useMemo(() => {
+    if (!checkIn || !checkOut) {
+      const list = [];
+      rooms.forEach((room) => {
+        const units = room.roomStatuses || [];
+        units.forEach((unit) => {
+          if (unit.status === "Available") {
+            list.push({
+              roomId: room.id,
+              roomName: room.name,
+              price: room.price,
+              roomNumber: unit.roomNumber
+            });
+          }
+        });
+      });
+      return list;
+    }
+
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+
+    const bookedRoomNumbers = new Set();
+    bookings.forEach((b) => {
+      if (b.status !== "cancelled" && b.room_number) {
+        const bStart = new Date(b.check_in);
+        const bEnd = new Date(b.check_out);
+        if (bStart < end && bEnd > start) {
+          bookedRoomNumbers.add(b.room_number);
+        }
+      }
+    });
+
+    const list = [];
+    rooms.forEach((room) => {
+      const units = room.roomStatuses || [];
+      units.forEach((unit) => {
+        if (unit.status === "Available" && !bookedRoomNumbers.has(unit.roomNumber)) {
+          list.push({
+            roomId: room.id,
+            roomName: room.name,
+            price: room.price,
+            roomNumber: unit.roomNumber
+          });
+        }
+      });
+    });
+
+    return list;
+  }, [rooms, bookings, checkIn, checkOut]);
+
   const handleOpenForm = async () => {
     await fetchUsersAndRooms();
     setCheckIn("");
     setCheckOut("");
+    setSelectedRoomNumber("");
+    setSelectedRoom("");
     setAdults(1);
     setChildren(0);
     setGuestMode("existing");
@@ -184,6 +238,7 @@ const AdminBookings = () => {
           check_out: checkOut,
           adults: Number(adults),
           children: Number(children),
+          room_number: selectedRoomNumber || null,
           payment_method: paymentMethod,
         }),
       });
@@ -379,6 +434,7 @@ const AdminBookings = () => {
                     {/* ROOM */}
                     <td className="p-4 ">
                       <div className="text-white font-medium text-[16px]">{b.room_name}</div>
+                      {b.room_number && <div className="text-xs text-green-400 font-semibold mt-0.5">Room: {b.room_number}</div>}
                       <div className="text-[16px] text-white mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
                     </td>
 
@@ -401,18 +457,15 @@ const AdminBookings = () => {
 
                     {/* PAYMENT METHOD */}
                     <td className="p-4 ">
-                      <select
-                        value={b.payment_method || "cash"}
-                        onChange={(e) => handleUpdatePaymentMethod(b.id, e.target.value)}
-                        className={`text-[16px] px-3 py-1.5 bg-[#071524] rounded-lg border font-semibold outline-none focus:border-[#C8A64D] uppercase cursor-pointer ${
+                      <span
+                        className={`text-[15px] px-3 py-1.5 rounded-full border font-semibold uppercase ${
                           b.payment_method === "online"
-                            ? "text-indigo-400 border-indigo-500/20"
-                            : "text-[#C8A64D] border-[#C8A64D]/20"
+                            ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"
+                            : "bg-[#C8A64D]/10 text-[#C8A64D] border-[#C8A64D]/20"
                         }`}
                       >
-                        <option value="cash" className="bg-[#081A2F]">CASH</option>
-                        <option value="online" className="bg-[#081A2F]">ONLINE</option>
-                      </select>
+                        {b.payment_method || "cash"}
+                      </span>
                     </td>
 
                     {/* STATUS */}
@@ -598,20 +651,34 @@ const AdminBookings = () => {
                   </div>
                 )}
 
-                {/* Room dropdown */}
+                {/* Room Number dropdown */}
                 <div className={guestMode === "new" ? "col-span-1 md:col-span-2" : ""}>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Room Inventory</label>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Room Number (Available Only)</label>
                   <select
-                    value={selectedRoom}
-                    onChange={(e) => setSelectedRoom(e.target.value)}
+                    value={selectedRoomNumber}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setSelectedRoomNumber(val);
+                      const found = availableRoomNumbers.find(item => item.roomNumber === val);
+                      if (found) {
+                        setSelectedRoom(found.roomId.toString());
+                      } else {
+                        setSelectedRoom("");
+                      }
+                    }}
+                    required
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
                   >
-                    {rooms.map((room) => (
-                      <option key={room.id} value={room.id}>
-                        {room.name} - ₹{parseFloat(room.price).toLocaleString()} / night
+                    <option value="">-- Select Room Number --</option>
+                    {availableRoomNumbers.map((item) => (
+                      <option key={item.roomNumber} value={item.roomNumber}>
+                        {item.roomNumber} ({item.roomName}) - ₹{parseFloat(item.price).toLocaleString()} / night
                       </option>
                     ))}
                   </select>
+                  {availableRoomNumbers.length === 0 && (
+                    <p className="text-[11px] text-red-400 mt-1">No available rooms found for the selected check-in/out dates.</p>
+                  )}
                 </div>
 
                 {/* Dates range picker */}

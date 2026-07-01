@@ -20,7 +20,7 @@ const logAction = async (userId, actionType, details) => {
 // 1. Create a booking
 exports.createBooking = async (req, res) => {
   try {
-    const { room_id, check_in, check_out, adults, children, user_id: bodyUserId, payment_method, rooms } = req.body;
+    const { room_id, check_in, check_out, adults, children, user_id: bodyUserId, payment_method, rooms, room_number } = req.body;
     let user_id = req.user.id;
 
     if (req.user.role === "admin" && bodyUserId) {
@@ -70,8 +70,40 @@ exports.createBooking = async (req, res) => {
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     const roomCount = Number(rooms) || 1;
 
+    // Check specific room number availability if provided
+    if (room_number) {
+      const unit = room.roomStatuses.find(u => u.roomNumber === room_number);
+      if (!unit) {
+        return res.status(400).json({
+          success: false,
+          message: `Room unit "${room_number}" does not belong to category "${room.name}".`
+        });
+      }
 
-    // Check availability
+      if (unit.status !== "Available") {
+        return res.status(400).json({
+          success: false,
+          message: `Room unit "${room_number}" is currently marked as "${unit.status}" and cannot be booked.`
+        });
+      }
+
+      // Check for overlapping bookings on this specific room number
+      const existingOverlapping = await Booking.findOne({
+        room_number,
+        status: { $ne: "cancelled" },
+        $or: [
+          { check_in: { $lt: end }, check_out: { $gt: start } }
+        ]
+      });
+      if (existingOverlapping) {
+        return res.status(400).json({
+          success: false,
+          message: `Room unit "${room_number}" is already booked for these dates.`
+        });
+      }
+    }
+
+    // Check category level availability
     const totalRooms = room.totalRooms || 1;
 
     const overlappingBookings = await Booking.find({
@@ -104,6 +136,7 @@ exports.createBooking = async (req, res) => {
       adults: adults || 1,
       children: children || 0,
       rooms: roomCount,
+      room_number: room_number || null,
       total_price,
       status: 'pending',
       payment_method: payment_method || 'online'

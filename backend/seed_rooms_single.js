@@ -9,6 +9,18 @@ try {
   dns.setServers(["8.8.8.8", "1.1.1.1"]);
 } catch (err) {}
 
+const generateStatuses = (prefix, count) => {
+  const statuses = [];
+  for (let i = 1; i <= count; i++) {
+    const num = 100 + i;
+    statuses.push({
+      roomNumber: `${prefix}-${num}`,
+      status: "Available"
+    });
+  }
+  return statuses;
+};
+
 const roomsData = [
   {
     roomNumber: "40",
@@ -16,6 +28,7 @@ const roomsData = [
     price: 4990,
     category: "Executive Rooms",
     totalRooms: 40,
+    roomStatuses: generateStatuses("HE", 40),
     area: "30 M²",
     beds: "1 Double Bed",
     bathrooms: "1 Bathroom",
@@ -29,6 +42,7 @@ const roomsData = [
     price: 6990,
     category: "Luxury Villas",
     totalRooms: 9,
+    roomStatuses: generateStatuses("LV", 9),
     area: "45 M²",
     beds: "1 King Bed",
     bathrooms: "1 Bathroom",
@@ -42,6 +56,7 @@ const roomsData = [
     price: 5990,
     category: "Compact Villas",
     totalRooms: 5,
+    roomStatuses: generateStatuses("CV", 5),
     area: "38 M²",
     beds: "1 Queen Bed",
     bathrooms: "1 Bathroom",
@@ -55,6 +70,9 @@ const roomsData = [
     price: 9990,
     category: "Duplex Villa",
     totalRooms: 1,
+    roomStatuses: [
+      { roomNumber: "DV-401", status: "Available" }
+    ],
     area: "75 M²",
     beds: "2 Double Beds",
     bathrooms: "2 Bathrooms",

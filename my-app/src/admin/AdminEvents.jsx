@@ -176,7 +176,7 @@ const AdminEvents = () => {
   };
 
   return (
-    <div className="space-y-6 text-white max-w-7xl mx-auto">
+    <div className="space-y-6 text-white max-w-[180vh] mx-auto">
       {/* HEADER */}
       <div className="flex justify-between items-center border-b border-white/5 pb-6">
         <div>

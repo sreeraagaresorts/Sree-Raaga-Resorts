@@ -19,6 +19,7 @@ import {
   X,
   MessageSquare,
   ShoppingBag,
+  ChevronDown,
 } from "lucide-react";
 
 const navItems = [
@@ -26,9 +27,9 @@ const navItems = [
   { name: "Billing & Payments", path: "/admin/billing", icon: CreditCard },
   { name: "Guests", path: "/admin/users", icon: Users },
   { name: "Rooms & Bookings", path: "/admin/bookings", icon: Calendar },
-  { name: "Room Inventory", path: "/admin/rooms", icon: BedDouble },
+  { name: "Rooms Management", path: "/admin/rooms-mgmt", icon: BedDouble },
+  { name: "Hotel Management", path: "/admin/hotel-mgmt", icon: CalendarDays },
   { name: "Restaurant Menu", path: "/admin/menu", icon: UtensilsCrossed },
-  { name: "Events & Packages", path: "/admin/events", icon: CalendarDays },
   { name: "Enquiries", path: "/admin/enquiries", icon: MessageSquare },
   { name: "CMS", path: "/admin/content", icon: Edit3 },
   { name: "Settings", path: "/admin/settings", icon: Settings },
@@ -41,6 +42,7 @@ const  AdminLayout=()=> {
   const [adminUser, setAdminUser] = React.useState(null);
   const [popNotifications, setPopNotifications] = React.useState([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [isHotelMgmtOpen, setIsHotelMgmtOpen] = React.useState(true);
   const [unreadCounts, setUnreadCounts] = React.useState({
     "/admin/bookings": 0,
     "/admin/menu": 0,

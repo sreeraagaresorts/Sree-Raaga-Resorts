@@ -10,6 +10,7 @@ const bookingSchema = new mongoose.Schema({
   adults: { type: Number, default: 1 },
   children: { type: Number, default: 0 },
   rooms: { type: Number, default: 1 },
+  room_number: { type: String, default: null },
   total_price: { type: Number, required: true },
   status: { type: String, default: "pending" },
   payment_method: { type: String, default: "online" },

@@ -149,6 +149,17 @@ exports.createRoom = async (req, res) => {
       extraImages = req.files['extraImages'].map(f => f.filename);
     }
 
+    // Generate roomStatuses
+    const prefix = roomNumber || "RM";
+    const statuses = [];
+    const count = Number(totalRooms) || 1;
+    for (let i = 1; i <= count; i++) {
+      statuses.push({
+        roomNumber: `${prefix}-${100 + i}`,
+        status: "Available"
+      });
+    }
+
     const room = new Room({
       roomNumber,
       name,
@@ -156,7 +167,8 @@ exports.createRoom = async (req, res) => {
       image,
       images: extraImages,
       category: category || "Executive Rooms",
-      totalRooms: Number(totalRooms) || 1,
+      totalRooms: count,
+      roomStatuses: statuses,
       area: area || null,
       beds: beds || null,
       bathrooms: bathrooms || null,
@@ -226,12 +238,39 @@ exports.updateRoom = async (req, res) => {
       });
     }
 
+    // Fetch the room to update to compare roomNumber and totalRooms
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(idParam)) {
+      query = { $or: [{ _id: idParam }, { id: isNaN(Number(idParam)) ? null : Number(idParam) }] };
+    } else {
+      query = { id: isNaN(Number(idParam)) ? null : Number(idParam) };
+    }
+    const currentRoomDoc = await Room.findOne(query);
+
+    let updatedStatuses = [];
+    const newTotal = Number(totalRooms) || 1;
+    if (currentRoomDoc) {
+      updatedStatuses = currentRoomDoc.roomStatuses || [];
+      // Rebuild if total count or prefix roomNumber changes
+      if (updatedStatuses.length !== newTotal || currentRoomDoc.roomNumber !== roomNumber) {
+        const prefix = roomNumber || "RM";
+        updatedStatuses = [];
+        for (let i = 1; i <= newTotal; i++) {
+          updatedStatuses.push({
+            roomNumber: `${prefix}-${100 + i}`,
+            status: "Available"
+          });
+        }
+      }
+    }
+
     const updateData = {
       roomNumber,
       name,
       price: parseFloat(price),
       category: category || "Executive Rooms",
-      totalRooms: Number(totalRooms) || 1,
+      totalRooms: newTotal,
+      roomStatuses: updatedStatuses,
       area: area || null,
       beds: beds || null,
       bathrooms: bathrooms || null,
@@ -263,13 +302,6 @@ exports.updateRoom = async (req, res) => {
 
     if (req.body.existingExtraImages !== undefined || (req.files && req.files['extraImages'])) {
       updateData.images = [...existingImages, ...newExtraImages];
-    }
-
-    let query = {};
-    if (mongoose.Types.ObjectId.isValid(idParam)) {
-      query = { $or: [{ _id: idParam }, { id: isNaN(Number(idParam)) ? null : Number(idParam) }] };
-    } else {
-      query = { id: isNaN(Number(idParam)) ? null : Number(idParam) };
     }
 
     const room = await Room.findOneAndUpdate(
@@ -390,16 +422,10 @@ exports.getRoomAvailability = async (req, res) => {
     }
 
     const Booking = require("../models/Booking");
-
-    // Count how many total rooms exist in database with the same name
-    const totalRooms = await Room.countDocuments({ name: room.name });
-
-    // Find all overlapping bookings for rooms with this name
-    const matchingRooms = await Room.find({ name: room.name });
-    const roomIds = matchingRooms.map(r => r.id);
+    const totalRooms = room.totalRooms || 1;
 
     const overlappingBookings = await Booking.find({
-      room_id: { $in: roomIds },
+      room_id: room.id,
       status: { $ne: "cancelled" },
       $or: [
         { check_in: { $lt: end }, check_out: { $gt: start } }
@@ -426,6 +452,111 @@ exports.getRoomAvailability = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server error checking availability"
+    });
+  }
+};
+
+exports.updateRoomUnitStatus = async (req, res) => {
+  try {
+    const idParam = req.params.id;
+    const { roomNumber, status } = req.body;
+
+    if (!roomNumber || !status) {
+      return res.status(400).json({
+        success: false,
+        message: "roomNumber and status are required"
+      });
+    }
+
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(idParam)) {
+      query = { $or: [{ _id: idParam }, { id: isNaN(Number(idParam)) ? null : Number(idParam) }] };
+    } else {
+      query = { id: isNaN(Number(idParam)) ? null : Number(idParam) };
+    }
+
+    const room = await Room.findOne(query);
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        message: "Room Not Found"
+      });
+    }
+
+    const unit = room.roomStatuses.find(u => u.roomNumber === roomNumber);
+    if (!unit) {
+      return res.status(404).json({
+        success: false,
+        message: `Room Unit ${roomNumber} not found in this room type`
+      });
+    }
+
+    unit.status = status;
+    await room.save();
+
+    res.json({
+      success: true,
+      message: `Room Unit ${roomNumber} status updated to ${status}`
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update room unit status"
+    });
+  }
+};
+
+exports.addRoomUnit = async (req, res) => {
+  try {
+    const { roomNumber, categoryName, price, status } = req.body;
+
+    if (!roomNumber || !categoryName) {
+      return res.status(400).json({
+        success: false,
+        message: "roomNumber and categoryName are required"
+      });
+    }
+
+    const duplicateRoom = await Room.findOne({ "roomStatuses.roomNumber": roomNumber });
+    if (duplicateRoom) {
+      return res.status(400).json({
+        success: false,
+        message: `Room number ${roomNumber} already exists`
+      });
+    }
+
+    const roomCategory = await Room.findOne({ name: categoryName });
+    if (!roomCategory) {
+      return res.status(404).json({
+        success: false,
+        message: `Room category "${categoryName}" not found`
+      });
+    }
+
+    roomCategory.roomStatuses.push({
+      roomNumber,
+      status: status || "Available"
+    });
+
+    roomCategory.totalRooms += 1;
+
+    if (price) {
+      roomCategory.price = parseFloat(price);
+    }
+
+    await roomCategory.save();
+
+    res.json({
+      success: true,
+      message: `Room ${roomNumber} added to ${categoryName} successfully`,
+      data: roomCategory
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to add room unit"
     });
   }
 };

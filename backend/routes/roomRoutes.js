@@ -17,7 +17,9 @@ const {
   createRoom,
   updateRoom,
   deleteRoom,
-  getRoomAvailability
+  getRoomAvailability,
+  updateRoomUnitStatus,
+  addRoomUnit
 } = require("../controllers/roomController");
 
 /*
@@ -65,6 +67,20 @@ router.delete(
   verifyToken,
   adminMiddleware,
   deleteRoom
+);
+
+router.put(
+  "/:id/status",
+  verifyToken,
+  adminMiddleware,
+  updateRoomUnitStatus
+);
+
+router.post(
+  "/add-unit",
+  verifyToken,
+  adminMiddleware,
+  addRoomUnit
 );
 
 module.exports = router;
