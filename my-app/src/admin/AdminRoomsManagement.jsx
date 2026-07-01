@@ -421,13 +421,13 @@ const AdminRoomsManagement = () => {
                     <BedDouble size={18} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[15px] text-white">Room {unit.roomNumber}</h3>
-                    <span className="text-[11px] text-white/40 block mt-0.5 leading-tight">{room.category}</span>
+                    <h3 className="font-bold text-[17px] text-white">Room {unit.roomNumber}</h3>
+                    <span className="text-xs text-white/40 block mt-0.5 leading-tight">{room.category}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-1.5 relative">
-                  <span className={`text-[10px] px-2 py-0.5 rounded border font-semibold uppercase ${getStatusColor(unit.status)}`}>
+                  <span className={`text-[11px] px-2 py-0.5 rounded border font-semibold uppercase ${getStatusColor(unit.status)}`}>
                     {unit.status}
                   </span>
 
@@ -473,7 +473,7 @@ const AdminRoomsManagement = () => {
               </div>
 
               {/* Specs */}
-              <div className="mt-4 border-t border-white/5 pt-3 space-y-1.5 text-xs text-white/70">
+              <div className="mt-4 border-t border-white/5 pt-3 space-y-1.5 text-[13px] text-white/70">
                 <div className="flex justify-between">
                   <span>Floor</span>
                   <span className="text-white font-medium">{floor}</span>
