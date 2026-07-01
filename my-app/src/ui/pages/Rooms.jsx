@@ -385,12 +385,6 @@ const Rooms = () => {
             ))}
           </div>
 
-          {/* Load More Button */}
-          <div className="flex justify-center mt-20 select-none">
-            <button className="px-8 py-3.5 border border-[#c8a64d] text-[#0d2b4e] hover:text-white bg-transparent hover:bg-[#c8a64d] text-xs font-bold uppercase tracking-[3px] rounded-sm transition-all duration-300 shadow-sm">
-              LOAD MORE
-            </button>
-          </div>
 
         </section>
 

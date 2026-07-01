@@ -532,10 +532,10 @@ className="text-3xl md:text-3xl font-light uppercase tracking-[8px] text-white" 
                 <span className="text-4xl  tracking-[3px] font-medium font-corm font-semibold text-[#0d2b4e] mb-2">
                   Location
                 </span>
-                <span className="text-xl text-gray-700 font-light leading-relaxed">
+                <span className="text-xl text-gray-700 font-medium leading-relaxed">
                   Devanahalli Hobli, Taluk Chamarayapatna
                 </span>
-                <span className="text-xl text-gray-700 font-light leading-relaxed mt-0.5">
+                <span className="text-xl text-gray-700 font-medium leading-relaxed mt-0.5">
                   Karnataka 562129, India
                 </span>
               </div>
@@ -545,12 +545,13 @@ className="text-3xl md:text-3xl font-light uppercase tracking-[8px] text-white" 
                 <span className="text-4xl  tracking-[3px] font-medium font-corm font-semibold text-[#0d2b4e] mb-2">
                   Phone Support
                 </span>
-                <span className="text-xl text-gray-700 font-light">
-                  +91 89045 61155
+                <span className="text-xl text-gray-700 font-medium">
+                  +91 890 456 1155
                 </span>
-                <span className="text-xl text-gray-700 font-light mt-0.5">
-                  info@sreeraagaresorts.in
+                   <span className="text-xl text-gray-700 font-medium">
+                  +91 890 438 1155
                 </span>
+               
               </div>
 
               {/* Connect With Us */}
@@ -558,9 +559,10 @@ className="text-3xl md:text-3xl font-light uppercase tracking-[8px] text-white" 
                 <span className="text-4xl  tracking-[3px] font-medium font-corm font-semibold text-[#0d2b4e] mb-2">
                   Connect With Us
                 </span>
-                <span className="text-xl text-gray-700 font-light">
-                  +91 89045 61155
+                 <span className="text-xl text-gray-700 font-medium mt-0.5">
+                  info@sreeraagaresorts.in
                 </span>
+             
                 {/* Social icons */}
                 {/* <div className="flex gap-4 mt-3">
                   <a 

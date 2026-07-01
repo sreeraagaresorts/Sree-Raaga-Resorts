@@ -20,6 +20,32 @@ const AdminRooms = () => {
   const [error, setError] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingRoom, setEditingRoom] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  // Dynamically extract unique categories from the rooms list
+  const categories = React.useMemo(() => {
+    const cats = new Set();
+    rooms.forEach((room) => {
+      if (room.category) {
+        cats.add(room.category);
+      }
+    });
+    return ["All", ...Array.from(cats)];
+  }, [rooms]);
+
+  // Filter rooms based on the selected category
+  const filteredRooms = React.useMemo(() => {
+    if (selectedCategory === "All") return rooms;
+    return rooms.filter((room) => room.category === selectedCategory);
+  }, [rooms, selectedCategory]);
+
+  // Reset selected category to "All" if it is no longer in the categories list
+  useEffect(() => {
+    if (selectedCategory !== "All" && !categories.includes(selectedCategory)) {
+      setSelectedCategory("All");
+    }
+  }, [categories, selectedCategory]);
+
 
   // Form states
   const [roomNumber, setRoomNumber] = useState("");
@@ -484,6 +510,29 @@ const AdminRooms = () => {
   </div>
 )}
 
+      {/* FILTER SECTION */}
+      {!loading && rooms.length > 0 && (
+        <div className="flex flex-wrap items-center gap-4 bg-[#081A2F] border border-white/10 p-4 rounded-xl">
+          <span className="text-sm text-white/60">Filter by Category:</span>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition cursor-pointer border-0 ${
+                  selectedCategory === cat
+                    ? "bg-[#C8A64D] text-black"
+                    : "bg-white/5 text-white/80 hover:bg-white/10"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ROOM GRID */}
       {loading ? (
         <div className="flex items-center gap-2 text-white/60 justify-center py-12">
@@ -501,96 +550,110 @@ const AdminRooms = () => {
           </button>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {rooms.map((room) => (
-            <div
-              key={room.id || room._id}
-              className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden hover:scale-[1.02] transition duration-300 flex flex-col justify-between"
-            >
-              {/* IMAGE */}
-              <div>
-                <img
-                  src={getImageUrl(room.image)}
-                  className="h-48 w-full object-cover border-b border-white/10"
-                  alt={room.name}
-                />
+        <>
+          {filteredRooms.length === 0 ? (
+            <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl">
+              <p className="text-white/50 text-lg">No rooms found in this category.</p>
+              <button 
+                onClick={() => setSelectedCategory("All")} 
+                className="mt-4 px-6 py-2 bg-[#C8A64D] text-black font-bold rounded-lg border-0 cursor-pointer hover:bg-[#b09141] transition"
+              >
+                Clear Filter
+              </button>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredRooms.map((room) => (
+                <div
+                  key={room.id || room._id}
+                  className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden hover:scale-[1.02] transition duration-300 flex flex-col justify-between"
+                >
+                  {/* IMAGE */}
+                  <div>
+                    <img
+                      src={getImageUrl(room.image)}
+                      className="h-48 w-full object-cover border-b border-white/10"
+                      alt={room.name}
+                    />
 
-                {/* CONTENT */}
-                <div className="p-4 space-y-3">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h2 className="font-bold text-[18px] leading-tight text-white">{room.name}</h2>
-                      {room.category && (
-                        <span className="text-[12px] text-white uppercase tracking-widest font-bold block mt-0.5">
-                          {room.category}
+                    {/* CONTENT */}
+                    <div className="p-4 space-y-3">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h2 className="font-bold text-[18px] leading-tight text-white">{room.name}</h2>
+                          {room.category && (
+                            <span className="text-[12px] text-white uppercase tracking-widest font-bold block mt-0.5">
+                              {room.category}
+                            </span>
+                          )}
+                        </div>
+                        {room.roomNumber && (
+                          <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
+                            Room {room.roomNumber}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-[#C8A64D] font-bold text-[18px]">
+                        ₹{parseFloat(room.price).toLocaleString()} <span className="text-white text-[14px] font-normal">/ night</span>
+                      </p>
+
+                      <p className="text-white text-[16px] line-clamp-2">
+                        {room.description}
+                      </p>
+
+                      {/* INFO */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[14px] text-white border-t border-white/10 pt-3">
+                        <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Beds">
+                          <BedDouble size={14} className="text-[#C8A64D]" />
+                          {room.beds}
                         </span>
-                      )}
+
+                        <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Area">
+                          <Maximize size={14} className="text-[#C8A64D]" />
+                          {room.area}
+                        </span>
+
+                        {room.guests && (
+                          <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Guests Capacity">
+                            <Users size={14} className="text-[#C8A64D]" />
+                            {room.guests}
+                          </span>
+                        )}
+
+                        {room.images && room.images.length > 0 && (
+                          <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20 col-span-full sm:col-span-1" title="Gallery Images">
+                            <Upload size={14} className="text-[#C8A64D]" />
+                            {room.images.length} Extra
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    {room.roomNumber && (
-                      <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
-                        Room {room.roomNumber}
-                      </span>
-                    )}
                   </div>
 
-                  <p className="text-[#C8A64D] font-bold text-[18px]">
-                    ₹{parseFloat(room.price).toLocaleString()} <span className="text-white text-[14px] font-normal">/ night</span>
-                  </p>
+                  {/* ACTIONS */}
+                  <div className="flex gap-2 p-4 border-t border-white/5">
+                    <button 
+                      onClick={() => openEditModal(room)}
+                      className="flex-1 bg-white/10 py-2 rounded-lg flex items-center justify-center hover:bg-white/20 transition cursor-pointer text-white border-0"
+                      title="Edit Room"
+                    >
+                      <Edit size={14} className="mr-1" /> Edit
+                    </button>
 
-                  <p className="text-white text-[16px] line-clamp-2">
-                    {room.description}
-                  </p>
-
-                  {/* INFO */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[14px] text-white border-t border-white/10 pt-3">
-                    <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Beds">
-                      <BedDouble size={14} className="text-[#C8A64D]" />
-                      {room.beds}
-                    </span>
-
-                    <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Area">
-                      <Maximize size={14} className="text-[#C8A64D]" />
-                      {room.area}
-                    </span>
-
-                    {room.guests && (
-                      <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Guests Capacity">
-                        <Users size={14} className="text-[#C8A64D]" />
-                        {room.guests}
-                      </span>
-                    )}
-
-                    {room.images && room.images.length > 0 && (
-                      <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20 col-span-full sm:col-span-1" title="Gallery Images">
-                        <Upload size={14} className="text-[#C8A64D]" />
-                        {room.images.length} Extra
-                      </span>
-                    )}
+                    <button 
+                      onClick={() => handleDelete(room.id || room._id)}
+                      className="flex-1 bg-red-500/10 text-red-400 py-2 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition cursor-pointer border-0"
+                      title="Delete Room"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
-              </div>
-
-              {/* ACTIONS */}
-              <div className="flex gap-2 p-4 border-t border-white/5">
-                <button 
-                  onClick={() => openEditModal(room)}
-                  className="flex-1 bg-white/10 py-2 rounded-lg flex items-center justify-center hover:bg-white/20 transition cursor-pointer"
-                  title="Edit Room"
-                >
-                  <Edit size={14} className="mr-1" /> Edit
-                </button>
-
-                 <button 
-                  onClick={() => handleDelete(room.id || room._id)}
-                  className="flex-1 bg-red-500/10 text-red-400 py-2 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition cursor-pointer"
-                  title="Delete Room"
-                >
-                  Delete
-                </button>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );
