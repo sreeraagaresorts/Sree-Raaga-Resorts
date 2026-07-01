@@ -242,11 +242,44 @@ exports.getAllBookings = async (req, res) => {
   }
 };
 
+// Helper to update the physical room unit status in Rooms Management
+const syncRoomUnitStatus = async (roomId, roomNumber, bookingStatus) => {
+  if (!roomNumber) return;
+  try {
+    const room = await Room.findOne({ id: roomId });
+    if (!room) return;
+    const unit = room.roomStatuses.find(u => u.roomNumber === roomNumber);
+    if (!unit) return;
+
+    let newStatus = "Available";
+    if (bookingStatus === "confirmed") {
+      newStatus = "Reserved";
+    } else if (bookingStatus === "checked_in") {
+      newStatus = "Occupied";
+    } else if (bookingStatus === "cancelled") {
+      newStatus = "Available";
+    }
+    
+    unit.status = newStatus;
+    await room.save();
+  } catch (err) {
+    console.error("Failed to sync room unit status:", err);
+  }
+};
+
 // 4. Update booking status or details (Admin only)
 exports.updateBookingStatus = async (req, res) => {
   try {
-    const { status, payment_method } = req.body;
+    const { status, payment_method, room_number } = req.body;
     const { id } = req.params;
+
+    const booking = await Booking.findOne({ id: Number(id) });
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found."
+      });
+    }
 
     const updateFields = {};
 
@@ -272,6 +305,36 @@ exports.updateBookingStatus = async (req, res) => {
       updateFields.payment_method = payment_method;
     }
 
+    if (room_number !== undefined) {
+      if (room_number) {
+        const room = await Room.findOne({ id: booking.room_id });
+        if (!room) {
+          return res.status(404).json({ success: false, message: "Room type not found." });
+        }
+        const unit = room.roomStatuses.find(u => u.roomNumber === room_number);
+        if (!unit) {
+          return res.status(400).json({ success: false, message: `Room unit "${room_number}" does not belong to category "${room.name}".` });
+        }
+        
+        // Check for overlapping bookings on this specific room number (excluding this booking itself)
+        const existingOverlapping = await Booking.findOne({
+          id: { $ne: booking.id },
+          room_number,
+          status: { $ne: "cancelled" },
+          $or: [
+            { check_in: { $lt: booking.check_out }, check_out: { $gt: booking.check_in } }
+          ]
+        });
+        if (existingOverlapping) {
+          return res.status(400).json({
+            success: false,
+            message: `Room unit "${room_number}" is already booked for these dates.`
+          });
+        }
+      }
+      updateFields.room_number = room_number || null;
+    }
+
     if (Object.keys(updateFields).length === 0) {
       return res.status(400).json({
         success: false,
@@ -279,25 +342,31 @@ exports.updateBookingStatus = async (req, res) => {
       });
     }
 
-    const booking = await Booking.findOneAndUpdate(
+    // Sync old room status back to Available if room number changes
+    const oldRoomNumber = booking.room_number;
+    const finalRoomNumber = room_number !== undefined ? room_number : oldRoomNumber;
+    if (room_number !== undefined && oldRoomNumber && oldRoomNumber !== room_number) {
+      await syncRoomUnitStatus(booking.room_id, oldRoomNumber, "cancelled");
+    }
+
+    const updatedBooking = await Booking.findOneAndUpdate(
       { id: Number(id) },
       updateFields,
       { returnDocument: "after" }
     );
 
-    if (!booking) {
-      return res.status(404).json({
-        success: false,
-        message: "Booking not found."
-      });
+    // Sync new/current room status based on status
+    const finalStatus = status !== undefined ? status : updatedBooking.status;
+    if (finalRoomNumber) {
+      await syncRoomUnitStatus(updatedBooking.room_id, finalRoomNumber, finalStatus);
     }
 
     // Fetch details for email notification
     try {
-      const room = await Room.findOne({ id: booking.room_id });
-      const user = await User.findOne({ id: booking.user_id });
+      const room = await Room.findOne({ id: updatedBooking.room_id });
+      const user = await User.findOne({ id: updatedBooking.user_id });
       const emailPayload = {
-        ...booking.toObject(),
+        ...updatedBooking.toObject(),
         room_name: room ? room.name : null,
         room_number: room ? room.roomNumber : null,
         guest_name: user ? user.full_name : null,
@@ -317,7 +386,7 @@ exports.updateBookingStatus = async (req, res) => {
       logAction(
         req.user.id,
         "Booking Update",
-        `Updated booking #${booking.id} (Status: ${booking.status})`
+        `Updated booking #${updatedBooking.id} (Status: ${updatedBooking.status})`
       );
     }
 

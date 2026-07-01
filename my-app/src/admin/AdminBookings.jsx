@@ -40,6 +40,12 @@ const AdminBookings = () => {
   const [children, setChildren] = useState(0);
   const [saving, setSaving] = useState(false);
 
+  // Assign Room Modal State
+  const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
+  const [assignBooking, setAssignBooking] = useState(null);
+  const [assignRoomNumber, setAssignRoomNumber] = useState("");
+  const [assignSaving, setAssignSaving] = useState(false);
+
   // Manual guest registration details
   const [guestMode, setGuestMode] = useState("existing");
   const [guestName, setGuestName] = useState("");
@@ -101,6 +107,7 @@ const AdminBookings = () => {
 
   useEffect(() => {
     fetchBookings();
+    fetchUsersAndRooms();
 
     // Auto-refresh bookings silently every 10 seconds
     const interval = setInterval(() => {
@@ -116,7 +123,7 @@ const AdminBookings = () => {
       rooms.forEach((room) => {
         const units = room.roomStatuses || [];
         units.forEach((unit) => {
-          if (unit.status === "Available") {
+          if (unit.status !== "Maintenance") {
             list.push({
               roomId: room.id,
               roomName: room.name,
@@ -147,7 +154,7 @@ const AdminBookings = () => {
     rooms.forEach((room) => {
       const units = room.roomStatuses || [];
       units.forEach((unit) => {
-        if (unit.status === "Available" && !bookedRoomNumbers.has(unit.roomNumber)) {
+        if (unit.status !== "Maintenance" && !bookedRoomNumbers.has(unit.roomNumber)) {
           list.push({
             roomId: room.id,
             roomName: room.name,
@@ -160,6 +167,79 @@ const AdminBookings = () => {
 
     return list;
   }, [rooms, bookings, checkIn, checkOut]);
+
+  const assignAvailableRooms = React.useMemo(() => {
+    if (!assignBooking) return [];
+
+    const start = new Date(assignBooking.check_in);
+    const end = new Date(assignBooking.check_out);
+
+    const bookedRoomNumbers = new Set();
+    bookings.forEach((b) => {
+      if (b.id !== assignBooking.id && b.status !== "cancelled" && b.room_number) {
+        const bStart = new Date(b.check_in);
+        const bEnd = new Date(b.check_out);
+        if (bStart < end && bEnd > start) {
+          bookedRoomNumbers.add(b.room_number);
+        }
+      }
+    });
+
+    const targetRoomCategory = rooms.find(r => Number(r.id) === Number(assignBooking.room_id));
+    if (!targetRoomCategory) return [];
+
+    const list = [];
+    const units = targetRoomCategory.roomStatuses || [];
+    units.forEach((unit) => {
+      if (unit.status !== "Maintenance" && !bookedRoomNumbers.has(unit.roomNumber)) {
+        list.push(unit.roomNumber);
+      }
+    });
+
+    return list;
+  }, [rooms, bookings, assignBooking]);
+
+  const handleOpenAssignModal = (booking) => {
+    setAssignBooking(booking);
+    setAssignRoomNumber("");
+    setIsAssignModalOpen(true);
+  };
+
+  const handleAssignRoom = async (e) => {
+    e.preventDefault();
+    if (!assignBooking || !assignRoomNumber) return;
+
+    setAssignSaving(true);
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`${API_URL}/api/bookings/${assignBooking.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          room_number: assignRoomNumber
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to assign room.");
+      }
+
+      toast.success(`Room ${assignRoomNumber} assigned successfully to booking #${assignBooking.id}!`);
+      setIsAssignModalOpen(false);
+      setAssignBooking(null);
+      setAssignRoomNumber("");
+      fetchBookings();
+    } catch (err) {
+      toast.error(err.message || "Failed to assign room.");
+    } finally {
+      setAssignSaving(false);
+    }
+  };
 
   const handleOpenForm = async () => {
     await fetchUsersAndRooms();
@@ -411,6 +491,7 @@ const AdminBookings = () => {
                 <tr>
                   <th className="p-4 text-left font-semibold text-[#c8a64d] ">Guest Details</th>
                   <th className="p-4 text-left font-semibold text-[#c8a64d] ">Room booked</th>
+                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Assign Room</th>
                   <th className="p-4 text-left font-semibold text-[#c8a64d] ">Reservation Dates</th>
                   <th className="p-4 text-left font-semibold text-[#c8a64d] ">Amount</th>
                   <th className="p-4 text-left font-semibold text-[#c8a64d] ">Payment</th>
@@ -434,8 +515,23 @@ const AdminBookings = () => {
                     {/* ROOM */}
                     <td className="p-4 ">
                       <div className="text-white font-medium text-[16px]">{b.room_name}</div>
-                      {b.room_number && <div className="text-xs text-green-400 font-semibold mt-0.5">Room: {b.room_number}</div>}
                       <div className="text-[16px] text-white mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
+                    </td>
+
+                    {/* ASSIGN ROOM */}
+                    <td className="p-4 ">
+                      {b.room_number ? (
+                        <span className="text-xs text-green-400 font-semibold border border-green-500/20 bg-green-500/10 px-2 py-1 rounded">
+                          Room: {b.room_number}
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => handleOpenAssignModal(b)}
+                          className="px-2.5 py-1 bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 hover:bg-yellow-500/20 rounded text-[12px] font-semibold transition cursor-pointer"
+                        >
+                          Assign Room
+                        </button>
+                      )}
                     </td>
 
                     {/* DATES */}
@@ -788,6 +884,65 @@ const AdminBookings = () => {
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* ASSIGN ROOM MODAL */}
+      {isAssignModalOpen && assignBooking && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <form
+            onSubmit={handleAssignRoom}
+            className="bg-[#081A2F] w-full max-w-md p-6 rounded-xl border border-white/10 space-y-4"
+          >
+            <h2 className="text-lg font-bold border-b border-white/5 pb-2">
+              Assign Room Number
+            </h2>
+            <div className="text-sm space-y-1.5 text-white/70">
+              <p><span className="font-semibold text-white">Guest:</span> {assignBooking.guest_name}</p>
+              <p><span className="font-semibold text-white">Category:</span> {assignBooking.room_name}</p>
+              <p><span className="font-semibold text-white">Dates:</span> {new Date(assignBooking.check_in).toLocaleDateString("en-GB")} - {new Date(assignBooking.check_out).toLocaleDateString("en-GB")}</p>
+            </div>
+
+            <div>
+              <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Select Physical Room Number</label>
+              <select
+                value={assignRoomNumber}
+                onChange={(e) => setAssignRoomNumber(e.target.value)}
+                required
+                className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+              >
+                <option value="">-- Select Room Number --</option>
+                {assignAvailableRooms.map((num) => (
+                  <option key={num} value={num}>
+                    Room {num} (Available)
+                  </option>
+                ))}
+              </select>
+              {assignAvailableRooms.length === 0 && (
+                <p className="text-xs text-red-400 mt-2">No available rooms found in this category for the booking dates.</p>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsAssignModalOpen(false);
+                  setAssignBooking(null);
+                }}
+                className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white font-semibold cursor-pointer border-0"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={assignSaving || assignAvailableRooms.length === 0}
+                className="px-4 py-2 rounded-lg bg-[#C8A64D] hover:bg-[#b09141] text-black font-bold flex items-center gap-1.5 cursor-pointer border-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {assignSaving ? "Assigning..." : "Assign Room"}
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </div>

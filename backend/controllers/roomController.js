@@ -534,9 +534,11 @@ exports.addRoomUnit = async (req, res) => {
       });
     }
 
+    const floorVal = Number(req.body.floor) || 1;
     roomCategory.roomStatuses.push({
       roomNumber,
-      status: status || "Available"
+      status: status || "Available",
+      floor: floorVal
     });
 
     roomCategory.totalRooms += 1;
@@ -557,6 +559,72 @@ exports.addRoomUnit = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to add room unit"
+    });
+  }
+};
+
+exports.updateRoomUnit = async (req, res) => {
+  try {
+    const idParam = req.params.id;
+    const { oldRoomNumber, newRoomNumber, floor, status } = req.body;
+
+    if (!oldRoomNumber || !newRoomNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "oldRoomNumber and newRoomNumber are required"
+      });
+    }
+
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(idParam)) {
+      query = { $or: [{ _id: idParam }, { id: isNaN(Number(idParam)) ? null : Number(idParam) }] };
+    } else {
+      query = { id: isNaN(Number(idParam)) ? null : Number(idParam) };
+    }
+
+    const room = await Room.findOne(query);
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        message: "Room Not Found"
+      });
+    }
+
+    const unit = room.roomStatuses.find(u => u.roomNumber === oldRoomNumber);
+    if (!unit) {
+      return res.status(404).json({
+        success: false,
+        message: `Room unit ${oldRoomNumber} not found`
+      });
+    }
+
+    // Check if new room number is already taken by a different unit
+    if (oldRoomNumber !== newRoomNumber) {
+      const duplicateRoom = await Room.findOne({ "roomStatuses.roomNumber": newRoomNumber });
+      if (duplicateRoom) {
+        return res.status(400).json({
+          success: false,
+          message: `Room number ${newRoomNumber} is already in use`
+        });
+      }
+    }
+
+    unit.roomNumber = newRoomNumber;
+    if (floor !== undefined) unit.floor = Number(floor) || 1;
+    if (status !== undefined) unit.status = status;
+
+    await room.save();
+
+    res.json({
+      success: true,
+      message: `Room unit updated successfully`,
+      data: room
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update room unit"
     });
   }
 };

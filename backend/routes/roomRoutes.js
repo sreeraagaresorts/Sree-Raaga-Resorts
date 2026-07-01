@@ -19,7 +19,8 @@ const {
   deleteRoom,
   getRoomAvailability,
   updateRoomUnitStatus,
-  addRoomUnit
+  addRoomUnit,
+  updateRoomUnit
 } = require("../controllers/roomController");
 
 /*
@@ -81,6 +82,13 @@ router.post(
   verifyToken,
   adminMiddleware,
   addRoomUnit
+);
+
+router.put(
+  "/:id/unit",
+  verifyToken,
+  adminMiddleware,
+  updateRoomUnit
 );
 
 module.exports = router;

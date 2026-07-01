@@ -14,7 +14,8 @@ const roomSchema = new mongoose.Schema({
     type: [
       {
         roomNumber: { type: String, required: true },
-        status: { type: String, enum: ["Available", "Occupied", "Reserved", "Maintenance"], default: "Available" }
+        status: { type: String, enum: ["Available", "Occupied", "Reserved", "Maintenance"], default: "Available" },
+        floor: { type: Number, default: 1 }
       }
     ],
     default: []

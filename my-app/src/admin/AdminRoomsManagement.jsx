@@ -33,9 +33,18 @@ const AdminRoomsManagement = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [addRoomNumber, setAddRoomNumber] = useState("");
   const [addCategory, setAddCategory] = useState("Executive Rooms");
+  const [addFloor, setAddFloor] = useState("1");
   const [addPrice, setAddPrice] = useState("");
   const [addStatus, setAddStatus] = useState("Available");
   const [addSaving, setAddSaving] = useState(false);
+
+  // Edit Room Modal State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editOldRoomNumber, setEditOldRoomNumber] = useState("");
+  const [editRoomNumber, setEditRoomNumber] = useState("");
+  const [editFloor, setEditFloor] = useState("1");
+  const [editStatus, setEditStatus] = useState("Available");
+  const [editSaving, setEditSaving] = useState(false);
 
   const fetchRooms = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -71,16 +80,7 @@ const AdminRoomsManagement = () => {
     rooms.forEach((room) => {
       const statuses = room.roomStatuses || [];
       statuses.forEach((unit) => {
-        // Extract floor from room number (e.g. HE-105 -> floor 1, LV-204 -> floor 2)
-        let floor = 1;
-        const matches = unit.roomNumber.match(/\d+/);
-        if (matches) {
-          const numberValue = parseInt(matches[0]);
-          if (numberValue >= 400) floor = 4;
-          else if (numberValue >= 300) floor = 3;
-          else if (numberValue >= 200) floor = 2;
-          else floor = 1;
-        }
+        const floor = unit.floor || 1;
 
         list.push({
           room,
@@ -189,6 +189,7 @@ const AdminRoomsManagement = () => {
         body: JSON.stringify({
           roomNumber: addRoomNumber,
           categoryName: addCategory,
+          floor: addFloor ? Number(addFloor) : 1,
           price: addPrice ? parseFloat(addPrice) : undefined,
           status: addStatus
         })
@@ -202,6 +203,7 @@ const AdminRoomsManagement = () => {
       toast.success(`Room ${addRoomNumber} added successfully to ${addCategory}!`);
       setIsAddModalOpen(false);
       setAddRoomNumber("");
+      setAddFloor("1");
       setAddPrice("");
       setAddStatus("Available");
       fetchRooms();
@@ -209,6 +211,55 @@ const AdminRoomsManagement = () => {
       toast.error(err.message || "Failed to add room unit.");
     } finally {
       setAddSaving(false);
+    }
+  };
+
+  const openEditModal = (room, unit) => {
+    setSelectedUnit({ room, unit });
+    setEditOldRoomNumber(unit.roomNumber);
+    setEditRoomNumber(unit.roomNumber);
+    setEditFloor(unit.floor || 1);
+    setEditStatus(unit.status);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateUnit = async (e) => {
+    e.preventDefault();
+    if (!editRoomNumber) {
+      toast.warning("Room Number is required.");
+      return;
+    }
+    setEditSaving(true);
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`${API_URL}/api/rooms/${selectedUnit.room.id || selectedUnit.room._id}/unit`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          oldRoomNumber: editOldRoomNumber,
+          newRoomNumber: editRoomNumber,
+          floor: Number(editFloor) || 1,
+          status: editStatus
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update room unit.");
+      }
+
+      toast.success(`Room ${editRoomNumber} updated successfully!`);
+      setIsEditModalOpen(false);
+      setSelectedUnit(null);
+      fetchRooms();
+    } catch (err) {
+      toast.error(err.message || "Failed to update room unit.");
+    } finally {
+      setEditSaving(false);
     }
   };
 
@@ -323,7 +374,7 @@ const AdminRoomsManagement = () => {
           {filteredUnits.map(({ room, unit, floor }) => (
             <div
               key={unit.roomNumber}
-              onClick={() => openStatusModal(room, unit)}
+              onClick={() => openEditModal(room, unit)}
               className="bg-[#081A2F] border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-[#C8A64D]/50 hover:scale-[1.02] cursor-pointer transition-all duration-300"
             >
               {/* Header */}
@@ -365,47 +416,78 @@ const AdminRoomsManagement = () => {
         </div>
       )}
 
-      {/* STATUS CHANGE POPUP/MODAL */}
-      {selectedUnit && (
+      {/* EDIT ROOM UNIT MODAL */}
+      {isEditModalOpen && selectedUnit && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#081A2F] w-full max-w-md p-6 rounded-xl border border-white/10 space-y-4">
+          <form
+            onSubmit={handleUpdateUnit}
+            className="bg-[#081A2F] w-full max-w-md p-6 rounded-xl border border-white/10 space-y-4"
+          >
             <h2 className="text-lg font-bold border-b border-white/5 pb-2">
-              Update Status: Room {selectedUnit.unit.roomNumber}
+              Edit Room Unit: {editOldRoomNumber}
             </h2>
             <p className="text-xs text-white/50 leading-relaxed">
-              Manually override the status for this room number. Set to Maintenance for cleaning/repairs.
+              Edit the room unit settings. Changes here will immediately reflect in the status grid.
             </p>
 
-            <div className="space-y-3">
-              <label className="block text-yellow-500 text-xs uppercase tracking-wider">Select Room Status</label>
-              <select
-                value={newStatus}
-                onChange={(e) => setNewStatus(e.target.value)}
-                className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-              >
-                <option value="Available">Available (Clean & Ready)</option>
-                <option value="Occupied">Occupied</option>
-                <option value="Reserved">Reserved</option>
-                <option value="Maintenance">Maintenance</option>
-              </select>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Room Number</label>
+                <input
+                  type="text"
+                  required
+                  value={editRoomNumber}
+                  onChange={(e) => setEditRoomNumber(e.target.value)}
+                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Floor Number</label>
+                <input
+                  type="number"
+                  required
+                  value={editFloor}
+                  onChange={(e) => setEditFloor(e.target.value)}
+                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Select Room Status</label>
+                <select
+                  value={editStatus}
+                  onChange={(e) => setEditStatus(e.target.value)}
+                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                >
+                  <option value="Available">Available (Clean & Ready)</option>
+                  <option value="Occupied">Occupied</option>
+                  <option value="Reserved">Reserved</option>
+                  <option value="Maintenance">Maintenance</option>
+                </select>
+              </div>
             </div>
 
             <div className="flex justify-end gap-3 pt-2">
               <button
-                onClick={() => setSelectedUnit(null)}
+                type="button"
+                onClick={() => {
+                  setIsEditModalOpen(false);
+                  setSelectedUnit(null);
+                }}
                 className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white font-semibold cursor-pointer border-0"
               >
                 Cancel
               </button>
               <button
-                onClick={handleUpdateStatus}
-                disabled={updating}
+                type="submit"
+                disabled={editSaving}
                 className="px-4 py-2 rounded-lg bg-[#C8A64D] hover:bg-[#b09141] text-black font-bold flex items-center gap-1.5 cursor-pointer border-0"
               >
-                {updating ? "Saving..." : "Save Status"}
+                {editSaving ? "Saving..." : "Save Changes"}
               </button>
             </div>
-          </div>
+          </form>
         </div>
       )}
       {/* ADD ROOM MODAL */}
@@ -447,6 +529,18 @@ const AdminRoomsManagement = () => {
                   <option value="Compact Villas">Compact Villas</option>
                   <option value="Duplex Villa">Duplex Villa</option>
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Floor Number</label>
+                <input
+                  type="number"
+                  required
+                  placeholder="e.g. 1"
+                  value={addFloor}
+                  onChange={(e) => setAddFloor(e.target.value)}
+                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                />
               </div>
 
               <div>
