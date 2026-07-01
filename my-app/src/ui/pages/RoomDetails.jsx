@@ -1058,7 +1058,7 @@ const RoomDetails = () => {
               <div>
            
                 <h2 className="text-5xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
-                  Similar Rooms
+                  Explore Rooms
                 </h2>
               </div>
               <Link 
