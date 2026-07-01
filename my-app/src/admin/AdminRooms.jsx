@@ -49,6 +49,7 @@ const AdminRooms = () => {
 
   // Form states
   const [roomNumber, setRoomNumber] = useState("");
+  const [totalRooms, setTotalRooms] = useState("1");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Executive Rooms");
@@ -98,6 +99,7 @@ const AdminRooms = () => {
   const openAddModal = () => {
     setEditingRoom(null);
     setRoomNumber("");
+    setTotalRooms("1");
     setName("");
     setPrice("");
     setCategory("Executive Rooms");
@@ -117,6 +119,7 @@ const AdminRooms = () => {
   const openEditModal = (room) => {
     setEditingRoom(room);
     setRoomNumber(room.roomNumber || "");
+    setTotalRooms(room.totalRooms || "1");
     setName(room.name);
     setPrice(room.price);
     setCategory(room.category || "Executive Rooms");
@@ -198,7 +201,7 @@ const AdminRooms = () => {
 
       const formData = new FormData();
       formData.append("roomNumber", roomNumber);
-      formData.append("totalRooms", roomNumber);
+      formData.append("totalRooms", totalRooms);
       formData.append("name", name);
       formData.append("price", price);
       formData.append("category", category);
@@ -322,12 +325,23 @@ const AdminRooms = () => {
         {/* Changed grid to lg:grid-cols-4 to spread inputs horizontally and reduce height */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
+            <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Room Number</label>
+            <input 
+              required 
+              placeholder="e.g. HE-101" 
+              value={roomNumber} 
+              onChange={(e) => setRoomNumber(e.target.value)} 
+              className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
+            />
+          </div>
+          <div>
             <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Number of Rooms</label>
             <input 
               required 
+              type="number"
               placeholder="e.g. 40" 
-              value={roomNumber} 
-              onChange={(e) => setRoomNumber(e.target.value)} 
+              value={totalRooms} 
+              onChange={(e) => setTotalRooms(e.target.value)} 
               className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm" 
             />
           </div>
@@ -582,11 +596,18 @@ const AdminRooms = () => {
                       <div className="flex justify-between items-start">
                         <div>
                           <h2 className="font-bold text-[18px] leading-tight text-white">{room.name}</h2>
-                          {room.category && (
-                            <span className="text-[12px] text-white uppercase tracking-widest font-bold block mt-0.5">
-                              {room.category}
-                            </span>
-                          )}
+                          <div className="flex items-center gap-2 mt-1">
+                            {room.category && (
+                              <span className="text-[12px] text-white/60 uppercase tracking-widest font-bold block">
+                                {room.category}
+                              </span>
+                            )}
+                            {room.roomNumber && (
+                              <span className="text-[10px] bg-white/10 text-white px-1.5 py-0.5 rounded font-semibold uppercase">
+                                #{room.roomNumber}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
                           {room.availableRooms !== undefined ? `Available: ${room.availableRooms}/${room.totalRooms}` : `Rooms: ${room.roomNumber}`}
@@ -602,7 +623,7 @@ const AdminRooms = () => {
                       </p>
 
                       <div className="text-[14px] text-white/80 font-medium">
-                        Number of Rooms: <span className="text-[#C8A64D] font-bold">{room.totalRooms || room.roomNumber}</span>
+                        Number of Rooms: <span className="text-[#C8A64D] font-bold">{room.totalRooms}</span>
                       </div>
 
                       {/* INFO */}
