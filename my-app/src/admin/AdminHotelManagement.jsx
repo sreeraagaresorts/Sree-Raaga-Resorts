@@ -16,8 +16,8 @@ const AdminHotelManagement = () => {
           className={`flex items-center gap-2 px-6 py-3 font-bold border-b-2 transition cursor-pointer text-sm ${
             activeTab === "rooms"
               ? "border-[#C8A64D] text-[#C8A64D]"
-              : "border-transparent text-white/60 hover:text-white"
-          } bg-transparent border-t-0 border-x-0 outline-none`}
+              : "border-transparent text-white/60  hover:text-white"
+          } bg-transparent border-t-0 uppercase border-x-0 outline-none`}
         >
           <BedDouble size={16} /> Rooms Inventory
         </button>
@@ -27,7 +27,7 @@ const AdminHotelManagement = () => {
             activeTab === "events"
               ? "border-[#C8A64D] text-[#C8A64D]"
               : "border-transparent text-white/60 hover:text-white"
-          } bg-transparent border-t-0 border-x-0 outline-none`}
+          } bg-transparent border-t-0 uppercase border-x-0 outline-none`}
         >
           <CalendarDays size={16} /> Event Management
         </button>
