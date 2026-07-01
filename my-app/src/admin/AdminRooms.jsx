@@ -602,11 +602,11 @@ const AdminRooms = () => {
                                 {room.category}
                               </span>
                             )}
-                            {room.roomNumber && (
+                            {/* {room.roomNumber && (
                               <span className="text-[10px] bg-white/10 text-white px-1.5 py-0.5 rounded font-semibold uppercase">
                                 #{room.roomNumber}
                               </span>
-                            )}
+                            )} */}
                           </div>
                         </div>
                         <span className="bg-[#C8A64D]/10 text-[#C8A64D] text-[12px] px-2 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
@@ -618,9 +618,9 @@ const AdminRooms = () => {
                         ₹{parseFloat(room.price).toLocaleString()} <span className="text-white text-[14px] font-normal">/ night</span>
                       </p>
 
-                      <p className="text-white text-[16px] line-clamp-2">
+                      {/* <p className="text-white text-[16px] line-clamp-2">
                         {room.description}
-                      </p>
+                      </p> */}
 
                       <div className="text-[14px] text-white/80 font-medium">
                         Number of Rooms: <span className="text-[#C8A64D] font-bold">{room.totalRooms}</span>
