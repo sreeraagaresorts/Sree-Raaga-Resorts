@@ -9,7 +9,10 @@ import {
   ArrowRight,
   RefreshCw,
   UserCheck,
+  ChevronDown
 } from "lucide-react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
 import { formatPhoneNumber } from "../utils/phoneFormatter";
@@ -611,27 +614,51 @@ const AdminBookings = () => {
                   </select>
                 </div>
 
-                {/* Check In */}
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check In</label>
-                  <input
-                    type="date"
-                    required
-                    value={checkIn}
-                    onChange={(e) => setCheckIn(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-                  />
-                </div>
-
-                {/* Check Out */}
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check Out</label>
-                  <input
-                    type="date"
-                    required
-                    value={checkOut}
-                    onChange={(e) => setCheckOut(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                {/* Dates range picker */}
+                <div className="col-span-1 md:col-span-2 relative">
+                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check In - Check Out</label>
+                  <DatePicker
+                    wrapperClassName="w-full"
+                    selectsRange={true}
+                    startDate={checkIn ? new Date(checkIn) : null}
+                    endDate={checkOut ? new Date(checkOut) : null}
+                    onChange={(update) => {
+                      const [start, end] = update;
+                      const formatDate = (date) => {
+                        if (!date) return "";
+                        const tzOffset = date.getTimezoneOffset() * 60000;
+                        return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
+                      };
+                      setCheckIn(start ? formatDate(start) : "");
+                      setCheckOut(end ? formatDate(end) : "");
+                    }}
+                    minDate={new Date()}
+                    customInput={
+                      <button
+                        type="button"
+                        className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white flex items-center justify-between outline-none cursor-pointer text-left focus:border-yellow-500 transition-all text-sm"
+                      >
+                        <span>
+                          {checkIn
+                            ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
+                                checkOut
+                                  ? ` - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                                  : " - Check Out"
+                              }`
+                            : "Select Check-in and Check-out dates"}
+                        </span>
+                        <ChevronDown size={16} className="text-white/40" />
+                      </button>
+                    }
+                    calendarClassName="custom-datepicker"
+                    popperModifiers={[
+                      {
+                        name: "preventOverflow",
+                        options: {
+                          boundary: "viewport",
+                        },
+                      },
+                    ]}
                   />
                 </div>
 
