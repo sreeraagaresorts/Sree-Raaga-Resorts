@@ -633,7 +633,13 @@ const AdminDashboard = () => {
               <Users className="text-teal-400 mx-auto" />
               <p className="text-xs text-white/70 mt-2">Users</p>
             </button>
-
+  <button
+              onClick={() => navigate("/admin/billing")}
+              className="p-4 bg-[#071524] rounded-xl border border-white/5 hover:border-[#C8A64D]/30 transition text-center cursor-pointer"
+            >
+              <FileText className="text-[#C8A64D] mx-auto" />
+              <p className="text-xs text-white/70 mt-2">Billing & Payments</p>
+            </button>
             <button
               onClick={() => navigate("/admin/hotel-mgmt",)}
               className="p-4 bg-[#071524] rounded-xl border border-white/5 hover:border-[#C8A64D]/30 transition text-center cursor-pointer"
@@ -642,13 +648,7 @@ const AdminDashboard = () => {
               <p className="text-xs text-white/70 mt-2">Manage Hotel</p>
             </button>
 
-            <button
-              onClick={() => navigate("/admin/billing")}
-              className="p-4 bg-[#071524] rounded-xl border border-white/5 hover:border-[#C8A64D]/30 transition text-center cursor-pointer"
-            >
-              <FileText className="text-[#C8A64D] mx-auto" />
-              <p className="text-xs text-white/70 mt-2">Billing Ledger</p>
-            </button>
+          
           </div>
         </div>
       </div>
