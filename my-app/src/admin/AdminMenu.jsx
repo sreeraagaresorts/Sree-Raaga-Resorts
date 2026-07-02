@@ -772,21 +772,22 @@ const AdminMenu = () => {
 
               <div>
                 <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Description</label>
-                <textarea
-                  required
-                  value={description}
-                  onChange={(e) => {
-                    const inputText = e.target.value;
-                    const wordCount = inputText.trim() === "" ? 0 : inputText.trim().split(/\s+/).length;
-                    
-                    if (wordCount <= 50) {
-                      setDescription(inputText);
-                    }
-                  }}
-                  className="w-full bg-[#071524] p-3 rounded-lg border border-white/10 outline-none focus:border-yellow-500 transition text-white font-light text-sm"
-                  rows={3}
-                  placeholder="Describe the dish ingredients, flavor, spice level... (Max 50 words)"
-                />
+             <textarea
+  required
+  value={description}
+  maxLength={100}
+  onChange={(e) => {
+    const inputText = e.target.value;
+    
+    // Only update state if character count is 100 or less
+    if (inputText.length <= 100) {
+      setDescription(inputText);
+    }
+  }}
+  className="w-full bg-[#071524] p-3 rounded-lg border border-white/10 outline-none focus:border-yellow-500 transition text-white font-light text-sm"
+  rows={3}
+  placeholder="Describe the dish ingredients, flavor, spice level... (Max 100 characters)"
+/>
               </div>
 
               {/* IMAGE UPLOAD */}
