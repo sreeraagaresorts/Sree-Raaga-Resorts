@@ -83,8 +83,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
 
   // Dynamically extract unique categories from the loaded categories list
   const categories = React.useMemo(() => {
-    const subcats = roomCategories.filter((c) => c.parent !== null && c.parent !== "");
-    return ["All", ...subcats.map((c) => c.name)];
+    return ["All", ...roomCategories.map((c) => c.name)];
   }, [roomCategories]);
 
   // Filter rooms based on the selected category
@@ -93,27 +92,20 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
     return rooms.filter((room) => room.category === selectedCategory);
   }, [rooms, selectedCategory]);
 
-  // Derived state to separate rooms by their parent category
+  // Group rooms directly by category name
   const villasRooms = React.useMemo(() => {
-    return filteredRooms.filter((room) => {
-      const cat = roomCategories.find((c) => c.name === room.category);
-      return cat?.parent === "Villas";
-    });
-  }, [filteredRooms, roomCategories]);
+    return filteredRooms.filter((room) => room.category === "Villas");
+  }, [filteredRooms]);
 
   const roomsRooms = React.useMemo(() => {
-    return filteredRooms.filter((room) => {
-      const cat = roomCategories.find((c) => c.name === room.category);
-      return cat?.parent === "Rooms";
-    });
-  }, [filteredRooms, roomCategories]);
+    return filteredRooms.filter((room) => room.category === "Rooms");
+  }, [filteredRooms]);
 
   const uncategorizedRooms = React.useMemo(() => {
-    return filteredRooms.filter((room) => {
-      const cat = roomCategories.find((c) => c.name === room.category);
-      return cat?.parent !== "Villas" && cat?.parent !== "Rooms";
-    });
-  }, [filteredRooms, roomCategories]);
+    return filteredRooms.filter(
+      (room) => room.category !== "Villas" && room.category !== "Rooms"
+    );
+  }, [filteredRooms]);
 
   // Reset selected category to "All" if it is no longer in the categories list
   useEffect(() => {
@@ -191,8 +183,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
     setTotalRooms("1");
     setName("");
     setPrice("");
-    const subcats = roomCategories.filter((c) => c.parent !== null && c.parent !== "");
-    setCategory(subcats.length > 0 ? subcats[0].name : "Executive Rooms");
+    setCategory(roomCategories.length > 0 ? roomCategories[0].name : "Villas");
     setArea("");
     setBeds("");
     setBathrooms("");
@@ -688,13 +679,11 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
                   >
-                    {roomCategories
-                      .filter((c) => c.parent !== null && c.parent !== "")
-                      .map((c) => (
-                        <option key={c._id || c.id} value={c.name}>
-                          {c.name}
-                        </option>
-                      ))}
+                    {roomCategories.map((c) => (
+                      <option key={c._id || c.id} value={c.name}>
+                        {c.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>

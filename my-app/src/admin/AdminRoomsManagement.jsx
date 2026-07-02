@@ -422,7 +422,8 @@ const AdminRoomsManagement = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-[17px] text-white">Room {unit.roomNumber}</h3>
-                    <span className="text-xs text-white/40 block mt-0.5 leading-tight">{room.category}</span>
+                    <span className="text-xs text-white/70 block mt-0.5 leading-tight font-medium">{room.name}</span>
+                    <span className="text-[11px] text-white/30 block leading-tight">{room.category}</span>
                   </div>
                 </div>
 

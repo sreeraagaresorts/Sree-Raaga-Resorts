@@ -771,14 +771,23 @@ const handleSaveCategory = () => {
 
               <div>
                 <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Description</label>
-                <textarea
-                  required
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-[#071524] p-3 rounded-lg border border-white/10 outline-none focus:border-yellow-500 transition text-white font-light text-sm"
-                  rows={3}
-                  placeholder="Describe the dish ingredients, flavor, spice level..."
-                />
+         <textarea
+  required
+  value={description}
+  onChange={(e) => {
+    const inputText = e.target.value;
+    // Split text by spaces or newlines to count words, ignoring leading/trailing spaces
+    const wordCount = inputText.trim() === "" ? 0 : inputText.trim().split(/\s+/).length;
+    
+    // Only update state if word count is 30 or less
+    if (wordCount <= 50) {
+      setDescription(inputText);
+    }
+  }}
+  className="w-full bg-[#071524] p-3 rounded-lg border border-white/10 outline-none focus:border-yellow-500 transition text-white font-light text-sm"
+  rows={3}
+  placeholder="Describe the dish ingredients, flavor, spice level... (Max 50 words)"
+/>
               </div>
 
               {/* IMAGE UPLOAD */}

@@ -131,6 +131,16 @@ const Menu = () => {
     return matchesSearch && matchesCategory && matchesDiet && dish.isAvailable;
   });
 
+  // Group filtered dishes by category for the new layout
+  const groupedDishes = filteredDishes.reduce((acc, dish) => {
+    const category = dish.category || "Other";
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(dish);
+    return acc;
+  }, {});
+
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (isAdmin) {
@@ -225,7 +235,8 @@ const Menu = () => {
             </div>
           </div>
         </section>
-            {/* ================= MENU HIGHLIGHTS SECTION ================= */}
+
+        {/* ================= MENU HIGHLIGHTS SECTION ================= */}
         <section className="py-16 max-w-[180vh] mx-auto px-6 pb-28">
           
           <div className="text-center mb-10 select-none">
@@ -328,43 +339,61 @@ const Menu = () => {
             </div>
           )}
 
-          {/* DISHES LIST - 2 COLUMN MINIMALIST LAYOUT */}
+          {/* DISHES LIST - GROUPED BY CATEGORY WITH LEFT HEADING */}
           {!loading && !error && filteredDishes.length > 0 && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-y-12 md:gap-x-16 max-w-6xl mx-auto px-6">
-              {filteredDishes.map((dish) => (
-               <div 
-  key={dish.id || dish._id}
-  className="flex gap-4 items-start group"
->
-                  {/* Thumbnail */}
-                  <div className="w-19 h-19  overflow-hidden shrink-0 border border-gray-200 shadow-md">
-                    <img 
-                      src={getImageUrl(dish.image)} 
-                      alt={dish.name} 
-                      className="w-full h-full object-cover" 
-                    />
-                  </div>
+            <div className="max-w-7xl mx-auto px-6">
+              {Object.entries(groupedDishes).map(([category, items]) => (
+                <div key={category} className="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-20 last:mb-0 relative">
                   
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-end gap-2 mb-1">
-                      <h4 className=" text-[30px] font-medium font-corm text-[#0d2b4e]  truncate flex items-center gap-2">
-                        <img 
-                          src={dish.isVegetarian ? "/veg.png" : "/nonveg.png"} 
-                          alt={dish.isVegetarian ? "Veg" : "Non-Veg"} 
-                          className="w-4 h-4 object-contain shrink-0" 
-                        />
-                        {dish.name}
-                      </h4>
-                      {/* Dotted connector */}
-                      <div className="flex-1 border-b border-dotted border-gray-300 mx-2 mb-1.5 min-w-[20px]" />
-                      <span className=" text-[17px] font-semibold text-black shrink-0">
-                        ₹{parseFloat(dish.price).toLocaleString()}
-                      </span>
+                  {/* Left Side: Category Heading */}
+                  <div className="lg:w-1/4 shrink-0">
+                    <div className="sticky top-24 pt-2">
+                      <h3 className="text-3xl md:text-4xl font-medium font-corm text-[#0d2b4e] capitalize">
+                        {category}
+                      </h3>
+                      <div className="w-16 h-0.5 bg-[#c8a64d] mt-4 rounded-full"></div>
                     </div>
-                    <p className="text-gray-500 text-[15px] font-medium line-clamp-2 leading-relaxed ">
-                      {dish.description || "Freshly cooked exquisite dish prepared by our resort specialty chefs."}
-                    </p>
+                  </div>
+
+                  {/* Right Side: Dishes List */}
+                  <div className="lg:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-y-12">
+                    {items.map((dish) => (
+                      <div 
+                        key={dish.id || dish._id}
+                        className="flex gap-4 items-start group"
+                      >
+                        {/* Thumbnail */}
+                        <div className="w-19 h-19 overflow-hidden shrink-0 border border-gray-200 shadow-md">
+                          <img 
+                            src={getImageUrl(dish.image)} 
+                            alt={dish.name} 
+                            className="w-full h-full object-cover" 
+                          />
+                        </div>
+                        
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-end gap-2 mb-1">
+                            <h4 className="text-[30px] font-medium font-corm text-[#0d2b4e] truncate flex items-center gap-2">
+                              <img 
+                                src={dish.isVegetarian ? "/veg.png" : "/nonveg.png"} 
+                                alt={dish.isVegetarian ? "Veg" : "Non-Veg"} 
+                                className="w-4 h-4 object-contain shrink-0" 
+                              />
+                              {dish.name}
+                            </h4>
+                            {/* Dotted connector */}
+                            <div className="flex-1 border-b border-dotted border-gray-300 mx-2 mb-1.5 min-w-[20px]" />
+                            <span className="text-[17px] font-semibold text-black shrink-0">
+                              ₹{parseFloat(dish.price).toLocaleString()}
+                            </span>
+                          </div>
+                          <p className="text-gray-500 text-[15px] font-medium line-clamp-2 leading-relaxed ">
+                            {dish.description || "Freshly cooked exquisite dish prepared by our resort specialty chefs."}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -377,7 +406,6 @@ const Menu = () => {
           <h2 className="text-3xl font-medium font-corm text-[#0d2b4e] leading-relaxed mb-6">
             An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.
           </h2>
-    
         </section>
 
         {/* ================= RESORT GALLERY IMAGES ================= */}
@@ -399,8 +427,6 @@ const Menu = () => {
             ))}
           </div>
         </section>
-
-    
 
       </div>
 
