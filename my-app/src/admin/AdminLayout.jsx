@@ -290,7 +290,9 @@ const  AdminLayout=()=> {
         initialNotifs.sort((x, y) => y.id.localeCompare(x.id));
         setNotifications((prev) => {
           const cleared = new Set(JSON.parse(localStorage.getItem("clearedNotificationIds") || "[]"));
-          const merged = [...initialNotifs, ...prev].filter(n => !cleared.has(n.id));
+          const existingIds = new Set(prev.map((n) => n.id));
+          const newOnes = initialNotifs.filter((n) => !existingIds.has(n.id) && !cleared.has(n.id));
+          const merged = [...newOnes, ...prev].filter((n) => !cleared.has(n.id));
           return merged.slice(0, 20);
         });
 
