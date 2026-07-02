@@ -13,13 +13,19 @@ const DEFAULT_CATEGORIES = [
 
 exports.getRoomCategories = async (req, res) => {
   try {
-    let categories = await RoomCategory.find({}).sort({ created_at: 1 });
+    // Sort by order first, then created_at as a fallback
+    let categories = await RoomCategory.find({}).sort({ order: 1, created_at: 1 });
     
     // Seed default categories if none exist in the database yet
     if (categories.length === 0) {
       console.log("Seeding default room categories...");
-      await RoomCategory.insertMany(DEFAULT_CATEGORIES);
-      categories = await RoomCategory.find({}).sort({ created_at: 1 });
+      // Map an initial order to the default categories
+      const seededData = DEFAULT_CATEGORIES.map((cat, index) => ({
+        ...cat,
+        order: index
+      }));
+      await RoomCategory.insertMany(seededData);
+      categories = await RoomCategory.find({}).sort({ order: 1, created_at: 1 });
     }
 
     res.json({
@@ -59,9 +65,14 @@ exports.createRoomCategory = async (req, res) => {
       });
     }
 
+    // Get the highest order number to put the new category at the bottom
+    const lastCategory = await RoomCategory.findOne().sort({ order: -1 });
+    const newOrder = lastCategory ? lastCategory.order + 1 : 0;
+
     const category = new RoomCategory({
       name: trimmedName,
-      parent: parent || null
+      parent: parent || null,
+      order: newOrder
     });
     await category.save();
 
@@ -168,6 +179,41 @@ exports.deleteRoomCategory = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Category deletion failed"
+    });
+  }
+};
+
+// --- NEW FUNCTION FOR REORDERING ---
+exports.reorderRoomCategories = async (req, res) => {
+  try {
+    const { orderedIds } = req.body;
+
+    if (!orderedIds || !Array.isArray(orderedIds)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Please provide an array of category IDs." 
+      });
+    }
+
+    // Prepare bulk operations to update the order field for each ID
+    const bulkOperations = orderedIds.map((id, index) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $set: { order: index } }
+      }
+    }));
+
+    await RoomCategory.bulkWrite(bulkOperations);
+
+    res.json({
+      success: true,
+      message: "Categories reordered successfully"
+    });
+  } catch (error) {
+    console.error("Failed to reorder room categories:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to reorder categories"
     });
   }
 };

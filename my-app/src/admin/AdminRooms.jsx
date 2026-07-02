@@ -9,6 +9,7 @@ import {
   Maximize,
   BedDouble,
   RefreshCw,
+  GripVertical // Add this import
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
@@ -32,6 +33,53 @@ const AdminRooms = () => {
   const [catName, setCatName] = useState("");
   const [catParent, setCatParent] = useState("Villas");
   const [editingCategory, setEditingCategory] = useState(null);
+const [draggedCatIndex, setDraggedCatIndex] = useState(null);
+
+  // --- Drag and Drop Handlers ---
+  const handleDragStart = (e, index) => {
+    setDraggedCatIndex(index);
+    e.dataTransfer.effectAllowed = "move"; 
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault(); 
+  };
+
+  const handleDrop = async (e, dropIndex) => {
+    e.preventDefault();
+    if (draggedCatIndex === null || draggedCatIndex === dropIndex) return;
+
+    const updatedCategories = [...roomCategories];
+    const draggedItem = updatedCategories[draggedCatIndex];
+
+    updatedCategories.splice(draggedCatIndex, 1);
+    updatedCategories.splice(dropIndex, 0, draggedItem);
+
+    setRoomCategories(updatedCategories);
+    setDraggedCatIndex(null);
+
+    // Backend Update 
+    try {
+      const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/api/room-categories/reorder`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ 
+          orderedIds: updatedCategories.map(cat => cat._id || cat.id) 
+        }),
+      });
+      
+      if (!response.ok) throw new Error("Failed to save order");
+      toast.success("Category order updated!");
+    } catch (err) {
+      toast.error("Failed to save new order.");
+      fetchCategories(); 
+    }
+  };
+
 
   // Dynamically extract unique categories from the loaded categories list
   const categories = React.useMemo(() => {
@@ -893,52 +941,67 @@ const AdminRooms = () => {
             </div>
 
             <div className="overflow-x-auto max-h-96">
-              <table className="w-full text-sm border-collapse text-left">
-                <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider border-b border-white/10 font-bold">
-                  <tr>
-                    <th className="p-3 text-[#c8a64d]">Category Name</th>
-                    <th className="p-3 text-[#c8a64d]">Parent Category</th>
-                    <th className="p-3 text-[#c8a64d]">Created Date</th>
-                    <th className="p-3 text-[#c8a64d] text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {roomCategories.map((cat) => (
-                    <tr key={cat._id || cat.id} className="hover:bg-white/5 transition">
-                      <td className="p-3 font-semibold text-white">{cat.name}</td>
-                      <td className="p-3 text-white/70">
-                        {cat.parent || <span className="text-white/30 italic">None (Top-Level)</span>}
-                      </td>
-                      <td className="p-3 text-white/50 text-xs">
-                        {new Date(cat.created_at || Date.now()).toLocaleDateString("en-IN", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </td>
-                      <td className="p-3 text-center flex justify-center gap-2">
-                        <button
-                          onClick={() => {
-                            setEditingCategory(cat);
-                            setCatName(cat.name);
-                            setCatParent(cat.parent || "");
-                            setIsCatFormOpen(true);
-                          }}
-                          className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded text-xs font-semibold cursor-pointer border-0"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteCategory(cat)}
-                          className="px-2.5 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded text-xs font-semibold cursor-pointer border-0"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+         <table className="w-full text-sm border-collapse text-left">
+  <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider border-b border-white/10 font-bold">
+    <tr>
+      {/* New empty th for the drag handle */}
+      <th className="p-3 w-10"></th> 
+      <th className="p-3 text-[#c8a64d]">Category Name</th>
+      <th className="p-3 text-[#c8a64d]">Parent Category</th>
+      <th className="p-3 text-[#c8a64d]">Created Date</th>
+      <th className="p-3 text-[#c8a64d] text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody className="divide-y divide-white/5">
+    {roomCategories.map((cat, index) => (
+      <tr 
+        key={cat._id || cat.id} 
+        draggable // Enables dragging
+        onDragStart={(e) => handleDragStart(e, index)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, index)}
+        // Add visual feedback when the row is being dragged
+        className={`hover:bg-white/5 transition ${draggedCatIndex === index ? 'opacity-30 bg-black/50' : ''}`}
+      >
+        {/* Drag Handle Cell */}
+        <td className="p-3 text-white/30 cursor-grab active:cursor-grabbing hover:text-white/80 transition">
+          <GripVertical size={16} />
+        </td>
+        <td className="p-3 font-semibold text-white">{cat.name}</td>
+        <td className="p-3 text-white/70">
+          {cat.parent || <span className="text-white/30 italic">None (Top-Level)</span>}
+        </td>
+        <td className="p-3 text-white/50 text-xs">
+          {new Date(cat.created_at || Date.now()).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })}
+        </td>
+        <td className="p-3 text-center flex justify-center gap-2">
+          {/* ... existing Edit and Delete buttons ... */}
+          <button
+            onClick={() => {
+              setEditingCategory(cat);
+              setCatName(cat.name);
+              setCatParent(cat.parent || "");
+              setIsCatFormOpen(true);
+            }}
+            className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded text-xs font-semibold cursor-pointer border-0"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => handleDeleteCategory(cat)}
+            className="px-2.5 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded text-xs font-semibold cursor-pointer border-0"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
             </div>
           </div>
         </div>
