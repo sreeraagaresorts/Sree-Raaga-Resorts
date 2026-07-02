@@ -31,7 +31,7 @@ const navItems = [
   { name: "Manage Hotel", path: "/admin/hotel-mgmt", icon: CalendarDays },
   { name: "Restaurant Menu", path: "/admin/menu", icon: UtensilsCrossed },
   { name: "Enquiries", path: "/admin/enquiries", icon: MessageSquare },
-  { name: "CMS", path: "/admin/content", icon: Edit3 },
+  // { name: "CMS", path: "/admin/content", icon: Edit3 },
   { name: "Settings", path: "/admin/settings", icon: Settings },
 ];
 
