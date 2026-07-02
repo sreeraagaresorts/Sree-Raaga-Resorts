@@ -447,7 +447,7 @@ const handleSaveCategory = () => {
       {activeTab === "dishes" && (
         <>
           {/* FILTER BAR */}
-          <div className="bg-[#081A2F] border border-white/10 p-4 rounded-xl flex flex-col gap-4 shadow-md">
+          <div className="bg-[#081A2F] border border-white/10 p-4  rounded-xl flex flex-col gap-4 shadow-md">
             <div className="flex items-center bg-[#071524] px-3 rounded-lg border border-white/5 w-full">
               <Search className="text-white/40 mr-2" size={18} />
               <input

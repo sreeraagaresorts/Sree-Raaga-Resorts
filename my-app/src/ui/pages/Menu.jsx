@@ -339,24 +339,22 @@ const Menu = () => {
             </div>
           )}
 
-          {/* DISHES LIST - GROUPED BY CATEGORY WITH LEFT HEADING */}
+          {/* DISHES LIST - GROUPED BY CATEGORY WITH LEFT HEADING (NORMAL LAYOUT) */}
           {!loading && !error && filteredDishes.length > 0 && (
             <div className="max-w-7xl mx-auto px-6">
               {Object.entries(groupedDishes).map(([category, items]) => (
-                <div key={category} className="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-20 last:mb-0 relative">
+                <div key={category} className="mb-20 last:mb-0">
                   
-                  {/* Left Side: Category Heading */}
-                  <div className="lg:w-1/4 shrink-0">
-                    <div className="sticky top-24 pt-2">
-                      <h3 className="text-3xl md:text-4xl font-medium font-corm text-[#0d2b4e] capitalize">
-                        {category}
-                      </h3>
-                      <div className="w-16 h-0.5 bg-[#c8a64d] mt-4 rounded-full"></div>
-                    </div>
+                  {/* Category Heading - Normal Left Side */}
+                  <div className="mb-10 text-left">
+                    <h3 className="text-3xl md:text-4xl font-medium font-corm text-[#0d2b4e] capitalize">
+                      {category}
+                    </h3>
+                    <div className="w-16 h-0.5 bg-[#c8a64d] mt-4 rounded-full"></div>
                   </div>
 
-                  {/* Right Side: Dishes List */}
-                  <div className="lg:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-y-12">
+                  {/* Dishes List - Centered Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-y-12 md:gap-x-16 max-w-[190vh] mx-auto">
                     {items.map((dish) => (
                       <div 
                         key={dish.id || dish._id}
