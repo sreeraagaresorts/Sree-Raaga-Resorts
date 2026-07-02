@@ -10,6 +10,7 @@ const dishSchema = new mongoose.Schema({
   image: { type: String },
   isVegetarian: { type: Boolean, default: true },
   isAvailable: { type: Boolean, default: true },
+  isDrink: { type: Boolean, default: false },
   created_at: { type: Date, default: Date.now }
 });
 

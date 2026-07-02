@@ -373,11 +373,15 @@ const Menu = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-end gap-2 mb-1">
                             <h4 className="text-[30px] font-medium font-corm text-[#0d2b4e] truncate flex items-center gap-2">
-                              <img 
-                                src={dish.isVegetarian ? "/veg.png" : "/nonveg.png"} 
-                                alt={dish.isVegetarian ? "Veg" : "Non-Veg"} 
-                                className="w-4 h-4 object-contain shrink-0" 
-                              />
+                              {(dish.isDrink === true || dish.isDrink === "true") ? (
+                                <span className="text-blue-400 text-[18px]">🥤</span>
+                              ) : (
+                                <img 
+                                  src={dish.isVegetarian ? "/veg.png" : "/nonveg.png"} 
+                                  alt={dish.isVegetarian ? "Veg" : "Non-Veg"} 
+                                  className="w-4 h-4 object-contain shrink-0" 
+                                />
+                              )}
                               {dish.name}
                             </h4>
                             {/* Dotted connector */}

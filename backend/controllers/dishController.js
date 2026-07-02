@@ -18,7 +18,7 @@ const logAction = async (userId, actionType, details) => {
 
 exports.getDishes = async (req, res) => {
   try {
-    const dishes = await Dish.find({}).sort({ id: -1 });
+    const dishes = await Dish.find({}).sort({ id: 1 });
     res.json({
       success: true,
       count: dishes.length,
@@ -56,7 +56,7 @@ exports.getDish = async (req, res) => {
 
 exports.createDish = async (req, res) => {
   try {
-    const { name, price, category, description, isVegetarian, isAvailable } = req.body;
+    const { name, price, category, description, isVegetarian, isAvailable, isDrink } = req.body;
     let image = null;
 
     if (req.file) {
@@ -70,7 +70,8 @@ exports.createDish = async (req, res) => {
       description,
       image,
       isVegetarian: isVegetarian === "true" || isVegetarian === true,
-      isAvailable: isAvailable === "true" || isAvailable === true
+      isAvailable: isAvailable === "true" || isAvailable === true,
+      isDrink: isDrink === "true" || isDrink === true
     });
     await dish.save();
 
@@ -99,7 +100,7 @@ exports.createDish = async (req, res) => {
 
 exports.updateDish = async (req, res) => {
   try {
-    const { name, price, category, description, isVegetarian, isAvailable } = req.body;
+    const { name, price, category, description, isVegetarian, isAvailable, isDrink } = req.body;
 
     const updateData = {
       name,
@@ -107,7 +108,8 @@ exports.updateDish = async (req, res) => {
       category,
       description,
       isVegetarian: isVegetarian === "true" || isVegetarian === true,
-      isAvailable: isAvailable === "true" || isAvailable === true
+      isAvailable: isAvailable === "true" || isAvailable === true,
+      isDrink: isDrink === "true" || isDrink === true
     };
 
     if (req.file) {

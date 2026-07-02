@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList, Pencil } from "lucide-react";
+import { Plus, Edit2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList, Pencil, GlassWater } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
 import { compressImage } from "../utils/imageCompressor";
@@ -26,6 +26,7 @@ const AdminMenu = () => {
   const [description, setDescription] = useState("");
   const [isVegetarian, setIsVegetarian] = useState(true);
   const [isAvailable, setIsAvailable] = useState(true);
+  const [isDrink, setIsDrink] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
 
@@ -205,6 +206,7 @@ const AdminMenu = () => {
     setDescription("");
     setIsVegetarian(true);
     setIsAvailable(true);
+    setIsDrink(false);
     setImageFile(null);
     setImagePreview("");
     setIsFormOpen(true);
@@ -218,6 +220,7 @@ const AdminMenu = () => {
     setDescription(dish.description || "");
     setIsVegetarian(dish.isVegetarian === true || dish.isVegetarian === "true");
     setIsAvailable(dish.isAvailable === true || dish.isAvailable === "true");
+    setIsDrink(dish.isDrink === true || dish.isDrink === "true");
     setImageFile(null);
     setImagePreview(dish.image ? (dish.image.startsWith("http") ? dish.image : `${API_URL}/uploads/${dish.image}`) : "");
     setIsFormOpen(true);
@@ -250,6 +253,7 @@ const AdminMenu = () => {
       formData.append("description", description);
       formData.append("isVegetarian", isVegetarian);
       formData.append("isAvailable", isAvailable);
+      formData.append("isDrink", isDrink);
       if (compressedImage) {
         formData.append("image", compressedImage);
       }
@@ -496,9 +500,19 @@ const AdminMenu = () => {
                               className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                             />
                             {/* Veg indicator badge */}
-                            <div className="absolute top-3 left-3 z-20 bg-black/80 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-white/5">
-                              <span className={`w-2 h-2 rounded-full shrink-0 aspect-square ${(dish.isVegetarian === true || dish.isVegetarian === "true") ? "bg-green-500" : "bg-red-600"}`}></span>
-                              <span>{(dish.isVegetarian === true || dish.isVegetarian === "true") ? "Veg" : "Non-Veg"}</span>
+                            <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
+                              {!(dish.isDrink === true || dish.isDrink === "true") && (
+                                <div className="bg-black/80 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-white/5">
+                                  <span className={`w-2 h-2 rounded-full shrink-0 aspect-square ${(dish.isVegetarian === true || dish.isVegetarian === "true") ? "bg-green-500" : "bg-red-600"}`}></span>
+                                  <span>{(dish.isVegetarian === true || dish.isVegetarian === "true") ? "Veg" : "Non-Veg"}</span>
+                                </div>
+                              )}
+                              {(dish.isDrink === true || dish.isDrink === "true") && (
+                                <div className="bg-black/80 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-blue-500/30 text-blue-400">
+                                  <GlassWater size={10} className="text-blue-400" />
+                                  <span>Drink</span>
+                                </div>
+                              )}
                             </div>
 
                             {/* Availability badge */}
@@ -753,6 +767,18 @@ const AdminMenu = () => {
                     />
                     <span className="text-xs uppercase tracking-wider text-white/80 flex items-center gap-1 font-bold">
                       <Leaf size={14} className="text-green-500" /> Vegetarian
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={isDrink}
+                      onChange={(e) => setIsDrink(e.target.checked)}
+                      className="w-4.5 h-4.5 rounded border-white/10 bg-black text-blue-400 focus:ring-blue-400 accent-blue-400"
+                    />
+                    <span className="text-xs uppercase tracking-wider text-white/80 flex items-center gap-1 font-bold">
+                      <GlassWater size={14} className="text-blue-400" /> Drinks
                     </span>
                   </label>
 
