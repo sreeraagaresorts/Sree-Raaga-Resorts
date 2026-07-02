@@ -478,10 +478,10 @@ const AdminMenu = () => {
                   
                   {/* Center Category Heading */}
                   <div className="flex flex-col items-start justify-center mb-2">
-                    <h3 className="text-3xl font-bold text-white capitalize text-center">
+                    <h3 className="text-xl uppercase font-medium text-[#C8A64D]  py-3  border-b-1 border-white/10 w-full  capitalize text-start">
                       {categoryName}
                     </h3>
-                    <div className="w-16 h-1 bg-[#C8A64D] mt-3 rounded-full"></div>
+                    {/* <div className="w-full h-0.5 bg-white/10 mt-3 rounded-full"></div> */}
                   </div>
 
                   {/* Dishes List Grid */}
