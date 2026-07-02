@@ -389,6 +389,17 @@ const AdminMenu = () => {
     return acc;
   }, {});
 
+  // Define display order — Starters first, then the rest
+  const categoryOrder = ["Starters", "Breakfast", "Main Course", "Biryani", "Rice & Noodles", "Desserts", "Beverages"];
+  const sortedGroupedDishes = Object.entries(groupedDishes).sort(([a], [b]) => {
+    const ai = categoryOrder.indexOf(a);
+    const bi = categoryOrder.indexOf(b);
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
   return (
     <div className="space-y-6 text-white max-w-7xl mx-auto">
       {/* HEADER */}
@@ -477,7 +488,7 @@ const AdminMenu = () => {
             </div>
           ) : (
             <div className="space-y-16 mt-8">
-              {Object.entries(groupedDishes).map(([categoryName, items]) => (
+              {sortedGroupedDishes.map(([categoryName, items]) => (
                 <div key={categoryName} className="flex flex-col gap-6">
                   
                   {/* Center Category Heading */}
