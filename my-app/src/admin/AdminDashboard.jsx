@@ -635,11 +635,11 @@ const AdminDashboard = () => {
             </button>
 
             <button
-              onClick={() => navigate("/admin/hotel-mgmt",{ state: { tab: "events" } })}
+              onClick={() => navigate("/admin/hotel-mgmt",)}
               className="p-4 bg-[#071524] rounded-xl border border-white/5 hover:border-[#C8A64D]/30 transition text-center cursor-pointer"
             >
               <CalendarDays className="text-green-400 mx-auto" />
-              <p className="text-xs text-white/70 mt-2">Events</p>
+              <p className="text-xs text-white/70 mt-2">Manage Hotel</p>
             </button>
 
             <button
