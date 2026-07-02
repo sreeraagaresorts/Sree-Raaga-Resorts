@@ -374,7 +374,7 @@ const Menu = () => {
                           <div className="flex justify-between items-end gap-2 mb-1">
                             <h4 className="text-[30px] font-medium font-corm text-[#0d2b4e] truncate flex items-center gap-2">
                               {(dish.isDrink === true || dish.isDrink === "true") ? (
-                                <span className="text-blue-400 text-[18px]">🥤</span>
+                                <img src="/drinks.svg" alt="Drink" className="w-5 h-5 object-contain shrink-0" />
                               ) : (
                                 <img 
                                   src={dish.isVegetarian ? "/veg.png" : "/nonveg.png"} 

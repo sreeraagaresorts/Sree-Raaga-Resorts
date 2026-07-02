@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Martini glass body -->
+  <polygon points="80,60 432,60 272,280" stroke="currentColor" stroke-width="22" fill="none"/>
+  <!-- Stem -->
+  <line x1="272" y1="280" x2="272" y2="420"/>
+  <!-- Base -->
+  <line x1="180" y1="450" x2="364" y2="450"/>
+  <!-- Curved base feet -->
+  <path d="M180,450 Q272,470 364,450"/>
+  <!-- Lemon slice circle -->
+  <circle cx="118" cy="118" r="58"/>
+  <!-- Lemon spokes -->
+  <line x1="118" y1="68" x2="118" y2="82"/>
+  <line x1="118" y1="154" x2="118" y2="168"/>
+  <line x1="68" y1="118" x2="82" y2="118"/>
+  <line x1="154" y1="118" x2="168" y2="118"/>
+  <line x1="82" y1="82" x2="92" y2="92"/>
+  <line x1="144" y1="144" x2="154" y2="154"/>
+  <line x1="154" y1="82" x2="144" y2="92"/>
+  <line x1="92" y1="144" x2="82" y2="154"/>
+  <!-- Inner wave in glass -->
+  <path d="M140,160 Q200,200 272,180 Q330,160 390,180" fill="none"/>
+</svg>

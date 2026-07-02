@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList, Pencil, GlassWater } from "lucide-react";
+import { Plus, Edit2, X, Upload, RefreshCw, Search, Leaf, ShoppingBag, User, MapPin, ClipboardList, Pencil } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
 import { compressImage } from "../utils/imageCompressor";
@@ -509,7 +509,7 @@ const AdminMenu = () => {
                               )}
                               {(dish.isDrink === true || dish.isDrink === "true") && (
                                 <div className="bg-black/80 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-blue-500/30 text-blue-400">
-                                  <GlassWater size={10} className="text-blue-400" />
+                                  <img src="/drinks.svg" alt="Drink" className="w-3 h-3 object-contain" />
                                   <span>Drink</span>
                                 </div>
                               )}
@@ -702,7 +702,7 @@ const AdminMenu = () => {
       {/* DISHES ADD / EDIT MODAL */}
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-[#081A2F] w-full max-w-2xl rounded-xl p-6 border border-white/10 my-8 shadow-2xl">
+          <div className="bg-[#081A2F] w-full max-w-[120vh] rounded-xl p-6 border border-white/10 my-8 shadow-2xl">
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">{editingDish ? "Edit Dish" : "Add Dish"}</h2>
@@ -778,7 +778,7 @@ const AdminMenu = () => {
                       className="w-4.5 h-4.5 rounded border-white/10 bg-black text-blue-400 focus:ring-blue-400 accent-blue-400"
                     />
                     <span className="text-xs uppercase tracking-wider text-white/80 flex items-center gap-1 font-bold">
-                      <GlassWater size={14} className="text-blue-400" /> Drinks
+                      <img src="/drinks.svg" alt="Drink" className="w-3.5 h-3.5 object-contain" /> Drinks
                     </span>
                   </label>
 
