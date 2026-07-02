@@ -520,7 +520,7 @@ const AdminMenu = () => {
                               )}
                               {(dish.isDrink === true || dish.isDrink === "true") && (
                                 <div className="bg-black/80 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-blue-500/30 text-blue-400">
-                                  <img src="/drinks.svg" alt="Drink" className="w-3 h-3 object-contain" />
+                                  <img src="/drinks.svg" alt="Drink" className="w-3 h-3 invert object-contain" />
                                   <span>Drink</span>
                                 </div>
                               )}
