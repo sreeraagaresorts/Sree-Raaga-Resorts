@@ -262,7 +262,7 @@ const AdminBilling = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12 w-full text-white">
+    <div className="space-y-6 max-w-[180vh] mx-auto pb-12 w-full text-white">
       {/* CSS print override styles */}
       <style>{`
         @media print {

@@ -314,7 +314,7 @@ const AdminRoomsManagement = () => {
   };
 
   return (
-    <div className="space-y-6 text-white max-w-[200vh] mx-auto select-none">
+    <div className="space-y-6 text-white max-w-[180vh] mx-auto select-none">
       
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 border-b border-white/5 pb-6">

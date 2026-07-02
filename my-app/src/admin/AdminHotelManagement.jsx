@@ -7,7 +7,7 @@ const AdminHotelManagement = () => {
   const [activeTab, setActiveTab] = useState("rooms");
 
   return (
-    <div className="space-y-6 text-white max-w-[200vh] mx-auto select-none">
+    <div className="space-y-6 text-white max-w-[180vh] mx-auto select-none">
       
       {/* TABS HEADER */}
       <div className="flex gap-4 border-b border-white/10 pb-2">

@@ -319,7 +319,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="space-y-6 text-white max-w-7xl mx-auto">
+    <div className="space-y-6 text-white max-w-[180vh] mx-auto">
       {/* ERROR DISPLAY */}
       {error && (
         <div className="bg-red-500/10 border border-red-500 text-red-400 p-4 rounded-lg">

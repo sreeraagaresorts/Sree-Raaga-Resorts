@@ -423,7 +423,7 @@ const AdminBookings = () => {
   });
 
   return (
-    <div className="space-y-6 text-white max-w-[200vh] mx-auto">
+    <div className="space-y-6 text-white max-w-[180vh] mx-auto">
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 border-b border-white/5 pb-6">
         <div>
