@@ -361,7 +361,7 @@ const Menu = () => {
                         className="flex gap-4 items-start group"
                       >
                         {/* Thumbnail */}
-                        <div className="w-19 h-19 overflow-hidden shrink-0 border border-gray-200 shadow-md">
+                        <div className="w-26 h-26 overflow-hidden shrink-0 border border-gray-200 shadow-md">
                           <img 
                             src={getImageUrl(dish.image)} 
                             alt={dish.name} 
