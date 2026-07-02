@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+
 import AdminRooms from "./AdminRooms";
 import AdminEvents from "./AdminEvents";
+import { useLocation } from "react-router-dom";
 import { BedDouble, CalendarDays } from "lucide-react";
 
 const AdminHotelManagement = () => {
-  const [activeTab, setActiveTab] = useState("rooms");
-
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState( location.state?.tab || "rooms");
+  
+useEffect(() => {
+    if (location.state?.tab) {
+      setActiveTab(location.state.tab);
+    }
+  }, [location.state]);
   return (
     <div className="space-y-6 text-white max-w-[180vh] mx-auto select-none">
       
@@ -34,10 +42,12 @@ const AdminHotelManagement = () => {
       </div>
 
       {/* TAB CONTENT */}
-      <div>
-        {activeTab === "rooms" ? (
+     <div>
+        {activeTab === "rooms" && (
           <AdminRooms />
-        ) : (
+        )}
+        
+        {activeTab === "events" && (
           <AdminEvents />
         )}
       </div>
