@@ -347,7 +347,7 @@ const Menu = () => {
                   
                   {/* Category Heading - Normal Left Side */}
                   <div className="mb-10 text-left">
-                    <h3 className="text-3xl md:text-4xl font-medium font-corm text-[#0d2b4e] capitalize">
+                    <h3 className="text-3xl md:text-[40px] font-medium font-corm text-[#0d2b4e] capitalize">
                       {category}
                     </h3>
                     <div className="w-16 h-0.5 bg-[#c8a64d] mt-4 rounded-full"></div>
