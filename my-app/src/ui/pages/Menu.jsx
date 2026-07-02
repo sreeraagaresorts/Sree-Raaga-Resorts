@@ -141,6 +141,17 @@ const Menu = () => {
     return acc;
   }, {});
 
+  // Define display order — Starters first
+  const categoryOrder = ["Starters", "Breakfast", "Main Course", "Biryani", "Rice & Noodles", "Desserts", "Beverages"];
+  const sortedGroupedDishes = Object.entries(groupedDishes).sort(([a], [b]) => {
+    const ai = categoryOrder.indexOf(a);
+    const bi = categoryOrder.indexOf(b);
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (isAdmin) {
@@ -342,7 +353,7 @@ const Menu = () => {
           {/* DISHES LIST - GROUPED BY CATEGORY WITH LEFT HEADING (NORMAL LAYOUT) */}
           {!loading && !error && filteredDishes.length > 0 && (
             <div className="max-w-7xl mx-auto px-6">
-              {Object.entries(groupedDishes).map(([category, items]) => (
+              {sortedGroupedDishes.map(([category, items]) => (
                 <div key={category} className="mb-20 last:mb-0">
                   
                   {/* Category Heading - Normal Left Side */}
