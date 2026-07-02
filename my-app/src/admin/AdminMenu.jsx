@@ -520,7 +520,7 @@ const AdminMenu = () => {
                               )}
                               {(dish.isDrink === true || dish.isDrink === "true") && (
                                 <div className="bg-black/80 backdrop-blur px-2.5 py-1 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider rounded border border-blue-500/30 text-blue-400">
-                                  <img src="/drinks.svg" alt="Drink" className="w-3 h-3 invert object-contain" />
+                                  <img src="/drinks.svg" alt="Drink" className="w-4 h-4 invert object-contain" />
                                   <span>Drink</span>
                                 </div>
                               )}
@@ -789,7 +789,7 @@ const AdminMenu = () => {
                       className="w-4.5 h-4.5 rounded border-white/10 bg-black text-blue-400 focus:ring-blue-400 accent-blue-400"
                     />
                     <span className="text-xs uppercase tracking-wider text-white/80 flex items-center gap-1 font-bold">
-                      <img src="/drinks.svg" alt="Drink" className="w-3.5 h-3.5 object-contain" /> Drinks
+                      <img src="/drinks.svg" alt="Drink" className="w-4 h-4 invert object-contain" /> Drinks
                     </span>
                   </label>
 
