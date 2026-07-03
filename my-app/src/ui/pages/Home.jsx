@@ -24,7 +24,8 @@ import {
   ChevronRight, 
   ChevronDown,
   CalendarDays,
-  Sparkles 
+  Sparkles ,
+  ArrowDown 
 } from "lucide-react";
 
 import wifiIcon from "../../assets/icons/wifi.png";
@@ -421,13 +422,13 @@ return (
           </motion.div>
 
           <div className="relative z-10 text-center px-5 max-w-5xl text-white">
-            <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-4 text-sm font-semibold">
+            <span className="text-[#c8a64d] uppercase tracking-[3px] block mb-4 text-[15px] font-medium">
               Sree Raaga Resorts
             </span>
-            <h1 className="text-4xl font-corm md:text-6xl lg:text-7xl font-light leading-tight mb-8 drop-shadow-md">
-              A Premier Destination for Getaways, <br />
-              <span className="italic font-normal text-[#D8BF72]">
-                Celebrations & Grand Events
+            <h1 className="text-4xl font-corm md:text-6xl lg:text-[92px] font-medium leading-tight mb-8 drop-shadow-md">
+              Experience Unparalleled<br />
+              <span className="  font-medium text-[#D8BF72]">
+                Comfort
               </span>
             </h1>
           </div>
@@ -436,10 +437,10 @@ return (
           <div className="absolute bottom-0 translate-y-1/2 w-full z-20 px-4 md:px-10">
       <form
   onSubmit={handleSearch}
-  className="max-w-5xl mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl md:mt-[-120px] mt-0"
+  className="max-w-3xl mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-3 py-4 md:py-2 flex flex-col md:flex-row items-center shadow-2xl md:mt-[-120px] mt-0"
 >
   {/* DATE */}
-  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer z-9999 group transition-all duration-300">
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/20 cursor-pointer z-9999 group transition-all duration-300">
     <DatePicker
       selectsRange={true}
       startDate={checkIn ? new Date(checkIn) : null}
@@ -458,9 +459,7 @@ return (
       customInput={
         <div className="flex-1 text-left flex items-center justify-between w-full ">
           <div>
-            <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-              Dates
-            </p>
+         
             <span className="text-white text-xs lg:text-sm">
               {checkIn
                 ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
@@ -490,16 +489,14 @@ return (
   </div>
 
   {/* ROOM */}
-  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10 select-none cursor-pointer booking-field"
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/20 select-none cursor-pointer booking-field"
        onClick={() => {
          setIsRoomsOpen(!isRoomsOpen);
          setIsGuestsOpen(false);
        }}
   >
     <div className="flex-1">
-      <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-        Room Type
-      </p>
+    
       <span className="text-white text-xs lg:text-sm">
         Rooms {roomsCount}
       </span>
@@ -549,9 +546,7 @@ return (
        }}
   >
     <div className="flex-1">
-      <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-        Guests
-      </p>
+  
       <span className="text-white text-xs lg:text-sm">
         {adultsCount + childrenCount === 0
           ? "Guests"
@@ -1190,229 +1185,248 @@ offer to suit your needs and elevate your experience.          </p>
 </Swiper>
         </div>
 
-        {/* ================= BOOK YOUR STAY NOW BANNER ================= */}
-        <section 
-          className="relative py-32 bg-fixed bg-cover bg-center  flex items-center justify-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000')",
-          }}
-        >
-          <div className="absolute inset-0 bg-black/60"></div>
-          
-          <div className="relative z-10 w-full max-w-[100vh] mx-auto text-center px-6 text-white">
-            <span className="text-[#D8BF72] uppercase tracking-[4px] text-xs font-semibold block mb-4">
-              Instant Booking
-            </span>
-            <h2 className="text-4xl md:text-5xl font-medium mb-8  font-corm leading-tight">
-              Book Your Stay Now
-            </h2>
-            
-            {/* Sleek Pill-shaped Booking Panel */}
-          <form
-  onSubmit={handleSearch}
-  className=" max-w-7xl mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4  py-4 md:py-0 flex flex-col md:flex-row items-center shadow-2xl"
->
-  {/* DATE */}
-  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group transition-all duration-300">
-    <DatePicker
-      selectsRange={true}
-      startDate={checkIn ? new Date(checkIn) : null}
-      endDate={checkOut ? new Date(checkOut) : null}
-      onChange={(update) => {
-        const [start, end] = update;
-        const formatDate = (date) => {
-          if (!date) return "";
-          const tzOffset = date.getTimezoneOffset() * 60000;
-          return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
-        };
-        setCheckIn(start ? formatDate(start) : "");
-        setCheckOut(end ? formatDate(end) : "");
+  
+   <section
+      className="relative py-32 md:py-52 bg-fixed bg-cover bg-center flex items-center justify-center"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000')",
       }}
-      minDate={new Date()}
-      customInput={
-        <div className="flex-1 text-left flex items-center justify-between w-full select-none">
-          <div>
-            <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-              Dates
-            </p>
-            <span className="text-white text-xs lg:text-sm">
-              {checkIn
-                ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
-                    checkOut
-                      ? ` - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
-                      : " - Check Out"
-                  }`
-                : "Check In - Check Out"}
+    >
+      <div className="absolute inset-0 bg-black/50"></div>
+
+      <div className="relative z-10 w-full max-w-7xl mx-auto text-center px-4 md:px-6">
+        <span className="text-[#D8BF72] uppercase tracking-[2px] text-[13px] md:text-[15px] font-medium block mb-3 md:mb-4">
+          Instant Booking
+        </span>
+        <h2 className="text-white text-3xl md:text-[64px] font-medium mb-10 font-corm leading-tight">
+          Book Your Stay Now
+        </h2>
+
+        {/* Clean White Pill Booking Panel */}
+        <form
+          onSubmit={handleSearch}
+          className="w-full max-w-6xl mx-auto bg-white rounded-3xl md:rounded-2xl p-3 md:p-4 flex flex-col md:flex-row items-stretch md:items-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-neutral-800"
+        >
+          {/* DATE */}
+          <div className="relative w-full md:flex-1 flex items-center justify-between px-4 md:px-6 py-4 md:py-3 border-b md:border-b-0 md:border-r border-neutral-200 cursor-pointer group transition-all duration-300">
+            <DatePicker
+              selectsRange={true}
+              startDate={checkIn ? new Date(checkIn) : null}
+              endDate={checkOut ? new Date(checkOut) : null}
+              onChange={(update) => {
+                const [start, end] = update;
+                const formatDate = (date) => {
+                  if (!date) return "";
+                  const tzOffset = date.getTimezoneOffset() * 60000;
+                  return new Date(date.getTime() - tzOffset)
+                    .toISOString()
+                    .split("T")[0];
+                };
+                setCheckIn(start ? formatDate(start) : "");
+                setCheckOut(end ? formatDate(end) : "");
+              }}
+              minDate={new Date()}
+              customInput={
+                <div className="flex-1 text-left flex items-center justify-between w-full select-none">
+                  <span className="text-neutral-800 font-normal text-sm md:text-base tracking-wide truncate">
+                    {checkIn
+                      ? `${new Date(checkIn).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                        })}${
+                          checkOut
+                            ? ` - ${new Date(checkOut).toLocaleDateString(
+                                "en-IN",
+                                { day: "2-digit", month: "short" }
+                              )}`
+                            : " - Check Out"
+                        }`
+                      : "Check In - Check Out"}
+                  </span>
+                  <ArrowDown
+                    size={14}
+                    strokeWidth={1.5}
+                    className="text-neutral-500 group-hover:text-neutral-900 transition ml-4 shrink-0"
+                  />
+                </div>
+              }
+              calendarClassName="custom-datepicker"
+              popperModifiers={[
+                {
+                  name: "preventOverflow",
+                  options: {
+                    boundary: "viewport",
+                  },
+                },
+              ]}
+            />
+          </div>
+
+          {/* ROOMS */}
+          <div
+            className="relative w-full md:flex-1 flex items-center justify-between px-4 md:px-6 py-4 md:py-3 border-b md:border-b-0 md:border-r border-neutral-200 select-none cursor-pointer booking-field group"
+            onClick={() => {
+              setIsRoomsOpen(!isRoomsOpen);
+              setIsGuestsOpen(false);
+            }}
+          >
+            <span className="text-neutral-800 font-normal text-sm md:text-base tracking-wide">
+              Rooms {roomsCount > 0 ? `(${roomsCount})` : ""}
             </span>
-          </div>
-          <ChevronDown
-            size={14}
-            className="text-white/60 group-hover:text-white transition ml-4"
-          />
-        </div>
-      }
-      calendarClassName="custom-datepicker"
-      popperModifiers={[
-        {
-          name: "preventOverflow",
-          options: {
-            boundary: "viewport",
-          },
-        },
-      ]}
-    />
-  </div>
+            <ArrowDown
+              size={14}
+              strokeWidth={1.5}
+              className={`text-neutral-500 group-hover:text-neutral-900 transition-transform duration-300 shrink-0 ${
+                isRoomsOpen ? "rotate-180" : ""
+              }`}
+            />
 
-  {/* ROOM */}
-  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10 select-none cursor-pointer booking-field"
-       onClick={() => {
-         setIsRoomsOpen(!isRoomsOpen);
-         setIsGuestsOpen(false);
-       }}
-  >
-    <div className="flex-1">
-      <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-        Room Type
-      </p>
-      <span className="text-white text-xs lg:text-sm">
-        Rooms {roomsCount}
-      </span>
-    </div>
-    <ChevronDown
-      size={14}
-      className={`text-white/60 transition-transform duration-300 ${isRoomsOpen ? "rotate-180" : ""}`}
-    />
+            {/* Rooms Dropdown */}
+            {isRoomsOpen && (
+              <div className="absolute top-[105%] md:top-[120%] left-0 w-full md:w-64 bg-white text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-sm">Rooms</span>
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (roomsCount > 1) setRoomsCount(roomsCount - 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="font-semibold text-sm w-4 text-center">
+                      {roomsCount}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRoomsCount(roomsCount + 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
-    {isRoomsOpen && (
-      <div className="absolute top-[110%] left-0 w-64 bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
-        <div className="flex items-center justify-between">
-          <span className="font-semibold text-sm">Rooms</span>
-          <div className="flex items-center gap-6">
+          {/* GUESTS */}
+          <div
+            className="relative w-full md:flex-1 flex items-center justify-between px-4 md:px-6 py-4 md:py-3 select-none cursor-pointer booking-field group"
+            onClick={() => {
+              setIsGuestsOpen(!isGuestsOpen);
+              setIsRoomsOpen(false);
+            }}
+          >
+            <span className="text-neutral-800 font-normal text-sm md:text-base tracking-wide">
+              {adultsCount + childrenCount === 0
+                ? "Guests"
+                : adultsCount + childrenCount === 1
+                ? "1 Guest"
+                : `${adultsCount + childrenCount} Guests`}
+            </span>
+            <ArrowDown
+              size={14}
+              strokeWidth={1.5}
+              className={`text-neutral-500 group-hover:text-neutral-900 transition-transform duration-300 shrink-0 ${
+                isGuestsOpen ? "rotate-180" : ""
+              }`}
+            />
+
+            {/* Guests Dropdown */}
+            {isGuestsOpen && (
+              <div className="absolute top-[105%] md:top-[120%] right-0 md:left-0 w-full md:w-72 bg-white text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none space-y-4 animate-in fade-in zoom-in-95 duration-200">
+                {/* Adults */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium text-sm">Adults</div>
+                    <div className="text-xs text-neutral-400">Ages 13 or above</div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (adultsCount > 0) setAdultsCount(adultsCount - 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="font-semibold text-sm w-4 text-center">
+                      {adultsCount}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setAdultsCount(adultsCount + 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div className="border-t border-neutral-100"></div>
+
+                {/* Children */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium text-sm">Children</div>
+                    <div className="text-xs text-neutral-400">Ages 0 - 12</div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (childrenCount > 0)
+                          setChildrenCount(childrenCount - 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="font-semibold text-sm w-4 text-center">
+                      {childrenCount}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setChildrenCount(childrenCount + 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* CHECK AVAILABILITY BUTTON */}
+          <div className="p-1 mt-2 md:mt-0 w-full md:w-auto shrink-0">
             <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (roomsCount > 1) setRoomsCount(roomsCount - 1);
-              }}
-              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+              type="submit"
+              className="w-full md:w-auto px-8 py-4 md:py-4 rounded-2xl md:rounded-full bg-[#f3dac6] hover:bg-[#e6caba] text-neutral-900 font-medium tracking-[1.5px] uppercase text-xs md:text-sm transition-all duration-300 shadow-sm hover:shadow shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap"
             >
-              -
-            </button>
-            <span className="font-semibold text-sm w-4 text-center">{roomsCount}</span>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setRoomsCount(roomsCount + 1);
-              }}
-              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-            >
-              +
+              Check Availability
             </button>
           </div>
-        </div>
+        </form>
       </div>
-    )}
-  </div>
-
-  {/* GUESTS */}
-  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 select-none cursor-pointer booking-field"
-       onClick={() => {
-         setIsGuestsOpen(!isGuestsOpen);
-         setIsRoomsOpen(false);
-       }}
-  >
-    <div className="flex-1">
-      <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-        Guests
-      </p>
-      <span className="text-white text-xs lg:text-sm">
-        {adultsCount + childrenCount === 0
-          ? "Guests"
-          : adultsCount + childrenCount === 1
-          ? "1 Guest"
-          : `${adultsCount + childrenCount} Guests`}
-      </span>
-    </div>
-    <ChevronDown
-      size={14}
-      className={`text-white/60 transition-transform duration-300 ${isGuestsOpen ? "rotate-180" : ""}`}
-    />
-
-    {isGuestsOpen && (
-      <div className="absolute top-[110%] left-0 w-64 bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none space-y-4">
-        {/* Adults */}
-        <div className="flex items-center justify-between">
-          <span className="font-semibold text-sm">Adults</span>
-          <div className="flex items-center gap-6">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (adultsCount > 0) setAdultsCount(adultsCount - 1);
-              }}
-              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-            >
-              -
-            </button>
-            <span className="font-semibold text-sm w-4 text-center">{adultsCount}</span>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setAdultsCount(adultsCount + 1);
-              }}
-              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-            >
-              +
-            </button>
-          </div>
-        </div>
-
-        <div className="border-t border-[#0d2b4e]/10"></div>
-
-        {/* Children */}
-        <div className="flex items-center justify-between">
-          <span className="font-semibold text-sm">Children</span>
-          <div className="flex items-center gap-6">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (childrenCount > 0) setChildrenCount(childrenCount - 1);
-              }}
-              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-            >
-              -
-            </button>
-            <span className="font-semibold text-sm w-4 text-center">{childrenCount}</span>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setChildrenCount(childrenCount + 1);
-              }}
-              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-            >
-              +
-            </button>
-          </div>
-        </div>
-      </div>
-    )}
-  </div>
-
-  {/* SEARCH BUTTON */}
-  <button
-    type="submit"
-    className="group mt-4 md:mt-0 md:ml-4 h-12 w-12 rounded-full bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white text-[#0d2b4e] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shrink-0 cursor-pointer"
-  >
-    <span className="font-jost font-semibold text-xs tracking-wider uppercase">GO</span>
-  </button>
-</form>
-          </div>
-        </section>
+    </section>
 
         {/* ================= FOLLOW US ON INSTAGRAM ================= */}
         <section className="  bg-[#fdfeff] text-[#0d2b4e]">

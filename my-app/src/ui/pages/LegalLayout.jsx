@@ -44,7 +44,7 @@ const LegalLayout = () => {
               "url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=2000')",
           }}
         >
-          <div className="absolute inset-0 bg-[#04121a]/60"></div>
+          <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center px-4 max-w-7xl space-y-4">
             <span className="text-white text-[17px] uppercase tracking-[6px] font-semibold font-jost">
               Legal

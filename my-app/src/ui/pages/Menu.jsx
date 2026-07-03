@@ -211,7 +211,7 @@ const Menu = () => {
             backgroundImage: "url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2000')"
           }}
         >
-          <div className="absolute inset-0 bg-[#04121a]/60"></div>
+          <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white px-6 w-full max-w-7xl">
             <span className="text=white uppercase tracking-[6px] block  text-[17px] font-semibold ">
               Restaurant

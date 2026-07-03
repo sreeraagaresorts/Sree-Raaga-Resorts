@@ -319,7 +319,7 @@ const About = () => {
               "url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=2000')",
           }}
         >
-          <div className="absolute inset-0 bg-[#04121a]/60"></div>
+          <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-white select-none max-w-3xl">
             <h2 className="text-3xl md:text-6xl font-medium font-corm   mb-8">
               Luxury Awaits, <br /> Book Your Stay Today!

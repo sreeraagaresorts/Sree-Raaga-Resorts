@@ -228,7 +228,7 @@ const Amenities = () => {
             backgroundImage: "url('https://images.unsplash.com/photo-1517176118179-65244903d13c?q=80&w=2000')"
           }}
         >
-          <div className="absolute inset-0 bg-[#04121a]/30"></div>
+          <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white px-4 max-w-3xl space-y-4">
             <span className="text-white uppercase tracking-[6px]  text-[17px] font-semibold font-jost">
               Sree Raaga Resorts 
