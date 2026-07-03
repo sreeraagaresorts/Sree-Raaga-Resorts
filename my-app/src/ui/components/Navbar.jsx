@@ -415,7 +415,7 @@ const Navbar = () => {
 
         {/* LEFT COLUMN: Large Serif Menu Links */}
         <div className="relative flex-1 lg:flex-[0_0_60%] flex flex-col justify-center px-6 md:px-24 py-20 z-10 overflow-y-auto max-h-screen [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <div ref={menuLinksRef} className="flex flex-col  gap-5 md:gap-7">
+          <div ref={menuLinksRef} className="flex flex-col  gap-2 md:gap-7">
             {menuLinks.map((link, idx) => {
               if (link.name === "Rooms") {
                 return (
@@ -435,7 +435,7 @@ const Navbar = () => {
                       <Link 
                         to={link.path}
                         onClick={() => setIsOpen(false)}
-className="text-3xl md:text-3xl font-light uppercase tracking-[8px] text-white"                      >
+className="text-xl md:text-3xl font-light uppercase tracking-[8px] text-white"                      >
                         {link.name}
                         {/* <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 " /> */}
                         <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#c8a64d]/30" />
