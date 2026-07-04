@@ -20,6 +20,7 @@ import LegalLayout from "./ui/pages/LegalLayout";
 import NotFound from "./ui/pages/NotFound";
 import DayOut from "./ui/pages/DayOut";
 import Corporate from "./ui/pages/Corporate";
+import CustomCursor from "./ui/components/CustomCursor";
 
 // PRIVACY SUBPAGES
 import PrivacyGeneral from "./ui/pages/privacy/General";
@@ -64,7 +65,7 @@ const App = () => {
   return (
     <>
     
-
+<CustomCursor />
       <Routes>
 
         {/* PUBLIC ROUTES */}
