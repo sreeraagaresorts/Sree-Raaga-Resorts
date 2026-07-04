@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
+import Experience from "../components/ExperienceSlider"
 import "swiper/css";
 import "swiper/css/navigation";
 import Navbar from "../components/Navbar";
@@ -819,11 +820,11 @@ offer to suit your needs and elevate your experience.          </p>
   </div>
 </div>
 
-                        <h3 className="text-2xl md:text-3xl font-light mb-2 font-corm group-hover:text-[#c8a64d] transition duration-300">
+                        <h3 className="text-2xl md:text-3xl font-semibold mb-2 font-corm group-hover:text-[#c8a64d] transition duration-300">
                           {room.name}
                         </h3>
 
-                        <div className="flex flex-wrap items-center gap-3 text-[#D8C8A5] text-sm font-medium font-jost uppercase tracking-widest mb-4">
+                        <div className="flex flex-wrap items-center gap-3 text-[#D8C8A5] text-[16px] font-medium font-jost uppercase tracking-widest mb-4">
                           <span>{room.area} SQM</span>
                           <span>•</span>
                           <span>{room.beds}</span>
@@ -882,7 +883,7 @@ offer to suit your needs and elevate your experience.          </p>
         
 
             {/* Icons Row */}
-            <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-4 mb-12 md:mb-32">
+            <div className="max-w-[180vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-4 mb-12 md:mb-32">
   {amenities.map((item, idx) => (
     <div
       key={idx}
@@ -896,7 +897,7 @@ offer to suit your needs and elevate your experience.          </p>
         />
       </div>
 
-      <span className="text-sm md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+      <span className="text-sm md:text-[26px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
         {item.name}
       </span>
     </div>
@@ -905,9 +906,9 @@ offer to suit your needs and elevate your experience.          </p>
 
             {/* Exceptional Gastronomy Header */}
             <div className="text-center mb-20 select-none">
-              <span className="text-gray-400 uppercase tracking-[4px] text-[12px]  font-medium block mb-4">
-                Sree Raaga Resorts Luxury Hotel
-              </span>
+             <span className="uppercase tracking-[3px] text-sm font-semibold font-jost text-[#c8a64d]">
+          Sree Raaga Resorts
+        </span>
               <h2 className="text-3xl md:text-[60px] font-medium font-corm  text-[#0d2b4e] leading-snug">
                 Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
               </h2>
@@ -960,7 +961,7 @@ offer to suit your needs and elevate your experience.          </p>
   </div>
 
                       <h3
-                        className={`text-xl md:text-4xl font-medium tracking-wide font-corm mb-1  transition-colors duration-300 ${tabColor}`}
+                        className={`text-xl md:text-4xl font-semibold tracking-wide font-corm mb-1  transition-colors duration-300 ${tabColor}`}
                       >
                         {tabData[key].title}
                       </h3>
@@ -983,29 +984,41 @@ offer to suit your needs and elevate your experience.          </p>
         </section>
 
         {/* ================= EXPERIENCES GRID ================= */}
-      <section className="bg-white">
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 ">
+   <section className="bg-white">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
     {[
       {
-        title: "Yoga On Beach",
-        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200",
+        title: "Restaurant & Bar",
+        image:
+          "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200",
+        description:
+          "Enjoy gourmet dining, refreshing beverages, and a relaxing atmosphere with exceptional hospitality.",
       },
       {
-        title: "Water Sports",
-        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200",
+        title: "Spa & Wellness",
+        image:
+          "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1200",
+        description:
+          "Relax your mind and body with rejuvenating spa therapies, massages, and wellness experiences.",
       },
       {
-        title: "Scuba Diving",
-        image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200",
+        title: "Fitness Center",
+        image:
+          "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200",
+        description:
+          "Stay active during your stay with modern fitness equipment and a comfortable workout environment.",
       },
       {
-        title: "Island Activities",
-        image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1200",
+        title: "Coffee Shop",
+        image:
+          "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200",
+        description:
+          "Savor freshly brewed coffee, delicious snacks, and cozy moments in our elegant coffee shop.",
       },
     ].map((exp, index) => (
       <div
         key={index}
-        className="relative h-[500px] lg:h-[850px] overflow-hidden group "
+        className="relative h-[500px] lg:h-[850px] overflow-hidden group"
       >
         {/* Background Image */}
         <img
@@ -1019,40 +1032,38 @@ offer to suit your needs and elevate your experience.          </p>
 
         {/* Content */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8 text-white">
-          
-          <span className="uppercase tracking-widest text-sm font-jost mb-10">
-            Experiences
+          <span className="uppercase tracking-widest text-[17px] font-jost mb-10">
+            Amenities
           </span>
 
           <h3 className="font-corm text-4xl lg:text-6xl font-light leading-tight mb-8">
             {exp.title}
           </h3>
 
-          <p className="max-w-xs text-sm lg:text-base text-white/90 mb-12">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          <p className="max-w-xs text-sm lg:text-base text-white/90 mb-12 font-medium">
+            {exp.description}
           </p>
 
-        <button
-  className="
-    px-12 py-4
-    border border-white
-    
-    uppercase
-    tracking-widest
-    text-sm
-    font-semibold
-    opacity-0
-    translate-y-4
-    group-hover:opacity-100
-    group-hover:translate-y-0
-    hover:bg-white
-    hover:text-black
-    transition-all
-    duration-500
-  "
->
-  Discover More
-</button>
+          <button
+            className="
+              px-12 py-4
+              border border-white
+              uppercase
+              tracking-widest
+              text-sm
+              font-semibold
+              opacity-0
+              translate-y-4
+              group-hover:opacity-100
+              group-hover:translate-y-0
+              hover:bg-white
+              hover:text-black
+              transition-all
+              duration-500
+            "
+          >
+            Discover More
+          </button>
         </div>
       </div>
     ))}
@@ -1067,17 +1078,17 @@ offer to suit your needs and elevate your experience.          </p>
     <div className="bg-[#fdfeff] min-h-[400px] md:min-h-[700px] flex items-center justify-center px-8">
       <div className="max-w-3xl text-center">
 
-        <span className="uppercase tracking-[3px] text-sm font-jost text-[#0d2b4e]">
+        <span className="uppercase tracking-[3px] text-sm font-semibold font-jost text-[#c8a64d]">
           Sree Raaga Resorts
         </span>
 
-        <h2 className="font-corm text-[#0d2b4e] text-5xl md:text-[60px]  leading-[1.15] font-medium mt-6 mb-10">
+        <h2 className="font-corm text-[#0d2b4e] text-5xl md:text-[60px]  leading-[1.15] font-semibold mt-6 mb-10">
           DayOut Packages
           <br />
           
         </h2>
 
-        <p className="text-gray-600 text-lg leading-relaxed max-w-2xl  mx-auto mb-12">
+        <p className="text-gray-600 text-[17px] leading-relaxed max-w-2xl font-medium  mx-auto mb-12">
          Enjoy a perfect day of relaxation, adventure, delicious cuisine, and memorable experiences crafted for families, friends, and corporate groups.
         </p>
 
@@ -1130,64 +1141,20 @@ offer to suit your needs and elevate your experience.          </p>
         {/* ================= UNIQUE EXPERIENCES ================= */}
         <div className="bg-[#fdfeff] pb-20">
           <div className="max-w-6xl mx-auto text-center mb-16">
-  <span className="text-gray-500 uppercase tracking-[4px] text-xs font-jost font-semibold block mb-3">
+  <span className="text-[#c8a64d] uppercase tracking-[3px] text-[14px] font-jost font-semibold block  mb-8">
     There's so much to discover
   </span>
 
-  <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium font-corm text-[#0d2b4e] mb-4">
+  <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold font-corm text-[#0d2b4e] pb-8">
     Unique Experiences
   </h2>
   </div>
-     <Swiper
-  modules={[Autoplay]}
-  loop={true}
-  centeredSlides={true}
-  slidesPerView={1.2}
-  spaceBetween={40}
-  speed={1000}
-  autoplay={{
-    delay: 3000,
-    disableOnInteraction: false,
-  }}
-  breakpoints={{
-    768: {
-      slidesPerView: 3,
-    },
-  }}
-  className="unique-experience-slider"
->
-  
-  {experiences.map((item) => (
-    <SwiperSlide key={item.id}>
-      <div className="group flex flex-col relative transition-all duration-700">
-        <div
-          className={`relative overflow-hidden mb-6 ${item.height}`}
-        >
-          <WindowReveal
-            src={item.image}
-            alt={item.title}
-            className="w-full h-full"
-          />
-        </div>
-
-        <div className="px-2">
-          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">
-            {item.id}
-          </span>
-
-          <h3 className="text-2xl font-light text-[#0d2b4e] font-jost hover:text-[#c8a64d] transition duration-300">
-            {item.title}
-          </h3>
-        </div>
-      </div>
-    </SwiperSlide>
-  ))}
-</Swiper>
+  <Experience/>
         </div>
 
   
    <section
-      className="relative py-32 md:py-52 bg-fixed bg-cover bg-center flex items-center justify-center"
+      className="relative py-32 md:py-49 bg-fixed bg-cover bg-center flex items-center justify-center"
       style={{
         backgroundImage:
           "url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000')",
@@ -1195,18 +1162,18 @@ offer to suit your needs and elevate your experience.          </p>
     >
       <div className="absolute inset-0 bg-black/50"></div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto text-center px-4 md:px-6">
-        <span className="text-[#D8BF72] uppercase tracking-[2px] text-[13px] md:text-[15px] font-medium block mb-3 md:mb-4">
+      <div className="relative z-10 w-full max-w-5xl mx-auto text-center px-4 md:px-6">
+        <span className="text-[#D8BF72] uppercase tracking-[2px] text-[13px] md:text-[15px] font-semibold block mb-3 md:mb-4">
           Instant Booking
         </span>
-        <h2 className="text-white text-3xl md:text-[64px] font-medium mb-10 font-corm leading-tight">
+        <h2 className="text-white text-3xl md:text-[64px] font-bold mb-10 font-corm leading-tight">
           Book Your Stay Now
         </h2>
 
         {/* Clean White Pill Booking Panel */}
         <form
           onSubmit={handleSearch}
-          className="w-full max-w-6xl mx-auto bg-white rounded-3xl md:rounded-2xl p-3 md:p-4 flex flex-col md:flex-row items-stretch md:items-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-neutral-800"
+          className="w-full max-w-6xl mx-auto bg-white rounded-3xl md:rounded-2xl p-3.5 md:p-4 flex flex-col md:flex-row items-stretch md:items-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-neutral-800"
         >
           {/* DATE */}
           <div className="relative w-full md:flex-1 flex items-center justify-between px-4 md:px-6 py-4 md:py-3 border-b md:border-b-0 md:border-r border-neutral-200 cursor-pointer group transition-all duration-300">
@@ -1229,7 +1196,7 @@ offer to suit your needs and elevate your experience.          </p>
               minDate={new Date()}
               customInput={
                 <div className="flex-1 text-left flex items-center justify-between w-full select-none">
-                  <span className="text-neutral-800 font-normal text-sm md:text-base tracking-wide truncate">
+                  <span className="text-neutral-800 font-normal text-sm md:text-[17px] tracking-wide truncate">
                     {checkIn
                       ? `${new Date(checkIn).toLocaleDateString("en-IN", {
                           day: "2-digit",
@@ -1271,8 +1238,8 @@ offer to suit your needs and elevate your experience.          </p>
               setIsGuestsOpen(false);
             }}
           >
-            <span className="text-neutral-800 font-normal text-sm md:text-base tracking-wide">
-              Rooms {roomsCount > 0 ? `(${roomsCount})` : ""}
+            <span className="text-neutral-800 font-normal text-sm md:text-[17px] tracking-wide">
+              Rooms
             </span>
             <ArrowDown
               size={14}
@@ -1325,11 +1292,11 @@ offer to suit your needs and elevate your experience.          </p>
               setIsRoomsOpen(false);
             }}
           >
-            <span className="text-neutral-800 font-normal text-sm md:text-base tracking-wide">
+            <span className="text-neutral-800 font-normal text-sm md:text-[17px] tracking-wide">
               {adultsCount + childrenCount === 0
                 ? "Guests"
                 : adultsCount + childrenCount === 1
-                ? "1 Guest"
+                ? "Guest"
                 : `${adultsCount + childrenCount} Guests`}
             </span>
             <ArrowDown
@@ -1419,7 +1386,7 @@ offer to suit your needs and elevate your experience.          </p>
           <div className="p-1 mt-2 md:mt-0 w-full md:w-auto shrink-0">
             <button
               type="submit"
-              className="w-full md:w-auto px-8 py-4 md:py-4 rounded-2xl md:rounded-full bg-[#f3dac6] hover:bg-[#e6caba] text-neutral-900 font-medium tracking-[1.5px] uppercase text-xs md:text-sm transition-all duration-300 shadow-sm hover:shadow shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap"
+              className="w-full md:w-auto px-8 py-4 md:py-4 rounded-2xl md:rounded-xl bg-[#f3dac6] hover:bg-[#e6caba] text-neutral-900 font-medium tracking-[1px] uppercase text-xs md:text-sm transition-all duration-300 shadow-sm hover:shadow shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap"
             >
               Check Availability
             </button>
@@ -1431,7 +1398,7 @@ offer to suit your needs and elevate your experience.          </p>
         {/* ================= FOLLOW US ON INSTAGRAM ================= */}
         <section className="  bg-[#fdfeff] text-[#0d2b4e]">
           <div className="py-12 text-center mb-12">
-            <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-jost font-semibold block mb-2">
+            <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-jost font-semibold block mb-2">
               Social Media
             </span>
             <h2 className="text-2xl md:text-6xl font-medium font-corm  flex items-center justify-center gap-2">

@@ -52,7 +52,7 @@ body {
 }
 
 .unique-experience-slider .swiper-slide-active {
-  transform: translateY(-40px);
+  transform: translateY(-60px);
 }
 
 .unique-experience-slider .swiper-slide-prev,
@@ -284,4 +284,4 @@ body {
 .user-dashboard-wrapper a.bg-\[\#c8a64d\],
 .user-dashboard-wrapper button.bg-red-600 {
   border-radius: 8px !important;
-}
+}
