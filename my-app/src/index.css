@@ -294,7 +294,7 @@ body {
 /* For Firefox */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #C8A64D #052053; /* thumb color, track color */
+  scrollbar-color: #C8A64D #011b3c; /* thumb color, track color */
 }
 
 /* For WebKit browsers (Chrome, Safari, Edge) */
