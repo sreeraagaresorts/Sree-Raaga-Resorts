@@ -295,7 +295,7 @@ const Amenities = () => {
                 <div className="pt-4">
                      <Link
                    to="/about"
-                   className="inline-flex items-center gap-4 px-6 py-4  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                   className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
                  >
                    <span>—</span>
                    Discover More
@@ -326,7 +326,7 @@ const Amenities = () => {
                 <div className="pt-4">
                 <Link
                    to="/about"
-                   className="inline-flex items-center gap-4 px-6 py-4  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                   className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
                  >
                    <span>—</span>
                    Discover More
@@ -357,7 +357,7 @@ const Amenities = () => {
                 <div className="pt-4">
                    <Link
                    to="/about"
-                   className="inline-flex items-center gap-4 px-6 py-4  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                   className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
                  >
                    <span>—</span>
                    Discover More

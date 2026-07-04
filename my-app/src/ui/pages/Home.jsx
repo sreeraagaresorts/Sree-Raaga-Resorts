@@ -423,7 +423,7 @@ return (
           </motion.div>
 
           <div className="relative z-10 text-center px-5 max-w-5xl text-white">
-            <span className="text-[#c8a64d] uppercase tracking-[3px] block mb-4 text-[15px] font-medium">
+            <span className="text-[#c8a64d] uppercase tracking-[3px] block mb-4 text-[17px] font-medium">
               Sree Raaga Resorts
             </span>
             <h1 className="text-4xl font-corm md:text-6xl lg:text-[92px] font-medium leading-tight mb-8 drop-shadow-md">
@@ -438,7 +438,7 @@ return (
           <div className="absolute bottom-0 translate-y-1/2 w-full z-20 px-4 md:px-10">
       <form
   onSubmit={handleSearch}
-  className="max-w-3xl mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-3 py-4 md:py-2 flex flex-col md:flex-row items-center shadow-2xl md:mt-[-120px] mt-0"
+  className="max-w-3xl mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-3 py-4 md:py-[10px] flex flex-col md:flex-row items-center shadow-2xl md:mt-[-120px] mt-0"
 >
   {/* DATE */}
   <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/20 cursor-pointer z-9999 group transition-all duration-300">
@@ -461,7 +461,7 @@ return (
         <div className="flex-1 text-left flex items-center justify-between w-full ">
           <div>
          
-            <span className="text-white text-xs lg:text-sm">
+            <span className="text-white text-xs lg:text-[17px]">
               {checkIn
                 ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
                     checkOut
@@ -498,7 +498,7 @@ return (
   >
     <div className="flex-1">
     
-      <span className="text-white text-xs lg:text-sm">
+      <span className="text-white text-xs lg:text-[17px]">
         Rooms {roomsCount}
       </span>
     </div>
@@ -548,7 +548,7 @@ return (
   >
     <div className="flex-1">
   
-      <span className="text-white text-xs lg:text-sm">
+      <span className="text-white text-xs lg:text-[17px]">
         {adultsCount + childrenCount === 0
           ? "Guests"
           : adultsCount + childrenCount === 1
@@ -1028,7 +1028,7 @@ offer to suit your needs and elevate your experience.          </p>
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/35"></div>
+        <div className="absolute inset-0 bg-black/40"></div>
 
         {/* Content */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8 text-white">
@@ -1139,7 +1139,7 @@ offer to suit your needs and elevate your experience.          </p>
 </section>
 
         {/* ================= UNIQUE EXPERIENCES ================= */}
-        <div className="bg-[#fdfeff] pb-20">
+        <div className="bg-[#fdfeff] ">
           <div className="max-w-6xl mx-auto text-center mb-16">
   <span className="text-[#c8a64d] uppercase tracking-[3px] text-[14px] font-jost font-semibold block  mb-8">
     There's so much to discover
@@ -1386,7 +1386,7 @@ offer to suit your needs and elevate your experience.          </p>
           <div className="p-1 mt-2 md:mt-0 w-full md:w-auto shrink-0">
             <button
               type="submit"
-              className="w-full md:w-auto px-8 py-4 md:py-4 rounded-2xl md:rounded-xl bg-[#f3dac6] hover:bg-[#e6caba] text-neutral-900 font-medium tracking-[1px] uppercase text-xs md:text-sm transition-all duration-300 shadow-sm hover:shadow shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap"
+              className="w-full md:w-auto px-8 py-4 md:py-4 rounded-2xl md:rounded-xl bg-[#f3dac6] hover:bg-[#011b3c] hover:text-white text-neutral-900 font-medium tracking-[1px] uppercase text-xs md:text-sm transition-all duration-300 shadow-sm hover:shadow shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap"
             >
               Check Availability
             </button>

@@ -30,7 +30,7 @@ const Dine = () => {
 
         {/* Intro Section */}
         <section className="py-20 max-w-4xl mx-auto px-6 text-center select-none">
-          <span className="text-[#c8a64d] uppercase tracking-[4px] mb-4 text-xs font-semibold  block">
+          <span className="text-[#c8a64d] uppercase tracking-[3px] mb-4 text-[17px] font-semibold  block">
             Culinary Delights
           </span>
           <h2 className="text-3xl md:text-4xl font-medium font-corm text-[#0d2b4e] leading-snug mb-8">
@@ -38,15 +38,15 @@ const Dine = () => {
           </h2>
           
           <div className="flex flex-col sm:flex-row justify-center items-center gap-8 md:gap-16 pt-6 border-t border-[#0d2b4e]/10 max-w-3xl mx-auto  text-sm  tracking-wider text-gray-500 font-semibold">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 text-[17px]">
               <Phone size={16} className="text-[#c8a64d]" />
               <span><a href="tel:918904381155">+91 89045 61155</a></span>
               <Phone size={16} className="text-[#c8a64d]" />
               <span><a href="tel:918904381155">+91 8904381155</a></span>
             </div>
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 text-[17px]">
               <Mail size={16} className="text-[#c8a64d]" />
-              <span className="text-lg">info@sreeraagaresorts.in</span>
+              <span className="">info@sreeraagaresorts.in</span>
             </div>
           </div>
         </section>
@@ -64,10 +64,10 @@ const Dine = () => {
               />
             </div>
             <div className="space-y-6">
-              <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold  block">
+              <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Restaurant
               </span>
-              <h3 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e]">
+              <h3 className="text-3xl md:text-5xl font-semibold font-corm text-[#0d2b4e]">
                 Multi-Cuisine Dining
               </h3>
               <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed   mr-4">
@@ -76,7 +76,7 @@ const Dine = () => {
               <div className="pt-2">
                 <Link 
                   to="/menu"
-                  className="inline-block border border-[#0d2b4e] px-8 py-3 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest text-xs font-bold  transition duration-300"
+                  className="inline-block border border-[#0d2b4e] px-10 py-5 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest  font-bold  transition duration-300"
                 >
                   Explore Menu
                 </Link>
@@ -87,10 +87,10 @@ const Dine = () => {
           {/* Section 2: Coffee Shop */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="space-y-6 px-6 lg:order-1 order-2">
-              <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold  block">
+              <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Garden Cafe
               </span>
-              <h3 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e]">
+              <h3 className="text-3xl md:text-5xl font-semibold font-corm text-[#0d2b4e]">
                 Coffee Shop
               </h3>
               <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed  ">
@@ -99,7 +99,7 @@ const Dine = () => {
               <div className="pt-2">
                 <Link 
                   to="/menu"
-                  className="inline-block border border-[#0d2b4e] px-8 py-3 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest text-xs font-bold  transition duration-300"
+                  className="inline-block border border-[#0d2b4e] px-10 py-5 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest  font-bold  transition duration-300"
                 >
                   Explore Cafe Menu
                 </Link>
@@ -124,10 +124,10 @@ const Dine = () => {
               />
             </div>
             <div className="space-y-6">
-              <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold  block">
+              <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Lounge
               </span>
-              <h3 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e]">
+              <h3 className="text-3xl md:text-5xl font-semibold font-corm text-[#0d2b4e]">
                 Bar & Restaurant
               </h3>
               <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed mr-4 ">
@@ -136,7 +136,7 @@ const Dine = () => {
               <div className="pt-2">
                 <Link 
                   to="/contact"
-                  className="inline-block border border-[#0d2b4e] px-8 py-3 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest text-xs font-bold  transition duration-300"
+                  className="inline-block border border-[#0d2b4e] px-10 py-5 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest  font-bold  transition duration-300"
                 >
                   Reserve A Table
                 </Link>
@@ -147,10 +147,10 @@ const Dine = () => {
           {/* Section 4: Sports Bar */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="space-y-6 px-6 lg:order-1 order-2">
-              <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-semibold  block">
+              <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Gaming Lounge
               </span>
-              <h3 className="text-3xl md:text-5xl font-medium  font-corm text-[#0d2b4e]">
+              <h3 className="text-3xl md:text-5xl font-semibold  font-corm text-[#0d2b4e]">
                 Sports Bar
               </h3>
               <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed   ">
@@ -159,7 +159,7 @@ const Dine = () => {
               <div className="pt-2">
                 <Link 
                   to="/amenities"
-                  className="inline-block border border-[#0d2b4e] px-8 py-3 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest text-xs font-bold  transition duration-300"
+                  className="inline-block border border-[#0d2b4e] px-10 py-5 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest  font-bold  transition duration-300"
                 >
                   Explore Games
                 </Link>
