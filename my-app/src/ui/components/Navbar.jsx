@@ -472,7 +472,7 @@ const Navbar = () => {
         <Link 
           to="/rooms"
           onClick={() => setIsOpen(false)}
-          className="px-6 py-3 bg-[#c8a64d] text-white text-center rounded uppercase tracking-widest text-xs font-bold hover:bg-[#b08e3b] transition"
+          className="px-6 py-4 bg-[#c8a64d] text-white text-center  uppercase tracking-widest text-xs font-bold hover:bg-[#b08e3b] transition"
         >
           Book Your Stay
         </Link>
@@ -482,7 +482,7 @@ const Navbar = () => {
               setIsOpen(false);
               handleSignOut();
             }}
-            className="px-6 py-3 border border-red-500/35 text-red-400 text-center rounded uppercase tracking-widest text-xs font-bold hover:bg-red-500/10 transition cursor-pointer"
+            className="px-6 py-4 border border-red-500/35 text-red-400 text-center rounded uppercase tracking-widest text-xs font-bold hover:bg-red-500/10 transition cursor-pointer"
           >
             Sign Out
           </button>
