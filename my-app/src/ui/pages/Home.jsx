@@ -645,7 +645,7 @@ return (
       
       {/* Outlined brand text behind the staggered images */}
       <div 
-        className="absolute top-[3%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[12vw] md:text-[9vw] font-corm uppercase tracking-[5px] font-medium text-[#3fbcc3]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
+        className="absolute top-[3%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[12vw] md:text-[9vw] font-corm uppercase tracking-[5px] font-bold md:font-medium text-[#3fbcc3]/10 select-none pointer-events-none text-center whitespace-nowrap z-0"
       >
         Sree Raaga
       </div>
@@ -673,7 +673,7 @@ return (
       </div>
 
       {/* Large Title Below Staggered Images */}
-      <h2 className="text-4xl sm:text-6xl md:text-[120px] font-[400] text-[#c18e35] tracking-[6px] md:tracking-[12px] font-corm uppercase text-center relative z-20 -mt-6 sm:-mt-12 md:-mt-30 mb-6">
+      <h2 className="text-4xl sm:text-6xl md:text-[120px] font-[400] text-[#c18e35] tracking-[6px] md:tracking-[12px] font-corm font-bold md:font-medium uppercase text-center relative z-20 -mt-6 sm:-mt-12 md:-mt-30 mb-6">
         Resorts
       </h2>
 
