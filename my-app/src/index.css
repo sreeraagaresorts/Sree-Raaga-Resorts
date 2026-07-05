@@ -77,10 +77,24 @@ body {
   /* box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important; */
 }
 
+/* 1. Default styles for Mobile (smaller padding and width adjustments) */
 .react-datepicker {
-  padding: 1rem !important;
+  padding: 0.5rem !important;
+  font-size: 0.875rem !important; /* Slightly smaller text for mobile */
 }
 
+/* Ensure the internal container doesn't overflow on small screens */
+.react-datepicker__month-container {
+  width: 100% !important; 
+}
+
+/* 2. Styles for Tablets and Desktops (768px and wider) */
+@media (min-width: 768px) {
+  .react-datepicker {
+    padding: 1rem !important;
+    font-size: 1rem !important;
+  }
+}
 .react-datepicker__header {
   background-color: #f7d6b8 !important;
   border-bottom: none !important;
