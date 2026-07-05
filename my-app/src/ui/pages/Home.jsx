@@ -645,7 +645,7 @@ return (
       
       {/* Outlined brand text behind the staggered images */}
       <div 
-        className="absolute top-[3%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[12vw] md:text-[9vw] font-corm uppercase tracking-[5px] font-bold md:font-medium md:text-[#3fbcc3]/10 text-[#011b3c]/60 select-none pointer-events-none text-center whitespace-nowrap z-0"
+        className="absolute top-[3%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[12vw] md:text-[9vw] font-corm uppercase tracking-[5px] font-bold md:font-medium md:text-[#3fbcc3]/10 text-[#011b3c]/30 select-none pointer-events-none text-center whitespace-nowrap z-0"
       >
         Sree Raaga
       </div>
