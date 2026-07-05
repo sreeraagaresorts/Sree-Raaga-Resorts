@@ -247,6 +247,7 @@ export default function Home() {
   // API states
   const [rooms, setRooms] = useState([]);
   const [loadingRooms, setLoadingRooms] = useState(true);
+  
 
   // Mock rooms for fallback if API is empty or loading fails
   const mockRooms = [
@@ -290,6 +291,7 @@ export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(N); // start at the middle copy
   const [animate, setAnimate] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -744,108 +746,154 @@ return (
       </div>
     </section>
 
-        {/* ================= ROOMS & SUITES SECTION ================= */}
-        <section className="py-24 px-6 bg-[#011b3c] text-white relative overflow-hidden">
+{/* ================= ROOMS & SUITES SECTION ================= */}
+        <section className="py-16 md:py-24 px-4 md:px-6 bg-[#011b3c] text-white relative overflow-hidden">
           <div className="max-w-[180vh] mx-auto w-full">
             
-            {/* Header */}
-            <div className="flex justify-between items-end mb-16 border-b border-white/10 pb-6">
+            {/* Header - Updated for mobile stacking (flex-col on small, flex-row on md) */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-0 mb-12 md:mb-16 border-b border-white/10 pb-6">
               <div>
-                <span className="text-[#c8a64d] uppercase font-jost tracking-[4px] text-sm font-semibold block mb-4">
+                <span className="text-[#c8a64d] uppercase font-jost tracking-[4px] text-xs md:text-sm font-semibold block mb-2 md:mb-4">
                   Explore
                 </span>
-                <h2 className="text-3xl md:text-6xl font-corm font-medium">
+                <h2 className="text-4xl md:text-6xl font-corm font-medium">
                   Rooms & Suites
                 </h2>
               </div>
-             <div className="flex justify-center mb-20">
-  <button className="group flex items-center gap-4 uppercase tracking-wide text-sm font-medium text-white">
-    <span className="w-9 h-9 rounded-full border border-white flex items-center justify-center transition-all duration-300 group-hover:bg-[#c8a64d] group-hover:text-white">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-4 h-4"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M5 12h14m-5-5 5 5-5 5"
-        />
-      </svg>
-    </span>
+              <div className="flex items-center justify-center">
+                <button className="group flex items-center gap-4 uppercase tracking-wide text-xs md:text-sm font-medium text-white">
+                  <span className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-white flex items-center justify-center transition-all duration-300 group-hover:bg-[#c8a64d] group-hover:border-[#c8a64d] group-hover:text-white">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-3 h-3 md:w-4 md:h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14m-5-5 5 5-5 5"
+                      />
+                    </svg>
+                  </span>
 
-    <span className="relative">
-      DISCOVER MORE
-      <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
-    </span>
-  </button>
-</div>
+                  <span className="relative">
+                    DISCOVER MORE
+                    <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                  </span>
+                </button>
+              </div>
             </div>
 
-            {loadingRooms ? (
+          {loadingRooms ? (
               <div className="text-center py-12 text-[#c8a64d] tracking-widest">
                 Loading Rooms...
               </div>
             ) : (
-              <div className="w-full overflow-hidden">
+              // Added 'relative' and 'group/slider' to container to position arrows
+              <div className="relative w-full overflow-hidden touch-pan-y group/slider">
+                
+                {/* --- LEFT ARROW --- */}
+                <button
+                  onClick={() => {
+                    setAnimate(true);
+                    // Safe boundary check so it doesn't scroll past the first slide
+                    setCurrentIndex(prev => Math.max(0, prev - 1));
+                  }}
+                  className={`absolute left-2 md:left-4 top-[40%] md:top-[45%] -translate-y-1/2 z-30 w-10 h-10 md:w-14 md:h-14 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-[#c8a64d] hover:border-[#c8a64d] transition-all duration-300 shadow-xl ${
+                    currentIndex === 0 ? "opacity-50 pointer-events-none" : "opacity-100"
+                  }`}
+                  aria-label="Previous Room"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m15 18-6-6 6-6"/>
+                  </svg>
+                </button>
+
+                {/* --- RIGHT ARROW --- */}
+                <button
+                  onClick={() => {
+                    setAnimate(true);
+                    // Safe boundary check (adjust depending on how many slides you show at once)
+                    setCurrentIndex(prev => Math.min(allSlides.length - (isMobile ? 1 : 2), prev + 1));
+                  }}
+                  className={`absolute right-2 md:right-4 top-[40%] md:top-[45%] -translate-y-1/2 z-30 w-10 h-10 md:w-14 md:h-14 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-[#c8a64d] hover:border-[#c8a64d] transition-all duration-300 shadow-xl ${
+                    currentIndex >= allSlides.length - (isMobile ? 1 : 2) ? "opacity-50 pointer-events-none" : "opacity-100"
+                  }`}
+                  aria-label="Next Room"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </button>
+
                 <motion.div 
+                  // Native Swipe Detection
+                  onTouchStart={(e) => setTouchStart(e.touches[0].clientX)}
+                  onTouchMove={(e) => {
+                    if (touchStart === null) return;
+                    
+                    const currentTouch = e.touches[0].clientX;
+                    const diff = touchStart - currentTouch;
+
+                    // Swiped left (Next Slide)
+                    if (diff > 50) {
+                      setAnimate(true);
+                      setCurrentIndex(prev => Math.min(allSlides.length - (isMobile ? 1 : 2), prev + 1));
+                      setTouchStart(null); 
+                    } 
+                    // Swiped right (Previous Slide)
+                    else if (diff < -50) {
+                      setAnimate(true);
+                      setCurrentIndex(prev => Math.max(0, prev - 1));
+                      setTouchStart(null); 
+                    }
+                  }}
                   animate={{ x: `-${currentIndex * (100 / allSlides.length)}%` }}
                   transition={{ duration: animate ? 0.8 : 0, ease: [0.25, 1, 0.35, 1] }}
                   style={{ width: isMobile ? `${allSlides.length * 100}%` : `${allSlides.length * 50}%` }}
-                  className="flex"
+                  className="flex" 
                 >
                   {allSlides.map((room, idx) => (
                     <div
                       key={`${room.id}-${idx}`}
                       style={{ width: `${100 / allSlides.length}%` }}
-                      className="shrink-0 px-4 group"
+                      className="shrink-0 px-2 md:px-4 group"
                     >
-                      <Link to={`/rooms/${room.id}`} className="block">
-                       <div className="relative mb-6 aspect-[4/3] overflow-hidden group">
-  <WindowReveal
-    src={getImageUrl(room.image)}
-    alt={room.name}
-    className="w-full h-full"
-  />
+                      <Link 
+                        to={`/rooms/${room.id}`} 
+                        className="block" 
+                      >
+                        <div>
+                          <div className="relative mb-4 md:mb-6 aspect-[4/3] overflow-hidden group/image rounded-sm md:rounded-none">
+                            <WindowReveal
+                              src={getImageUrl(room.image)}
+                              alt={room.name}
+                              className="w-full h-full pointer-events-none" 
+                            />
 
-  {/* Price Tag */}
-  {/* <div className="absolute bottom-6 left-6 z-20 bg-black/75 backdrop-blur-sm px-4 py-2 border border-[#c8a64d]/30 text-white rounded">
-    <span className="text-xs uppercase tracking-widest font-jost font-semibold text-[#D8BF72]">
-      Starts at ₹{Number(room.price).toLocaleString()}
-    </span>
-  </div> */}
+                            {/* Hover Overlay */}
+                            <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/image:opacity-100 transition-all duration-500 flex items-center justify-center z-20">
+                              <button className="px-4 py-3 md:px-5 md:py-14 rounded-full bg-[#D8BF72] text-black font-jost uppercase tracking-widest text-xs md:text-sm font-semibold hover:bg-white transition-all duration-300 transform translate-y-4 group-hover/image:translate-y-0">
+                                Book Now
+                              </button>
+                            </div>
+                          </div>
 
-  {/* Hover Overlay */}
-  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center z-20">
-    <button className="px-5 py-14 rounded-full bg-[#D8BF72] text-black font-jost uppercase tracking-widest text-sm font-semibold hover:bg-white transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
-      Book Now
-    </button>
-  </div>
-</div>
+                          <h3 className="text-2xl md:text-3xl font-semibold mb-2 font-jost group-hover:text-[#c8a64d] transition duration-300">
+                            {room.name}
+                          </h3>
 
-                        <h3 className="text-2xl md:text-3xl font-semibold mb-2 font-corm group-hover:text-[#c8a64d] transition duration-300">
-                          {room.name}
-                        </h3>
-
-                        <div className="flex flex-wrap items-center gap-3 text-[#D8C8A5] text-[16px] font-medium font-jost uppercase tracking-widest mb-4">
-                          <span>{room.area} SQM</span>
-                          <span>•</span>
-                          <span>{room.beds}</span>
-                          <span>•</span>
-                          <span>{room.bathrooms} Bathroom</span>
+                          <div className="flex flex-wrap items-center gap-2 md:gap-3 text-[#D8C8A5] text-[13px] md:text-[16px] font-medium font-jost uppercase tracking-widest mb-4">
+                            <span>{room.area} SQM</span>
+                            <span>•</span>
+                            <span>{room.beds}</span>
+                            <span>•</span>
+                            <span>{room.bathrooms} Bath</span>
+                          </div>
                         </div>
-
-                        {/* <p className="text-gray-400 mb-6 text-sm leading-relaxed max-w-xl ">
-                          {room.description}
-                        </p> */}
-{/* 
-                        <div className="text-[#c8a64d] uppercase text-xs tracking-widest flex items-center gap-3 font-semibold group-hover:text-white transition">
-                          Room Details
-                          <span className="w-8 h-[1px] bg-[#c8a64d] group-hover:bg-white group-hover:w-12 transition-all duration-300"></span>
-                        </div> */}
                       </Link>
                     </div>
                   ))}
@@ -854,7 +902,7 @@ return (
             )}
 
             {/* Slider Dots Indicator */}
-            <div className="flex justify-center gap-3 mt-12 items-center">
+            <div className="flex justify-center gap-2 md:gap-3 mt-8 md:mt-12 items-center">
               {displayRooms.map((_, idx) => {
                 const isDotActive = (currentIndex % N) === idx;
 
@@ -867,7 +915,7 @@ return (
                     }}
                     className={`h-1 rounded-full transition-all duration-500 cursor-pointer ${
                       isDotActive 
-                        ? "w-8 bg-[#c8a64d] opacity-100" 
+                        ? "w-6 md:w-8 bg-[#c8a64d] opacity-100" 
                         : "w-2 bg-white/40 opacity-40 hover:bg-white/60 hover:opacity-60"
                     }`}
                   />
