@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-const Exp = () => {
+const  Exp =()=> {
   const [activeIndex, setActiveIndex] = useState(0);
   
   // We use a ref to track the previous index so we know when an item is wrapping around
@@ -63,8 +63,7 @@ const Exp = () => {
   };
 
   return (
-    <div className="hidden md:flex min-h-screen bg-[#fdfeff] py-20 flex-col justify-center overflow-hidden font-jost relative">
-      {/* ADDED hidden md:flex to parent div to hide on mobile */}
+    <div className="min-h-screen bg-[#fdfeff] py-20 flex flex-col justify-center overflow-hidden font-jost relative">
       
       {/* Required Fonts */}
       <style>{`
@@ -96,7 +95,7 @@ const Exp = () => {
                 transform: `translate(calc(-50% + ${offset * 115}%), calc(-50% - ${isCenter ? 90 : 0}px))`,
                 
                 // Hide items entirely if they are further away than the immediate left/right
-                opacity: Math.abs(offset) > 1 ? 0 : (isCenter ? 1 : 1),
+                opacity: Math.abs(offset) > 1 ? 0 : (isCenter ? 1 :1),
                 visibility: Math.abs(offset) > 1 ? 'hidden' : 'visible',
                 
                 zIndex: 10 - Math.abs(offset),
