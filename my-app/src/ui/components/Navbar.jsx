@@ -258,6 +258,7 @@ const Navbar = () => {
   return (
     <>
       {/* ================= DESKTOP & MOBILE HEADER ================= */}
+      
       <motion.header
         initial="initial"
         animate={!isVisible ? "hidden" : isScrolled ? "scrolled" : "initial"}
@@ -296,9 +297,9 @@ const Navbar = () => {
         className="fixed top-0 left-0 right-0 z-50 border-b flex flex-col items-center"
       >
         {/* TOP ROW */}
-        <div className="w-full mx-[20px] px-6 flex items-center justify-between">
+        <div className="w-full  px-20 flex items-center justify-between">
           {/* LEFT PANEL: Menu Toggle & Phone Number */}
-          <div className="flex items-center gap-10 flex-1">
+          <div className="flex items-center gap-20 flex-1">
             {/* Custom Morphing Menu Toggle */}
             <div 
               className="flex items-center gap-4 cursor-pointer group z-[60]"
@@ -317,7 +318,7 @@ const Navbar = () => {
             {/* Telephone Line */}
             <div className={`hidden md:flex items-center gap-2.5 text-white/80 hover:text-white transition-all duration-500 ${isOpen ? "opacity-0 pointer-events-none blur-sm" : ""}`}>
               <Phone size={14} className="text-white shrink-0" />
-              <span className="text-xs lg:text-[16px]  tracking-widest font-jost text-white">+91 890 456 1155</span>
+              <span className="text-xs lg:text-[16px] font-medium  tracking-widest font-jost text-white">+91 890 456 1155</span>
             </div>
           </div>
 
@@ -343,7 +344,7 @@ const Navbar = () => {
           </Link>
 
           {/* RIGHT PANEL: Profile/Login, Book Button */}
-          <div className={`flex items-center justify-end gap-8 flex-1 transition-all duration-500 ${
+          <div className={`flex items-center justify-end gap-32 flex-1 transition-all duration-500 ${
             isOpen ? "opacity-0 pointer-events-none blur-sm scale-95" : ""
           }`}>
             {/* Login & Profile Dashboard */}
@@ -366,7 +367,7 @@ const Navbar = () => {
               )}
             </div>
 
-            <div className="absolute hidden md:block mx-47 w-px h-26 bg-white/20"></div>
+            <div className="absolute hidden md:block mx-58 w-px h-26 bg-white/20"></div>
             {/* Booking Call to Action */}
             <Link
               to="/rooms"

@@ -248,10 +248,10 @@ const Menu = () => {
         </section>
 
         {/* ================= MENU HIGHLIGHTS SECTION ================= */}
-        <section className="py-16 max-w-[180vh] mx-auto px-6 pb-28">
+        <section className="py-16 max-w-[160vh] mx-auto px-6 pb-28">
           
           <div className="text-center mb-10 select-none">
-            <span className="text-[#c8a64d] uppercase tracking-[4px] mb-3 text-xs font-semibold  block">
+            <span className="text-[#c8a64d] uppercase tracking-[4px] mb-3 text-[17px] font-semibold  block">
               Our Menu
             </span>
             <h2 className="text-3xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">

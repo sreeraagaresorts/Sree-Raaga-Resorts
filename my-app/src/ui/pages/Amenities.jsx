@@ -1,7 +1,7 @@
 import React, { useState, useRef,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { ChevronDown, ArrowRight } from "lucide-react";
+import { ChevronDown, ArrowRight ,ArrowDown } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import DatePicker from "react-datepicker";
@@ -13,7 +13,7 @@ import roomServiceIcon from "../../assets/icons/services.png";
 import laundryIcon from "../../assets/icons/laundry.png";
 import housekeepingIcon from "../../assets/icons/cleaning.png";
 
-const amenitiesList = [
+const amenities = [
   { icon: wifiIcon, name: "Wifi & Internet" },
   { icon: buggyIcon, name: "Buggy Services" },
   { icon: tvIcon, name: "Smart TV" },
@@ -248,13 +248,13 @@ const Amenities = () => {
             <div className="text-[#c8a64d] flex justify-center">
               <WaterSportsIcon className="w-12 h-12" />
             </div>
-            <span className="text-[#c8a64d] text-xs uppercase tracking-[4px] font-semibold font-jost block">
+            <span className="text-[#c8a64d] text-[17px] uppercase tracking-[4px] font-semibold font-jost block">
               LUXURY RESORT
             </span>
-            <h2 className="text-3xl md:text-6xl font-medium font-corm text-[#0d2b4e] leading-snug">
+            <h2 className="text-3xl md:text-6xl font-semibold font-corm text-[#0d2b4e] leading-snug">
               Water Sports you Must Try
             </h2>
-            <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[17px] leading-relaxed max-w-2xl mx-auto">
+            <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed max-w-2xl mx-auto">
               An integral part of relax and perfect experience of your stay is water sports. Paddle boarding, kayaking, and surfing activities are designed to create memorable moments for you and your family.
             </p>
             <div className="pt-4">
@@ -289,7 +289,7 @@ const Amenities = () => {
                 <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
                   Restaurant & Bar
                 </h3>
-                <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[17px] leading-relaxed">
+                <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
                   An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.
                 </p>
                 <div className="pt-4">
@@ -320,7 +320,7 @@ const Amenities = () => {
                 <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
                   Spa & Wellness
                 </h3>
-                <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[17px] leading-relaxed">
+                <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
                   Indulge in absolute relaxation. Rejuvenate your mind, body, and soul with our curated therapies, healing massages, and organic spa treatments administered by expert therapists.
                 </p>
                 <div className="pt-4">
@@ -351,7 +351,7 @@ const Amenities = () => {
                 <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
                   Fitness Center
                 </h3>
-                <p className="text-[#2d5b8a] font-jost font-light text-sm md:text-[17px] leading-relaxed">
+                <p className="text-[#2d5b8a] font-jost font-mediumBook Your Stay Now text-sm md:text-[17px] leading-relaxed">
                   Keep up with your fitness regime. Our state-of-the-art gym is equipped with premium cardio machines, strength training equipment, and free weights for a complete workout.
                 </p>
                 <div className="pt-4">
@@ -370,335 +370,359 @@ const Amenities = () => {
         </section>
 
         {/* ================= 4. BOOK YOUR STAY NOW BANNER ================= */}
-        <section 
-          className="relative py-32 bg-fixed bg-cover bg-center flex items-center justify-center"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000')"
-          }}
+      <section
+      className="relative py-32 md:py-49 bg-fixed bg-cover bg-center flex items-center justify-center"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000')",
+      }}
+    >
+      <div className="absolute inset-0 bg-black/50"></div>
+
+      <div className="relative z-10 w-full max-w-5xl mx-auto text-center px-4 md:px-6">
+        <span className="text-[#D8BF72] uppercase tracking-[2px] text-[13px] md:text-[15px] font-semibold block mb-3 md:mb-4">
+          Instant Booking
+        </span>
+        <h2 className="text-white text-3xl md:text-[64px] font-bold mb-10 font-corm leading-tight">
+          Book Your Stay Now
+        </h2>
+
+        {/* Clean White Pill Booking Panel */}
+        <form
+          onSubmit={handleSearch}
+          className="w-full max-w-6xl mx-auto bg-white rounded-3xl md:rounded-2xl p-3.5 md:p-4 flex flex-col md:flex-row items-stretch md:items-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-neutral-800"
         >
-          <div className="absolute inset-0 bg-black/60"></div>
-          <div className="relative z-10 w-full max-w-6xl px-6 text-center space-y-6">
-            <span className="text-white text-[17px] uppercase tracking-[6px] font-semibold font-jost">
+          {/* DATE */}
+          <div className="relative w-full md:flex-1 flex items-center justify-between px-4 md:px-6 py-4 md:py-3 border-b md:border-b-0 md:border-r border-neutral-200 cursor-pointer group transition-all duration-300">
+            <DatePicker
+              selectsRange={true}
+              startDate={checkIn ? new Date(checkIn) : null}
+              endDate={checkOut ? new Date(checkOut) : null}
+              onChange={(update) => {
+                const [start, end] = update;
+                const formatDate = (date) => {
+                  if (!date) return "";
+                  const tzOffset = date.getTimezoneOffset() * 60000;
+                  return new Date(date.getTime() - tzOffset)
+                    .toISOString()
+                    .split("T")[0];
+                };
+                setCheckIn(start ? formatDate(start) : "");
+                setCheckOut(end ? formatDate(end) : "");
+              }}
+              minDate={new Date()}
+              customInput={
+                <div className="flex-1 text-left flex items-center justify-between w-full select-none">
+                  <span className="text-neutral-800 font-normal text-sm md:text-[17px] tracking-wide truncate">
+                    {checkIn
+                      ? `${new Date(checkIn).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                        })}${
+                          checkOut
+                            ? ` - ${new Date(checkOut).toLocaleDateString(
+                                "en-IN",
+                                { day: "2-digit", month: "short" }
+                              )}`
+                            : " - Check Out"
+                        }`
+                      : "Check In - Check Out"}
+                  </span>
+                  <ArrowDown
+                    size={14}
+                    strokeWidth={1.5}
+                    className="text-neutral-500 group-hover:text-neutral-900 transition ml-4 shrink-0"
+                  />
+                </div>
+              }
+              calendarClassName="custom-datepicker"
+              popperModifiers={[
+                {
+                  name: "preventOverflow",
+                  options: {
+                    boundary: "viewport",
+                  },
+                },
+              ]}
+            />
+          </div>
+
+          {/* ROOMS */}
+          <div
+            className="relative w-full md:flex-1 flex items-center justify-between px-4 md:px-6 py-4 md:py-3 border-b md:border-b-0 md:border-r border-neutral-200 select-none cursor-pointer booking-field group"
+            onClick={() => {
+              setIsRoomsOpen(!isRoomsOpen);
+              setIsGuestsOpen(false);
+            }}
+          >
+            <span className="text-neutral-800 font-normal text-sm md:text-[17px] tracking-wide">
+              Rooms
+            </span>
+            <ArrowDown
+              size={14}
+              strokeWidth={1.5}
+              className={`text-neutral-500 group-hover:text-neutral-900 transition-transform duration-300 shrink-0 ${
+                isRoomsOpen ? "rotate-180" : ""
+              }`}
+            />
+
+            {/* Rooms Dropdown */}
+            {isRoomsOpen && (
+              <div className="absolute top-[105%] md:top-[120%] left-0 w-full md:w-64 bg-white text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-sm">Rooms</span>
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (roomsCount > 1) setRoomsCount(roomsCount - 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="font-semibold text-sm w-4 text-center">
+                      {roomsCount}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRoomsCount(roomsCount + 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* GUESTS */}
+          <div
+            className="relative w-full md:flex-1 flex items-center justify-between px-4 md:px-6 py-4 md:py-3 select-none cursor-pointer booking-field group"
+            onClick={() => {
+              setIsGuestsOpen(!isGuestsOpen);
+              setIsRoomsOpen(false);
+            }}
+          >
+            <span className="text-neutral-800 font-normal text-sm md:text-[17px] tracking-wide">
+              {adultsCount + childrenCount === 0
+                ? "Guests"
+                : adultsCount + childrenCount === 1
+                ? "Guest"
+                : `${adultsCount + childrenCount} Guests`}
+            </span>
+            <ArrowDown
+              size={14}
+              strokeWidth={1.5}
+              className={`text-neutral-500 group-hover:text-neutral-900 transition-transform duration-300 shrink-0 ${
+                isGuestsOpen ? "rotate-180" : ""
+              }`}
+            />
+
+            {/* Guests Dropdown */}
+            {isGuestsOpen && (
+              <div className="absolute top-[105%] md:top-[120%] right-0 md:left-0 w-full md:w-72 bg-white text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none space-y-4 animate-in fade-in zoom-in-95 duration-200">
+                {/* Adults */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium text-sm">Adults</div>
+                    <div className="text-xs text-neutral-400">Ages 13 or above</div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (adultsCount > 0) setAdultsCount(adultsCount - 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="font-semibold text-sm w-4 text-center">
+                      {adultsCount}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setAdultsCount(adultsCount + 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div className="border-t border-neutral-100"></div>
+
+                {/* Children */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium text-sm">Children</div>
+                    <div className="text-xs text-neutral-400">Ages 0 - 12</div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (childrenCount > 0)
+                          setChildrenCount(childrenCount - 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="font-semibold text-sm w-4 text-center">
+                      {childrenCount}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setChildrenCount(childrenCount + 1);
+                      }}
+                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* CHECK AVAILABILITY BUTTON */}
+          <div className="p-1 mt-2 md:mt-0 w-full md:w-auto shrink-0">
+            <button
+              type="submit"
+              className="w-full md:w-auto px-8 py-4 md:py-4 rounded-2xl md:rounded-xl bg-[#f3dac6] hover:bg-[#011b3c] hover:text-white text-neutral-900 font-medium tracking-[1px] uppercase text-xs md:text-sm transition-all duration-300 shadow-sm hover:shadow shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap"
+            >
+              Check Availability
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+         {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
+            <section className="pt-24  bg-[#fdfeff] text-[#0d2b4e]">
+              <div className="">
+                   <div className="max-w-6xl mx-auto text-center mb-16">
+              
+                  <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
+                    Resort Facilities
+                  </h2>
+                </div>
+            
+    
+                {/* Icons Row */}
+                <div className="max-w-[180vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-4 mb-12 md:mb-32">
+      {amenities.map((item, idx) => (
+        <div
+          key={idx}
+          className="flex flex-col items-center text-center group cursor-default"
+        >
+          <div className=" overflow-hidden">
+            <img
+              src={item.icon}
+              alt={item.name}
+              className="w-20 h-20 px-4 object-contain transition-all duration-300 group-hover:scale-110"
+            />
+          </div>
+    
+          <span className="text-sm md:text-[26px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+            {item.name}
+          </span>
+        </div>
+      ))}
+    </div>
+    
+                {/* Exceptional Gastronomy Header */}
+                <div className="text-center mb-20 select-none">
+                 <span className="uppercase tracking-[3px] text-sm font-semibold font-jost text-[#c8a64d]">
               Sree Raaga Resorts
             </span>
-            <h2 className="text-4xl md:text-5xl font-light font-corm text-white">
-              Book Your Stay Now
-            </h2>
-            <form
-              onSubmit={handleSearch}
-              className="max-w-5xl w-full mx-auto bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-full px-4 md:px-6 py-4 md:py-3 flex flex-col md:flex-row items-center shadow-2xl mt-8"
-            >
-              {/* DATE */}
-              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-white/10 cursor-pointer group transition-all duration-300">
-                <DatePicker
-                  selectsRange={true}
-                  startDate={checkIn ? new Date(checkIn) : null}
-                  endDate={checkOut ? new Date(checkOut) : null}
-                  onChange={(update) => {
-                    const [start, end] = update;
-                    const formatDate = (date) => {
-                      if (!date) return "";
-                      const tzOffset = date.getTimezoneOffset() * 60000;
-                      return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
-                    };
-                    setCheckIn(start ? formatDate(start) : "");
-                    setCheckOut(end ? formatDate(end) : "");
-                  }}
-                  minDate={new Date()}
-                  customInput={
-                    <div className="flex-1 text-left flex items-center justify-between w-full select-none">
-                      <div>
-                        <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-                          Dates
-                        </p>
-                        <span className="text-white text-xs lg:text-sm">
-                          {checkIn
-                            ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
-                                checkOut
-                                  ? ` - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
-                                  : " - Check Out"
-                              }`
-                            : "Check In - Check Out"}
-                        </span>
-                      </div>
-                      <ChevronDown
-                        size={14}
-                        className="text-white/60 group-hover:text-white transition ml-4"
-                      />
-                    </div>
-                  }
-                  calendarClassName="custom-datepicker"
-                  popperModifiers={[
-                    {
-                      name: "preventOverflow",
-                      options: {
-                        boundary: "viewport",
-                      },
-                    },
-                  ]}
-                />
-              </div>
-
-              {/* ROOM */}
-              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 border-b md:border-b-0 md:border-r border-white/10 select-none cursor-pointer booking-field"
-                   onClick={() => {
-                     setIsRoomsOpen(!isRoomsOpen);
-                     setIsGuestsOpen(false);
-                   }}
-              >
-                <div className="flex-1 text-left">
-                  <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-                    Room Type
-                  </p>
-                  <span className="text-white text-xs lg:text-sm">
-                    Rooms {roomsCount}
-                  </span>
+                  <h2 className="text-3xl md:text-[60px] font-medium font-corm  text-[#0d2b4e] leading-snug">
+                    Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
+                  </h2>
                 </div>
-                <ChevronDown
-                  size={14}
-                  className={`text-white/60 transition-transform duration-300 ${isRoomsOpen ? "rotate-180" : ""}`}
-                />
-
-                {isRoomsOpen && (
-                  <div className="absolute top-[110%] left-0 w-64 bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-sm">Rooms</span>
-                      <div className="flex items-center gap-6">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (roomsCount > 1) setRoomsCount(roomsCount - 1);
-                          }}
-                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                        >
-                          -
-                        </button>
-                        <span className="font-semibold text-sm w-4 text-center">{roomsCount}</span>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setRoomsCount(roomsCount + 1);
-                          }}
-                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* GUESTS */}
-              <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-3 select-none cursor-pointer booking-field"
-                   onClick={() => {
-                     setIsGuestsOpen(!isGuestsOpen);
-                     setIsRoomsOpen(false);
-                   }}
-              >
-                <div className="flex-1 text-left">
-                  <p className="text-[10px] uppercase tracking-[3px] text-white/40 mb-1">
-                    Guests
-                  </p>
-                  <span className="text-white text-xs lg:text-sm">
-                    {adultsCount + childrenCount === 0
-                      ? "Guests"
-                      : adultsCount + childrenCount === 1
-                      ? "1 Guest"
-                      : `${adultsCount + childrenCount} Guests`}
-                  </span>
-                </div>
-                <ChevronDown
-                  size={14}
-                  className={`text-white/60 transition-transform duration-300 ${isGuestsOpen ? "rotate-180" : ""}`}
-                />
-
-                {isGuestsOpen && (
-                  <div className="absolute top-[110%] left-0 w-64 bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none space-y-4">
-                    {/* Adults */}
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-sm">Adults</span>
-                      <div className="flex items-center gap-6">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (adultsCount > 0) setAdultsCount(adultsCount - 1);
-                          }}
-                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                        >
-                          -
-                        </button>
-                        <span className="font-semibold text-sm w-4 text-center">{adultsCount}</span>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setAdultsCount(adultsCount + 1);
-                          }}
-                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-[#0d2b4e]/10"></div>
-
-                    {/* Children */}
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-sm">Children</span>
-                      <div className="flex items-center gap-6">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (childrenCount > 0) setChildrenCount(childrenCount - 1);
-                          }}
-                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                        >
-                          -
-                        </button>
-                        <span className="font-semibold text-sm w-4 text-center">{childrenCount}</span>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setChildrenCount(childrenCount + 1);
-                          }}
-                          className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* SEARCH BUTTON */}
-              <button
-                type="submit"
-                className="group mt-4 md:mt-0 md:ml-4 h-12 w-12 rounded-full bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white text-[#0d2b4e] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shrink-0 cursor-pointer"
-              >
-                <span className="font-jost font-semibold text-xs tracking-wider uppercase">GO</span>
-              </button>
-            </form>
-          </div>
-        </section>
-
-        {/* ================= 5. HOTEL FACILITIES SECTION ================= */}
-        <section className="py-24 bg-[#fdfeff]  text-[#0d2b4e]">
-          <div className="max-w-[160vh] mx-auto">
-            <div className="text-center mb-16 select-none">
-              <h2 className="text-4xl md:text-6xl font-medium font-corm text-[#0d2b4e]">
-                Hotel Facilities
-              </h2>
-            </div>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-4">
-              {amenitiesList.map((item, idx) => (
-                <div key={idx} className="flex flex-col items-center text-center group cursor-default">
-                  <div className="overflow-hidden">
-                    <img
-                      src={item.icon}
-                      alt={item.name}
-                      className="w-20 h-20 px-4 object-contain transition-all duration-300 group-hover:scale-110"
+                
+    
+                {/* Gastronomy Interactive Split */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                  
+                  {/* Left: Dynamic tab image */}
+                  <div className="lg:col-span-6 relative group w-full  h-[450px] md:h-[90vh]">
+                    <WindowReveal 
+                      src={tabData[activeTab].image} 
+                      alt={tabData[activeTab].title}
+                      className="h-full w-full"
                     />
+                    {/* Custom circular interaction overlay: BOOK NOW */}
+                    <Link 
+                      to="/rooms"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
+                    >
+                      <span className="text-[11px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
+                        Book Now
+                      </span>
+                    </Link>
                   </div>
-                  <span className="text-sm md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
-                    {item.name}
-                  </span>
+    
+                  {/* Right: Static Tabs List */}
+                  <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
+                    {Object.keys(tabData).map((key) => {
+                      const isActive = activeTab === key;
+                      const tabColor = isActive
+                        ? "text-[#0d2b4e]"
+                        : "text-[#0d2b4e]/35 hover:text-[#0d2b4e]/60";
+    
+                      return (
+                        <div
+                          key={key}
+                          onClick={() => handleTabClick(key)}
+                          className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
+                        >
+                         <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                            isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-[100px] opacity-30 "
+                          }`}>
+        <img
+          src={tabData[key].iconImage}
+          alt={tabData[key].title}
+          className="w-10 h-10 m-2  transition-all duration-300"
+        />
+      </div>
+    
+                          <h3
+                            className={`text-xl md:text-4xl font-semibold tracking-wide font-corm mb-1  transition-colors duration-300 ${tabColor}`}
+                          >
+                            {tabData[key].title}
+                          </h3>
+    
+                          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                            isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-0 opacity-0"
+                          }`}>
+                            <p className="text-sm md:text-[17px] text-gray-500 leading-relaxed font-jost font-medium font-jost mr-2">
+                              {tabData[key].description}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+    
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ================= 6. EXCEPTIONAL GASTRONOMY SECTION ================= */}
-        <section className="pt-24 bg-[#fdfeff]  ">
-          <div className=" ">
-            
-           {/* Exceptional Gastronomy Header */}
-                   <div className="text-center mb-20 select-none">
-                     <span className="text-gray-400 uppercase tracking-[4px] text-[12px]  font-medium block mb-4">
-                       Sree Raaga Resorts Luxury Hotel
-                     </span>
-                     <h2 className="text-3xl md:text-[60px] font-medium font-corm  text-[#0d2b4e] leading-snug">
-                       Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
-                     </h2>
-                   </div>
-                   
-       
-                   {/* Gastronomy Interactive Split */}
-                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-                     
-                     {/* Left: Dynamic tab image */}
-                     <div className="lg:col-span-6 relative group w-full  h-[450px] md:h-[90vh]">
-                       <WindowReveal 
-                         src={tabData[activeTab].image} 
-                         alt={tabData[activeTab].title}
-                         className="h-full w-full"
-                       />
-                       {/* Custom circular interaction overlay: BOOK NOW */}
-                       <Link 
-                         to="/rooms"
-                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
-                       >
-                         <span className="text-[11px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
-                           Book Now
-                         </span>
-                       </Link>
-                     </div>
-       
-                     {/* Right: Static Tabs List */}
-                     <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
-                       {Object.keys(tabData).map((key) => {
-                         const isActive = activeTab === key;
-                         const tabColor = isActive
-                           ? "text-[#0d2b4e]"
-                           : "text-[#0d2b4e]/35 hover:text-[#0d2b4e]/60";
-       
-                         return (
-                           <div
-                             key={key}
-                             onClick={() => handleTabClick(key)}
-                             className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
-                           >
-                            <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                               isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-[100px] opacity-30 "
-                             }`}>
-           <img
-             src={tabData[key].iconImage}
-             alt={tabData[key].title}
-             className="w-10 h-10 m-2  transition-all duration-300"
-           />
-         </div>
-       
-                             <h3
-                               className={`text-xl md:text-4xl font-medium tracking-wide font-corm mb-1  transition-colors duration-300 ${tabColor}`}
-                             >
-                               {tabData[key].title}
-                             </h3>
-       
-                             <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                               isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-0 opacity-0"
-                             }`}>
-                               <p className="text-sm md:text-[17px] text-gray-500 leading-relaxed font-jost font-medium font-jost mr-2">
-                                 {tabData[key].description}
-                               </p>
-                             </div>
-                           </div>
-                         );
-                       })}
-                     </div>
-       
-                   </div>
-
-          </div>
-        </section>
+    
+              </div>
+            </section>
 
       </div>
       <Footer />
