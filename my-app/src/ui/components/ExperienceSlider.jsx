@@ -151,7 +151,7 @@ const Exp = () => {
 
                 {/* Text Container */}
                 <div className="px-2 text-left">
-                  <h3 className="text-3xl lg:text-[28px] font-semibold text-gray-500 font-corm hover:text-[#c8a64d] transition duration-300">
+                  <h3 className="text-3xl lg:text-[28px] font-bold text-gray-500 font-corm hover:text-[#c8a64d] transition duration-300">
                     {item.title}
                   </h3>
                 </div>
