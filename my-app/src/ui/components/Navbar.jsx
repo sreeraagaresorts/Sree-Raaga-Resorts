@@ -299,16 +299,16 @@ const Navbar = () => {
         {/* TOP ROW */}
         <div className="w-full px-4 md:px-20 flex items-center justify-between">
           {/* LEFT PANEL: Menu Toggle & Phone Number */}
-          <div className="flex items-center gap-20 flex-1">
+          <div className="flex items-center gap-4 md:gap-20 flex-1">
             {/* Custom Morphing Menu Toggle */}
             <div 
-              className="flex items-center gap-4 cursor-pointer group z-[60]"
+              className="flex items-center gap-2 md:gap-4 cursor-pointer group z-[60]"
               onClick={() => setIsOpen(!isOpen)}
             >
-              <div className="relative w-7 h-5 flex flex-col justify-between">
-                <span className={`w-7 h-[1.5px] bg-white transition-all duration-500 origin-center ${isOpen ? "rotate-45 translate-y-[9px]" : ""}`} />
-                <span className={`w-5 h-[1.5px] bg-white transition-opacity duration-300 ${isOpen ? "opacity-0" : "group-hover:w-7"}`} />
-                <span className={`w-7 h-[1.5px] bg-white transition-all duration-500 origin-center ${isOpen ? "-rotate-45 -translate-y-[9px]" : ""}`} />
+              <div className="relative w-6 md:w-7 h-4 md:h-5 flex flex-col justify-between">
+                <span className={`w-6 md:w-7 h-[1.5px] bg-white transition-all duration-500 origin-center ${isOpen ? "rotate-45 translate-y-[7px] md:translate-y-[9px]" : ""}`} />
+                <span className={`w-4 md:w-5 h-[1.5px] bg-white transition-opacity duration-300 ${isOpen ? "opacity-0" : "group-hover:w-6 md:group-hover:w-7"}`} />
+                <span className={`w-6 md:w-7 h-[1.5px] bg-white transition-all duration-500 origin-center ${isOpen ? "-rotate-45 -translate-y-[7px] md:-translate-y-[9px]" : ""}`} />
               </div>
               <span className="text-xs lg:text-sm uppercase tracking-[5px] hidden md:block font-semibold text-white select-none">
                 {isOpen ? "Close" : "Menu"}
@@ -337,13 +337,13 @@ const Navbar = () => {
   <img
     src="/logo.png" /* <-- Replace this with your actual logo path */
     alt="Sree Raaga Resorts"
-    className="h-18 lg:h-16 w-auto object-contain" 
+    className="h-10 md:h-12 lg:h-16 w-auto object-contain" 
   />
 </motion.div>
           </Link>
 
           {/* RIGHT PANEL: Profile/Login, Book Button */}
-          <div className={`flex items-center justify-end gap-32 flex-1 transition-all duration-500 ${
+          <div className={`flex items-center justify-end gap-4 md:gap-32 flex-1 transition-all duration-500 ${
             isOpen ? "opacity-0 pointer-events-none blur-sm scale-95" : ""
           }`}>
             {/* Login & Profile Dashboard */}
@@ -351,7 +351,7 @@ const Navbar = () => {
               {user ? (
                 <Link
                   to={user.role === "admin" ? "/admin" : "/dashboard/profile"}
-                  className="w-10 h-10 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#c8a64d] hover:text-black transition duration-300"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#c8a64d] hover:text-black transition duration-300"
                   title={user.full_name}
                 >
                   <User size={15} />
@@ -359,7 +359,7 @@ const Navbar = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="hover:text-[#c8a64d] text-white uppercase tracking-widest text-xs lg:text-sm font-semibold"
+                  className="hover:text-[#c8a64d] text-white uppercase tracking-widest text-[10px] md:text-xs lg:text-sm font-semibold"
                 >
                   Login
                 </Link>
@@ -415,7 +415,7 @@ const Navbar = () => {
 
         {/* LEFT COLUMN: Large Serif Menu Links */}
         <div className="relative flex-1 lg:flex-[0_0_60%] flex flex-col justify-center px-6 md:px-24 py-20 z-10 overflow-y-auto max-h-screen [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <div ref={menuLinksRef} className="flex flex-col  gap-2 md:gap-7">
+          <div ref={menuLinksRef} className="flex flex-col gap-4 md:gap-7">
             {menuLinks.map((link, idx) => {
               if (link.name === "Rooms") {
                 return (
@@ -435,10 +435,10 @@ const Navbar = () => {
                       <Link 
                         to={link.path}
                         onClick={() => setIsOpen(false)}
-className="text-xl md:text-3xl font-light uppercase tracking-[8px] text-white"                      >
+className="text-2xl md:text-3xl font-light uppercase tracking-[4px] text-white"                      >
                         {link.name}
                         {/* <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 " /> */}
-                        <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#c8a64d]/30" />
+                        {/* <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#c8a64d]/30" /> */}
                       </Link>
                       
                   
@@ -458,7 +458,7 @@ className="text-xl md:text-3xl font-light uppercase tracking-[8px] text-white"  
                       onClick={() => setIsOpen(false)}
                       onMouseEnter={() => setCursorHovered(true)}
                       onMouseLeave={() => setCursorHovered(false)}
-                      className="text-3xl md:text-3xl font-light uppercase tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 "
+                      className="text-2xl md:text-3xl font-light uppercase tracking-[4px] md:tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 "
                     >
                       {link.name}
                       {/* Animated Underline */}
@@ -548,10 +548,10 @@ className="text-xl md:text-3xl font-light uppercase tracking-[8px] text-white"  
                 <span className="text-xl text-gray-700 font-medium">
                   +91 890 456 1155
                 </span>
-                   <span className="text-xl text-gray-700 font-medium">
+                    <span className="text-xl text-gray-700 font-medium">
                   +91 890 438 1155
                 </span>
-               
+                
               </div>
 
               {/* Connect With Us */}
@@ -562,7 +562,7 @@ className="text-xl md:text-3xl font-light uppercase tracking-[8px] text-white"  
                  <span className="text-xl text-gray-700 font-medium mt-0.5">
                   info@sreeraagaresorts.in
                 </span>
-             
+              
                 {/* Social icons */}
                 {/* <div className="flex gap-4 mt-3">
                   <a 
