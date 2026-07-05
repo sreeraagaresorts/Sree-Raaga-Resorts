@@ -678,7 +678,7 @@ return (
       </h2>
 
       {/* Centered Curated Description */}
-      <p className="max-w-3xl mx-auto text-gray-500 text-center font-jost leading-relaxed text-xs sm:text-sm lg:text-[17px] mb-12 md:mb-20 px-2">
+      <p className="max-w-3xl mx-auto text-gray-500 text-center font-jost leading-relaxed text-[17px] mb-12 md:mb-20 px-2">
         Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create lasting memories. Whether you’re planning a romantic getaway, a family vacation, or a business trip, we have the perfect offer to suit your needs and elevate your experience.
       </p>
 
