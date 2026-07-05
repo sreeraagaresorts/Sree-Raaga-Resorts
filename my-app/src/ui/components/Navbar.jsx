@@ -294,7 +294,7 @@ const Navbar = () => {
           }
         }}
         transition={{ type: "spring", stiffness: 100, damping: 18, mass: 1 }}
-        className="fixed top-0 left-0 right-0 z-50 border-b flex flex-col items-center"
+        className="fixed top-0 left-0 right-0 z-50 border-b flex flex-col  items-center"
       >
         {/* TOP ROW */}
         <div className="w-full px-4 md:px-20 flex items-center justify-between">
@@ -337,7 +337,7 @@ const Navbar = () => {
   <img
     src="/logo.png" /* <-- Replace this with your actual logo path */
     alt="Sree Raaga Resorts"
-    className="h-15 md:h-12 lg:h-16 w-auto object-contain" 
+    className="h-[42px] md:h-12 lg:h-16 w-auto object-contain" 
   />
 </motion.div>
           </Link>
@@ -414,92 +414,91 @@ const Navbar = () => {
         )}
 
         {/* LEFT COLUMN: Large Serif Menu Links */}
-        <div className="relative flex-1 lg:flex-[0_0_60%] flex flex-col justify-center px-6 md:px-24 py-20 z-10 overflow-y-auto max-h-screen [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <div ref={menuLinksRef} className="flex flex-col gap-4 md:gap-7">
-            {menuLinks.map((link, idx) => {
-              if (link.name === "Rooms") {
-                return (
-                  <div 
-                    key={idx} 
-                    className="relative overflow-visible py-1 flex flex-col lg:flex-row lg:items-center gap-4 group/rooms-item"
-                    onMouseEnter={() => {
-                      setCursorHovered(true);
-                      setShowRoomsSubmenu(true);
-                    }}
-                    onMouseLeave={() => {
-                      setCursorHovered(false);
-                      setShowRoomsSubmenu(false);
-                    }}
-                  >
-                    <div className="menu-link-wrapper flex items-center">
-                      <Link 
-                        to={link.path}
-                        onClick={() => setIsOpen(false)}
-className="text-2xl md:text-3xl font-light uppercase tracking-[4px] text-white"                      >
-                        {link.name}
-                        {/* <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 " /> */}
-                        {/* <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#c8a64d]/30" /> */}
-                      </Link>
-                      
-                  
-                    </div>
-
-                    {/* Dropright side submenu */}
-              
-                  </div>
-                );
-              }
-
-              return (
-                <div key={idx} className="overflow-hidden py-1">
-                  <span className="menu-link-wrapper block">
-                    <MagneticLink 
-                      to={link.path}
-                      onClick={() => setIsOpen(false)}
-                      onMouseEnter={() => setCursorHovered(true)}
-                      onMouseLeave={() => setCursorHovered(false)}
-                      className="text-2xl md:text-3xl font-light uppercase tracking-[4px] md:tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 "
-                    >
-                      {link.name}
-                      {/* Animated Underline */}
-                      <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100" />
-                    </MagneticLink>
-                  </span>
-                </div>
-              );
-            })}
-
-            {/* Mobile Only Quick Actions */}
-            <div className="flex flex-col gap-4 mt-8 md:hidden border-t border-white/10 pt-8 max-w-xs w-full">
-              <Link 
-                to="/rooms"
-                onClick={() => setIsOpen(false)}
-                className="px-6 py-3 bg-[#c8a64d] text-white text-center rounded uppercase tracking-widest text-xs font-bold  hover:bg-[#b08e3b] transition"
-              >
-                Book Your Stay
-              </Link>
-              {user ? (
-                <button
-                  onClick={() => {
-                    setIsOpen(false);
-                    handleSignOut();
-                  }}
-                  className="px-6 py-3 border border-red-500/35 text-red-400 text-center rounded uppercase tracking-widest text-xs font-bold  hover:bg-red-500/10 transition cursor-pointer"
-                >
-                  Sign Out
-                </button>
-              ) : (
+  {/* LEFT COLUMN: Large Serif Menu Links */}
+  <div className="relative flex-1 lg:flex-[0_0_60%] flex flex-col justify-start lg:justify-center px-6 md:px-24 pt-28 pb-12 lg:py-20 z-10 overflow-y-auto max-h-[100dvh] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    
+    {/* Added 'my-auto lg:my-0' here so it centers safely without cutting off top items */}
+    <div ref={menuLinksRef} className="flex flex-col gap-4 md:gap-7 my-auto lg:my-0">
+      
+      {menuLinks.map((link, idx) => {
+        if (link.name === "Rooms") {
+          return (
+            <div 
+              key={idx} 
+              className="relative overflow-visible py-1 flex flex-col lg:flex-row lg:items-center gap-4 group/rooms-item"
+              onMouseEnter={() => {
+                setCursorHovered(true);
+                setShowRoomsSubmenu(true);
+              }}
+              onMouseLeave={() => {
+                setCursorHovered(false);
+                setShowRoomsSubmenu(false);
+              }}
+            >
+              <div className="menu-link-wrapper flex items-center">
                 <Link 
-                  to="/login"
+                  to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className="px-6 py-3 border border-white/20 text-white text-center rounded uppercase tracking-widest text-xs font-bold  hover:bg-white/10 transition"
+                  className="text-2xl md:text-3xl font-light uppercase tracking-[4px] text-white"
                 >
-                  Login / Register
+                  {link.name}
                 </Link>
-              )}
+              </div>
             </div>
+          );
+        }
+
+        return (
+          <div key={idx} className="overflow-hidden py-1">
+            <span className="menu-link-wrapper block">
+              <MagneticLink 
+                to={link.path}
+                onClick={() => setIsOpen(false)}
+                onMouseEnter={() => setCursorHovered(true)}
+                onMouseLeave={() => setCursorHovered(false)}
+                className="text-2xl md:text-3xl font-light uppercase tracking-[4px] md:tracking-[8px] hover:text-[#c8a64d] text-white transition-colors duration-300 "
+              >
+                {link.name}
+                {/* Animated Underline */}
+                <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#c8a64d] scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100" />
+              </MagneticLink>
+            </span>
           </div>
-        </div>
+        );
+      })}
+
+      {/* Mobile Only Quick Actions */}
+      <div className="flex flex-col gap-4 mt-8 md:hidden border-t border-white/10 pt-8 w-full max-w-xs shrink-0">
+        <Link 
+          to="/rooms"
+          onClick={() => setIsOpen(false)}
+          className="px-6 py-3 bg-[#c8a64d] text-white text-center rounded uppercase tracking-widest text-xs font-bold hover:bg-[#b08e3b] transition"
+        >
+          Book Your Stay
+        </Link>
+        {user ? (
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              handleSignOut();
+            }}
+            className="px-6 py-3 border border-red-500/35 text-red-400 text-center rounded uppercase tracking-widest text-xs font-bold hover:bg-red-500/10 transition cursor-pointer"
+          >
+            Sign Out
+          </button>
+        ) : (
+          <Link 
+            to="/login"
+            onClick={() => setIsOpen(false)}
+            className="px-6 py-3 border border-white/20 text-white text-center rounded uppercase tracking-widest text-xs font-bold hover:bg-white/10 transition"
+          >
+            Login / Register
+          </Link>
+        )}
+      </div>
+      
+    </div>
+  </div>
 
         {/* RIGHT COLUMN: Luxury Beige Panel (Resort Info) */}
         <div className="hidden lg:flex lg:w-[40%] bg-[#f5dec2] text-[#0d2b4e] flex-col justify-center items-center px-12 py-16 relative z-10 overflow-y-auto">
