@@ -424,7 +424,7 @@ return (
           </motion.div>
 
           <div className="relative z-10 text-center px-5 max-w-5xl text-white mt-[-330px] md:mt-0">
-            <span className="text-white uppercase tracking-[3px] text-[13px] font-jost font-medium block mb-5 md:hidden">
+            <span className="text-white uppercase tracking-[3px] text-[13px] font-jost font-medium block  md:hidden">
               Stay With Us Feel Like Home
             </span>
             <h1 className="text-[36px] font-corm md:text-6xl lg:text-[92px] font-medium leading-tight mb-0 md:mb-8 drop-shadow-md">
