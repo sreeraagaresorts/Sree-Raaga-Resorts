@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { API_URL } from '../../config/api';
 
 const  Exp =()=> {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -9,7 +10,8 @@ const  Exp =()=> {
     prevActiveIndexRef.current = activeIndex;
   }, [activeIndex]);
 
-  const baseExperiences = [
+  // Fallback static items shown while loading or if API returns nothing
+  const fallbackExperiences = [
     {
       id: '01',
       title: 'Bike Rides',
@@ -36,6 +38,35 @@ const  Exp =()=> {
     },
   ];
 
+  const [baseExperiences, setBaseExperiences] = useState(fallbackExperiences);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/events`);
+        const data = await res.json();
+        if (data.success && data.data && data.data.length > 0) {
+          const mapped = data.data.map((event, i) => ({
+            id: String(i + 1).padStart(2, '0'),
+            title: event.name,
+            image: event.image
+              ? event.image.startsWith('http')
+                ? event.image
+                : `${API_URL}/uploads/${event.image}`
+              : 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800',
+            description: event.description || '',
+            height: 'h-[300px] md:h-[460px]',
+          }));
+          setBaseExperiences(mapped);
+        }
+      } catch (err) {
+        console.error('Error fetching events for slider:', err);
+        // keeps fallback
+      }
+    };
+    fetchEvents();
+  }, []);
+
   // CLONE THE ARRAY: This gives us 12 total items (a large invisible buffer) 
   // so items can wrap around seamlessly in the background.
   const experiences = [...baseExperiences, ...baseExperiences, ...baseExperiences];
@@ -54,6 +85,7 @@ const  Exp =()=> {
     const interval = setInterval(nextSlide, 4500);
     return () => clearInterval(interval);
   }, [nextSlide]);
+
 
   // Calculates offset mathematically while safely handling negative numbers
   const getOffset = (index, active) => {
@@ -119,9 +151,9 @@ const  Exp =()=> {
 
                 {/* Text Container */}
                 <div className="px-2 text-left">
-                  <span className="text-[14px] text-gray-500 uppercase tracking-[0.2em] font-jost mb-3 block font-medium transition-colors duration-300">
+                  {/* <span className="text-[14px] text-gray-500 uppercase tracking-[0.2em] font-jost mb-3 block font-medium transition-colors duration-300">
                     {item.id}
-                  </span>
+                  </span> */}
 
                   <h3 className="text-3xl lg:text-[28px] font-medium text-gray-500 font-corm hover:text-[#c8a64d] transition duration-300">
                     {item.title}

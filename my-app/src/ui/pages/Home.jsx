@@ -1125,7 +1125,7 @@ return (
 </section>
 
         {/* ================= A WARM, EXPRESSIVE URBAN SPACE ================= */}
-   <section className="py-24 bg-[#fdfeff] overflow-hidden">
+   <section className="pt-24 pb-8 bg-[#fdfeff] overflow-hidden">
   <div className=" relative">
 
     {/* Main Center Box */}
