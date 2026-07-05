@@ -327,6 +327,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("multicuisine");
   const [isRoomsOpen, setIsRoomsOpen] = useState(false);
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -422,13 +423,13 @@ return (
             <div className="absolute inset-0 bg-black/40"></div>
           </motion.div>
 
-          <div className="relative z-10 text-center px-5 max-w-5xl text-white">
-            {/* <span className="text-[#c8a64d] uppercase tracking-[3px] block mb-4 text-[17px] font-medium">
-              Sree Raaga Resorts
-            </span> */}
-            <h1 className="text-4xl font-corm md:text-6xl lg:text-[92px] font-medium leading-tight mb-8 drop-shadow-md mt-[-120px] md:mt-0">
+          <div className="relative z-10 text-center px-5 max-w-5xl text-white mt-[-230px] md:mt-0">
+            <span className="text-[#c8a64d] uppercase tracking-[3px] text-[13px] font-jost font-medium block mb-5 md:hidden">
+              Stay With Us Feel Like Home
+            </span>
+            <h1 className="text-[36px] font-corm md:text-6xl lg:text-[92px] font-medium leading-tight mb-0 md:mb-8 drop-shadow-md">
               Experience Unparalleled<br />
-              <span className="  font-medium ">
+              <span className="font-medium">
                 Comfort
               </span>
             </h1>
@@ -438,56 +439,61 @@ return (
           <div className="absolute bottom-0 translate-y-1/2 w-full z-20 px-4 md:px-10">
       <form
   onSubmit={handleSearch}
-  className="max-w-[100vh] mx-auto bg-transparent backdrop-blur-sm md:backdrop-blur-xl md:border md:border-white/10 border border-white/30  rounded-xl md:rounded-full px-0 md:px-3  md:py-[10px] flex flex-col md:flex-row items-center shadow-2xl md:mt-[-120px] mt-[-400px]"
+  className="max-w-[100vh] mx-auto bg-black/50 md:bg-transparent backdrop-blur-xl md:backdrop-blur-xl border border-white/20 rounded-2xl md:rounded-full px-0 md:px-3 md:py-[10px] flex flex-col md:flex-row items-center shadow-2xl md:mt-[-120px] mt-[-400px] "
 >
-  {/* DATE */}
-  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-6 md:py-2 border-b md:border-b-0 md:border-r border-white/20 cursor-pointer z-9999 group transition-all duration-300">
-    <DatePicker
-      selectsRange={true}
-      startDate={checkIn ? new Date(checkIn) : null}
-      endDate={checkOut ? new Date(checkOut) : null}
-      onChange={(update) => {
-        const [start, end] = update;
-        const formatDate = (date) => {
-          if (!date) return "";
-          const tzOffset = date.getTimezoneOffset() * 60000;
-          return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
-        };
-        setCheckIn(start ? formatDate(start) : "");
-        setCheckOut(end ? formatDate(end) : "");
-      }}
-      minDate={new Date()}
-      customInput={
-        <div className="flex-1 text-left flex items-center justify-between w-full ">
-          <div>
-         
-            <span className="text-white text-[16px] lg:text-[17px]">
-              {checkIn
-                ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
-                    checkOut
-                      ? ` - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
-                      : " - Check Out"
-                  }`
-                : "Check In - Check Out"}
-            </span>
-          </div>
-          <ChevronDown
-            size={14}
-            className="text-white/60 group-hover:text-white transition md:ml-4 ml-41"
-          />
-        </div>
-      }
-      calendarClassName="custom-datepicker"
-      popperModifiers={[
-        {
-          name: "preventOverflow",
-          options: {
-            boundary: "viewport",
-          },
+<div className="relative w-full md:flex-1 flex items-center gap-3 px-5 py-5 md:py-2 border-b border-white/15 md:border-b-0 md:border-r md:border-white/20 cursor-pointer z-[9999] group transition-all duration-300">
+  <DatePicker
+    selectsRange={true}
+    startDate={checkIn ? new Date(checkIn) : null}
+    endDate={checkOut ? new Date(checkOut) : null}
+    // 1. ADD THIS PROP HERE:
+    wrapperClassName="w-full" 
+    onChange={(update) => {
+      const [start, end] = update;
+      const formatDate = (date) => {
+        if (!date) return "";
+        const tzOffset = date.getTimezoneOffset() * 60000;
+        return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
+      };
+      setCheckIn(start ? formatDate(start) : "");
+      setCheckOut(end ? formatDate(end) : "");
+    }}
+    minDate={new Date()}
+    onCalendarOpen={() => setIsDatePickerOpen(true)}
+    onCalendarClose={() => setIsDatePickerOpen(false)}
+    customInput={
+      <div className="flex items-center justify-between w-full">
+        <span className="text-white/90 text-[15px] lg:text-[17px] font-jost">
+          {checkIn
+            ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
+                checkOut
+                  ? ` - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                  : " - Check Out"
+              }`
+            : "Check In - Check Out"}
+        </span>
+       {/* Wrap the icon to prevent flexbox layout shifts during rotation */}
+<span className="flex items-center justify-center w-4 h-4 mr-1 md:mr-0 shrink-0">
+  <ChevronDown
+    size={16}
+    className={`text-white/60 transition-transform duration-300 origin-center ${
+      isDatePickerOpen ? "rotate-180" : ""
+    }`}
+  />
+</span>
+      </div>
+    }
+    calendarClassName="custom-datepicker"
+    popperModifiers={[
+      {
+        name: "preventOverflow",
+        options: {
+          boundary: "viewport",
         },
-      ]}
-    />
-  </div>
+      },
+    ]}
+  />
+</div>
 
   {/* ROOM */}
   <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-6 md:py-2 border-b md:border-b-0 md:border-r border-white/20 select-none cursor-pointer booking-field"
@@ -498,7 +504,7 @@ return (
   >
     <div className="flex-1">
     
-      <span className="text-white text-xs lg:text-[17px]">
+      <span className="text-white text-[15px] lg:text-[17px]">
         Rooms 
       </span>
     </div>
@@ -508,7 +514,7 @@ return (
     />
 
     {isRoomsOpen && (
-      <div className="absolute top-[110%] left-0 w-64 bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
+      <div className="absolute top-[110%] left-0 md:w-64 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-60 font-jost text-left select-none">
         <div className="flex items-center justify-between">
           <span className="font-semibold text-sm">Rooms</span>
           <div className="flex items-center gap-6">
@@ -548,7 +554,7 @@ return (
   >
     <div className="flex-1">
   
-      <span className="text-white text-xs lg:text-[17px]">
+      <span className="text-white text-[15px] lg:text-[17px]">
         {adultsCount + childrenCount === 0
           ? "Guests"
           : adultsCount + childrenCount === 1
@@ -562,7 +568,7 @@ return (
     />
 
     {isGuestsOpen && (
-      <div className="absolute top-[110%] left-0 w-64 bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none space-y-4">
+      <div className="absolute top-[110%] left-0 md:w-64 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none space-y-4">
         {/* Adults */}
         <div className="flex items-center justify-between">
           <span className="font-semibold text-sm">Adults</span>

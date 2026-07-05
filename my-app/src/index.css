@@ -325,3 +325,6 @@ html {
 ::-webkit-scrollbar-corner {
   background: #F7F4EC; 
 }
+.react-datepicker-wrapper {
+  width: 100%;
+}

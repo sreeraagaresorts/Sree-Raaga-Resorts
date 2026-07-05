@@ -310,7 +310,7 @@ const Navbar = () => {
                 <span className={`w-5 h-[1.5px] bg-white transition-opacity duration-300 ${isOpen ? "opacity-0" : "group-hover:w-7"}`} />
                 <span className={`w-7 h-[1.5px] bg-white transition-all duration-500 origin-center ${isOpen ? "-rotate-45 -translate-y-[9px]" : ""}`} />
               </div>
-              <span className="text-xs lg:text-sm uppercase tracking-[5px] font-semibold text-white select-none">
+              <span className="text-xs lg:text-sm uppercase tracking-[5px] hidden md:block font-semibold text-white select-none">
                 {isOpen ? "Close" : "Menu"}
               </span>
             </div>
