@@ -423,8 +423,8 @@ return (
             <div className="absolute inset-0 bg-black/40"></div>
           </motion.div>
 
-          <div className="relative z-10 text-center px-5 max-w-5xl text-white mt-[-230px] md:mt-0">
-            <span className="text-white uppercase tracking-[3px] text-[13px] font-jost font-medium block  md:hidden">
+          <div className="relative z-10 text-center px-5 max-w-5xl text-white mt-[-130px] md:mt-0">
+            <span className="text-white uppercase tracking-[3px] text-[13px] font-jost font-medium block mb-4 md:hidden">
               Stay With Us Feel Like Home
             </span>
             <h1 className="text-[36px] font-corm md:text-6xl lg:text-[92px] font-medium leading-tight mb-0 md:mb-8 drop-shadow-md">
@@ -439,7 +439,7 @@ return (
           <div className="absolute bottom-0 translate-y-1/2 w-full z-20 px-4 md:px-10">
       <form
   onSubmit={handleSearch}
-  className="max-w-[100vh] mx-auto bg-black/50 md:bg-transparent backdrop-blur-xl md:backdrop-blur-xl border border-white/20 rounded-2xl md:rounded-full px-0 md:px-3 md:py-[10px] flex flex-col md:flex-row items-center shadow-2xl md:mt-[-120px] mt-[-350px] "
+  className="max-w-[100vh] mx-auto bg-black/50 md:bg-transparent backdrop-blur-xl md:backdrop-blur-xl border border-white/20 rounded-2xl md:rounded-full px-0 md:px-3 md:py-[10px] flex flex-col md:flex-row items-center shadow-2xl md:mt-[-120px] mt-[-230px] "
 >
 <div className="relative w-full md:flex-1 flex items-center gap-3 px-5 py-5 md:py-2 border-b border-white/15 md:border-b-0 md:border-r md:border-white/20 cursor-pointer z-[9999] group transition-all duration-300">
   <DatePicker
