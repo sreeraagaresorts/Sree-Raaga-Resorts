@@ -490,7 +490,7 @@ return (
   </div>
 
   {/* ROOM */}
-  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-6 border-b md:border-b-0 md:border-r border-white/20 select-none cursor-pointer booking-field"
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-6 md:py-2 border-b md:border-b-0 md:border-r border-white/20 select-none cursor-pointer booking-field"
        onClick={() => {
          setIsRoomsOpen(!isRoomsOpen);
          setIsGuestsOpen(false);
@@ -540,7 +540,7 @@ return (
   </div>
 
   {/* GUESTS */}
-  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-6 select-none cursor-pointer booking-field"
+  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-6 md:py-2 select-none cursor-pointer booking-field"
        onClick={() => {
          setIsGuestsOpen(!isGuestsOpen);
          setIsRoomsOpen(false);

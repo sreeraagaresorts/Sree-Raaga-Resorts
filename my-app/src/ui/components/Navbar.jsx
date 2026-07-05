@@ -297,7 +297,7 @@ const Navbar = () => {
         className="fixed top-0 left-0 right-0 z-50 border-b flex flex-col items-center"
       >
         {/* TOP ROW */}
-        <div className="w-full  px-20 flex items-center justify-between">
+        <div className="w-full px-4 md:px-20 flex items-center justify-between">
           {/* LEFT PANEL: Menu Toggle & Phone Number */}
           <div className="flex items-center gap-20 flex-1">
             {/* Custom Morphing Menu Toggle */}
