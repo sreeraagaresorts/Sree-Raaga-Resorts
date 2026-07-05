@@ -534,9 +534,12 @@ const RoomDetails = () => {
               </div>
 
               {/* Price, Title & Specs */}
-              <div className="select-none space-y-4">
+              <div className="select-none space-y-2">
                 <div className="font-semibold text-[25px] uppercase tracking-[2px] font-jost text-[#c8a64d]">
                   ₹{parseFloat(room.price).toLocaleString()} / NIGHT
+                </div>
+                <div className="font-semibold text-[17px]  tracking-[2px] font-jost text-gray-500">
+                  Exclusive of taxes
                 </div>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium font-corm text-[#0d2b4e] leading-tight">
                   {room.name}
@@ -1118,6 +1121,7 @@ const RoomDetails = () => {
                         <span className="text-[17px] text-gray-700  block tracking-wider uppercase font-semibold">
                           / NIGHT
                         </span>
+                     
                       </div>
                     </div>
 
