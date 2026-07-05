@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/api';
 
 const Exp = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  
+  const navigate = useNavigate();
+
   // We use a ref to track the previous index so we know when an item is wrapping around
   const prevActiveIndexRef = useRef(0);
   useEffect(() => {
@@ -14,24 +16,28 @@ const Exp = () => {
   const fallbackExperiences = [
     {
       id: '01',
+      _id: null,
       title: 'Bike Rides',
       image: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2070&auto=format&fit=crop',
       height: 'h-[300px] md:h-[460px]',
     },
     {
       id: '02',
+      _id: null,
       title: 'Boat Trips',
       image: 'https://images.unsplash.com/photo-1540946485063-a40da27545f8?q=80&w=2070&auto=format&fit=crop',
       height: 'h-[300px] md:h-[460px]',
     },
     {
       id: '03',
+      _id: null,
       title: 'New Experience',
       image: 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2070&auto=format&fit=crop',
       height: 'h-[300px] md:h-[460px]',
     },
     {
       id: '04',
+      _id: null,
       title: 'Hot Air Balloons',
       image: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=1974&auto=format&fit=crop',
       height: 'h-[300px] md:h-[460px]',
@@ -48,6 +54,7 @@ const Exp = () => {
         if (data.success && data.data && data.data.length > 0) {
           const mapped = data.data.map((event, i) => ({
             id: String(i + 1).padStart(2, '0'),
+            _id: event._id,
             title: event.name,
             image: event.image
               ? event.image.startsWith('http')
@@ -67,17 +74,17 @@ const Exp = () => {
     fetchEvents();
   }, []);
 
-  // CLONE THE ARRAY: This gives us 12 total items (a large invisible buffer) 
+  // CLONE THE ARRAY: This gives us 12 total items (a large invisible buffer)
   // so items can wrap around seamlessly in the background.
   const experiences = [...baseExperiences, ...baseExperiences, ...baseExperiences];
   const total = experiences.length;
 
   const nextSlide = useCallback(() => {
-    setActiveIndex((prev) => prev + 1); // Continuous addition (no modulo here)
+    setActiveIndex((prev) => prev + 1);
   }, []);
 
   const prevSlide = useCallback(() => {
-    setActiveIndex((prev) => prev - 1); // Continuous subtraction
+    setActiveIndex((prev) => prev - 1);
   }, []);
 
   // Autoplay functionality
@@ -93,60 +100,76 @@ const Exp = () => {
     return offset;
   };
 
+  const handleSlideClick = (item, isCenter) => {
+    if (!isCenter) return;
+    if (item._id) {
+      navigate(`/events/${item._id}`);
+    }
+  };
+
   return (
-    <div className="hidden md:flex min-h-screen bg-[#fdfeff] py-20 flex-col justify-center overflow-hidden font-jost relative">
-      
+    <div className="hidden md:flex min-h-screen bg-[#fdfeff] pb-10 flex-col justify-center overflow-hidden font-jost relative">
+
       {/* Required Fonts */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
-        
+
         .font-corm { font-family: "Cormorant Garamond", serif; }
         .font-jost { font-family: "Jost", sans-serif; }
       `}</style>
 
       {/* Main Slider Container */}
-      <div className="relative w-full max-w-[1600px] mx-auto h-[450px] md:h-[600px]  flex items-center justify-center">
-        
+      <div className="relative w-full max-w-[1600px] mx-auto h-[450px] md:h-[600px] flex items-center justify-center">
+
         {experiences.map((item, index) => {
           const offset = getOffset(index, activeIndex);
           const prevOffset = getOffset(index, prevActiveIndexRef.current);
-          
+
           const isCenter = offset === 0;
-          
+
           // DETECT JUMP: If the item jumps from one far side to the other, we turn off its transition
           const isJumping = Math.abs(offset - prevOffset) > 1 && activeIndex !== prevActiveIndexRef.current;
 
           return (
             <div
-              key={`${item.id}-${index}`} 
-              // --- CHANGED HERE: Increased widths (w-[90vw] md:w-[55vw] lg:w-[45vw]) ---
+              key={`${item.id}-${index}`}
               className="absolute top-1/2 left-1/2 w-[90vw] md:w-[55vw] lg:w-[35vw] group"
               style={{
-                // Shifts active slide UP (-40px) and separates X positions
                 transform: `translate(calc(-50% + ${offset * 115}%), calc(-50% - ${isCenter ? 90 : 0}px))`,
-                
-                // Hide items entirely if they are further away than the immediate left/right
-                opacity: Math.abs(offset) > 1 ? 0 : (isCenter ? 1 : 1),
+                opacity: Math.abs(offset) > 1 ? 0 : 1,
                 visibility: Math.abs(offset) > 1 ? 'hidden' : 'visible',
-                
                 zIndex: 10 - Math.abs(offset),
                 pointerEvents: isCenter ? 'auto' : 'none',
-                
-                // If it is wrapping around the back, transition is instantly removed to prevent visual flying
                 transition: isJumping ? 'none' : 'all 0.8s cubic-bezier(0.25, 1, 0.5, 1)',
+                cursor: isCenter && item._id ? 'pointer' : 'default',
               }}
+              onClick={() => handleSlideClick(item, isCenter)}
             >
               <div className="flex flex-col relative w-full h-full">
-                
+
                 {/* Image Container */}
                 <div className={`relative overflow-hidden mb-6 ${item.height}`}>
-                  {/* --- CHANGED HERE: w-[700px] changed to w-full --- */}
                   <img
                     src={item.image}
                     alt={item.title}
                     className="w-full h-full md:h-[443px] object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
+
+                  {/* Hover Enquire Overlay — only shown on center slide */}
+                  {isCenter && item._id && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/events/${item._id}`);
+                        }}
+                        className="px-3 py-10 rounded-full bg-white/90 backdrop-blur-sm text-[#0d2b4e] text-sm font-semibold font-jost uppercase tracking-[2px] shadow-lg hover:bg-[#efd3b2] hover:text-[#0d2b4e] transition-all duration-300 translate-y-2 group-hover:translate-y-0"
+                      >
+                        Enquire
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Text Container */}
