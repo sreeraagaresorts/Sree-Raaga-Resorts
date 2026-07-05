@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { API_URL } from '../../config/api';
 
-const  Exp =()=> {
+const Exp = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   
   // We use a ref to track the previous index so we know when an item is wrapping around
@@ -86,7 +86,6 @@ const  Exp =()=> {
     return () => clearInterval(interval);
   }, [nextSlide]);
 
-
   // Calculates offset mathematically while safely handling negative numbers
   const getOffset = (index, active) => {
     let offset = ((index - active) % total + total) % total;
@@ -95,7 +94,7 @@ const  Exp =()=> {
   };
 
   return (
-    <div className="min-h-screen bg-[#fdfeff] py-20 flex flex-col justify-center overflow-hidden font-jost relative">
+    <div className="hidden md:flex min-h-screen bg-[#fdfeff] py-20 flex-col justify-center overflow-hidden font-jost relative">
       
       {/* Required Fonts */}
       <style>{`
@@ -120,14 +119,15 @@ const  Exp =()=> {
 
           return (
             <div
-              key={`${item.id}-${index}`} // Unique key using index because of cloning
-              className="absolute top-1/2 left-1/2 w-[80vw] md:w-[40vw] lg:w-[32vw] group"
+              key={`${item.id}-${index}`} 
+              // --- CHANGED HERE: Increased widths (w-[90vw] md:w-[55vw] lg:w-[45vw]) ---
+              className="absolute top-1/2 left-1/2 w-[90vw] md:w-[55vw] lg:w-[35vw] group"
               style={{
                 // Shifts active slide UP (-40px) and separates X positions
                 transform: `translate(calc(-50% + ${offset * 115}%), calc(-50% - ${isCenter ? 90 : 0}px))`,
                 
                 // Hide items entirely if they are further away than the immediate left/right
-                opacity: Math.abs(offset) > 1 ? 0 : (isCenter ? 1 :1),
+                opacity: Math.abs(offset) > 1 ? 0 : (isCenter ? 1 : 1),
                 visibility: Math.abs(offset) > 1 ? 'hidden' : 'visible',
                 
                 zIndex: 10 - Math.abs(offset),
@@ -141,21 +141,17 @@ const  Exp =()=> {
                 
                 {/* Image Container */}
                 <div className={`relative overflow-hidden mb-6 ${item.height}`}>
-                  {/* Note: Replace <img> with <WindowReveal> in your actual project if required */}
+                  {/* --- CHANGED HERE: w-[700px] changed to w-full --- */}
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    className="w-full h-full md:h-[443px] object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
                 </div>
 
                 {/* Text Container */}
                 <div className="px-2 text-left">
-                  {/* <span className="text-[14px] text-gray-500 uppercase tracking-[0.2em] font-jost mb-3 block font-medium transition-colors duration-300">
-                    {item.id}
-                  </span> */}
-
-                  <h3 className="text-3xl lg:text-[28px] font-medium text-gray-500 font-corm hover:text-[#c8a64d] transition duration-300">
+                  <h3 className="text-3xl lg:text-[28px] font-semibold text-gray-500 font-corm hover:text-[#c8a64d] transition duration-300">
                     {item.title}
                   </h3>
                 </div>
