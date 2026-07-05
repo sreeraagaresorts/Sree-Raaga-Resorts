@@ -735,7 +735,7 @@ return (
               {stat.number}
             </span>
 
-            <span className="text-[10px] md:text-sm uppercase tracking-widest w-full text-gray-500 font-medium">
+            <span className="text-[17px]  uppercase tracking-widest w-full text-gray-500 font-medium">
               {stat.label}
             </span>
           </motion.div>
