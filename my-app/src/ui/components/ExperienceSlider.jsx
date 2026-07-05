@@ -164,7 +164,7 @@ const Exp = () => {
                           e.stopPropagation();
                           navigate(`/events/${item._id}`);
                         }}
-                        className="px-3 py-10 rounded-full bg-white/90 backdrop-blur-sm text-[#0d2b4e] text-sm font-semibold font-jost uppercase tracking-[2px] shadow-lg hover:bg-[#efd3b2] hover:text-[#0d2b4e] transition-all duration-300 translate-y-2 group-hover:translate-y-0"
+                        className="px-5 py-12 rounded-full bg-white/90 backdrop-blur-sm text-[#0d2b4e] text-sm font-semibold font-jost uppercase tracking-[2px] shadow-lg hover:bg-[#efd3b2] hover:text-[#0d2b4e] transition-all duration-300 translate-y-2 group-hover:translate-y-0"
                       >
                         Enquire
                       </button>
