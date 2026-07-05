@@ -329,18 +329,17 @@ const Navbar = () => {
               isOpen ? "opacity-0 pointer-events-none blur-sm scale-95" : ""
             }`}
           >
-            <motion.div
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="flex flex-col items-center justify-center"
-            >
-              <h1 className="text-3xl lg:text-4xl text-[#c8a64d] tracking-wide font-corm leading-none">
-                Sree Raaga
-              </h1>
-              <span className="text-[10px] lg:text-[11px] tracking-[6px] uppercase font-jost text-white mt-1">
-                Resorts
-              </span>
-            </motion.div>
+       <motion.div
+  animate={{ scale: 1 }}
+  transition={{ duration: 0.5, ease: "easeInOut" }}
+  className="flex flex-col items-center justify-center"
+>
+  <img
+    src="/logo.png" /* <-- Replace this with your actual logo path */
+    alt="Sree Raaga Resorts"
+    className="h-12 lg:h-16 w-auto object-contain" 
+  />
+</motion.div>
           </Link>
 
           {/* RIGHT PANEL: Profile/Login, Book Button */}
