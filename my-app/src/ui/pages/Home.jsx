@@ -631,9 +631,10 @@ return (
   </div>
 
   {/* SEARCH BUTTON */}
+{/* SEARCH BUTTON */}
   <button
     type="submit"
-    className="group mt-4 md:mt-0 md:ml-4 h-12 md:w-12 w-full md:rounded-full bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white text-[#0d2b4e] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shrink-0 cursor-pointer rounded-b-[10px]"
+    className="group mt-0 md:ml-4 h-14 md:h-12 md:w-12 w-full rounded-b-2xl md:rounded-full bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white text-[#0d2b4e] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg shrink-0 cursor-pointer"
   >
     <span className="font-jost font-semibold md:text-xs text-sm tracking-wider uppercase">GO</span>
   </button>
@@ -641,11 +642,11 @@ return (
           </div>
         </section>
 
-<section className="relative py-20 md:py-48 px-4 md:px-6 bg-[#fdfeff] text-[#0d2b4e] overflow-hidden">
+<section className="relative py-30  md:py-48 px-4 md:px-6 bg-[#fdfeff] text-[#0d2b4e] overflow-hidden">
       
       {/* Outlined brand text behind the staggered images */}
       <div 
-        className="absolute top-[3%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[12vw] md:text-[9vw] font-corm uppercase tracking-[5px] font-bold md:font-medium md:text-[#3fbcc3]/10 text-[#011b3c]/30 select-none pointer-events-none text-center whitespace-nowrap z-0"
+        className="absolute top-[6%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[12vw] md:text-[9vw] font-corm uppercase tracking-[5px] font-bold md:font-medium md:text-[#3fbcc3]/10 text-[#011b3c]/30 select-none pointer-events-none text-center whitespace-nowrap z-0"
       >
         Sree Raaga
       </div>
