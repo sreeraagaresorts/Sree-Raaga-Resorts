@@ -1356,7 +1356,7 @@ const RoomDetails = () => {
         </div>
       )}
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
