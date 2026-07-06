@@ -289,3 +289,4 @@ function WaterSportsIcon({ className = "" }) {
 };
 
 export default Events;
+

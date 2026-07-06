@@ -119,7 +119,8 @@ exports.createRoom = async (req, res) => {
       bathrooms,
       guests,
       description,
-      totalRooms
+      totalRooms,
+      view360Iframe
     } = req.body;
 
     if (!roomNumber) {
@@ -175,7 +176,8 @@ exports.createRoom = async (req, res) => {
       beds: beds || null,
       bathrooms: bathrooms || null,
       guests: guests || null,
-      description
+      description,
+      view360Iframe: view360Iframe || null
     });
     await room.save();
 
@@ -215,7 +217,8 @@ exports.updateRoom = async (req, res) => {
       bathrooms,
       guests,
       description,
-      totalRooms
+      totalRooms,
+      view360Iframe
     } = req.body;
 
     if (!roomNumber) {
@@ -279,7 +282,8 @@ exports.updateRoom = async (req, res) => {
       beds: beds || null,
       bathrooms: bathrooms || null,
       guests: guests || null,
-      description
+      description,
+      view360Iframe: view360Iframe || null
     };
 
     if (req.file) {

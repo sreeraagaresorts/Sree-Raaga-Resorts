@@ -99,7 +99,7 @@ const AdminUsers = () => {
       }
 
       toast.success("User role updated successfully!");
-      fetchUsersAndBookings();
+      fetchUsersAndBookings(true);
       loadHistoryLogs();
     } catch (err) {
       toast.error(err.message || "Failed to change user role.");
@@ -124,7 +124,7 @@ const AdminUsers = () => {
       }
 
       toast.success("User account deleted successfully!");
-      fetchUsersAndBookings();
+      fetchUsersAndBookings(true);
       loadHistoryLogs();
     } catch (err) {
       toast.error(err.message || "Failed to delete user.");
@@ -368,3 +368,4 @@ const AdminUsers = () => {
 };
 
 export default AdminUsers;
+

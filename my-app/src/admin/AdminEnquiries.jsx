@@ -96,7 +96,7 @@ const AdminEnquiries = () => {
         throw new Error(data.message || "Failed to delete enquiry.");
       }
       toast.success("Event enquiry deleted successfully!");
-      fetchEventEnquiries();
+      fetchEventEnquiries(true);
       // Dispatch event to also remove it from notifications just in case
       window.dispatchEvent(new CustomEvent("eventEnquiryDeleted", { detail: { id } }));
     } catch (err) {
@@ -161,7 +161,7 @@ const AdminEnquiries = () => {
         throw new Error(data.message || "Failed to delete message.");
       }
       toast.success("Contact message deleted successfully!");
-      fetchContactEnquiries();
+      fetchContactEnquiries(true);
       window.dispatchEvent(new CustomEvent("inquiryDeleted", { detail: { id } }));
     } catch (err) {
       toast.error(err.message);
@@ -248,7 +248,7 @@ const AdminEnquiries = () => {
               className="bg-[#081A2F] border border-white/10 rounded-lg px-4 py-1.5 text-xs text-white outline-none focus:border-[#C8A64D] transition w-52 sm:w-64"
             />
             <button
-              onClick={() => (activeTab === "event" ? fetchEventEnquiries() : fetchContactEnquiries())}
+              onClick={() => (activeTab === "event" ? fetchEventEnquiries(true) : fetchContactEnquiries(true))}
               className="p-2 text-[#C8A64D] hover:bg-[#C8A64D]/10 rounded transition cursor-pointer"
               title="Refresh"
             >
@@ -454,3 +454,5 @@ const AdminEnquiries = () => {
 };
 
 export default AdminEnquiries;
+
+

@@ -136,7 +136,7 @@ const AdminEvents = () => {
 
       toast.success(editingEvent ? "Event updated successfully!" : "Event created successfully!");
       setIsFormOpen(false);
-      fetchEvents();
+      fetchEvents(true);
     } catch (err) {
       toast.error(err.message || "Failed to save event.");
     } finally {
@@ -163,7 +163,7 @@ const AdminEvents = () => {
       }
 
       toast.success("Event deleted successfully!");
-      fetchEvents();
+      fetchEvents(true);
     } catch (err) {
       toast.error(err.message || "Failed to delete event.");
     }
@@ -407,3 +407,4 @@ const AdminEvents = () => {
 };
 
 export default AdminEvents;
+

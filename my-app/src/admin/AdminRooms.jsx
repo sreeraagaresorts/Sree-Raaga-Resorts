@@ -76,7 +76,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
       toast.success("Category order updated!");
     } catch (err) {
       toast.error("Failed to save new order.");
-      fetchCategories(); 
+      fetchCategories(true); 
     }
   };
 
@@ -134,6 +134,10 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
   const [newExtraImageFiles, setNewExtraImageFiles] = useState([]);
   const [extraImagePreviews, setExtraImagePreviews] = useState([]);
 
+  // 360 View state
+  const [view360Iframe, setView360Iframe] = useState("");
+  const [show360Input, setShow360Input] = useState(false);
+
   const [saving, setSaving] = useState(false);
 
   const fetchRooms = async (silent = false) => {
@@ -172,7 +176,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
     // Auto-refresh rooms silently every 10 seconds
     const interval = setInterval(() => {
       fetchRooms(true);
-      fetchCategories();
+      fetchCategories(true);
     }, 10000);
 
     return () => clearInterval(interval);
@@ -196,6 +200,8 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
     setExistingExtraImages([]);
     setNewExtraImageFiles([]);
     setExtraImagePreviews([]);
+    setView360Iframe("");
+    setShow360Input(false);
     setIsFormOpen(true);
   };
 
@@ -232,6 +238,8 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
         filename: img,
       }))
     );
+    setView360Iframe(room.view360Iframe || "");
+    setShow360Input(!!room.view360Iframe);
     setIsFormOpen(true);
   };
 
@@ -300,6 +308,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
       formData.append("bathrooms", bathrooms);
       formData.append("guests", guests);
       formData.append("description", description);
+      formData.append("view360Iframe", view360Iframe);
       if (compressedMainImage) {
         formData.append("image", compressedMainImage);
       }
@@ -331,7 +340,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
 
       toast.success(editingRoom ? "Room updated successfully!" : "Room created successfully!");
       setIsFormOpen(false);
-      fetchRooms();
+      fetchRooms(true);
     } catch (err) {
       toast.error(err.message || "Failed to save room.");
     } finally {
@@ -358,7 +367,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
       }
 
       toast.success("Room deleted successfully!");
-      fetchRooms();
+      fetchRooms(true);
     } catch (err) {
       toast.error(err.message || "Failed to delete room.");
     }
@@ -408,7 +417,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
       setEditingCategory(null);
       setCatName("");
       setCatParent("");
-      fetchCategories();
+      fetchCategories(true);
     } catch (err) {
       toast.error(err.message || "Failed to save category.");
     }
@@ -429,7 +438,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
       }
 
       toast.success("Category deleted successfully!");
-      fetchCategories();
+      fetchCategories(true);
     } catch (err) {
       toast.error(err.message || "Failed to delete category.");
     }
@@ -724,9 +733,18 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Room Image
-                  </label>
+                  <div className="flex items-center  mb-2">
+                    <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-0">
+                      Room Image
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShow360Input(!show360Input)}
+                      className="  text-yellow-500 px-2 py-1 rounded text-[10px]  transition  border-0 "
+                    >
+                      {show360Input ? "Hide 360 View" : "+ Add 360 View"}
+                    </button>
+                  </div>
                   <div className="border border-dashed border-white/20 p-4 rounded-lg text-center bg-[#071524] relative h-[120px] flex flex-col justify-center items-center">
                     <input
                       type="file"
@@ -775,6 +793,21 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                   </div>
                 </div>
               </div>
+
+              {show360Input && (
+                <div>
+                  <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1 font-bold">
+                    360 View Iframe HTML
+                  </label>
+                  <textarea
+                    placeholder='<iframe src="..."></iframe>'
+                    value={view360Iframe}
+                    onChange={(e) => setView360Iframe(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-xs font-mono"
+                    rows={2}
+                  />
+                </div>
+              )}
 
               {extraImagePreviews.length > 0 && (
                 <div>
@@ -1100,3 +1133,4 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
 };
 
 export default AdminRooms;
+

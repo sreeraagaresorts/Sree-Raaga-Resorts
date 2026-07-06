@@ -49,7 +49,7 @@ const Menu = () => {
     // Auto-refresh menu silently every 10 seconds
     const interval = setInterval(() => {
       fetchDishes(true);
-      fetchRooms();
+      fetchRooms(true);
     }, 10000);
     
     // Autofill name and email from logged in user if available
@@ -601,3 +601,4 @@ const Menu = () => {
 };
 
 export default Menu;
+

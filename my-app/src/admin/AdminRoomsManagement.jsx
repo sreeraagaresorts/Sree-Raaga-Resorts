@@ -172,7 +172,7 @@ const AdminRoomsManagement = () => {
 
       toast.success(`Unit ${selectedUnit.unit.roomNumber} is now ${newStatus}`);
       setSelectedUnit(null);
-      fetchRooms();
+      fetchRooms(true);
     } catch (err) {
       toast.error(err.message || "Failed to update unit status.");
     } finally {
@@ -216,7 +216,7 @@ const AdminRoomsManagement = () => {
       setAddFloor("1");
       setAddPrice("");
       setAddStatus("Available");
-      fetchRooms();
+      fetchRooms(true);
     } catch (err) {
       toast.error(err.message || "Failed to add room unit.");
     } finally {
@@ -265,7 +265,7 @@ const AdminRoomsManagement = () => {
       toast.success(`Room ${editRoomNumber} updated successfully!`);
       setIsEditModalOpen(false);
       setSelectedUnit(null);
-      fetchRooms();
+      fetchRooms(true);
     } catch (err) {
       toast.error(err.message || "Failed to update room unit.");
     } finally {
@@ -294,7 +294,7 @@ const AdminRoomsManagement = () => {
         throw new Error(data.message || "Failed to delete room unit.");
       }
       toast.success(`Room ${roomNumber} deleted successfully!`);
-      fetchRooms();
+      fetchRooms(true);
     } catch (err) {
       toast.error(err.message || "Failed to delete room unit.");
     }
@@ -673,3 +673,5 @@ const AdminRoomsManagement = () => {
 };
 
 export default AdminRoomsManagement;
+
+

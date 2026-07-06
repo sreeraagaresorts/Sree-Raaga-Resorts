@@ -87,7 +87,7 @@ const AdminMenu = () => {
       if (data.success) {
         toast.success(data.message || "Category added successfully!");
         setNewCategoryName("");
-        fetchCategories();
+        fetchCategories(true);
       } else {
         throw new Error(data.message || "Failed to add category.");
       }
@@ -111,7 +111,7 @@ const AdminMenu = () => {
       const data = await response.json();
       if (data.success) {
         toast.success(data.message || "Category deleted successfully!");
-        fetchCategories();
+        fetchCategories(true);
       } else {
         throw new Error(data.message || "Failed to delete category.");
       }
@@ -148,7 +148,7 @@ const AdminMenu = () => {
         toast.success(data.message || "Category updated successfully!");
         setEditingCategory(null);
         setNewCategoryName("");
-        fetchCategories();
+        fetchCategories(true);
       } else {
         throw new Error(data.message || "Failed to update category.");
       }
@@ -281,7 +281,7 @@ const AdminMenu = () => {
 
       toast.success(editingDish ? "Dish updated successfully!" : "Dish created successfully!");
       setIsFormOpen(false);
-      fetchDishes();
+      fetchDishes(true);
     } catch (err) {
       toast.error(err.message || "Failed to save dish.");
     } finally {
@@ -306,7 +306,7 @@ const AdminMenu = () => {
       }
 
       toast.success("Dish deleted successfully!");
-      fetchDishes();
+      fetchDishes(true);
     } catch (err) {
       toast.error(err.message || "Failed to delete dish.");
     }
@@ -326,7 +326,7 @@ const AdminMenu = () => {
       const data = await response.json();
       if (data.success) {
         toast.success(`Order status updated to ${newStatus}!`);
-        fetchOrders();
+        fetchOrders(true);
       } else {
         throw new Error(data.message || "Failed to update order status.");
       }
@@ -349,7 +349,7 @@ const AdminMenu = () => {
       const data = await response.json();
       if (data.success) {
         toast.success("Order deleted successfully!");
-        fetchOrders();
+        fetchOrders(true);
       } else {
         throw new Error(data.message || "Failed to delete order.");
       }
@@ -984,3 +984,4 @@ const AdminMenu = () => {
 };
 
 export default AdminMenu;
+

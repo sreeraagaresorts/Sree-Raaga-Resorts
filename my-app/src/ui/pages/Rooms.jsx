@@ -202,7 +202,7 @@ const Rooms = () => {
     // Auto-refresh rooms silently every 10 seconds
     const interval = setInterval(() => {
       fetchRooms(true);
-      fetchCategories();
+      fetchCategories(true);
     }, 10000);
 
     return () => clearInterval(interval);
@@ -667,3 +667,4 @@ const Rooms = () => {
 };
 
 export default Rooms;
+

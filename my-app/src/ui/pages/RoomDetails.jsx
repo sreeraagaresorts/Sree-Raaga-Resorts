@@ -146,6 +146,7 @@ const RoomDetails = () => {
 
   // Slider State
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [is360ModalOpen, setIs360ModalOpen] = useState(false);
 
   // Coupon State
   const [coupons, setCoupons] = useState([]);
@@ -904,6 +905,14 @@ const RoomDetails = () => {
               
               {/* Gallery Image Slider (Single active image layout matching Swiss Resort) */}
               <div className="relative overflow-hidden aspect-[80/55] shadow-md group select-none bg-black/5 ">
+                {room?.view360Iframe && (
+                  <button
+                    onClick={() => setIs360ModalOpen(true)}
+                    className="absolute top-4 left-4 z-30 bg-[#c8a64d] text-white px-2 py-1 md:px-4 md:py-2  text-sm font-bold shadow-xl hover:bg-[#b09141] transition cursor-pointer border border-white/20 uppercase tracking-widest"
+                  >
+                    360° View
+                  </button>
+                )}
                 {gallery.map((src, idx) => (
                   <div
                     key={idx}
@@ -1329,8 +1338,28 @@ const RoomDetails = () => {
           </div>
         </div>
       )}
+
+      {/* 360 View Modal */}
+      {is360ModalOpen && room?.view360Iframe && (
+        <div className="fixed inset-0  z-[100] flex items-center justify-center p-4">
+          <button 
+            onClick={() => setIs360ModalOpen(false)}
+            className="absolute top-17 right-4 md:top-21 md:right-94 text-white hover:text-[#c8a64d] z-[110] transition p-2 cursor-pointer bg-black/50 rounded-tr-[16px] "
+            title="Close 360 View"
+          >
+            <X className="w-8 h-8" />
+          </button>
+          <div 
+            className="w-full h-full max-w-6xl max-h-[80vh] rounded-2xl overflow-hidden shadow-2xl relative flex items-center justify-center [&_iframe]:!w-full [&_iframe]:!h-full [&_iframe]:!max-w-full [&_iframe]:!border-0 border border-white/10"
+            dangerouslySetInnerHTML={{ __html: room.view360Iframe }}
+          />
+        </div>
+      )}
+
+      <Footer />
     </>
   );
 };
 
 export default RoomDetails;
+

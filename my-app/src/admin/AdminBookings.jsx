@@ -233,7 +233,7 @@ const AdminBookings = () => {
       setIsAssignModalOpen(false);
       setAssignBooking(null);
       setAssignRoomNumber("");
-      fetchBookings();
+      setBookings((prev) => prev.map((b) => b.id === assignBooking.id ? { ...b, room_number: assignRoomNumber } : b));
     } catch (err) {
       toast.error(err.message || "Failed to assign room.");
     } finally {
@@ -330,7 +330,7 @@ const AdminBookings = () => {
 
       toast.success("Booking created successfully!");
       setIsFormOpen(false);
-      fetchBookings();
+      fetchBookings(true);
     } catch (err) {
       toast.error(err.message || "Failed to create booking.");
     } finally {
@@ -356,7 +356,7 @@ const AdminBookings = () => {
       }
 
       toast.success(`Booking status changed to ${status}!`);
-      fetchBookings();
+      setBookings((prev) => prev.map((b) => b.id === id ? { ...b, status } : b));
     } catch (err) {
       toast.error(err.message || "Failed to update booking status.");
     }
@@ -380,7 +380,7 @@ const AdminBookings = () => {
       }
 
       toast.success(`Payment method changed to ${paymentMethod.toUpperCase()}!`);
-      fetchBookings();
+      setBookings((prev) => prev.map((b) => b.id === id ? { ...b, payment_method: paymentMethod } : b));
     } catch (err) {
       toast.error(err.message || "Failed to update payment method.");
     }
@@ -404,7 +404,7 @@ const AdminBookings = () => {
       }
 
       toast.success("Booking deleted successfully!");
-      fetchBookings();
+      setBookings((prev) => prev.filter((b) => b.id !== id));
     } catch (err) {
       toast.error(err.message || "Failed to delete booking.");
     }
@@ -953,3 +953,4 @@ const AdminBookings = () => {
 };
 
 export default AdminBookings;
+

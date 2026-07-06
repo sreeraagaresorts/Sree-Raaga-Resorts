@@ -377,7 +377,7 @@ export default function AdminDiscounts() {
       const data = await res.json();
       if (data.success) {
         showToast(isEdit ? "Coupon updated!" : "Coupon created!");
-        fetchCoupons();
+        fetchCoupons(true);
       } else {
         throw new Error(data.message);
       }
@@ -605,3 +605,5 @@ export default function AdminDiscounts() {
     </div>
   );
 }
+
+
