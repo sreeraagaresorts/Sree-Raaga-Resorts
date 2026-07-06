@@ -119,6 +119,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
   const [totalRooms, setTotalRooms] = useState("1");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [gstPercentage, setGstPercentage] = useState("12");
   const [category, setCategory] = useState("Executive Rooms");
   const [area, setArea] = useState("");
   const [beds, setBeds] = useState("");
@@ -183,6 +184,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
     setTotalRooms("1");
     setName("");
     setPrice("");
+    setGstPercentage("12");
     setCategory(roomCategories.length > 0 ? roomCategories[0].name : "Villas");
     setArea("");
     setBeds("");
@@ -203,6 +205,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
     setTotalRooms(room.totalRooms || "1");
     setName(room.name);
     setPrice(room.price);
+    setGstPercentage(room.gst_percentage || "12");
     setCategory(room.category || "Executive Rooms");
     setArea(room.area);
     setBeds(room.beds);
@@ -290,6 +293,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
       formData.append("totalRooms", totalRooms);
       formData.append("name", name);
       formData.append("price", price);
+      formData.append("gst_percentage", gstPercentage);
       formData.append("category", category);
       formData.append("area", area);
       formData.append("beds", beds);
@@ -609,18 +613,21 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
                   />
                 </div>
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Price (₹ / night)
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    placeholder="e.g. 8000"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+                      Price 
+                    </label>
+                    <input
+                      required
+                      type="number"
+                      placeholder="e.g. 8000"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
+                    />
+                  </div>
+                
                 </div>
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
@@ -686,6 +693,19 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     ))}
                   </select>
                 </div>
+                  <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+                      GST (%)
+                    </label>
+                    <input
+                      required
+                      type="number"
+                      placeholder="e.g. 12"
+                      value={gstPercentage}
+                      onChange={(e) => setGstPercentage(e.target.value)}
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
+                    />
+                  </div>
               </div>
 
               <div>

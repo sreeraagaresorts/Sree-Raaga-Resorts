@@ -20,6 +20,7 @@ import {
   MessageSquare,
   ShoppingBag,
   ChevronDown,
+  Ticket,
 } from "lucide-react";
 
 const navItems = [
@@ -30,8 +31,9 @@ const navItems = [
   { name: "Guests", path: "/admin/users", icon: Users },
   { name: "Manage Hotel", path: "/admin/hotel-mgmt", icon: CalendarDays },
   { name: "Restaurant Menu", path: "/admin/menu", icon: UtensilsCrossed },
-  { name: "Enquiries", path: "/admin/enquiries", icon: MessageSquare },
-  { name: "Settings", path: "/admin/settings", icon: Settings },
+  { name: "Enquiries",         path: "/admin/enquiries",  icon: MessageSquare },
+  { name: "Discounts & Coupons",path: "/admin/discounts",  icon: Ticket },
+  { name: "Settings",           path: "/admin/settings",  icon: Settings },
 ];
 
 const  AdminLayout=()=> {

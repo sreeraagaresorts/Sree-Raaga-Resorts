@@ -243,7 +243,7 @@ const Amenities = () => {
         </section>
 
         {/* ================= 2. WATER SPORTS DESCRIPTION SECTION ================= */}
-        <section className="py-24 px-6 bg-[] text-center">
+        <section className="md:py-24 py-18 px-6 bg-[] text-center">
           <div className="max-w-3xl mx-auto space-y-6">
             <div className="text-[#c8a64d] flex justify-center">
               <WaterSportsIcon className="w-12 h-12" />
@@ -269,16 +269,16 @@ const Amenities = () => {
           </div>
         </section>
 
-        {/* ================= 3. ALTERNATING AMENITIES SECTION ================= */}
-        <section className="py-24 px-6 bg-[#fdfeff]">
+  {/* ================= 3. ALTERNATING AMENITIES SECTION ================= */}
+        <section className="md:py-24 py-18 px-6 bg-[#fdfeff]">
           <div className="max-w-7xl mx-auto space-y-28">
             
-            {/* ITEM 01: Restaurant & Bar */}
+            {/* ITEM 01: Swimming Pool */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800" 
-                  alt="Restaurant & Bar"
+                  src="https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=800" 
+                  alt="Swimming Pool"
                   className="h-full w-full"
                 />
               </div>
@@ -287,10 +287,10 @@ const Amenities = () => {
                   01
                 </span>
                 <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
-                  Restaurant & Bar
+                  Swimming Pool
                 </h3>
                 <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
-                  An integral part of relax and perfect experience of your stay is exceptional gastronomy. Chefs' team prepares daily delicious meals from domestic and international cuisine with love for you.
+                  Dive into relaxation with our crystal-clear swimming pool. Perfect for a refreshing morning swim or lounging by the water with your favorite drink while soaking up the sun.
                 </p>
                 <div className="pt-4">
                      <Link
@@ -304,12 +304,12 @@ const Amenities = () => {
               </div>
             </div>
 
-            {/* ITEM 02: Spa & Wellness */}
+            {/* ITEM 02: Childrens Play Area */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 lg:order-2 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=800" 
-                  alt="Spa & Wellness"
+                  src="./play.jpg" 
+                  alt="Childrens Play Area"
                   className="h-full w-full"
                 />
               </div>
@@ -318,10 +318,10 @@ const Amenities = () => {
                   02
                 </span>
                 <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
-                  Spa & Wellness
+                  Childrens Play Area
                 </h3>
                 <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
-                  Indulge in absolute relaxation. Rejuvenate your mind, body, and soul with our curated therapies, healing massages, and organic spa treatments administered by expert therapists.
+                  A safe, vibrant, and engaging space for your little ones to explore, play, and make new friends. Equipped with modern structures to keep kids entertained for hours.
                 </p>
                 <div className="pt-4">
                 <Link
@@ -335,12 +335,12 @@ const Amenities = () => {
               </div>
             </div>
 
-            {/* ITEM 03: Fitness Center */}
+            {/* ITEM 03: Adventures Activity */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800" 
-                  alt="Fitness Center"
+                  src="./adv1.jpg" 
+                  alt="Adventures Activity"
                   className="h-full w-full"
                 />
               </div>
@@ -349,10 +349,134 @@ const Amenities = () => {
                   03
                 </span>
                 <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
-                  Fitness Center
+                  Adventures Activity
                 </h3>
-                <p className="text-[#2d5b8a] font-jost font-mediumBook Your Stay Now text-sm md:text-[17px] leading-relaxed">
-                  Keep up with your fitness regime. Our state-of-the-art gym is equipped with premium cardio machines, strength training equipment, and free weights for a complete workout.
+                <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
+                  Take part in exciting indoor and outdoor activities designed for fun, recreation, and memorable experiences for guests of all ages. Get your adrenaline pumping!
+                </p>
+                <div className="pt-4">
+                   <Link
+                   to="/about"
+                   className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                 >
+                   <span>—</span>
+                   Discover More
+                 </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* ITEM 04: Indoor Games */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+              <div className="lg:col-span-6 lg:order-2 h-[350px] lg:h-[500px]">
+                <WindowReveal 
+                  src="./indoor.jpg" 
+                  alt="Indoor Games"
+                  className="h-full w-full"
+                />
+              </div>
+              <div className="lg:col-span-6 lg:order-1 space-y-6">
+                <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
+                  04
+                </span>
+                <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
+                  Indoor Games
+                </h3>
+                <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
+                  Challenge your friends and family to a friendly match. Our dedicated games room features table tennis, billiards, carrom, and a variety of interactive board games.
+                </p>
+                <div className="pt-4">
+                <Link
+                   to="/about"
+                   className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                 >
+                   <span>—</span>
+                   Discover More
+                 </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* ITEM 05: Rain Dance */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+              <div className="lg:col-span-6 h-[350px] lg:h-[500px]">
+                <WindowReveal 
+                  src="./rain.jpg" 
+                  alt="Rain Dance"
+                  className="h-full w-full"
+                />
+              </div>
+              <div className="lg:col-span-6 space-y-6">
+                <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
+                  05
+                </span>
+                <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
+                  Rain Dance
+                </h3>
+                <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
+                  Let loose and groove to the music under the showers! Our rain dance arena is the ultimate spot to cool off, dance, and create joyful memories with your loved ones.
+                </p>
+                <div className="pt-4">
+                   <Link
+                   to="/about"
+                   className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                 >
+                   <span>—</span>
+                   Discover More
+                 </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* ITEM 06: Outdoor Recreation */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+              <div className="lg:col-span-6 lg:order-2 h-[350px] lg:h-[500px]">
+                <WindowReveal 
+                  src="./outdoor.jpg" 
+                  alt="Outdoor Recreation"
+                  className="h-full w-full"
+                />
+              </div>
+              <div className="lg:col-span-6 lg:order-1 space-y-6">
+                <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
+                  06
+                </span>
+                <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
+                  Outdoor Recreation
+                </h3>
+                <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
+                  Reconnect with nature and stay active. Enjoy our diverse outdoor recreation options, including volleyball courts, badminton, and scenic walking trails around the property.
+                </p>
+                <div className="pt-4">
+                <Link
+                   to="/about"
+                   className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+                 >
+                   <span>—</span>
+                   Discover More
+                 </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* ITEM 07: Open Green Space */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+              <div className="lg:col-span-6 h-[350px] lg:h-[500px]">
+                <WindowReveal 
+                  src="./green.jpg" 
+                  alt="Open Green Space"
+                  className="h-full w-full"
+                />
+              </div>
+              <div className="lg:col-span-6 space-y-6">
+                <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
+                  07
+                </span>
+                <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
+                  Open Green Space
+                </h3>
+                <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
+                  Breathe in the fresh air and unwind in our expansive manicured lawns. The perfect serene setting for a morning yoga session, a quiet picnic, or a peaceful evening stroll.
                 </p>
                 <div className="pt-4">
                    <Link

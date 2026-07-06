@@ -1041,34 +1041,34 @@ return (
    <section className="bg-white">
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
     {[
-      {
-        title: "Restaurant & Bar",
-        image:
-          "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200",
-        description:
-          "Enjoy gourmet dining, refreshing beverages, and a relaxing atmosphere with exceptional hospitality.",
-      },
-      {
-        title: "Spa & Wellness",
-        image:
-          "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1200",
-        description:
-          "Relax your mind and body with rejuvenating spa therapies, massages, and wellness experiences.",
-      },
-      {
-        title: "Fitness Center",
-        image:
-          "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200",
-        description:
-          "Stay active during your stay with modern fitness equipment and a comfortable workout environment.",
-      },
-      {
-        title: "Coffee Shop",
-        image:
-          "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200",
-        description:
-          "Savor freshly brewed coffee, delicious snacks, and cozy moments in our elegant coffee shop.",
-      },
+     {
+  title: "Swimming Pool",
+  image:
+    "https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=1200",
+  description:
+    "Enjoy our refreshing swimming pool, perfect for relaxation, leisure, and a rejuvenating experience.",
+},
+{
+  title: "Activities",
+  image:
+    "./adv1.jpg",
+  description:
+    "Take part in exciting indoor and outdoor activities designed for fun, recreation, and memorable experiences for guests of all ages.",
+},
+{
+  title: "Indoor Games",
+  image:
+    "./indoor.jpg",
+  description:
+    "Enjoy a variety of indoor games including table tennis, carrom, chess, and more for hours of entertainment.",
+},
+{
+  title: "Play Area",
+  image:
+    "./play.jpg",
+  description:
+    "A safe and exciting play area where children can have fun, explore, and create unforgettable memories.",
+},
     ].map((exp, index) => (
       <div
         key={index}
@@ -1098,26 +1098,33 @@ return (
             {exp.description}
           </p>
 
-          <button
-            className="
-              px-12 py-4
-              border border-white
-              uppercase
-              tracking-widest
-              text-sm
-              font-semibold
-              opacity-0
-              translate-y-4
-              group-hover:opacity-100
-              group-hover:translate-y-0
-              hover:bg-white
-              hover:text-black
-              transition-all
-              duration-500
-            "
-          >
-            Discover More
-          </button>
+        <button
+  className="
+    block
+    w-full sm:w-auto
+    px-12 py-4
+    border border-white
+    uppercase
+    tracking-widest
+    text-sm
+    font-semibold
+
+    opacity-100
+    translate-y-0
+
+    md:opacity-0
+    md:translate-y-4
+    md:group-hover:opacity-100
+    md:group-hover:translate-y-0
+
+    hover:bg-white
+    hover:text-black
+    transition-all
+    duration-500
+  "
+>
+  Discover More
+</button>
         </div>
       </div>
     ))}

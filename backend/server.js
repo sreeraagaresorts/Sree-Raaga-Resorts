@@ -71,6 +71,7 @@ app.use("/api/dishes", require("./routes/dishRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/categories", require("./routes/categoryRoutes"));
 app.use("/api/room-categories", require("./routes/roomCategoryRoutes"));
+app.use("/api/coupons", require("./routes/couponRoutes"));
 
 // Add your remaining routes here
 

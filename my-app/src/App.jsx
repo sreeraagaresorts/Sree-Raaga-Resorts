@@ -60,6 +60,7 @@ import AdminBilling from "./admin/AdminBilling";
 import AdminSettings from "./admin/AdminSettings";
 import AdminContent from "./admin/AdminContent";
 import AdminEnquiries from "./admin/AdminEnquiries";
+import AdminDiscounts from "./admin/AdminDiscounts";
 
 const App = () => {
   return (
@@ -146,7 +147,8 @@ const App = () => {
         <Route path="users" element={<AdminUsers />} />
         <Route path="billing" element={<AdminBilling />} />
         <Route path="settings" element={<AdminSettings />} />
-        <Route path="content" element={<AdminContent />} />
+        <Route path="content"  element={<AdminContent />} />
+        <Route path="discounts" element={<AdminDiscounts />} />
       </Route>
       
       {/* CATCH ALL 404 */}

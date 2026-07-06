@@ -122,7 +122,7 @@ const Footer = () => {
         </motion.button>
       </div>
 
-      <div className="max-w-[180vh] mx-auto px-6 pt-44 pb-22">
+      <div className="max-w-[180vh] mx-auto px-6 py-12 md:py-0 md:pt-44 md:pb-22">
         
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">

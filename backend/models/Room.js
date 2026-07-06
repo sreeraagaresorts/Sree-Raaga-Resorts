@@ -6,6 +6,7 @@ const roomSchema = new mongoose.Schema({
   roomNumber: { type: String, required: true },
   name: { type: String, required: true },
   price: { type: Number, required: true },
+  gst_percentage: { type: Number, default: 12 },
   image: { type: String },
   images: { type: [String], default: [] },
   category: { type: String, default: "Executive Rooms" },

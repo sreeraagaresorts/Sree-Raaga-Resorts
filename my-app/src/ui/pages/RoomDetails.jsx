@@ -13,7 +13,9 @@ import {
   ShieldAlert,
   Calendar,
   Lock,
-  Wind
+  Wind,
+  X,
+  Tag
 } from "lucide-react";
 import Navbar from "../components/RoomNav";
 import Footer from "../components/Footer";
@@ -137,8 +139,61 @@ const RoomDetails = () => {
   const [isChildrenOpen, setIsChildrenOpen] = useState(false);
   const [isPaymentMethodOpen, setIsPaymentMethodOpen] = useState(false);
 
+  // Dynamic Labeling for Villas vs Rooms
+  const isVilla = room?.category?.toLowerCase().includes("villa") || false;
+  const unitLabelSingle = isVilla ? "Villa" : "Room";
+  const unitLabelPlural = isVilla ? "Villas" : "Rooms";
+
   // Slider State
   const [galleryIndex, setGalleryIndex] = useState(0);
+
+  // Coupon State
+  const [coupons, setCoupons] = useState([]);
+  const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+
+  useEffect(() => {
+    if (!room) return;
+    const fetchCoupons = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/coupons`);
+        const data = await res.json();
+        if (data.success) {
+          const now = new Date();
+          const target = isVilla ? "VILLAS" : "ROOMS";
+
+          const valid = data.data.filter(c => 
+            c.status === "active" && 
+            new Date(c.expiry_date) >= now &&
+            (c.target_service === "ALL" || c.target_service === target) &&
+            (!c.max_cap || c.used_count < c.total_uses)
+          );
+          setCoupons(valid);
+        }
+      } catch (err) {}
+    };
+    fetchCoupons();
+  }, [room]);
+
+  const handleApplyCoupon = (codeOverride) => {
+    const code = (typeof codeOverride === 'string' ? codeOverride : couponInput).trim().toUpperCase();
+    if (!code) return;
+    const coupon = coupons.find(c => c.code === code);
+    if (!coupon) {
+      toast.error("Invalid or expired coupon code.");
+      return;
+    }
+    setAppliedCoupon(coupon);
+    setIsCouponModalOpen(false);
+    setCouponInput("");
+    toast.success(`Coupon ${code} applied successfully!`);
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    toast.success("Coupon removed.");
+  };
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -273,11 +328,32 @@ const RoomDetails = () => {
       services += 1200 * totalGuests * (nights > 0 ? nights : 1);
     }
 
+    let subtotalWithServices = subtotal + services;
+    let discount = 0;
+    
+    if (appliedCoupon) {
+      if (appliedCoupon.discount_type === "percentage") {
+        discount = (subtotalWithServices * appliedCoupon.discount_value) / 100;
+        if (appliedCoupon.max_cap && discount > appliedCoupon.max_cap) {
+          discount = appliedCoupon.max_cap;
+        }
+      } else {
+        discount = appliedCoupon.discount_value;
+      }
+    }
+
+    let gst = 0;
+    const gstRate = room.gst_percentage !== undefined ? room.gst_percentage : 12;
+    const taxableAmount = Math.max(0, subtotalWithServices - discount);
+    gst = (taxableAmount * gstRate) / 100;
+
     return {
       nights,
       subtotal,
       services,
-      total: subtotal + services
+      discount,
+      gst,
+      total: Math.max(0, taxableAmount + gst)
     };
   };
 
@@ -818,7 +894,7 @@ const RoomDetails = () => {
                       className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
                     >
                       <span className="font-medium text-[#0d2b4e]">
-                        {rooms} {rooms === 1 ? "Room" : "Rooms"}
+                        {rooms} {rooms === 1 ? unitLabelSingle : unitLabelPlural}
                       </span>
                       <ChevronDown
                         size={16}
@@ -829,7 +905,7 @@ const RoomDetails = () => {
                     {isRoomsOpen && (
                       <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-sm">Rooms</span>
+                          <span className="font-semibold text-sm">{unitLabelPlural}</span>
                           <div className="flex items-center gap-6">
                             <button
                               type="button"
@@ -1011,19 +1087,83 @@ const RoomDetails = () => {
                       )}
                     </div> */}
                   </div>
-
-                  {/* Price Calculation details */}
-                  <div className="border-t border-gray-200/60 pt-5 space-y-2 select-none">
-                    <div className="flex justify-between items-end pt-2">
-                      <span className="text-[17px] font-semibold text-[#0d2b4e]">Total Cost</span>
-                      <span className="text-4xl font-bold text-[#c8a64d]">₹{totals.total.toLocaleString()}</span>
+     {/* Add Coupon Button */}
+                      {!appliedCoupon && (
+                        <div className="flex justify-between items-start pt-2">
+                          <span className="text-gray-800">Coupon Code</span>
+                          <button type="button" onClick={() => setIsCouponModalOpen(true)} className="text-[15px] font-bold text-[#800000] underline underline-offset-2 decoration-[1.5px] hover:text-red-900 transition cursor-pointer">
+                            Add Coupon
+                          </button>
+                        </div>
+                      )}
+                        {/* Applied Coupon Details */}
+                      {appliedCoupon && (
+                        <div className="flex justify-between items-start border border-black/20 px-3 py-2 rounded-xl">
+                          <div>
+                            <div className="text-gray-800 flex text-[14px] items-center gap-2">
+                              Coupon Discounts
+                            
+                            </div>
+                            <div className="text-emerald-600 text-[12px] font-bold mt-1 uppercase tracking-wide">Discount '{appliedCoupon.code}'</div>
+                          </div>
+                         <button type="button" onClick={removeCoupon} className="text-[14px] font-bold text-red-400 hover:text-red-600 transition cursor-pointer uppercase tracking-wider bg-red-50 px-2 py-0.5 rounded">
+                                Remove
+                              </button>
+                        </div>
+                      )}
+ <div className="border-t border-[#eeeadd] mt-6 pt-5">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="text-[17px] font-semibold text-[#3d2c23]">Price</div>
+                 
+                        </div>
+                         <div className="text-[#c8a64d] font-bold text-[25px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                      </div>
                     </div>
-                    {totals.nights > 0 && (
-                      <span className="text-yellow-500 text-[14px] font-semibold uppercase tracking-wider block text-right">
-                        For {totals.nights} Nights Stay
-                      </span>
-                    )}
-                    {checkingAvailability ? (
+                                 {/* Price Details */}
+                  <div className="bg-[#fcfbf9] rounded-2xl  mt-6 select-none shadow-sm border border-gray-100">
+                    <h3 className="text-[20px] font-bold font-corm text-[#3d2c23] mb-6">Price Details</h3>
+                    <div className="space-y-3 text-[15px]">
+                      
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="text-gray-800 text=[14px]">Base Price</div>
+                          <div className="text-[#a89082] text-[12px] font-semibold ">For {totals.nights > 0 ? totals.nights : 1} Night{totals.nights > 1 ? 's' : ''}</div>
+                        </div>
+                        <div className="text-gray-800 font-medium text-[14px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                      </div>
+                      
+                 
+                      {/* Applied Coupon Details */}
+                      {appliedCoupon && (
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <div className="text-gray-800 flex text-[14px] items-center gap-2">
+                              Coupon Discounts
+                            
+                            </div>
+                            <div className="text-emerald-600 text-[12px] font-bold mt-1 uppercase tracking-wide">Discount '{appliedCoupon.code}'</div>
+                          </div>
+                          <div className="text-emerald-600 font-bold text-[14px]">- ₹ {totals.discount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                        </div>
+                      )}
+
+                      <div className="flex justify-between items-start pt-1">
+                        <div className="text-gray-800 text-[14px]">GST</div>
+                        <div className="text-gray-800 text-[14px] font-medium">₹ {totals.gst.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-[#eeeadd] mt-6 pt-5">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="text-[16px] font-semibold text-[#3d2c23]">Total Amount</div>
+                          <div className="text-gray-500 text-[12px] mt-1 font-medium">Including Tax </div>
+                        </div>
+                        <div className="text-[22px] font-bold text-[#3d2c23]">₹{totals.total.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                      </div>
+                    </div>
+                  </div>                   {checkingAvailability ? (
                       <span className="text-gray-400 text-xs block text-right">Checking availability...</span>
                     ) : availability ? (
                       availability.available && availability.remainingRooms >= rooms ? (
@@ -1044,19 +1184,22 @@ const RoomDetails = () => {
                       Administrators cannot book rooms in the user interface.
                     </div>
                   ) : (
-                    <button
-                      onClick={handleBooking}
-                      disabled={bookingLoading || (availability && (availability.available === false || rooms > availability.remainingRooms))}
-                      className="w-full mt-4 py-5 bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-[17px] shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
-                    >
-                      {bookingLoading ? "Processing..." : availability && (availability.available === false || rooms > availability.remainingRooms) ? "BOOKING FULL" : `BOOK YOUR STAY NOW`}
-                    </button>
+                    <>
+                      <button
+                        onClick={handleBooking}
+                        disabled={bookingLoading || (availability && (availability.available === false || rooms > availability.remainingRooms))}
+                        className="w-full mt-4 py-5 bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-[17px] shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
+                      >
+                        {bookingLoading ? "Processing..." : availability && (availability.available === false || rooms > availability.remainingRooms) ? "BOOKING FULL" : `BOOK YOUR STAY NOW`}
+                      </button>
+                      <p className="text-center text-[12px] text-gray-500 mt-[-30px] select-none font-jost">
+                        By proceeding you agree to our <Link to="/privacy-policy" className="underline hover:text-[#0d2b4e] transition">Privacy Policy</Link> and <Link to="/terms-conditions" className="underline hover:text-[#0d2b4e] transition">T&C</Link>.
+                      </p>
+                    </>
                   )}
 
                 </div>
               </div>
-            </div>
-
           </div>
         </section>
 
@@ -1151,6 +1294,75 @@ const RoomDetails = () => {
 
       </div>
       <Footer />
+
+      {/* Coupon Modal */}
+      {isCouponModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 font-jost">
+          <div className="bg-[#faf9f7] w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            {/* Header */}
+            <div className="flex justify-between items-center px-8 py-6 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-[#3d2c23] font-corm">Discount Coupons</h2>
+              <button onClick={() => setIsCouponModalOpen(false)} className="text-gray-400 hover:text-red-500 transition cursor-pointer">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="p-8 overflow-y-auto">
+              {/* Input */}
+              <div className="relative mb-8">
+                <input 
+                  type="text" 
+                  placeholder="Enter Coupon Code" 
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value)}
+                  className="w-full border border-gray-300 rounded-xl px-5 py-4 pr-24 text-[#3d2c23] placeholder:text-gray-400 outline-none focus:border-[#c8a64d] transition bg-white font-medium shadow-sm"
+                />
+                <button 
+                  onClick={handleApplyCoupon}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-[15px] font-bold text-gray-500 hover:text-[#3d2c23] transition cursor-pointer"
+                >
+                  Apply
+                </button>
+              </div>
+
+              {/* Coupons List */}
+              <div className="space-y-4">
+                <p className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-3">Best Offers</p>
+                {coupons.length === 0 ? (
+                  <p className="text-sm text-gray-400 text-center py-6">No active coupons available at the moment.</p>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {coupons.map((c) => (
+                      <div key={c._id || c.code} className="bg-[#f2f1ef] border border-gray-200 rounded-2xl p-5 hover:border-gray-300 transition group flex flex-col justify-between">
+                        <div>
+                          <div className="flex justify-between items-center mb-3">
+                            <div className="flex items-center gap-2 border border-blue-100 bg-white px-2.5 py-1 rounded-sm shadow-sm">
+                              <span className="font-extrabold text-[#0d2b4e] text-sm tracking-wide">{c.code}</span>
+                            </div>
+                            <button onClick={() => handleApplyCoupon(c.code)} className="text-sm font-bold text-gray-500 group-hover:text-[#3d2c23] transition cursor-pointer">
+                              Apply
+                            </button>
+                          </div>
+                          <p className="text-[13px] font-bold text-[#c8a64d] mb-1.5 leading-tight">
+                            {c.discount_type === 'percentage' ? `Get ${c.discount_value}% OFF` : `Get ₹${c.discount_value} OFF`}
+                            {c.max_cap ? ` up to ₹${c.max_cap}` : ''}
+                          </p>
+                          <p className="text-xs text-gray-600 leading-snug">
+                            {c.description || `Valid for ${c.target_service === 'ALL' ? 'all bookings' : 'rooms'}.`}
+                          </p>
+                        </div>
+                        <div className="mt-4 pt-3 border-t border-gray-200/60">
+                          <p className="text-[10px] text-gray-400">Book and save with code {c.code}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
