@@ -428,7 +428,7 @@ const AdminBookings = () => {
       <div className="flex flex-col sm:flex-row justify-between gap-4 border-b border-white/5 pb-6">
         <div>
           <h1 className="text-2xl font-bold">Bookings Manager</h1>
-          <p className="text-white text-sm">
+          <p className="text-white/50 text-sm">
             Manage reservations and guest stays
           </p>
         </div>

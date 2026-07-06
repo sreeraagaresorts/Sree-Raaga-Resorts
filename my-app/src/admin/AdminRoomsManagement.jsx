@@ -320,8 +320,8 @@ const AdminRoomsManagement = () => {
       <div className="flex flex-col sm:flex-row justify-between gap-4 border-b border-white/5 pb-6">
         <div>
           <h1 className="text-2xl font-bold">Rooms Management</h1>
-          <p className="text-white text-sm">
-            {/* Live status grid of all resort rooms and suites */}
+          <p className="text-white/50 text-sm">
+           Manage room details, availability, pricing, and booking status.
           </p>
         </div>
 

@@ -880,7 +880,7 @@ const RoomDetails = () => {
             >
               {bookingLoading ? "Processing..." : availability && (availability.available === false || rooms > availability.remainingRooms) ? "BOOKING FULL" : `BOOK YOUR STAY NOW`}
             </button>
-            <p className="text-center text-[12px] text-gray-500 mt-[-10px] select-none font-jost">
+            <p className="text-center text-[12px] text-gray-500 mt-[-4px] select-none font-jost">
               By proceeding you agree to our <Link to="/privacy-policy" className="underline hover:text-[#0d2b4e] transition">Privacy Policy</Link> and <Link to="/terms-conditions" className="underline hover:text-[#0d2b4e] transition">T&C</Link>.
             </p>
           </>
