@@ -385,11 +385,11 @@ const Rooms = () => {
                                 <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block uppercase">
                                   {room.category}
                                 </span>
-                                {room.availableRooms === 0 && (
+                                {/* {room.availableRooms === 0 && (
                                   <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
                                     Sold Out
                                   </span>
-                                )}
+                                )} */}
                               </div>
                             )}
                           </div>
