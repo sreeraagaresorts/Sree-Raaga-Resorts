@@ -435,7 +435,7 @@ const AdminBookings = () => {
 
         <button
           onClick={handleOpenForm}
-          className="bg-[#C8A64D] text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
+          className="bg-[#C8A64D] text-black px-3 py-0.5 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
         >
           <Plus size={16} /> New Booking
         </button>

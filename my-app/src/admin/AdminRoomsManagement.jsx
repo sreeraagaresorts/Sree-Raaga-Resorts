@@ -329,15 +329,15 @@ const AdminRoomsManagement = () => {
         
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-[#C8A64D] text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition text-sm"
+            className="bg-[#C8A64D] text-black px-6 py-3 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
           >
             <Plus size={16} /> Add Room
           </button>
           <Link
             to="/admin/bookings"
-            className="bg-[#C8A64D] text-black px-4 py-3 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
+            className="bg-[#C8A64D] text-black px-6 py-3 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
           >
-            <Plus size={16} /> New Booking
+          Booking
           </Link>
         </div>
       </div>

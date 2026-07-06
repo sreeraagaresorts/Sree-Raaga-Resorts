@@ -478,7 +478,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
           </p>
 
           <div className="text-[14px] text-white/80 font-medium">
-            Number of Rooms: <span className="text-[#C8A64D] font-bold">{room.totalRooms}</span>
+            Number of Units: <span className="text-[#C8A64D] font-bold">{room.totalRooms}</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[14px] text-white border-t border-white/10 pt-3">
@@ -590,7 +590,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                 </div>
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Number of Rooms
+                    Number of Units
                   </label>
                   <input
                     required

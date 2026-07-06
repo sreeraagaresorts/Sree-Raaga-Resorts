@@ -349,7 +349,7 @@ const Rooms = () => {
                           
                           {/* Hover centered circular gold button */}
                           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
-                            <span className="text-sm font-semibold  tracking-[3px]">{room.availableRooms === 0 ? "SOLD OUT" : "BOOK NOW"}</span>
+                            <span className="text-sm font-semibold  tracking-[3px]">BOOK NOW</span>
                           </div>
 
                           <img
@@ -435,12 +435,12 @@ const Rooms = () => {
                             className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d]  text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
                           >
                             <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
-                              {room.availableRooms === 0 ? "Sold Out" : "Book now"}
+                              Book now
                             </span>
                             <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
                           </Link>
                         </div>
-                      </div>
+                      </div>  
                     </motion.div>
                   ))}
                 </div>
@@ -478,7 +478,7 @@ const Rooms = () => {
                           
                           {/* Hover centered circular gold button */}
                           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-white/20 bg-[#c8a64d]/85 hover:bg-[#c8a64d] text-white flex items-center justify-center scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 z-20 backdrop-blur-sm select-none">
-                            <span className="text-sm font-semibold  tracking-[3px]">{room.availableRooms === 0 ? "SOLD OUT" : "BOOK NOW"}</span>
+                            <span className="text-sm font-semibold  tracking-[3px]">BOOK NOW</span>
                           </div>
 
                           <img
@@ -564,7 +564,7 @@ const Rooms = () => {
                             className="inline-flex items-center text-[#0d2b4e] hover:text-[#c8a64d]  text-sm font-bold uppercase tracking-[2px] transition-colors group/btn"
                           >
                             <span className="mr-2 border-b border-transparent group-hover/btn:border-[#c8a64d] pb-0.5">
-                              {room.availableRooms === 0 ? "Sold Out" : "Book now"}
+                              Book now
                             </span>
                             <ArrowRight className="w-5 h-5 transform group-hover/btn:translate-x-1 transition-transform" />
                           </Link>
