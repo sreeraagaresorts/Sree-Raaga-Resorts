@@ -299,11 +299,11 @@ const Rooms = () => {
         </section>
 
         {/* ================= MAIN ROOMS SECTION ================= */}
-        <section className="py-24 max-w-7xl mx-auto px-6">
+        <section className="py-24 max-w-7xl mx-auto md:px-6">
           
           {/* Header Introduction */}
           <div className="row justify-center text-center mb-20 select-none">
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-2xl mx-auto px-6 md:px-0">
               <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-[12px]  font-semibold ">
                 Our Accommodations
               </span>
@@ -322,7 +322,7 @@ const Rooms = () => {
             {villasRooms.length > 0 && (
               <div>
                 <div className="border-b border-[#0d2b4e]/10 pb-4 mb-12 select-none">
-                  <h3 className="text-3xl font-medium font-corm text-[#0d2b4e] tracking-wider uppercase">Villas</h3>
+                  <h3 className="text-3xl font-medium font-corm text-[#0d2b4e] tracking-wider uppercase px-6 md:px-0">Villas</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-24">
                   {villasRooms.map((room, idx) => (
@@ -374,7 +374,7 @@ const Rooms = () => {
                       </div>
 
                       {/* Room Metadata */}
-                      <div className="flex flex-col flex-grow select-none">
+                      <div className="flex flex-col flex-grow select-none px-6 md:px-0">
                         <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                           <div>
                             <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
@@ -451,7 +451,7 @@ const Rooms = () => {
             {roomsRooms.length > 0 && (
               <div>
                 <div className="border-b border-[#0d2b4e]/10 pb-4 mb-12 select-none">
-                  <h3 className="text-3xl font-medium font-corm text-[#0d2b4e] tracking-wider uppercase">Rooms</h3>
+                  <h3 className="text-3xl font-medium font-corm text-[#0d2b4e] tracking-wider uppercase px-6 md:px-0">Rooms</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-24">
                   {roomsRooms.map((room, idx) => (
@@ -503,7 +503,7 @@ const Rooms = () => {
                       </div>
 
                       {/* Room Metadata */}
-                      <div className="flex flex-col flex-grow select-none">
+                      <div className="flex flex-col flex-grow select-none px-6 md:px-0">
                         <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                           <div>
                             <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
@@ -581,7 +581,7 @@ const Rooms = () => {
         </section>
 
         {/* ================= HOTEL FACILITIES SECTION ================= */}
-        <section className="py-24 px-6 bg-[#fdfeff]">
+        <section className="md:py-24 px-6 bg-[#fdfeff]">
          <div className="max-w-6xl mx-auto text-center mb-16">
           
               <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
@@ -605,7 +605,7 @@ const Rooms = () => {
         />
       </div>
 
-      <span className="text-sm md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+      <span className="text-[16px] md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
         {item.name}
       </span>
     </div>
@@ -613,40 +613,52 @@ const Rooms = () => {
 </div>
         </section>
 
-        {/* ================= FOLLOW US ON INSTAGRAM SECTION ================= */}
-        <section className=" bg-[#fdfeff]">
-          <div className="py-10 text-center mb-16 select-none">
-           <span className="text-[#c8a64d] uppercase tracking-[4px] text-xs font-jost font-semibold block mb-2">Social Media</span>
-            <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
-              Follow us on Instagram
-            </h2>
-          </div>
+     {/* ================= FOLLOW US ON INSTAGRAM ================= */}
+      <section className="bg-[#fdfeff] text-[#0d2b4e]">
+        <div className="py-12 text-center mb-12">
+          <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-jost font-semibold block mb-2">
+            Social Media
+          </span>
+          <h2 className="text-[36px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
+            Follow us on Instagram 
+            {/* <Instagram size={26} className="text-[#c8a64d] mt-2" /> */}
+          </h2>
+        </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 ">
-            {[
-              "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=600",
-              "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
-              "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=600",
-              "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=600",
-              "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=600"
-            ].map((url, idx) => (
-              <div key={idx} className="relative overflow-hidden  aspect-square group cursor-pointer shadow-sm">
-                <div className="absolute inset-0 bg-[#0d2b4e]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white scale-75 group-hover:scale-100 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                  </svg>
-                </div>
-                <img
-                  src={url}
-                  alt={`Instagram Showcase ${idx + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+        {/* 
+          Wrapper Changes: 
+          - Mobile: flex, overflow-x-auto, snap-x (for swiping), hidden scrollbars
+          - Desktop (sm+): switch to grid, remove overflow and snapping 
+        */}
+        <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 overflow-x-auto snap-x snap-mandatory sm:overflow-visible sm:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {[
+            "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=600",
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600",
+            "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
+            "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=600"
+          ].map((img, i) => (
+            <div 
+              key={i} 
+              /* 
+                Item Changes:
+                - Mobile: flex-none, fixed width (75% of screen), snap to center
+                - Desktop (sm+): auto width (fills grid cell), disable snapping
+              */
+              className="flex-none w-[75%] sm:w-auto snap-center sm:snap-align-none relative aspect-square overflow-hidden group shadow-sm"
+            >
+              <img 
+                src={img} 
+                alt={`Instagram Showcase ${i}`} 
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+              />
+              <div className="absolute inset-0 bg-[#0d2b4e]/60 opacity-0 group-hover:opacity-100 transition duration-300 z-10 flex items-center justify-center">
+                {/* <Instagram size={28} className="text-white" /> */}
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
+      </section>
 
       </div>
       <Footer />

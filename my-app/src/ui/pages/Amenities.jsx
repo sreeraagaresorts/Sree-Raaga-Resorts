@@ -762,7 +762,7 @@ const Amenities = () => {
             />
           </div>
     
-          <span className="text-sm md:text-[26px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+          <span className="text-[16px] md:text-[26px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
             {item.name}
           </span>
         </div>
@@ -774,7 +774,7 @@ const Amenities = () => {
                  <span className="uppercase tracking-[3px] text-sm font-semibold font-jost text-[#c8a64d]">
               Sree Raaga Resorts
             </span>
-                  <h2 className="text-3xl md:text-[60px] font-medium font-corm  text-[#0d2b4e] leading-snug">
+                  <h2 className="text-3xl md:text-[60px] font-medium font-corm px-2 text-[#0d2b4e] leading-snug">
                     Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
                   </h2>
                 </div>
@@ -813,7 +813,7 @@ const Amenities = () => {
                         <div
                           key={key}
                           onClick={() => handleTabClick(key)}
-                          className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
+                          className="cursor-pointer group flex flex-col items-start justify-center px-4 md:px-0 transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
                         >
                          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                             isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-[100px] opacity-30 "

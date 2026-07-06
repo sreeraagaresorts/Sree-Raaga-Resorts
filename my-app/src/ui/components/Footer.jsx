@@ -111,7 +111,7 @@ const Footer = () => {
     <footer className="bg-[#011b3c]  relative border-t border-white/5 text-white ">
       
       {/* Scroll Top Button */}
-      <div className="absolute top-0 right-10 -translate-y-1/2">
+      {/* <div className="absolute top-0 right-10 -translate-y-1/2">
         <motion.button
           whileHover={{ scale: 1.1, backgroundColor: "#c8a64d", color: "#030e21", borderColor: "#c8a64d" }}
           whileTap={{ scale: 0.95 }}
@@ -120,7 +120,7 @@ const Footer = () => {
         >
           <ArrowUp size={18} />
         </motion.button>
-      </div>
+      </div> */}
 
       <div className="max-w-[180vh] mx-auto px-6 py-12 md:py-0 md:pt-44 md:pb-22">
         
@@ -129,9 +129,11 @@ const Footer = () => {
 
           {/* About Us Column */}
           <div>
-            <h3 className="text-lg md:text-3xl font-medium font-corm tracking-wide mb-6">
-              About Us
-            </h3>
+      <img
+    src="/logo.png" /* <-- Replace this with your actual logo path */
+    alt="Sree Raaga Resorts"
+    className="h-[55px] mb-5 md:h-20 lg:h-25 w-auto object-contain" 
+  />
             <p className="text-white text-xs md:text-[16px] leading-relaxed max-w-xs">
               Sree Raaga Resorts offers a sanctuary of peace, where luxury meets nature. Escape the city's hustle and enjoy a perfect blend of stays, corporate events, weddings, and family recreation.
             </p>
@@ -139,7 +141,7 @@ const Footer = () => {
 
           {/* Contact Column */}
           <div>
-            <h3 className="text-lg md:text-4xl font-medium font-corm tracking-wide mb-6">
+            <h3 className="text-lg md:text-4xl font-bold font-corm tracking-wide mb-6">
               Contact
             </h3>
             <div className="space-y-4 text-white text-xs md:text-[16px] leading-relaxed">
@@ -177,7 +179,7 @@ const Footer = () => {
 
           {/* Double column Links */}
           <div>
-            <h3 className="text-lg md:text-3xl font-medium font-corm tracking-wide mb-6">
+            <h3 className="text-lg md:text-3xl font-bold font-corm tracking-wide mb-6">
               Links
             </h3>
             
@@ -195,7 +197,7 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/day-out" className="text-whitehover:text-[#c8a64d] transition">
+                  <Link to="/events" className="text-whitehover:text-[#c8a64d] transition">
                     Day Out
                   </Link>
                 </li>
@@ -209,8 +211,8 @@ const Footer = () => {
            <div>
             <ul className="space-y-3">
               <li>
-                  <Link to="/corporate" className="text-whitehover:text-[#c8a64d] transition">
-                    Corporate Outings
+                  <Link to="/events" className="text-whitehover:text-[#c8a64d] transition">
+                    Events
                   </Link>
                 </li>
                 <li>
@@ -234,7 +236,7 @@ const Footer = () => {
 
           {/* Newsletter Column */}
           <div>
-            <h3 className="text-lg md:text-3xl font-medium font-corm tracking-wide mb-6">
+            <h3 className="text-lg md:text-3xl font-bold font-corm tracking-wide mb-6">
               Legal Pages
             </h3>
             <ul className="space-y-3">

@@ -350,7 +350,7 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               {user ? (
                 <Link
-                  to={user.role === "admin" ? "/admin" : "/dashboard/profile"}
+                  to={user.role === "admin" ? "/admin" : "/dashboard"}
                   className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white flex items-center justify-center text-white hover:bg-[#c8a64d] hover:text-black transition duration-300"
                   title={user.full_name}
                 >

@@ -131,7 +131,7 @@ function WaterSportsIcon({ className = "" }) {
         </section>
 
         {/* DYNAMIC UPLOADED EVENTS SECTION */}
-        <section className="py-12 pb-24 px-6 bg-[#fdfeff]">
+        <section className="py-12 pb-24 md:px-6 bg-[#fdfeff]">
           <div className="max-w-7xl mx-auto space-y-12">
             
             {loading ? (
@@ -187,7 +187,7 @@ function WaterSportsIcon({ className = "" }) {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                           />
                           {event.sqft && (
-                            <span className="absolute top-6 left-6 bg-white/95 backdrop-blur-xs text-[#0d2b4e] text-[15px] uppercase tracking-widest font-medium px-6 py-3  border border-[#c8a64d]/30 shadow-xs">
+                            <span className="absolute top-4 left-3 md:top-6 md:left-6 bg-white/95 backdrop-blur-xs text-[#0d2b4e] text-[12px] md:text-[15px] uppercase tracking-widest font-medium md:px-6 md:py-3 px-2 py-1  border border-[#c8a64d]/30 shadow-xs">
                               {event.sqft} SQft
                             </span>
                           )}
@@ -195,7 +195,7 @@ function WaterSportsIcon({ className = "" }) {
                       </div>
 
                       {/* Event Details */}
-                      <div className={`lg:col-span-5 ${isEven ? "lg:offset-1" : ""} flex flex-col justify-center h-full py-2 md:ml-22 text-left`}>
+                      <div className={`lg:col-span-5 ${isEven ? "lg:offset-1" : ""} flex flex-col justify-center h-full py-2 px-5 md:ml-22 text-left`}>
                         <div>
                           <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                             <div>
@@ -250,111 +250,7 @@ function WaterSportsIcon({ className = "" }) {
           </div>
         </section>
 
-        {/* ================= DAY OUT PACKAGES SECTION ================= */}
-        <section className="py-24 bg-[#f7f5ee] px-6 border-t border-gray-100">
-          <div className="max-w-7xl mx-auto">
-            {/* Section Header */}
-            <div className="text-center mb-16 select-none">
-              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-xs font-semibold">
-                Day Outing & Staycation
-              </span>
-              <h2 className="text-4xl md:text-6xl font-medium font-corm text-[#0d2b4e]">
-                Day Out Packages
-              </h2>
-            </div>
 
-            <div className="grid lg:grid-cols-12 gap-12 items-stretch">
-              {/* Left Details Column */}
-              <div className="lg:col-span-7 flex flex-col justify-between space-y-8 bg-white p-8 md:p-12 shadow-sm border border-gray-100 rounded-sm">
-                <div className="text-left">
-                  <h3 className="text-2xl md:text-3xl font-light text-[#0d2b4e] mb-4">
-                    A Premium Day-Out & Staycation Destination Near Bangalore
-                  </h3>
-                  <p className="text-gray-500 text-sm md:text-base leading-relaxed font-light mb-8">
-                    Escape the city's hustle and enjoy a perfect blend of relaxation, adventure, dining, and family entertainment at Sree Raaga Resort. Spend a memorable day with family, friends, colleagues, or corporate teams amidst lush surroundings and exciting recreational activities.
-                  </p>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-8">
-                  {/* Inclusions */}
-                  <div className="text-left">
-                    <h4 className="text-lg font-medium text-[#0d2b4e] mb-4 pb-2 border-b border-[#c8a64d]/20 flex items-center gap-2">
-                      <span className="w-1.5 h-6 bg-[#c8a64d]"></span> Package Includes
-                    </h4>
-                    <ul className="space-y-3">
-                      {[
-                        "Welcome Drink",
-                        "Delicious Veg & Non-Veg Lunch Buffet",
-                        "Evening High Tea",
-                        "Access to Resort Amenities"
-                      ].map((perk, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <div className="w-4 h-4 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
-                            <Check className="w-3 h-3" strokeWidth={3} />
-                          </div>
-                          <span className="text-gray-600 text-xs md:text-sm font-light">{perk}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Activities */}
-                  <div className="text-left">
-                    <h4 className="text-lg font-medium text-[#0d2b4e] mb-4 pb-2 border-b border-[#c8a64d]/20 flex items-center gap-2">
-                      <span className="w-1.5 h-6 bg-[#c8a64d]"></span> Activities Included
-                    </h4>
-                    <ul className="space-y-3">
-                      {[
-                        "Rain Dance",
-                        "Swimming Pool",
-                        "Adventure Activities",
-                        "Indoor Games",
-                        "Outdoor Games",
-                        "Children's Play Area"
-                      ].map((act, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <div className="w-4.5 h-4.5 rounded-full bg-[#c8a64d]/10 flex items-center justify-center text-[#c8a64d] shrink-0 mt-0.5">
-                            <span className="w-1.5 h-1.5 bg-[#c8a64d] rounded-full"></span>
-                          </div>
-                          <span className="text-gray-600 text-xs md:text-sm font-light">{act}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Booking / Pricing Card */}
-              <div className="lg:col-span-5 bg-white border border-[#c8a64d]/30 p-8 md:p-12 shadow-md rounded-sm flex flex-col justify-between relative overflow-hidden text-left">
-                <div className="absolute top-0 right-0 bg-[#c8a64d] text-white text-[10px] uppercase font-bold tracking-[2px] px-4 py-1.5 rounded-bl">
-                  Popular
-                </div>
-                <div>
-                  <div className="w-12 h-12 rounded-full bg-[#c8a64d]/10 flex items-center justify-center text-[#c8a64d] mb-6">
-                    <Ticket className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-2xl font-light text-[#0d2b4e] mb-2 font-corm">
-                    Day Out Package
-                  </h3>
-                  <div className="text-4xl text-[#c8a64d] font-semibold mb-4">
-                    ₹1,800 <span className="text-xs text-gray-400 font-light block sm:inline">+ 18% GST / person</span>
-                  </div>
-                  <p className="text-gray-500 text-xs mb-8">
-                    Perfect day out experience amidst lush surroundings and exciting recreational activities. Spend a memorable day with family, friends, or corporate teams.
-                  </p>
-                </div>
-                <a
-                  href="https://wa.me/918904561155?text=I%20am%20interested%20in%20booking%20a%20Day%20Out%20package%20at%20Sree%20Raaga%20Resorts."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-center w-full py-4 bg-[#f5dec2] hover:bg-[#ebd0b0] text-[#0d2b4e] font-semibold uppercase tracking-[2px] text-xs transition shadow-sm border border-transparent"
-                >
-                  Book Your Day of Fun & Relaxation
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* ================= RESORT FACILITIES SECTION ================= */}
         <section className="py-24 px-6 bg-[#fdfeff] border-t border-gray-100">
@@ -378,7 +274,7 @@ function WaterSportsIcon({ className = "" }) {
                     className="w-20 h-20 px-4 object-contain transition-all duration-300 group-hover:scale-110"
                   />
                 </div>
-                <span className="text-sm md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+                <span className="text-[16px] md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
                   {item.name}
                 </span>
               </div>

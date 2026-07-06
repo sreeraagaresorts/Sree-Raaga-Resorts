@@ -516,7 +516,7 @@ return (
     />
 
     {isRoomsOpen && (
-      <div className="absolute top-[110%] left-0 md:w-64 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-60 font-jost text-left select-none">
+      <div className="absolute top-[110%] left-0 md:w-84 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl py-7 px-3 md:py-8 md:px-4 shadow-2xl z-60 font-jost text-left select-none">
         <div className="flex items-center justify-between">
           <span className="font-semibold text-sm">Rooms</span>
           <div className="flex items-center gap-6">
@@ -548,7 +548,7 @@ return (
   </div>
 
   {/* GUESTS */}
-  <div className="relative w-full md:flex-1 flex items-center gap-3 px-4 py-6 md:py-2 select-none cursor-pointer booking-field"
+  <div className="relative w-full  md:flex-1 flex items-center gap-3 px-4 py-6 md:py-2 select-none cursor-pointer booking-field"
        onClick={() => {
          setIsGuestsOpen(!isGuestsOpen);
          setIsRoomsOpen(false);
@@ -570,7 +570,7 @@ return (
     />
 
     {isGuestsOpen && (
-      <div className="absolute top-[110%] left-0 md:w-64 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none space-y-4">
+      <div className="absolute top-[110%] left-0 md:w-84 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl py-7 px-3 md:py-8 md:px-4 shadow-2xl z-50 font-jost text-left select-none space-y-4">
         {/* Adults */}
         <div className="flex items-center justify-between">
           <span className="font-semibold text-sm">Adults</span>
@@ -747,11 +747,11 @@ return (
     </section>
 
 {/* ================= ROOMS & SUITES SECTION ================= */}
-        <section className="py-16 md:py-24 px-4 md:px-6 bg-[#011b3c] text-white relative overflow-hidden">
+        <section className="py-16 md:py-24 px-0 md:px-6 bg-[#011b3c] text-white relative overflow-hidden">
           <div className="max-w-[180vh] mx-auto w-full">
             
             {/* Header - Updated for mobile stacking (flex-col on small, flex-row on md) */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-0 mb-12 md:mb-16 border-b border-white/10 pb-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-0 mb-12 md:mb-16 border-b border-white/10 pb-6 px-4 md:px-0">
               <div>
                 <span className="text-[#c8a64d] uppercase font-jost tracking-[4px] text-xs md:text-sm font-semibold block mb-2 md:mb-4">
                   Explore
@@ -860,14 +860,14 @@ return (
                     <div
                       key={`${room.id}-${idx}`}
                       style={{ width: `${100 / allSlides.length}%` }}
-                      className="shrink-0 px-2 md:px-4 group"
+                      className="shrink-0 px-0 md:px-4 group"
                     >
                       <Link 
                         to={`/rooms/${room.id}`} 
                         className="block" 
                       >
                         <div>
-                          <div className="relative mb-4 md:mb-6 aspect-[4/3] overflow-hidden group/image rounded-sm md:rounded-none">
+                          <div className="relative mb-4 md:mb-6 aspect-[4/3] overflow-hidden group/image  md:rounded-none">
                             <WindowReveal
                               src={getImageUrl(room.image)}
                               alt={room.name}
@@ -882,11 +882,11 @@ return (
                             </div>
                           </div>
 
-                          <h3 className="text-2xl md:text-3xl font-semibold mb-2 font-jost group-hover:text-[#c8a64d] transition duration-300">
+                          <h3 className="text-2xl md:text-3xl font-semibold mb-2 px-4 md:px-0 font-jost group-hover:text-[#c8a64d] transition duration-300">
                             {room.name}
                           </h3>
 
-                          <div className="flex flex-wrap items-center gap-2 md:gap-3 text-[#D8C8A5] text-[13px] md:text-[16px] font-medium font-jost uppercase tracking-widest mb-4">
+                          <div className="flex flex-wrap items-center gap-2 md:gap-3 px-4 md:px-0 text-[#D8C8A5] text-[13px] md:text-[16px] font-medium font-jost uppercase tracking-widest mb-4">
                             <span>{room.area} SQM</span>
                             <span>•</span>
                             <span>{room.beds}</span>
@@ -928,7 +928,7 @@ return (
         {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
         <section className="pt-24  bg-[#fdfeff] text-[#0d2b4e]">
           <div className="">
-               <div className="max-w-6xl mx-auto text-center mb-16">
+               <div className="max-w-6xl mx-auto text-center ">
           
               <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
                 Resort Facilities
@@ -951,7 +951,7 @@ return (
         />
       </div>
 
-      <span className="text-sm md:text-[26px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+      <span className="text-[16px] md:text-[26px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
         {item.name}
       </span>
     </div>
@@ -963,7 +963,7 @@ return (
              <span className="uppercase tracking-[3px] text-sm font-semibold font-jost text-[#c8a64d]">
           Sree Raaga Resorts
         </span>
-              <h2 className="text-3xl md:text-[60px] font-medium font-corm  text-[#0d2b4e] leading-snug">
+              <h2 className="text-3xl md:text-[60px] font-medium font-corm px-2  text-[#0d2b4e] leading-snug">
                 Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
               </h2>
             </div>
@@ -1002,7 +1002,7 @@ return (
                     <div
                       key={key}
                       onClick={() => handleTabClick(key)}
-                      className="cursor-pointer group flex flex-col items-start justify-center transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
+                      className="cursor-pointer group flex flex-col items-start justify-center px-4 md:px-0 transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
                     >
                      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                         isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-[100px] opacity-30 "
@@ -1023,7 +1023,7 @@ return (
                       <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                         isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-0 opacity-0"
                       }`}>
-                        <p className="text-sm md:text-[17px] text-gray-500 leading-relaxed font-jost font-medium font-jost mr-2">
+                        <p className="text-sm md:text-[17px] block  text-gray-500 leading-relaxed font-jost font-medium font-jost mr-2">
                           {tabData[key].description}
                         </p>
                       </div>
@@ -1132,81 +1132,71 @@ return (
 </section>
 
         {/* ================= A WARM, EXPRESSIVE URBAN SPACE ================= */}
-   <section className="pt-24 pb-8 bg-[#fdfeff] overflow-hidden">
-  <div className=" relative">
+<section className="pt-10 lg:pt-24 pb-8 bg-[#fdfeff] overflow-hidden">
+      <div className="relative flex flex-col lg:block px-4 lg:px-0">
+        
+        {/* FIX: Removed bg-[#fdfeff] from this div so it doesn't cover the images behind it */}
+        <div className="order-2 lg:order-none relative z-10 min-h-[350px] lg:min-h-[700px] flex items-center justify-center lg:px-8 mt-10 lg:mt-0 pointer-events-none">
+          {/* Added pointer-events-none to the wrapper, and pointer-events-auto to the content so buttons still work, preventing the transparent box from blocking clicks to the images if needed */}
+          <div className="max-w-3xl text-center pointer-events-auto">
+            <span className="uppercase tracking-[3px] text-[12px] lg:text-sm font-semibold font-jost text-[#c8a64d]">
+              Sree Raaga Resorts
+            </span>
 
-    {/* Main Center Box */}
-    <div className="bg-[#fdfeff] min-h-[400px] md:min-h-[700px] flex items-center justify-center px-8">
-      <div className="max-w-3xl text-center">
+            <h2 className="font-corm text-[#0d2b4e] text-[32px] md:text-5xl lg:text-[60px] leading-[1.2] font-semibold mt-4 mb-6 lg:mb-10">
+              DayOut Packages
+              <br />
+            </h2>
 
-        <span className="uppercase tracking-[3px] text-sm font-semibold font-jost text-[#c8a64d]">
-          Sree Raaga Resorts
-        </span>
+            <p className="text-gray-600 text-[15px] lg:text-[17px] leading-relaxed max-w-2xl font-medium mx-auto mb-10 lg:mb-12">
+              Enjoy a perfect day of relaxation, adventure, delicious cuisine, and
+              memorable experiences crafted for families, friends, and corporate
+              groups.
+            </p>
 
-        <h2 className="font-corm text-[#0d2b4e] text-5xl md:text-[60px]  leading-[1.15] font-semibold mt-6 mb-10">
-          DayOut Packages
-          <br />
+            <Link
+              to="/about"
+              className="inline-flex items-center gap-4 px-8 lg:px-10 py-4 lg:py-5 bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transition duration-300 text-black uppercase tracking-wider font-medium text-xs lg:text-sm"
+            >
+              <span>—</span>
+              Discover More
+            </Link>
+          </div>
+        </div>
+
+        {/* Images Wrapper */}
+        <div className="order-1 lg:order-none flex flex-row gap-4 lg:block w-full z-0 max-w-lg mx-auto lg:max-w-none">
           
-        </h2>
+          {/* Left Image */}
+          <div className="w-1/2 lg:w-auto lg:absolute lg:left-12 lg:top-16">
+            <img
+              src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200"
+              alt="Restaurant"
+              className="w-full lg:w-[500px] h-[260px] sm:h-[350px] lg:h-[520px] object-cover shadow-sm lg:shadow-xl"
+            />
+          </div>
 
-        <p className="text-gray-600 text-[17px] leading-relaxed max-w-2xl font-medium  mx-auto mb-12">
-         Enjoy a perfect day of relaxation, adventure, delicious cuisine, and memorable experiences crafted for families, friends, and corporate groups.
-        </p>
+          {/* Right Image */}
+          <div className="w-1/2 lg:w-auto lg:absolute lg:right-12 lg:top-16">
+            <img
+              src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=1200"
+              alt="Pool Bar"
+              className="w-full lg:w-[500px] h-[260px] sm:h-[350px] lg:h-[520px] object-cover shadow-sm lg:shadow-xl"
+            />
+          </div>
 
-        <Link
-          to="/about"
-          className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
-        >
-          <span>—</span>
-          Discover More
-        </Link>
-
+        </div>
       </div>
-    </div>
-
-    {/* Left Floating Image */}
-    <div className="hidden lg:block absolute left-12 top-16">
-      {/* <div className="flex items-center gap-3 mb-8">
-        <span className="text-3xl">🍽</span>
-        <span className="font-corm text-4xl text-[#0d2b4e]">
-          Restaurant
-        </span>
-      </div> */}
-
-      <img
-        src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200"
-        alt=""
-        className="w-[500px] h-[520px] object-cover shadow-xl"
-      />
-    </div>
-
-    {/* Right Floating Image */}
-    <div className="hidden lg:block absolute right-12 top-16">
-      <img
-        src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=1200"
-        alt=""
-        className="w-[500px] h-[520px] object-cover shadow-xl"
-      />
-
-      {/* <div className="flex items-center gap-3 mt-8">
-        <span className="text-3xl ">🍹</span>
-        <span className="font-corm text-4xl text-[#0d2b4e]">
-          Pool Bar
-        </span>
-      </div> */}
-    </div>
-
-  </div>
-</section>
+    </section>
 
         {/* ================= UNIQUE EXPERIENCES ================= */}
         <div className="bg-[#fdfeff] ">
           <div className="max-w-6xl mx-auto text-center mb-16">
-  <span className="text-[#c8a64d] uppercase tracking-[3px] text-[14px] font-jost font-semibold block  mb-8">
+  <span className="text-[#c8a64d] uppercase tracking-[3px] text-[14px] font-jost font-semibold block mt-14 md:mt-0 md:mb-8">
     There's so much to discover
   </span>
 
-  <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold font-corm text-[#0d2b4e] pb-8">
+  <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold font-corm text-[#0d2b4e] ">
     Unique Experiences
   </h2>
   </div>
@@ -1312,7 +1302,7 @@ return (
 
             {/* Rooms Dropdown */}
             {isRoomsOpen && (
-              <div className="absolute top-[105%] md:top-[120%] left-0 w-full md:w-64 bg-white text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none animate-in fade-in zoom-in-95 duration-200">
+              <div className="absolute top-[105%] md:top-[120%] left-0 w-full md:w-64 bg-[#f7d6b8] text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none animate-in fade-in zoom-in-95 duration-200">
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-sm">Rooms</span>
                   <div className="flex items-center gap-4">
@@ -1347,7 +1337,7 @@ return (
 
           {/* GUESTS */}
           <div
-            className="relative w-full md:flex-1 flex items-center justify-between px-4 md:px-6 py-4 md:py-3 select-none cursor-pointer booking-field group"
+            className="relative w-full md:flex-1 flex items-center  justify-between px-4 md:px-6 py-4 md:py-3 select-none cursor-pointer booking-field group"
             onClick={() => {
               setIsGuestsOpen(!isGuestsOpen);
               setIsRoomsOpen(false);
@@ -1370,7 +1360,7 @@ return (
 
             {/* Guests Dropdown */}
             {isGuestsOpen && (
-              <div className="absolute top-[105%] md:top-[120%] right-0 md:left-0 w-full md:w-72 bg-white text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none space-y-4 animate-in fade-in zoom-in-95 duration-200">
+              <div className="absolute top-[105%] md:top-[120%] right-0 md:left-0 w-full md:w-72 bg-[#f7d6b8] text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none space-y-4 animate-in fade-in zoom-in-95 duration-200">
                 {/* Adults */}
                 <div className="flex items-center justify-between">
                   <div>
@@ -1456,38 +1446,51 @@ return (
       </div>
     </section>
 
-        {/* ================= FOLLOW US ON INSTAGRAM ================= */}
-        <section className="  bg-[#fdfeff] text-[#0d2b4e]">
-          <div className="py-12 text-center mb-12">
-            <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-jost font-semibold block mb-2">
-              Social Media
-            </span>
-            <h2 className="text-2xl md:text-6xl font-medium font-corm  flex items-center justify-center gap-2">
-              Follow us on Instagram <InstagramIcon size={26} className="text-[#c8a64d] mt-2" />
-            </h2>
-          </div>
+  {/* ================= FOLLOW US ON INSTAGRAM ================= */}
+      <section className="bg-[#fdfeff] text-[#0d2b4e]">
+        <div className="py-12 text-center mb-12">
+          <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-jost font-semibold block mb-2">
+            Social Media
+          </span>
+          <h2 className="text-[36px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
+            Follow us on Instagram <InstagramIcon size={26} className="text-[#c8a64d] mt-2" />
+          </h2>
+        </div>
 
-          <div className=" grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5  ">
-            {[
-              "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=600",
-              "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
-              "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600",
-              "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
-              "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=600"
-            ].map((img, i) => (
-              <div key={i} className="relative aspect-square overflow-hidden group  shadow-sm">
-                <img 
-                  src={img} 
-                  alt={`Instagram Showcase ${i}`} 
-                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
-                />
-                <div className="absolute inset-0 bg-[#0d2b4e]/60 opacity-0 group-hover:opacity-100 transition duration-300 z-10 flex items-center justify-center">
-                  <InstagramIcon size={28} className="text-white" />
-                </div>
+        {/* 
+          Wrapper Changes: 
+          - Mobile: flex, overflow-x-auto, snap-x (for swiping), hidden scrollbars
+          - Desktop (sm+): switch to grid, remove overflow and snapping 
+        */}
+        <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 overflow-x-auto snap-x snap-mandatory sm:overflow-visible sm:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {[
+            "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=600",
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600",
+            "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
+            "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=600"
+          ].map((img, i) => (
+            <div 
+              key={i} 
+              /* 
+                Item Changes:
+                - Mobile: flex-none, fixed width (75% of screen), snap to center
+                - Desktop (sm+): auto width (fills grid cell), disable snapping
+              */
+              className="flex-none w-[75%] sm:w-auto snap-center sm:snap-align-none relative aspect-square overflow-hidden group shadow-sm"
+            >
+              <img 
+                src={img} 
+                alt={`Instagram Showcase ${i}`} 
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+              />
+              <div className="absolute inset-0 bg-[#0d2b4e]/60 opacity-0 group-hover:opacity-100 transition duration-300 z-10 flex items-center justify-center">
+                <InstagramIcon size={28} className="text-white" />
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
+      </section>
 
       </div>
       <Footer />

@@ -7,6 +7,12 @@ import Footer from "../components/Footer";
 import restaurantIcon from "../../assets/images/icons/restaurant.svg";
 import spaIcon from "../../assets/images/icons/spa.svg";
 import fitnessIcon from "../../assets/images/icons/fitness.svg";
+import wifiIcon from "../../assets/icons/wifi.png";
+import buggyIcon from "../../assets/icons/car.png";
+import tvIcon from "../../assets/icons/tv.png";
+import roomServiceIcon from "../../assets/icons/services.png";
+import laundryIcon from "../../assets/icons/laundry.png";
+import housekeepingIcon from "../../assets/icons/cleaning.png";
 
 // Custom "Window Open" Reveal scroll animation component
 function WindowReveal({ src, alt, className = "", delay = 0 }) {
@@ -47,13 +53,6 @@ const testimonials = [
     author: "Sophia Chen"
   }
 ];
-import wifiIcon from "../../assets/icons/wifi.png";
-import buggyIcon from "../../assets/icons/car.png";
-import tvIcon from "../../assets/icons/tv.png";
-import roomServiceIcon from "../../assets/icons/services.png";
-import laundryIcon from "../../assets/icons/laundry.png";
-import housekeepingIcon from "../../assets/icons/cleaning.png";
-
 
 const amenities = [
   { icon: wifiIcon, name: "Wifi & Internet" },
@@ -91,125 +90,124 @@ const About = () => {
           </div>
         </section>
 
-<section className="relative py-20  md:py-48 px-4 md:px-6 bg-[#fdfeff] text-[#0d2b4e] overflow-hidden">
+        <section className="relative py-20  md:py-48 px-4 md:px-6 bg-[#fdfeff] text-[#0d2b4e] overflow-hidden">
       
-      {/* Outlined brand text behind the staggered images */}
-      <div 
-        className="absolute top-[3%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[12vw] md:text-[9vw] font-corm uppercase tracking-[5px] font-bold md:font-medium md:text-[#3fbcc3]/10 text-[#011b3c]/30 select-none pointer-events-none text-center whitespace-nowrap z-0"
-      >
-        Sree Raaga
-      </div>
-
-      {/* Staggered Images Grid - Now maintaining 3 columns on mobile */}
-      <div className="relative max-w-[170vh] mx-auto grid grid-cols-3 gap-2 sm:gap-6 md:gap-12 lg:gap-24 items-center z-10 mb-8 md:mb-12">
-        <WindowReveal 
-          src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
-          alt="Villa Exterior" 
-          className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[420px] w-full object-cover rounded-sm"
-        />
-        
-        {/* Center image is taller and offset upwards, overlapping background text */}
-        <WindowReveal 
-          src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
-          alt="Villa Interior" 
-          className="h-[140px] sm:h-[280px] md:h-[430px] lg:h-[520px] -translate-y-3 md:-translate-y-6 w-full object-cover rounded-sm"
-        />
-        
-        <WindowReveal 
-          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
-          alt="Luxury Pool" 
-          className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[420px] w-full object-cover rounded-sm"
-        />
-      </div>
-
-      {/* Large Title Below Staggered Images */}
-      <h2 className="text-4xl sm:text-6xl md:text-[120px] font-[400] text-[#c18e35] tracking-[6px] md:tracking-[12px] font-corm font-bold md:font-medium uppercase text-center relative z-20 -mt-6 sm:-mt-12 md:-mt-30 mb-6">
-        Resorts
-      </h2>
-
-      {/* Centered Curated Description */}
-      <p className="max-w-3xl mx-auto text-gray-500 text-center font-jost leading-relaxed text-[17px] mb-12 md:mb-20 px-2">
-        Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create lasting memories. Whether you’re planning a romantic getaway, a family vacation, or a business trip, we have the perfect offer to suit your needs and elevate your experience.
-      </p>
-
-      {/* Call to Action Button */}
-      <div className="flex justify-center mb-16 md:mb-20">
-        <button className="group flex items-center gap-4 uppercase tracking-wide text-xs md:text-sm font-medium text-black">
-          <span className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-black flex items-center justify-center transition-all duration-300 group-hover:bg-black group-hover:text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-3 h-3 md:w-4 md:h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M5 12h14m-5-5 5 5-5 5"
-              />
-            </svg>
-          </span>
-
-          <Link to="/about" className="group inline-block">
-            <span className="relative">
-              DISCOVER MORE
-              <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full"></span>
-            </span>
-          </Link>
-        </button>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-8 md:py-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 text-center">
-        {[
-          { number: "1,200+", label: "Guest Reviews" },
-          { number: "24/7", label: "Front Desk" },
-          { number: "15", label: "Villa Suites" },
-          { number: "17+", label: "Amenities" },
-        ].map((stat, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: 0.8,
-              delay: i * 0.2,
-              ease: "easeOut",
-            }}
-            className="flex flex-col items-center"
+          {/* Outlined brand text behind the staggered images */}
+          <div 
+            className="absolute top-[3%] lg:top-[4%] left-1/2 -translate-x-1/2 text-[12vw] md:text-[9vw] font-corm uppercase tracking-[5px] font-bold md:font-medium md:text-[#3fbcc3]/10 text-[#011b3c]/30 select-none pointer-events-none text-center whitespace-nowrap z-0"
           >
-            <span className="text-4xl sm:text-6xl md:text-[92px] font-medium font-corm text-[#c8a64d] mb-1 md:mb-2">
-              {stat.number}
-            </span>
+            Sree Raaga
+          </div>
 
-            <span className="text-[17px]  uppercase tracking-widest w-full text-gray-500 font-medium">
-              {stat.label}
-            </span>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-     
+          {/* Staggered Images Grid */}
+          <div className="relative max-w-[170vh] mx-auto grid grid-cols-3 gap-2 sm:gap-6 md:gap-12 lg:gap-24 items-center z-10 mb-8 md:mb-12">
+            <WindowReveal 
+              src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
+              alt="Villa Exterior" 
+              className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[420px] w-full object-cover rounded-sm"
+            />
+            
+            {/* Center image is taller and offset upwards */}
+            <WindowReveal 
+              src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
+              alt="Villa Interior" 
+              className="h-[140px] sm:h-[280px] md:h-[430px] lg:h-[520px] -translate-y-3 md:-translate-y-6 w-full object-cover rounded-sm"
+            />
+            
+            <WindowReveal 
+              src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
+              alt="Luxury Pool" 
+              className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[420px] w-full object-cover rounded-sm"
+            />
+          </div>
+
+          {/* Large Title Below Staggered Images */}
+          <h2 className="text-4xl sm:text-6xl md:text-[120px] font-[400] text-[#c18e35] tracking-[6px] md:tracking-[12px] font-corm font-bold md:font-medium uppercase text-center relative z-20 -mt-6 sm:-mt-12 md:-mt-30 mb-6">
+            Resorts
+          </h2>
+
+          {/* Centered Curated Description */}
+          <p className="max-w-3xl mx-auto text-gray-500 text-center font-jost leading-relaxed text-[17px] mb-12 md:mb-20 px-2">
+            Discover a world of luxury and relaxation with our carefully curated hotel offers, designed to enhance your stay and create lasting memories. Whether you’re planning a romantic getaway, a family vacation, or a business trip, we have the perfect offer to suit your needs and elevate your experience.
+          </p>
+
+          {/* Call to Action Button */}
+          <div className="flex justify-center mb-16 md:mb-20">
+            <button className="group flex items-center gap-4 uppercase tracking-wide text-xs md:text-sm font-medium text-black">
+              <span className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-black flex items-center justify-center transition-all duration-300 group-hover:bg-black group-hover:text-white">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-3 h-3 md:w-4 md:h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 12h14m-5-5 5 5-5 5"
+                  />
+                </svg>
+              </span>
+
+              <Link to="/about" className="group inline-block">
+                <span className="relative">
+                  DISCOVER MORE
+                  <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full"></span>
+                </span>
+              </Link>
+            </button>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="max-w-5xl mx-auto border-t border-b border-gray-100 py-8 md:py-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 text-center">
+            {[
+              { number: "1,200+", label: "Guest Reviews" },
+              { number: "24/7", label: "Front Desk" },
+              { number: "15", label: "Villa Suites" },
+              { number: "17+", label: "Amenities" },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{
+                  duration: 0.8,
+                  delay: i * 0.2,
+                  ease: "easeOut",
+                }}
+                className="flex flex-col items-center"
+              >
+                <span className="text-4xl sm:text-6xl md:text-[92px] font-medium font-corm text-[#c8a64d] mb-1 md:mb-2">
+                  {stat.number}
+                </span>
+
+                <span className="text-[17px]  uppercase tracking-widest w-full text-gray-500 font-medium">
+                  {stat.label}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      
         {/* ================= SPLIT FEATURE ROWS ================= */}
-        <section className="py-24 px-6 bg-[#fdfeff] ">
-          <div className=" space-y-32">
+        <section className="md:py-24 px-6 bg-[#fdfeff] ">
+          {/* Increased space-y-32 to space-y-48 for more breathing room between rows */}
+          <div className="space-y-48">
             
             {/* Row 1: Sophisticated Comfort */}
-            <div className=" max-w-[150vh]  mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div className="w-full h-[400px] md:h-[480px]">
+            <div className="max-w-[150vh] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              {/* Unified Height here */}
+              <div className="w-full h-[400px] md:h-[650px]">
                 <WindowReveal 
                   src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=800"
                   alt="Sophisticated Comfort"
-                  className="w-full h-full  shadow-xl"
+                  className="w-full h-full shadow-xl "
                 />
               </div>
               <div className="flex flex-col items-start select-none">
-                {/* <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px]  font-bold block mb-4">
-                  Sree Raaga Resorts
-                </span> */}
                 <h2 className="text-3xl md:text-5xl font-medium font-corm  text-[#0d2b4e] mb-6">
                   Sophisticated Comfort
                 </h2>
@@ -223,12 +221,8 @@ const About = () => {
             </div>
 
             {/* Row 2: A Unique Experience */}
-            <div className=" max-w-[150vh]  mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            
+            <div className="max-w-[150vh] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mt-[-90px] md:mt-[-60px] ">
               <div className="order-2 md:order-1 flex flex-col items-start select-none">
-                {/* <span className="text-[#c8a64d] uppercase tracking-[4px] text-[10px]  font-bold block mb-4">
-                  Our Experience
-                </span> */}
                 <h2 className=" text-3xl md:text-5xl font-medium font-corm  text-[#0d2b4e] mb-6">
                   A Unique Experience
                 </h2>
@@ -239,11 +233,12 @@ const About = () => {
                   and adventure.
                 </p>
               </div>
-                <div className="order-1 md:order-2 w-full h-[400px] md:h-[480px]">
+              {/* Unified Height here */}
+              <div className="order-1 md:order-2 w-full h-[400px] md:h-[650px]">
                 <WindowReveal 
                   src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800"
                   alt="A Unique Experience"
-                  className="w-full h-full  shadow-xl"
+                  className="w-full h-full shadow-xl "
                 />
               </div>
             </div>
@@ -251,64 +246,133 @@ const About = () => {
           </div>
         </section>
 
-            {/* Icons Row */}
-            <div className="max-w-[160vh] bg-[#fdfeff]  mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center ">
-  {amenities.map((item, idx) => (
-    <div
-      key={idx}
-      className="flex flex-col items-center text-center group cursor-default"
-    >
-      <div className=" overflow-hidden">
-        <img
-          src={item.icon}
-          alt={item.name}
-          className="w-20 h-20 px-4 object-contain transition-all duration-300 group-hover:scale-110"
-        />
+        {/* Icons Row */}
+        
+       {/* ================= RESORT FACILITIES ================= */}
+<section className="bg-[#fdfeff] py-14">
+  {/* Section Heading */}
+  <div className="max-w-6xl mx-auto text-center mb-12">
+    <h2 className="text-4xl md:text-6xl font-medium font-corm text-[#0d2b4e]">
+      Resort Facilities
+    </h2>
+  </div>
+
+  {/* Icons Row */}
+  <div className="max-w-[160vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-10">
+    {amenities.map((item, idx) => (
+      <div
+        key={idx}
+        className="flex flex-col items-center text-center group cursor-default"
+      >
+        <div className="overflow-hidden mb-4">
+          <img
+            src={item.icon}
+            alt={item.name}
+            className="w-20 h-20 px-4 object-contain transition-all duration-300 group-hover:scale-110"
+          />
+        </div>
+
+        <span className="text-[16px] md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
+          {item.name}
+        </span>
       </div>
+    ))}
+  </div>
+</section>
 
-      <span className="text-sm md:text-[24px] font-semibold text-gray-500 font-corm group-hover:text-[#0d2b4e] transition-colors duration-300">
-        {item.name}
-      </span>
-    </div>
-  ))}
-</div>
+        <section className="bg-[#fdfeff] ">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    {[
+     {
+  title: "Swimming Pool",
+  image:
+    "https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=1200",
+  description:
+    "Enjoy our refreshing swimming pool, perfect for relaxation, leisure, and a rejuvenating experience.",
+},
+{
+  title: "Activities",
+  image:
+    "./adv1.jpg",
+  description:
+    "Take part in exciting indoor and outdoor activities designed for fun, recreation, and memorable experiences for guests of all ages.",
+},
+{
+  title: "Indoor Games",
+  image:
+    "./indoor.jpg",
+  description:
+    "Enjoy a variety of indoor games including table tennis, carrom, chess, and more for hours of entertainment.",
+},
+{
+  title: "Play Area",
+  image:
+    "./play.jpg",
+  description:
+    "A safe and exciting play area where children can have fun, explore, and create unforgettable memories.",
+},
+    ].map((exp, index) => (
+      <div
+        key={index}
+        className="relative h-[500px] lg:h-[850px] overflow-hidden group"
+      >
+        {/* Background Image */}
+        <img
+          src={exp.image}
+          alt={exp.title}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
 
-        {/* ================= THREE COLUMNS ACTIVITIES ================= */}
-        <section className="py-24 px-6 bg-[#fdfeff] ">
-          <div className="max-w-[150vh] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Restaurant & Bars",
-                image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800",
-                icon: restaurantIcon
-              },
-              {
-                title: "Spa & Wellness",
-                image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=800",
-                icon: spaIcon
-              },
-              {
-                title: "Fitness Center",
-                image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800",
-                icon: fitnessIcon
-              }
-            ].map((act, idx) => (
-              <div key={idx} className="relative overflow-hidden group aspect-[3/4] shadow-md">
-                <WindowReveal src={act.image} alt={act.title} className="w-full h-full" delay={idx * 0.1} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10"></div>
-                <div className="absolute bottom-8 left-0 right-0 z-20 flex flex-col items-center justify-center gap-3 text-center text-[#c8a64d]">
-                  <img src={act.icon} alt={act.title} className="w-8 h-8 group-hover:scale-110  transition-transform duration-300 object-contain" />
-                  <h3 className="text-xl md:text-3xl font-medium font-corm text-white  tracking-wide">
-                    {act.title}
-                  </h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/40"></div>
 
-        {/* ================= TESTIMONIALS SLIDER ================= */}
-    
+        {/* Content */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8 text-white">
+          <span className="uppercase tracking-widest text-[17px] font-jost mb-10">
+            Amenities
+          </span>
+
+          <h3 className="font-corm text-4xl lg:text-6xl font-light leading-tight mb-8">
+            {exp.title}
+          </h3>
+
+          <p className="max-w-xs text-sm lg:text-base text-white/90 mb-12 font-medium">
+            {exp.description}
+          </p>
+
+        <button
+  className="
+    block
+    w-full sm:w-auto
+    px-12 py-4
+    border border-white
+    uppercase
+    tracking-widest
+    text-sm
+    font-semibold
+
+    opacity-100
+    translate-y-0
+
+    md:opacity-0
+    md:translate-y-4
+    md:group-hover:opacity-100
+    md:group-hover:translate-y-0
+
+    hover:bg-white
+    hover:text-black
+    transition-all
+    duration-500
+  "
+>
+  Discover More
+</button>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
         {/* ================= CALL TO ACTION (CTA) ================= */}
         <section
           className="relative py-42 px-6 bg-cover bg-center flex flex-col items-center justify-center text-center"

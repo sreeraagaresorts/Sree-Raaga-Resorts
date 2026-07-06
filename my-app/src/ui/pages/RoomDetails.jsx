@@ -559,13 +559,344 @@ const RoomDetails = () => {
   const visibleImagesCount = 3; 
   const maxGalleryIndex = Math.max(0, gallery.length - visibleImagesCount);
 
+  // Extract the booking sidebar into a variable so it can be rendered dynamically
+  // based on the screen size without duplicating code logic.
+  const bookingSidebarWidget = (
+    <div className="border border-[#0d2b4e]/20 p-8 space-y-14 shadow-xl max-w-[400px] w-full mx-auto lg:ml-auto bg-white relative z-10">
+      <h3 className="text-3xl md:text-[30px] font-semibold font-corm text-[#0d2b4e] select-none text-center lg:text-left">
+        Book Your Room
+      </h3>
+      <div className="space-y-5 font-jost">
+        {/* Dates range picker dropdown */}
+        <div className="relative">
+          <DatePicker
+            wrapperClassName="w-full"
+            selectsRange={true}
+            startDate={checkIn ? new Date(checkIn) : null}
+            endDate={checkOut ? new Date(checkOut) : null}
+            onChange={(update) => {
+              const [start, end] = update;
+              const formatDate = (date) => {
+                if (!date) return "";
+                const tzOffset = date.getTimezoneOffset() * 60000;
+                return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
+              };
+              setCheckIn(start ? formatDate(start) : "");
+              setCheckOut(end ? formatDate(end) : "");
+            }}
+            minDate={new Date()}
+            customInput={
+              <button
+                type="button"
+                className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+              >
+                <span className="font-medium text-[#0d2b4e]">
+                  {checkIn
+                    ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
+                        checkOut
+                          ? ` - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
+                          : " - Check Out"
+                      }`
+                    : "Check In - Check Out"}
+                </span>
+                <ChevronDown size={16} className="text-gray-400" />
+              </button>
+            }
+            calendarClassName="custom-datepicker"
+            popperModifiers={[
+              {
+                name: "preventOverflow",
+                options: {
+                  boundary: "viewport",
+                },
+              },
+            ]}
+          />
+        </div>
+
+        {/* Rooms dropdown */}
+        <div className="relative booking-field">
+          <button
+            type="button"
+            onClick={() => {
+              setIsRoomsOpen(!isRoomsOpen);
+              setIsAdultsOpen(false);
+              setIsChildrenOpen(false);
+              setIsPaymentMethodOpen(false);
+            }}
+            className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+          >
+            <span className="font-medium text-[#0d2b4e]">
+              {rooms} {rooms === 1 ? unitLabelSingle : unitLabelPlural}
+            </span>
+            <ChevronDown
+              size={16}
+              className={`text-gray-400 transition-transform duration-300 ${isRoomsOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {isRoomsOpen && (
+            <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-sm">{unitLabelPlural}</span>
+                <div className="flex items-center gap-6">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (rooms > 1) setRooms(rooms - 1);
+                    }}
+                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                  >
+                    -
+                  </button>
+                  <span className="font-semibold text-sm w-4 text-center">{rooms}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (rooms < maxAvailable) setRooms(rooms + 1);
+                    }}
+                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Adults dropdown */}
+        <div className="relative booking-field">
+          <button
+            type="button"
+            onClick={() => {
+              setIsAdultsOpen(!isAdultsOpen);
+              setIsRoomsOpen(false);
+              setIsChildrenOpen(false);
+              setIsPaymentMethodOpen(false);
+            }}
+            className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+          >
+            <span className="font-medium text-[#0d2b4e]">
+              {adults} {adults === 1 ? "Adult (18+ Years)" : "Adults (18+ Years)"}
+            </span>
+            <ChevronDown
+              size={16}
+              className={`text-gray-400 transition-transform duration-300 ${isAdultsOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {isAdultsOpen && (
+            <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-sm">Adults (18+ Years)</span>
+                <div className="flex items-center gap-6">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (adults > 1) setAdults(adults - 1);
+                    }}
+                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                  >
+                    -
+                  </button>
+                  <span className="font-semibold text-sm w-4 text-center">{adults}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (adults < 10) setAdults(adults + 1);
+                    }}
+                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Children dropdown */}
+        <div className="relative booking-field">
+          <button
+            type="button"
+            onClick={() => {
+              setIsChildrenOpen(!isChildrenOpen);
+              setIsRoomsOpen(false);
+              setIsAdultsOpen(false);
+              setIsPaymentMethodOpen(false);
+            }}
+            className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
+          >
+            <span className="font-medium text-[#0d2b4e]">
+              {children === 0 ? "Children" : children === 1 ? "1 Child" : `${children} Children`}
+            </span>
+            <ChevronDown
+              size={16}
+              className={`text-gray-400 transition-transform duration-300 ${isChildrenOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {isChildrenOpen && (
+            <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-sm">Children</span>
+                <div className="flex items-center gap-6">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (children > 0) setChildren(children - 1);
+                    }}
+                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                  >
+                    -
+                  </button>
+                  <span className="font-semibold text-sm w-4 text-center">{children}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (children < 10) setChildren(children + 1);
+                    }}
+                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Payment Method / Coupon Section */}
+        <div>
+          {/* Add Coupon Button */}
+          {!appliedCoupon && (
+            <div className="flex justify-between items-start pt-2">
+              <span className="text-gray-800">Coupon Code</span>
+              <button type="button" onClick={() => setIsCouponModalOpen(true)} className="text-[15px] font-bold text-[#800000] underline underline-offset-2 decoration-[1.5px] hover:text-red-900 transition cursor-pointer">
+                Add Coupon
+              </button>
+            </div>
+          )}
+          {/* Applied Coupon Details */}
+          {appliedCoupon && (
+            <div className="flex justify-between items-start border border-black/20 px-3 py-2 rounded-xl">
+              <div>
+                <div className="text-gray-800 flex text-[14px] items-center gap-2">
+                  Coupon Discounts
+                </div>
+                <div className="text-emerald-600 text-[12px] font-bold mt-1 uppercase tracking-wide">Discount '{appliedCoupon.code}'</div>
+              </div>
+              <button type="button" onClick={removeCoupon} className="text-[14px] font-bold text-red-400 hover:text-red-600 transition cursor-pointer uppercase tracking-wider bg-red-50 px-2 py-0.5 rounded">
+                Remove
+              </button>
+            </div>
+          )}
+
+          <div className="border-t border-[#eeeadd] mt-6 pt-5">
+            <div className="flex justify-between items-start">
+              <div>
+                <div className="text-[17px] font-semibold text-[#3d2c23]">Price</div>
+              </div>
+              <div className="text-[#c8a64d] font-bold text-[25px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+            </div>
+          </div>
+          
+          {/* Price Details */}
+          <div className=" rounded-2xl  mt-6 select-none">
+            <h3 className="text-[20px] font-bold font-corm text-[#3d2c23] mb-6">Price Details</h3>
+            <div className="space-y-3 text-[15px]">
+              
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="text-gray-800 text=[14px]">Base Price</div>
+                  <div className="text-[#a89082] text-[12px] font-semibold ">For {totals.nights > 0 ? totals.nights : 1} Night{totals.nights > 1 ? 's' : ''}</div>
+                </div>
+                <div className="text-gray-800 font-medium text-[14px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+              </div>
+              
+              {/* Applied Coupon Details */}
+              {appliedCoupon && (
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="text-gray-800 flex text-[14px] items-center gap-2">
+                      Coupon Discounts
+                    </div>
+                    <div className="text-emerald-600 text-[12px] font-bold mt-1 uppercase tracking-wide">Discount '{appliedCoupon.code}'</div>
+                  </div>
+                  <div className="text-emerald-600 font-bold text-[14px]">- ₹ {totals.discount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                </div>
+              )}
+
+              <div className="flex justify-between items-start pt-1">
+                <div className="text-gray-800 text-[14px]">GST</div>
+                <div className="text-gray-800 text-[14px] font-medium">₹ {totals.gst.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+              </div>
+            </div>
+
+            <div className="border-t border-[#eeeadd] mt-6 pt-5">
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="text-[16px] font-semibold text-[#3d2c23]">Total Amount</div>
+                  <div className="text-gray-500 text-[12px] mt-1 font-medium">Including Tax </div>
+                </div>
+                <div className="text-[22px] font-bold text-[#3d2c23]">₹{totals.total.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+              </div>
+            </div>
+          </div>                  
+          
+          {checkingAvailability ? (
+            <span className="text-gray-400 text-xs block text-right mt-2">Checking availability...</span>
+          ) : availability ? (
+            availability.available && availability.remainingRooms >= rooms ? (
+              <span className="text-emerald-600 text-xs font-semibold block text-right mt-2">
+                Available! ({availability.remainingRooms} of {availability.totalRooms} rooms left)
+              </span>
+            ) : (
+              <span className="text-rose-600 text-xs font-semibold block text-right mt-2">
+                Sold Out / Booking Full for these dates!
+              </span>
+            )
+          ) : null}
+        </div>
+
+        {/* Booking Trigger CTA */}
+        {isAdmin ? (
+          <div className="w-full mt-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-sm text-center">
+            Administrators cannot book rooms in the user interface.
+          </div>
+        ) : (
+          <>
+            <button
+              onClick={handleBooking}
+              disabled={bookingLoading || (availability && (availability.available === false || rooms > availability.remainingRooms))}
+              className="w-full mt-4 py-5 bg-[#f5d7b8] hover:bg-[#0d2b4e] px-3 text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-[17px] shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
+            >
+              {bookingLoading ? "Processing..." : availability && (availability.available === false || rooms > availability.remainingRooms) ? "BOOKING FULL" : `BOOK YOUR STAY NOW`}
+            </button>
+            <p className="text-center text-[12px] text-gray-500 mt-[-10px] select-none font-jost">
+              By proceeding you agree to our <Link to="/privacy-policy" className="underline hover:text-[#0d2b4e] transition">Privacy Policy</Link> and <Link to="/terms-conditions" className="underline hover:text-[#0d2b4e] transition">T&C</Link>.
+            </p>
+          </>
+        )}
+
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden min-h-screen pt-28 md:pt-36">
         
         {/* ================= MAIN CONTENT DETAILS GRID ================= */}
-        <section className="py-12 max-w-7xl mx-auto px-6">
+        <section className="py-12 max-w-7xl mx-auto md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-[6.8fr_4.2fr] gap-16 items-start">
             
             {/* LEFT COLUMN */}
@@ -610,7 +941,7 @@ const RoomDetails = () => {
               </div>
 
               {/* Price, Title & Specs */}
-              <div className="select-none space-y-2">
+              <div className="select-none space-y-2 px-6 md:px-0">
                 <div className="font-semibold text-[25px] uppercase tracking-[2px] font-jost text-[#c8a64d]">
                   ₹{parseFloat(room.price).toLocaleString()} / NIGHT
                 </div>
@@ -644,8 +975,13 @@ const RoomDetails = () => {
 
               <hr className="border-gray-200/60" />
 
+              {/* Mobile Booking Box Injection */}
+              <div className="block lg:hidden w-full px-4 md:px-0">
+                {bookingSidebarWidget}
+              </div>
+
               {/* About accommodation */}
-              <div className="space-y-4 max-w-3xl">
+              <div className="space-y-4 max-w-3xl px-6 md:px-0">
                 <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e]">
                   About accommodation
                 </h3>
@@ -658,7 +994,7 @@ const RoomDetails = () => {
               <hr className="border-gray-200/60" />
 
               {/* Room Amenities (12 items) */}
-              <div className="space-y-6">
+              <div className="space-y-6 px-6 md:px-0">
                 <h3 className="text-3xl font-medium  font-corm text-[#0d2b4e] select-none">
                   Room Amenities
                 </h3>
@@ -769,7 +1105,7 @@ const RoomDetails = () => {
               <hr className="border-gray-200/60" />
 
               {/* What's included in this suite? */}
-              <div className="space-y-6">
+              <div className="space-y-6 px-6 md:px-0">
                 <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e] select-none">
                   What's included in this suite?
                 </h3>
@@ -810,13 +1146,13 @@ const RoomDetails = () => {
               <hr className="border-gray-200/60" />
 
               {/* Room Rules */}
-              <div className="space-y-6">
+              <div className="space-y-6 px-6 md:px-0">
                 <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e] select-none">
                   Room Rules
                 </h3>
                 
-                <ul className="space-y-4  text-xs md:text-[17px] text-gray-700 list-disc pl-5 select-none">
-                  <li>Check-in from 9:00 AM - anytime</li>
+                <ul className="space-y-4  text-[17px] text-gray-700 list-disc pl-5 select-none">
+                  <li>Check-in from 9:00 AM - Anytime</li>
                   <li>Check-out: 11:00 AM</li>
                   <li>Self-check-in with lockbox</li>
                   <li>No smoking</li>
@@ -827,379 +1163,9 @@ const RoomDetails = () => {
             </div>
 
             {/* RIGHT COLUMN (BOOKING SIDEBAR CARD) */}
-            <div className="lg:sticky ">
-              <div className="border border-[#0d2b4e]/20 p-8 space-y-14 shadow-xl max-w-[400px] w-full mx-auto lg:ml-auto">
-                
-                <h3 className="text-3xl md:text-[30px] font-semibold font-corm text-[#0d2b4e] select-none text-center lg:text-left">
-                  Book Your Room
-                </h3>
-                <div className="space-y-5 font-jost">
-                  {/* Dates range picker dropdown */}
-                  <div className="relative">
-                    <DatePicker
-                      wrapperClassName="w-full"
-                      selectsRange={true}
-                      startDate={checkIn ? new Date(checkIn) : null}
-                      endDate={checkOut ? new Date(checkOut) : null}
-                      onChange={(update) => {
-                        const [start, end] = update;
-                        const formatDate = (date) => {
-                          if (!date) return "";
-                          const tzOffset = date.getTimezoneOffset() * 60000;
-                          return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
-                        };
-                        setCheckIn(start ? formatDate(start) : "");
-                        setCheckOut(end ? formatDate(end) : "");
-                      }}
-                      minDate={new Date()}
-                      customInput={
-                        <button
-                          type="button"
-                          className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
-                        >
-                          <span className="font-medium text-[#0d2b4e]">
-                            {checkIn
-                              ? `${new Date(checkIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}${
-                                  checkOut
-                                    ? ` - ${new Date(checkOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}`
-                                    : " - Check Out"
-                                }`
-                              : "Check In - Check Out"}
-                          </span>
-                          <ChevronDown size={16} className="text-gray-400" />
-                        </button>
-                      }
-                      calendarClassName="custom-datepicker"
-                      popperModifiers={[
-                        {
-                          name: "preventOverflow",
-                          options: {
-                            boundary: "viewport",
-                          },
-                        },
-                      ]}
-                    />
-                  </div>
-
-                   {/* Rooms dropdown */}
-                  <div className="relative booking-field">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsRoomsOpen(!isRoomsOpen);
-                        setIsAdultsOpen(false);
-                        setIsChildrenOpen(false);
-                        setIsPaymentMethodOpen(false);
-                      }}
-                      className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
-                    >
-                      <span className="font-medium text-[#0d2b4e]">
-                        {rooms} {rooms === 1 ? unitLabelSingle : unitLabelPlural}
-                      </span>
-                      <ChevronDown
-                        size={16}
-                        className={`text-gray-400 transition-transform duration-300 ${isRoomsOpen ? "rotate-180" : ""}`}
-                      />
-                    </button>
-
-                    {isRoomsOpen && (
-                      <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold text-sm">{unitLabelPlural}</span>
-                          <div className="flex items-center gap-6">
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (rooms > 1) setRooms(rooms - 1);
-                              }}
-                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                            >
-                              -
-                            </button>
-                            <span className="font-semibold text-sm w-4 text-center">{rooms}</span>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (rooms < maxAvailable) setRooms(rooms + 1);
-                              }}
-                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Adults dropdown */}
-                  <div className="relative booking-field">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsAdultsOpen(!isAdultsOpen);
-                        setIsRoomsOpen(false);
-                        setIsChildrenOpen(false);
-                        setIsPaymentMethodOpen(false);
-                      }}
-                      className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
-                    >
-                      <span className="font-medium text-[#0d2b4e]">
-                        {adults} {adults === 1 ? "Adult (18+ Years)" : "Adults (18+ Years)"}
-                      </span>
-                      <ChevronDown
-                        size={16}
-                        className={`text-gray-400 transition-transform duration-300 ${isAdultsOpen ? "rotate-180" : ""}`}
-                      />
-                    </button>
-
-                    {isAdultsOpen && (
-                      <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold text-sm">Adults (18+ Years)</span>
-                          <div className="flex items-center gap-6">
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (adults > 1) setAdults(adults - 1);
-                              }}
-                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                            >
-                              -
-                            </button>
-                            <span className="font-semibold text-sm w-4 text-center">{adults}</span>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (adults < 10) setAdults(adults + 1);
-                              }}
-                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Children dropdown */}
-                  <div className="relative booking-field">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsChildrenOpen(!isChildrenOpen);
-                        setIsRoomsOpen(false);
-                        setIsAdultsOpen(false);
-                        setIsPaymentMethodOpen(false);
-                      }}
-                      className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
-                    >
-                      <span className="font-medium text-[#0d2b4e]">
-                        {children === 0 ? "Children" : children === 1 ? "1 Child" : `${children} Children`}
-                      </span>
-                      <ChevronDown
-                        size={16}
-                        className={`text-gray-400 transition-transform duration-300 ${isChildrenOpen ? "rotate-180" : ""}`}
-                      />
-                    </button>
-
-                    {isChildrenOpen && (
-                      <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold text-sm">Children</span>
-                          <div className="flex items-center gap-6">
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (children > 0) setChildren(children - 1);
-                              }}
-                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                            >
-                              -
-                            </button>
-                            <span className="font-semibold text-sm w-4 text-center">{children}</span>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (children < 10) setChildren(children + 1);
-                              }}
-                              className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Payment Method */}
-                  <div>
-                   
-                    {/* <div className="relative booking-field">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsPaymentMethodOpen(!isPaymentMethodOpen);
-                          setIsRoomsOpen(false);
-                          setIsAdultsOpen(false);
-                          setIsChildrenOpen(false);
-                        }}
-                        className="w-full bg-white border border-gray-200 rounded px-4 py-4 text-xs text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
-                      >
-                        <span className="font-medium text-[#0d2b4e]">
-                          {paymentMethod === "online" ? "Online Payment (Razorpay)" : "Pay at Resort (Cash)"}
-                        </span>
-                        <ChevronDown
-                          size={14}
-                          className={`text-gray-400 transition-transform duration-300 ${isPaymentMethodOpen ? "rotate-180" : ""}`}
-                        />
-                      </button>
-
-                      {isPaymentMethodOpen && (
-                        <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl py-3 px-2 shadow-2xl z-50 font-jost text-left select-none border-none">
-                          {[
-                            { label: "Online Payment (Razorpay)", value: "online" },
-                            { label: "Pay at Resort (Cash)", value: "cash" }
-                          ].map((option) => (
-                            <div
-                              key={option.value}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setPaymentMethod(option.value);
-                                setIsPaymentMethodOpen(false);
-                              }}
-                              className={`px-4 py-2.5 rounded-full text-xs lg:text-sm font-semibold transition hover:bg-[#fbd2a4] hover:text-[#0d2b4e] cursor-pointer ${
-                                paymentMethod === option.value ? "bg-[#0d2b4e] text-white" : ""
-                              }`}
-                            >
-                              {option.label}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div> */}
-                  </div>
-     {/* Add Coupon Button */}
-                      {!appliedCoupon && (
-                        <div className="flex justify-between items-start pt-2">
-                          <span className="text-gray-800">Coupon Code</span>
-                          <button type="button" onClick={() => setIsCouponModalOpen(true)} className="text-[15px] font-bold text-[#800000] underline underline-offset-2 decoration-[1.5px] hover:text-red-900 transition cursor-pointer">
-                            Add Coupon
-                          </button>
-                        </div>
-                      )}
-                        {/* Applied Coupon Details */}
-                      {appliedCoupon && (
-                        <div className="flex justify-between items-start border border-black/20 px-3 py-2 rounded-xl">
-                          <div>
-                            <div className="text-gray-800 flex text-[14px] items-center gap-2">
-                              Coupon Discounts
-                            
-                            </div>
-                            <div className="text-emerald-600 text-[12px] font-bold mt-1 uppercase tracking-wide">Discount '{appliedCoupon.code}'</div>
-                          </div>
-                         <button type="button" onClick={removeCoupon} className="text-[14px] font-bold text-red-400 hover:text-red-600 transition cursor-pointer uppercase tracking-wider bg-red-50 px-2 py-0.5 rounded">
-                                Remove
-                              </button>
-                        </div>
-                      )}
- <div className="border-t border-[#eeeadd] mt-6 pt-5">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="text-[17px] font-semibold text-[#3d2c23]">Price</div>
-                 
-                        </div>
-                         <div className="text-[#c8a64d] font-bold text-[25px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                      </div>
-                    </div>
-                                 {/* Price Details */}
-                  <div className="bg-[#fcfbf9] rounded-2xl  mt-6 select-none shadow-sm border border-gray-100">
-                    <h3 className="text-[20px] font-bold font-corm text-[#3d2c23] mb-6">Price Details</h3>
-                    <div className="space-y-3 text-[15px]">
-                      
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="text-gray-800 text=[14px]">Base Price</div>
-                          <div className="text-[#a89082] text-[12px] font-semibold ">For {totals.nights > 0 ? totals.nights : 1} Night{totals.nights > 1 ? 's' : ''}</div>
-                        </div>
-                        <div className="text-gray-800 font-medium text-[14px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                      </div>
-                      
-                 
-                      {/* Applied Coupon Details */}
-                      {appliedCoupon && (
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <div className="text-gray-800 flex text-[14px] items-center gap-2">
-                              Coupon Discounts
-                            
-                            </div>
-                            <div className="text-emerald-600 text-[12px] font-bold mt-1 uppercase tracking-wide">Discount '{appliedCoupon.code}'</div>
-                          </div>
-                          <div className="text-emerald-600 font-bold text-[14px]">- ₹ {totals.discount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                        </div>
-                      )}
-
-                      <div className="flex justify-between items-start pt-1">
-                        <div className="text-gray-800 text-[14px]">GST</div>
-                        <div className="text-gray-800 text-[14px] font-medium">₹ {totals.gst.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-[#eeeadd] mt-6 pt-5">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="text-[16px] font-semibold text-[#3d2c23]">Total Amount</div>
-                          <div className="text-gray-500 text-[12px] mt-1 font-medium">Including Tax </div>
-                        </div>
-                        <div className="text-[22px] font-bold text-[#3d2c23]">₹{totals.total.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                      </div>
-                    </div>
-                  </div>                   {checkingAvailability ? (
-                      <span className="text-gray-400 text-xs block text-right">Checking availability...</span>
-                    ) : availability ? (
-                      availability.available && availability.remainingRooms >= rooms ? (
-                        <span className="text-emerald-600 text-xs font-semibold block text-right">
-                          Available! ({availability.remainingRooms} of {availability.totalRooms} rooms left)
-                        </span>
-                      ) : (
-                        <span className="text-rose-600 text-xs font-semibold block text-right">
-                          Sold Out / Booking Full for these dates!
-                        </span>
-                      )
-                    ) : null}
-                  </div>
-
-                  {/* Booking Trigger CTA */}
-                  {isAdmin ? (
-                    <div className="w-full mt-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-sm text-center">
-                      Administrators cannot book rooms in the user interface.
-                    </div>
-                  ) : (
-                    <>
-                      <button
-                        onClick={handleBooking}
-                        disabled={bookingLoading || (availability && (availability.available === false || rooms > availability.remainingRooms))}
-                        className="w-full mt-4 py-5 bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-[17px] shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
-                      >
-                        {bookingLoading ? "Processing..." : availability && (availability.available === false || rooms > availability.remainingRooms) ? "BOOKING FULL" : `BOOK YOUR STAY NOW`}
-                      </button>
-                      <p className="text-center text-[12px] text-gray-500 mt-[-30px] select-none font-jost">
-                        By proceeding you agree to our <Link to="/privacy-policy" className="underline hover:text-[#0d2b4e] transition">Privacy Policy</Link> and <Link to="/terms-conditions" className="underline hover:text-[#0d2b4e] transition">T&C</Link>.
-                      </p>
-                    </>
-                  )}
-
-                </div>
-              </div>
+            <div className="hidden lg:block lg:sticky lg:top-32">
+              {bookingSidebarWidget}
+            </div>
           </div>
         </section>
 
@@ -1208,7 +1174,7 @@ const RoomDetails = () => {
           <div className="max-w-[1400px] mx-auto">
             
             {/* Header Titles */}
-            <div className="flex flex-col sm:flex-row justify-between items-end mb-16 select-none">
+            <div className="flex flex-col sm:flex-row justify-between md:items-end mb-16 select-none">
               <div>
            
                 <h2 className="text-5xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">

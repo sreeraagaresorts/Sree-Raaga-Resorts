@@ -63,7 +63,7 @@ const Dine = () => {
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />
             </div>
-            <div className="space-y-6">
+            <div className="space-y-6 px-6">
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Restaurant
               </span>
@@ -123,7 +123,7 @@ const Dine = () => {
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />
             </div>
-            <div className="space-y-6">
+            <div className="space-y-6 px-6">
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Lounge
               </span>

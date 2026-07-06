@@ -108,7 +108,7 @@ const Exp = () => {
   };
 
   return (
-    <div className="hidden md:flex min-h-screen bg-[#fdfeff] pb-10 flex-col justify-center overflow-hidden font-jost relative">
+    <div className=" md:flex md:min-h-screen bg-[#fdfeff] md:pb-10 flex-col justify-center overflow-hidden font-jost relative">
 
       {/* Required Fonts */}
       <style>{`
@@ -173,8 +173,8 @@ const Exp = () => {
                 </div>
 
                 {/* Text Container */}
-                <div className="px-2 text-left">
-                  <h3 className="text-3xl lg:text-[28px] font-bold text-gray-500 font-corm hover:text-[#c8a64d] transition duration-300">
+                <div className="md:px-2 text-left">
+                  <h3 className="text-2xl lg:text-[28px] font-bold text-gray-500 font-corm hover:text-[#c8a64d] transition duration-300">
                     {item.title}
                   </h3>
                 </div>
@@ -186,7 +186,7 @@ const Exp = () => {
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 md:left-12 top-[40%] -translate-y-1/2 z-50 w-14 h-14 rounded-full bg-[rgba(30,30,30,0.5)] backdrop-blur-md flex items-center justify-center text-white hover:bg-[rgba(200,166,77,0.9)] hover:text-[#0d2b4e] transition-all duration-300"
+          className="absolute left-4 md:left-12 top-[30%] md:top-[40%] -translate-y-1/2 z-50 w-10 h-10 md:w-14 md:h-14 rounded-full bg-[rgba(30,30,30,0.5)] backdrop-blur-md flex items-center justify-center text-white hover:bg-[rgba(200,166,77,0.9)] hover:text-[#0d2b4e] transition-all duration-300"
           aria-label="Previous slide"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
@@ -196,7 +196,7 @@ const Exp = () => {
 
         <button
           onClick={nextSlide}
-          className="absolute right-4 md:right-12 top-[40%] -translate-y-1/2 z-50 w-14 h-14 rounded-full bg-[rgba(30,30,30,0.5)] backdrop-blur-md flex items-center justify-center text-white hover:bg-[rgba(200,166,77,0.9)] hover:text-[#0d2b4e] transition-all duration-300"
+          className="absolute right-4 md:right-12 top-[30%] md:top-[40%] -translate-y-1/2 z-50 w-10 h-10 md:w-14 md:h-14 rounded-full bg-[rgba(30,30,30,0.5)] backdrop-blur-md flex items-center justify-center text-white hover:bg-[rgba(200,166,77,0.9)] hover:text-[#0d2b4e] transition-all duration-300"
           aria-label="Next slide"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
