@@ -1163,7 +1163,7 @@ const RoomDetails = () => {
             </div>
 
             {/* RIGHT COLUMN (BOOKING SIDEBAR CARD) */}
-            <div className="hidden lg:block lg:sticky lg:top-32">
+            <div className="hidden lg:block lg:sticky lg:top-10">
               {bookingSidebarWidget}
             </div>
           </div>
