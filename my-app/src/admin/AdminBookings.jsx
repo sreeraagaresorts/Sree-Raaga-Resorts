@@ -614,10 +614,13 @@ const AdminBookings = () => {
 
                         {/* Cancel Button */}
                         <button
-                          onClick={() => 
-                            (b.status === "pending" || b.status === "confirmed") && 
-                            handleUpdateStatus(b.id, "cancelled")
-                          }
+                          onClick={() => {
+                            if (b.status === "pending" || b.status === "confirmed") {
+                              if (window.confirm("Are you sure you want to cancel this booking?")) {
+                                handleUpdateStatus(b.id, "cancelled");
+                              }
+                            }
+                          }}
                           disabled={b.status !== "pending" && b.status !== "confirmed"}
                           className={`p-1.5 rounded transition ${
                             b.status === "pending" || b.status === "confirmed"
