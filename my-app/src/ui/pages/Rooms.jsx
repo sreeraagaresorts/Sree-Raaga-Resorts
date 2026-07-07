@@ -331,7 +331,7 @@ const Rooms = () => {
           {/* Header Introduction */}
           <div className="row justify-center text-center mb-20 select-none">
             <div className="max-w-2xl mx-auto px-6 md:px-0">
-              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-[12px]  font-semibold ">
+              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-[16px]  font-semibold ">
                 Our Accommodations
               </span>
               <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]  mb-6">
@@ -409,7 +409,7 @@ const Rooms = () => {
                             </h3>
                             {room.category && (
                               <div className="flex items-center gap-2 mt-1.5">
-                                <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block uppercase">
+                                <span className="text-[14px] text-[#c8a64d]  font-bold tracking-[2px] block uppercase">
                                   {room.category}
                                 </span>
                                 {/* {room.availableRooms === 0 && (

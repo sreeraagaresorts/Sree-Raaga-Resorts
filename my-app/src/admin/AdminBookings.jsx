@@ -200,7 +200,7 @@ const AdminBookings = () => {
 
   const handleOpenAssignModal = (booking) => {
     setAssignBooking(booking);
-    setAssignRoomNumber("");
+    setAssignRoomNumber(booking.room_number || "");
     setIsAssignModalOpen(true);
   };
 
@@ -519,9 +519,18 @@ const AdminBookings = () => {
                     {/* ASSIGN ROOM */}
                     <td className="p-4 ">
                       {b.room_number ? (
-                        <span className="text-xs text-green-400 font-semibold border border-green-500/20 bg-green-500/10 px-2 py-1 rounded">
-                          Room: {b.room_number}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-green-400 font-semibold border border-green-500/20 bg-green-500/10 px-2 py-1 rounded">
+                            Room: {b.room_number}
+                          </span>
+                          <button
+                            onClick={() => handleOpenAssignModal(b)}
+                            className="p-1 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded transition cursor-pointer"
+                            title="Change Assigned Room"
+                          >
+                            <Edit size={12} />
+                          </button>
+                        </div>
                       ) : (
                         <button
                           onClick={() => handleOpenAssignModal(b)}
@@ -882,7 +891,7 @@ const AdminBookings = () => {
             className="bg-[#081A2F] w-full max-w-md p-6 rounded-xl border border-white/10 space-y-4"
           >
             <h2 className="text-lg font-bold border-b border-white/5 pb-2">
-              Assign Room Number
+              Assign / Change Room Number
             </h2>
             <div className="text-sm space-y-1.5 text-white/70">
               <p><span className="font-semibold text-white">Guest:</span> {assignBooking.guest_name}</p>
@@ -901,7 +910,7 @@ const AdminBookings = () => {
                 <option value="">-- Select Room Number --</option>
                 {assignAvailableRooms.map((num) => (
                   <option key={num} value={num}>
-                    Room {num} (Available)
+                    Room {num} {assignBooking.room_number === num ? "(Currently Assigned)" : "(Available)"}
                   </option>
                 ))}
               </select>
@@ -926,7 +935,7 @@ const AdminBookings = () => {
                 disabled={assignSaving || assignAvailableRooms.length === 0}
                 className="px-4 py-2 rounded-lg bg-[#C8A64D] hover:bg-[#b09141] text-black font-bold flex items-center gap-1.5 cursor-pointer border-0 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {assignSaving ? "Assigning..." : "Assign Room"}
+                {assignSaving ? "Saving..." : "Save Assignment"}
               </button>
             </div>
           </form>

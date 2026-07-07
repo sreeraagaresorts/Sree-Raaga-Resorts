@@ -1104,7 +1104,7 @@ return (
         {/* Content */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8 text-white">
           <span className="uppercase tracking-widest text-[17px] font-jost mb-10">
-            Amenities
+            Experience
           </span>
 
           <h3 className="font-corm text-4xl lg:text-6xl font-light leading-tight mb-8">
@@ -1115,7 +1115,8 @@ return (
             {exp.description}
           </p>
 
-        <button
+       <Link
+  to="/amenities"
   className="
     block
     w-full sm:w-auto
@@ -1125,6 +1126,7 @@ return (
     tracking-widest
     text-sm
     font-semibold
+    text-center
 
     opacity-100
     translate-y-0
@@ -1141,7 +1143,7 @@ return (
   "
 >
   Discover More
-</button>
+</Link>
         </div>
       </div>
     ))}

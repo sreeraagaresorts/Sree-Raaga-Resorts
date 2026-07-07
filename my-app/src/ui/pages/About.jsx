@@ -368,7 +368,8 @@ const About = () => {
             {exp.description}
           </p>
 
-        <button
+    <Link
+  to="/amenities"
   className="
     block
     w-full sm:w-auto
@@ -378,6 +379,7 @@ const About = () => {
     tracking-widest
     text-sm
     font-semibold
+    text-center
 
     opacity-100
     translate-y-0
@@ -394,7 +396,7 @@ const About = () => {
   "
 >
   Discover More
-</button>
+</Link>
         </div>
       </div>
     ))}

@@ -1151,37 +1151,43 @@ const RoomDetails = () => {
                   What's included in this suite?
                 </h3>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 select-none  text-xs md:text-sm text-gray-600">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span  className="text-[17px] text-gray-700">220V electrical sockets</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px] text-gray-700">Safety box</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px] text-gray-700">Room safe for your top mountain photos</span>
-                    </div>
-                  </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 select-none text-xs md:text-sm text-gray-600">
+  <div className="space-y-4">
+    <div className="flex items-center gap-3">
+      <Check className="w-4 h-4 text-[#c8a64d]" />
+      <span className="text-[17px] text-gray-700">Premium Quality Bedding</span>
+    </div>
 
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px] text-gray-700">220V electrical sockets</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px] text-gray-700">Slippers</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-4 h-4 text-[#c8a64d]" />
-                      <span className="text-[17px] text-gray-700">Mini bar</span>
-                    </div>
-                  </div>
-                </div>
+    <div className="flex items-center gap-3">
+      <Check className="w-4 h-4 text-[#c8a64d]" />
+      <span className="text-[17px] text-gray-700">Fresh Towels & Toiletries</span>
+    </div>
+
+    <div className="flex items-center gap-3">
+      <Check className="w-4 h-4 text-[#c8a64d]" />
+      <span className="text-[17px] text-gray-700">Complimentary Bottled Water</span>
+    </div>
+  </div>
+
+  <div className="space-y-4">
+    <div className="flex items-center gap-3">
+      <Check className="w-4 h-4 text-[#c8a64d]" />
+      <span className="text-[17px] text-gray-700">
+        Modern Bathroom with Hot & Cold Water
+      </span>
+    </div>
+
+    <div className="flex items-center gap-3">
+      <Check className="w-4 h-4 text-[#c8a64d]" />
+      <span className="text-[17px] text-gray-700">Spacious Storage Area</span>
+    </div>
+
+    <div className="flex items-center gap-3">
+      <Check className="w-4 h-4 text-[#c8a64d]" />
+      <span className="text-[17px] text-gray-700">Daily Housekeeping Service</span>
+    </div>
+  </div>
+</div>
               </div>
 
               <hr className="border-gray-200/60" />

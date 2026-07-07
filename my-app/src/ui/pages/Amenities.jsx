@@ -279,11 +279,12 @@ const Amenities = () => {
               LUXURY RESORT
             </span>
             <h2 className="text-3xl md:text-6xl font-semibold font-corm text-[#0d2b4e] leading-snug">
-              Water Sports you Must Try
-            </h2>
-            <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed max-w-2xl mx-auto">
-              An integral part of relax and perfect experience of your stay is water sports. Paddle boarding, kayaking, and surfing activities are designed to create memorable moments for you and your family.
-            </p>
+Luxury Beyond Expectations
+</h2>
+
+<p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed max-w-2xl mx-auto">
+  Experience exceptional comfort with our thoughtfully curated amenities, including luxury accommodations, a swimming pool, spa, fitness center, multi-cuisine restaurant, coffee shop, indoor and outdoor activities, and family-friendly spaces designed to make every stay relaxing and memorable.
+</p>
             <div className="pt-4">
            <Link
                    to="/rooms"
@@ -383,7 +384,7 @@ const Amenities = () => {
                 </p>
                 <div className="pt-4">
                    <Link
-                   to="/about"
+                   to="/amenities"
                    className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
                  >
                    <span>—</span>
@@ -445,7 +446,7 @@ const Amenities = () => {
                 </p>
                 <div className="pt-4">
                    <Link
-                   to="/about"
+                   to="/amenities"
                    className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
                  >
                    <span>—</span>
@@ -507,7 +508,7 @@ const Amenities = () => {
                 </p>
                 <div className="pt-4">
                    <Link
-                   to="/about"
+                   to="/amenities"
                    className="inline-flex items-center gap-4 px-10 py-5  bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
                  >
                    <span>—</span>

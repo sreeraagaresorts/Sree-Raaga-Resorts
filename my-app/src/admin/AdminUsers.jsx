@@ -264,7 +264,11 @@ const AdminUsers = () => {
                   {historyLogs.map((log) => (
                     <tr
                       key={log.id}
-                      className="border-t border-white/5 hover:bg-white/5 transition"
+                      className={`border-t border-white/5 transition ${
+                        log.actionType && log.actionType.toLowerCase().includes("delete")
+                          ? "bg-red-500/10 text-red-100 hover:bg-red-500/15"
+                          : "hover:bg-white/5"
+                      }`}
                     >
                       <td className="p-4 text-white text-xs">
                         {new Date(log.timestamp).toLocaleString("en-IN")}
@@ -273,14 +277,14 @@ const AdminUsers = () => {
                       <td className="p-4">
                         <span
                           className={`text-xs px-2.5 py-0.5 rounded border font-semibold inline-flex items-center gap-1 ${
-                            log.actionType === "User Deletion"
+                            log.actionType && log.actionType.toLowerCase().includes("delete")
                               ? "bg-red-500/10 text-red-400 border-red-500/20"
                               : log.actionType === "Login"
                               ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                               : "bg-amber-500/10 text-amber-400 border-amber-500/20"
                           }`}
                         >
-                          {log.actionType}
+                          {log.actionType}  
                         </span>
                       </td>
                       <td className="p-4 text-white">{log.details}</td>
