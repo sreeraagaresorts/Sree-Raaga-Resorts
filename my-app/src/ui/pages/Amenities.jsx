@@ -5,7 +5,7 @@ import { ChevronDown, ArrowRight ,ArrowDown } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import DatePicker from "react-datepicker";
-
+import { Helmet } from "react-helmet";
 import wifiIcon from "../../assets/icons/wifi.png";
 import buggyIcon from "../../assets/icons/car.png";
 import tvIcon from "../../assets/icons/tv.png";
@@ -218,6 +218,33 @@ const Amenities = () => {
 
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+     <Helmet>
+  <title>Amenities | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Explore the premium amenities at Sree Raaga Resorts, including luxury accommodations, swimming pool, spa, fitness center, restaurant, indoor and outdoor activities, children's play area, and more for a relaxing getaway."
+  />
+
+  <meta
+    name="keywords"
+    content="Sree Raaga Resorts amenities, resort facilities, swimming pool, spa, fitness center, restaurant, coffee shop, indoor games, outdoor activities, kids play area, luxury resort amenities"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="Amenities | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="Discover world-class amenities at Sree Raaga Resorts, from luxurious accommodations and fine dining to wellness, recreation, and family-friendly facilities."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden">
         
@@ -270,7 +297,7 @@ const Amenities = () => {
         </section>
 
   {/* ================= 3. ALTERNATING AMENITIES SECTION ================= */}
-        <section className="md:py-24 py-18 px-6 bg-[#fdfeff]">
+        <section className="md:py-24 py-18 md:px-6 bg-[#fdfeff]">
           <div className="max-w-7xl mx-auto space-y-28">
             
             {/* ITEM 01: Swimming Pool */}
@@ -282,7 +309,7 @@ const Amenities = () => {
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 space-y-6">
+              <div className="lg:col-span-6 space-y-6 px-6 md:px-0">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   01
                 </span>
@@ -313,7 +340,7 @@ const Amenities = () => {
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 lg:order-1 space-y-6">
+              <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   02
                 </span>
@@ -344,7 +371,7 @@ const Amenities = () => {
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 space-y-6">
+              <div className="lg:col-span-6 space-y-6 px-6 md:px-0">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   03
                 </span>
@@ -375,7 +402,7 @@ const Amenities = () => {
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 lg:order-1 space-y-6">
+              <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   04
                 </span>
@@ -406,7 +433,7 @@ const Amenities = () => {
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 space-y-6">
+              <div className="lg:col-span-6 space-y-6 px-6 md:px-0">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   05
                 </span>
@@ -437,7 +464,7 @@ const Amenities = () => {
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 lg:order-1 space-y-6">
+              <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   06
                 </span>
@@ -468,7 +495,7 @@ const Amenities = () => {
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 space-y-6">
+              <div className="lg:col-span-6 space-y-6 px-6 md:px-0">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   07
                 </span>
@@ -813,7 +840,7 @@ const Amenities = () => {
                         <div
                           key={key}
                           onClick={() => handleTabClick(key)}
-                          className="cursor-pointer group flex flex-col items-start justify-center px-4 md:px-0 transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
+                          className="cursor-pointer group flex flex-col items-start justify-center px-7 md:px-0 transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
                         >
                          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                             isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-[100px] opacity-30 "

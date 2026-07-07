@@ -12,7 +12,7 @@ const bookingSchema = new mongoose.Schema({
   rooms: { type: Number, default: 1 },
   room_number: { type: String, default: null },
   total_price: { type: Number, required: true },
-  status: { type: String, default: "pending" },
+  status: { type: String, default: "confirmed" },
   payment_method: { type: String, default: "online" },
   razorpay_payment_id: { type: String, default: null },
   created_at: { type: Date, default: Date.now }

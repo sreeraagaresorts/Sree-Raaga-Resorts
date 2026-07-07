@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import restaurantIcon from "../../assets/images/icons/restaurant.svg";
+import { Helmet } from "react-helmet";
 import spaIcon from "../../assets/images/icons/spa.svg";
 import fitnessIcon from "../../assets/images/icons/fitness.svg";
 import wifiIcon from "../../assets/icons/wifi.png";
@@ -68,6 +69,33 @@ const About = () => {
 
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+     <Helmet>
+  <title>About Us | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Learn about Sree Raaga Resorts, where luxury, comfort, and nature come together. Discover our story, hospitality, premium accommodations, and commitment to creating unforgettable guest experiences."
+  />
+
+  <meta
+    name="keywords"
+    content="About Sree Raaga Resorts, Sree Raaga story, luxury resort, premium resort, nature resort, family resort, hospitality, resort in Karnataka, luxury villas, weekend getaway"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="About Sree Raaga Resorts | Our Story & Hospitality"
+  />
+
+  <meta
+    property="og:description"
+    content="Discover the story behind Sree Raaga Resorts, our passion for hospitality, luxurious accommodations, scenic surroundings, and exceptional guest experiences."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden ">
         
@@ -374,7 +402,7 @@ const About = () => {
 </section>
 
         {/* ================= CALL TO ACTION (CTA) ================= */}
-        <section
+        {/* <section
           className="relative py-42 px-6 bg-cover bg-center flex flex-col items-center justify-center text-center"
           style={{
             backgroundImage:
@@ -393,7 +421,7 @@ const About = () => {
               Book Now
             </Link>
           </div>
-        </section>
+        </section> */}
 
       </div>
       <Footer />

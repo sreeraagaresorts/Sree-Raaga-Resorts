@@ -507,18 +507,17 @@ const Navbar = () => {
             className="flex flex-col items-center text-center space-y-10 max-w-sm w-full"
           >
             {/* Top Logo / Brand */}
-            <div className="flex flex-col items-center ">
-              <span className="text-[#0d2b4e] uppercase tracking-[2px] text-3xl font-corm  font-semibold block">
-                Sree Raaga
-              </span>
-              <span className="text-[#c8a64d] uppercase tracking-[4px] text-[14px] font-semibold mt-1">
-                Luxury Resorts
-              </span>
-            </div>
+          <div className="flex flex-col items-center">
+  <img
+    src="/logo.png"
+    alt="Sree Raaga Resorts"
+    className="h-16 md:h-20 w-auto object-contain"
+  />
+</div>
 
             {/* Elegant Tagline / Heading */}
             <h2 className="text-[40px] font-medium font-corm  text-[#0d2b4e] leading-tight">
-              Resort & Spa Sree Raaga
+              Luxury Resort
             </h2>
 
             {/* Divider line (subtle) */}

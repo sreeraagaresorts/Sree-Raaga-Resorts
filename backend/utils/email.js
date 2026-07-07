@@ -261,11 +261,12 @@ exports.sendBookingCreatedEmail = async (booking) => {
   const checkIn = formatDate(booking.check_in);
   const checkOut = formatDate(booking.check_out);
   const price = parseFloat(booking.total_price) || 0;
+  const isConfirmed = booking.status === "confirmed";
   
   const content = `
-    <div class="greeting">Booking Request Received</div>
+    <div class="greeting">${isConfirmed ? "Booking Confirmed" : "Booking Request Received"}</div>
     <p>Dear <strong>${booking.guest_name || "Guest"}</strong>,</p>
-    <p>Thank you for booking with us. We have received your booking and are checking it now.</p>
+    <p>${isConfirmed ? "Your booking has been successfully confirmed. We look forward to welcoming you!" : "Thank you for booking with us. We have received your booking and are checking it now."}</p>
     <div class="box">
       <strong>Booking Details:</strong><br>
       • Booking ID: #${booking.id || "N/A"}<br>
@@ -277,13 +278,13 @@ exports.sendBookingCreatedEmail = async (booking) => {
       • Payment Method: ${booking.payment_method || "cash"}<br>
       • Status: <strong>${booking.status || "pending"}</strong>
     </div>
-    <p>We will email you as soon as your booking is confirmed by the resort.</p>
+    ${isConfirmed ? `<p>We look forward to your stay. Have a safe trip!</p>` : `<p>We will email you as soon as your booking is confirmed by the resort.</p>`}
   `;
   return sendMail({
     to: booking.guest_email,
-    subject: `Booking Request Received - #${booking.id} - Sree Raaga Resort`,
-    html: getEmailShell("Booking Received", content),
-    text: `Booking Request Received: Booking #${booking.id} for ${booking.room_name} is currently ${booking.status}.`
+    subject: isConfirmed ? `Booking Confirmed - #${booking.id} - Sree Raaga Resort` : `Booking Request Received - #${booking.id} - Sree Raaga Resort`,
+    html: getEmailShell(isConfirmed ? "Booking Confirmed" : "Booking Received", content),
+    text: isConfirmed ? `Booking Confirmed: Booking #${booking.id} for ${booking.room_name} is confirmed.` : `Booking Request Received: Booking #${booking.id} for ${booking.room_name} is currently ${booking.status}.`
   });
 };
 

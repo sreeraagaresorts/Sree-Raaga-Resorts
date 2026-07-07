@@ -122,7 +122,7 @@ const Footer = () => {
         </motion.button>
       </div> */}
 
-      <div className="max-w-[180vh] mx-auto px-6 py-12 md:py-0 md:pt-44 md:pb-22">
+      <div className="max-w-[180vh] mx-auto px-6 md:py-12 py-8 md:py-0 md:pt-44 md:pb-22">
         
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
@@ -134,7 +134,7 @@ const Footer = () => {
     alt="Sree Raaga Resorts"
     className="h-[55px] mb-5 md:h-20 lg:h-25 w-auto object-contain" 
   />
-            <p className="text-white text-xs md:text-[16px] leading-relaxed max-w-xs">
+            <p className="text-white text-[16px] leading-relaxed max-w-xs">
               Sree Raaga Resorts offers a sanctuary of peace, where luxury meets nature. Escape the city's hustle and enjoy a perfect blend of stays, corporate events, weddings, and family recreation.
             </p>
           </div>
@@ -144,7 +144,7 @@ const Footer = () => {
             <h3 className="text-lg md:text-4xl font-bold font-corm tracking-wide mb-6">
               Contact
             </h3>
-            <div className="space-y-4 text-white text-xs md:text-[16px] leading-relaxed">
+            <div className="space-y-4 text-white text-[16px] leading-relaxed">
               <p>
                 No. 1246, Budigere Bypass Road,
                 <br />
@@ -183,7 +183,7 @@ const Footer = () => {
               Links
             </h3>
             
-            <div className="grid grid-cols-2 gap-4  text-xs md:text-[16px]">
+            <div className="grid grid-cols-2 gap-4  text-[16px]">
            <div>
                <ul className="space-y-3">
                 <li>
@@ -289,7 +289,7 @@ const Footer = () => {
 
       </div>
          {/* Bottom Bar: Copyright, Centered Logo, and Socials */}
-        <div className="border-t border-white/5 py-8 flex flex-col md:flex-row justify-center items-center gap-6">
+        <div className="border-t border-white/5 py-4 md:py-8 flex flex-col md:flex-row justify-center items-center gap-6">
           
       
 

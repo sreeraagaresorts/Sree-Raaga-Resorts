@@ -2,10 +2,40 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import { Helmet } from "react-helmet";
 const NotFound = () => {
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+    <Helmet>
+  <title>Page Not Found | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="The page you are looking for could not be found. Return to the Sree Raaga Resorts homepage to explore our luxury accommodations, dining, amenities, and experiences."
+  />
+
+  <meta
+    name="keywords"
+    content="404, page not found, Sree Raaga Resorts"
+  />
+
+  {/* Prevent indexing of the 404 page */}
+  <meta name="robots" content="noindex, nofollow" />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="Page Not Found | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="The requested page could not be found. Visit Sree Raaga Resorts to explore our accommodations, dining, events, and amenities."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className="bg-black text-white overflow-x-hidden">
         

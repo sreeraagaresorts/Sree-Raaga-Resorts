@@ -2,6 +2,8 @@ import React from "react";
 import { Link, useLocation, Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Helmet } from "react-helmet";
+
 
 const legalTabs = [
   { key: "privacy", title: "Privacy Policy", path: "/privacy-policy" },
@@ -28,7 +30,35 @@ const LegalLayout = () => {
 
   return (
     <>
-      <Navbar />
+    {/* 2. ADD HELMET COMPONENT HERE */}
+     <Helmet>
+  <title>Legal Policy | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Read the legal policies of Sree Raaga Resorts, including our terms and conditions, privacy policy, booking policies, cancellation guidelines, refund policy, and guest responsibilities."
+  />
+
+  <meta
+    name="keywords"
+    content="Sree Raaga Resorts legal policy, privacy policy, terms and conditions, booking policy, cancellation policy, refund policy, guest policy, resort terms"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="Legal Policy | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="Review the legal policies, privacy practices, booking terms, cancellation guidelines, and guest responsibilities at Sree Raaga Resorts."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
+
+<Navbar />
       <div 
         className="text-[#0d2b4e] min-h-screen bg-cover bg-center bg-no-repeat bg-fixed relative"
         style={{

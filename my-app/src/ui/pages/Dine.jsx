@@ -3,10 +3,38 @@ import { Link } from "react-router-dom";
 import { Phone, Mail } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Helmet } from "react-helmet";
 
 const Dine = () => {
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+    <Helmet>
+  <title>Dine | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Savor delicious flavors at Sree Raaga Resorts with our multi-cuisine restaurant, signature dishes, refreshing beverages, and an exceptional dining experience in a serene setting."
+  />
+
+  <meta
+    name="keywords"
+    content="Sree Raaga Resorts restaurant, dine at Sree Raaga Resorts, multi-cuisine restaurant, fine dining, resort restaurant, family dining, buffet, South Indian food, North Indian food, continental cuisine"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="Dine | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="Enjoy an unforgettable culinary experience at Sree Raaga Resorts with delicious multi-cuisine specialties, fresh ingredients, and warm hospitality."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e]  min-h-screen">
         

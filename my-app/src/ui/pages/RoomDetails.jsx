@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { 
   Maximize, 
   Users, 
@@ -806,58 +807,14 @@ const RoomDetails = () => {
                 <div className="text-[17px] font-semibold text-[#3d2c23]">Price</div>
               </div>
               <div className="text-[#c8a64d] font-bold text-[25px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-            </div>
-          </div>
-          
-          {/* Price Details */}
-          <div className=" rounded-2xl  mt-6 select-none">
-            <h3 className="text-[20px] font-bold font-corm text-[#3d2c23] mb-6">Price Details</h3>
-            <div className="space-y-3 text-[15px]">
               
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-gray-800 text=[14px]">Base Price</div>
-                  <div className="text-[#a89082] text-[12px] font-semibold ">For {totals.nights > 0 ? totals.nights : 1} Night{totals.nights > 1 ? 's' : ''}</div>
-                </div>
-                <div className="text-gray-800 font-medium text-[14px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-              </div>
-              
-              {/* Applied Coupon Details */}
-              {appliedCoupon && (
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="text-gray-800 flex text-[14px] items-center gap-2">
-                      Coupon Discounts
-                    </div>
-                    <div className="text-emerald-600 text-[12px] font-bold mt-1 uppercase tracking-wide">Discount '{appliedCoupon.code}'</div>
-                  </div>
-                  <div className="text-emerald-600 font-bold text-[14px]">- ₹ {totals.discount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-                </div>
-              )}
-
-              <div className="flex justify-between items-start pt-1">
-                <div className="text-gray-800 text-[14px]">GST</div>
-                <div className="text-gray-800 text-[14px] font-medium">₹ {totals.gst.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-              </div>
             </div>
-
-            <div className="border-t border-[#eeeadd] mt-6 pt-5">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-[16px] font-semibold text-[#3d2c23]">Total Amount</div>
-                  <div className="text-gray-500 text-[12px] mt-1 font-medium">Including Tax </div>
-                </div>
-                <div className="text-[22px] font-bold text-[#3d2c23]">₹{totals.total.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
-              </div>
-            </div>
-          </div>                  
-          
-          {checkingAvailability ? (
-            <span className="text-gray-400 text-xs block text-right mt-2">Checking availability...</span>
+                {checkingAvailability ? (
+            <span className="text-gray-400 text-xs block text-right ">Checking availability...</span>
           ) : availability ? (
             availability.available && availability.remainingRooms >= rooms ? (
               <span className="text-emerald-600 text-xs font-semibold block text-right mt-2">
-                Available! ({availability.remainingRooms} of {availability.totalRooms} rooms left)
+                Available! ( Only {availability.remainingRooms}  room left )
               </span>
             ) : (
               <span className="text-rose-600 text-xs font-semibold block text-right mt-2">
@@ -865,6 +822,54 @@ const RoomDetails = () => {
               </span>
             )
           ) : null}
+          </div>
+          
+          {/* Price Details */}
+          {checkIn && checkOut && (
+            <div className=" rounded-2xl  mt-6 select-none">
+              <h3 className="text-[20px] font-bold font-corm text-[#3d2c23] mb-6">Price Details</h3>
+              <div className="space-y-3 text-[15px]">
+                
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="text-gray-800 text=[14px]">Base Price</div>
+                    <div className="text-[#a89082] text-[12px] font-semibold ">For {totals.nights > 0 ? totals.nights : 1} Night{totals.nights > 1 ? 's' : ''}</div>
+                  </div>
+                  <div className="text-gray-800 font-medium text-[14px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                </div>
+                
+                {/* Applied Coupon Details */}
+                {appliedCoupon && (
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="text-gray-800 flex text-[14px] items-center gap-2">
+                        Coupon Discounts
+                      </div>
+                      <div className="text-emerald-600 text-[12px] font-bold mt-1 uppercase tracking-wide">Discount '{appliedCoupon.code}'</div>
+                    </div>
+                    <div className="text-emerald-600 font-bold text-[14px]">- ₹ {totals.discount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-start pt-1">
+                  <div className="text-gray-800 text-[14px]">GST</div>
+                  <div className="text-gray-800 text-[14px] font-medium">₹ {totals.gst.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                </div>
+              </div>
+
+              <div className="border-t border-[#eeeadd] mt-6 pt-5">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="text-[16px] font-semibold text-[#3d2c23]">Total Amount</div>
+                    <div className="text-gray-500 text-[12px] mt-1 font-medium">Including Tax </div>
+                  </div>
+                  <div className="text-[22px] font-bold text-[#3d2c23]">₹{totals.total.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                </div>
+              </div>
+            </div>
+          )}                  
+          
+      
         </div>
 
         {/* Booking Trigger CTA */}
@@ -893,6 +898,33 @@ const RoomDetails = () => {
 
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+     <Helmet>
+  <title>Room Details | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Explore our luxury rooms and villas at Sree Raaga Resorts. Discover spacious accommodations, modern amenities, scenic views, and premium comforts for a relaxing and memorable stay."
+  />
+
+  <meta
+    name="keywords"
+    content="Sree Raaga Resorts rooms, luxury rooms, private villas, premium accommodation, resort rooms, family suites, luxury stay, resort booking, villa booking"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="Room Details | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="Discover beautifully designed rooms and villas at Sree Raaga Resorts, offering premium amenities, comfort, and a peaceful retreat for every guest."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden min-h-screen pt-28 md:pt-36">
         
@@ -994,7 +1026,7 @@ const RoomDetails = () => {
                 <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e]">
                   About accommodation
                 </h3>
-                <p className="text-gray-500 text-sm md:text-[17px] leading-relaxed text-justify ">
+                <p className="text-gray-500 text-[17px] leading-relaxed text-justify ">
                   {room.description}
                 </p>
               
@@ -1161,12 +1193,49 @@ const RoomDetails = () => {
                 </h3>
                 
                 <ul className="space-y-4  text-[17px] text-gray-700 list-disc pl-5 select-none">
+                  <li>Please carry a valid ID for Verification</li>
+                  <li>Early check-in & check-out may be possible <br /> upon request, subject to availability</li>
                   <li>Check-in from 9:00 AM - Anytime</li>
                   <li>Check-out: 11:00 AM</li>
                   <li>Self-check-in with lockbox</li>
                   <li>No smoking</li>
                   <li>Pets are allowed</li>
                 </ul>
+              </div>
+
+              <hr className="border-gray-200/60" />
+
+              {/* Cancellation Policy */}
+              <div className="space-y-6 px-6 md:px-0">
+                <h3 className="text-3xl font-medium font-corm  text-[#0d2b4e] select-none">
+                  Cancellation Policy
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Before card */}
+                  {/* Before card */}
+                  <div className="py-4 px-5 rounded-2xl border border-[#f5ebd0] bg-[#fdfaf2] flex flex-col justify-between min-h-[75px] select-none">
+                    <div className="text-[12px] font-bold uppercase tracking-wider text-black font-jost">
+                      BEFORE
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-700 inline-block"></span>
+                      <span className="text-[14px] text-gray-800 font-jost">Non refundable.</span>
+                    </div>
+                  </div>
+
+                  {/* Within card */}
+                  <div className="py-4 px-5 rounded-2xl border border-[#ffdce0] bg-[#fff5f6] flex flex-col justify-between min-h-[75px] select-none">
+                    <div className="flex justify-between items-center text-[12px] font-bold uppercase tracking-wider text-black font-jost">
+                      <span>WITHIN</span>
+                      <span className="text-black font-extrabold text-[13px]">No Refund</span>
+                    </div>
+                    <div className="flex justify-between items-end mt-2 text-[14px] text-gray-800 font-jost">
+                      <span>15 days from check-in</span>
+                      <span className="text-gray-900 font-medium">Non-Refundable</span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -1179,11 +1248,11 @@ const RoomDetails = () => {
         </section>
 
         {/* ================= SIMILAR ROOMS SECTION ================= */}
-        <section className="py-28 px-6 bg-[#fdfeff] border-t border-gray-100">
+        <section className="py-28 md:px-6 bg-[#fdfeff] border-t border-gray-100">
           <div className="max-w-[1400px] mx-auto">
             
             {/* Header Titles */}
-            <div className="flex flex-col sm:flex-row justify-between md:items-end mb-16 select-none">
+            <div className="flex flex-col px-6 md:px-0 sm:flex-row justify-between md:items-end mb-16 select-none">
               <div>
            
                 <h2 className="text-5xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
@@ -1220,7 +1289,7 @@ const RoomDetails = () => {
                   </Link>
 
                   {/* Title & Price details */}
-                  <div className="flex flex-col select-none">
+                  <div className="flex flex-col select-none px-6 md:px-0">
                     <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                       <div>
                         <h4 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 ">
@@ -1341,18 +1410,24 @@ const RoomDetails = () => {
 
       {/* 360 View Modal */}
       {is360ModalOpen && room?.view360Iframe && (
-        <div className="fixed inset-0  z-[100] flex items-center justify-center p-4">
-          <button 
-            onClick={() => setIs360ModalOpen(false)}
-            className="absolute top-17 right-4 md:top-21 md:right-94 text-white hover:text-[#c8a64d] z-[110] transition p-2 cursor-pointer bg-black/50 rounded-tr-[16px] "
-            title="Close 360 View"
-          >
-            <X className="w-8 h-8" />
-          </button>
-          <div 
-            className="w-full h-full max-w-6xl max-h-[80vh] rounded-2xl overflow-hidden shadow-2xl relative flex items-center justify-center [&_iframe]:!w-full [&_iframe]:!h-full [&_iframe]:!max-w-full [&_iframe]:!border-0 border border-white/10"
-            dangerouslySetInnerHTML={{ __html: room.view360Iframe }}
-          />
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          {/* Click outside overlay */}
+          <div className="absolute inset-0" onClick={() => setIs360ModalOpen(false)}></div>
+          
+          {/* 360 View Container */}
+          <div className="w-full h-full max-w-6xl max-h-[80vh] rounded-2xl overflow-hidden shadow-2xl relative flex items-center justify-center border border-white/10 z-10 bg-black">
+            <button 
+              onClick={() => setIs360ModalOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-[#c8a64d] z-[110] transition p-2 cursor-pointer bg-black/50 hover:bg-black/80 rounded-full"
+              title="Close 360 View"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div 
+              className="w-full h-full [&_iframe]:!w-full [&_iframe]:!h-full [&_iframe]:!max-w-full [&_iframe]:!border-0"
+              dangerouslySetInnerHTML={{ __html: room.view360Iframe }}
+            />
+          </div>
         </div>
       )}
 

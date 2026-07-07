@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Edit,
-  CheckCircle,
   XCircle,
   Plus,
   X,
@@ -459,7 +458,6 @@ const AdminBookings = () => {
           className="bg-[#071524] px-3 py-2 rounded-lg text-sm border border-white/10 text-white outline-none focus:border-[#C8A64D]"
         >
           <option value="All">All Statuses</option>
-          <option value="pending">Pending</option>
           <option value="confirmed">Confirmed</option>
           <option value="checked_in">Checked In</option>
           <option value="cancelled">Cancelled</option>
@@ -584,20 +582,6 @@ const AdminBookings = () => {
                     {/* ACTIONS */}
                     <td className="p-4 text-center">
                       <div className="flex items-center justify-center gap-2">
-                        {/* Confirm Button */}
-                        <button
-                          onClick={() => b.status === "pending" && handleUpdateStatus(b.id, "confirmed")}
-                          disabled={b.status !== "pending"}
-                          className={`p-1.5 rounded transition ${
-                            b.status === "pending"
-                              ? "bg-green-500/10 text-green-400 hover:bg-green-500/20 cursor-pointer"
-                              : "bg-white/5 text-white/20 cursor-not-allowed opacity-30"
-                          }`}
-                          title={b.status === "pending" ? "Confirm Booking" : "Cannot Confirm"}
-                        >
-                          <CheckCircle size={14} />
-                        </button>
-
                         {/* Check In Button */}
                         <button
                           onClick={() => b.status === "confirmed" && handleUpdateStatus(b.id, "checked_in")}
@@ -615,19 +599,19 @@ const AdminBookings = () => {
                         {/* Cancel Button */}
                         <button
                           onClick={() => {
-                            if (b.status === "pending" || b.status === "confirmed") {
+                            if (b.status === "confirmed") {
                               if (window.confirm("Are you sure you want to cancel this booking?")) {
                                 handleUpdateStatus(b.id, "cancelled");
                               }
                             }
                           }}
-                          disabled={b.status !== "pending" && b.status !== "confirmed"}
+                          disabled={b.status !== "confirmed"}
                           className={`p-1.5 rounded transition ${
-                            b.status === "pending" || b.status === "confirmed"
+                            b.status === "confirmed"
                               ? "bg-red-500/10 text-red-400 hover:bg-red-500/20 cursor-pointer"
                               : "bg-white/5 text-white/20 cursor-not-allowed opacity-30"
                           }`}
-                          title={b.status === "pending" || b.status === "confirmed" ? "Cancel Booking" : "Cannot Cancel"}
+                          title={b.status === "confirmed" ? "Cancel Booking" : "Cannot Cancel"}
                         >
                           <XCircle size={14} />
                         </button>

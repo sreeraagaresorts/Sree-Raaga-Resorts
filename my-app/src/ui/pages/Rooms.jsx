@@ -5,7 +5,7 @@ import { Maximize, Users, Bed, Bath, ArrowRight, Heart } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useToast } from "../components/Toast";
-
+import { Helmet } from "react-helmet";
 import { API_URL } from "../../config/api";
 
 const fallbackRooms = [
@@ -276,6 +276,33 @@ const Rooms = () => {
 
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+     <Helmet>
+  <title>Our Rooms | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Explore our luxurious rooms and private villas at Sree Raaga Resorts. Choose from spacious accommodations with modern amenities, elegant interiors, and scenic surroundings for a comfortable and memorable stay."
+  />
+
+  <meta
+    name="keywords"
+    content="Sree Raaga Resorts rooms, luxury rooms, private villas, resort accommodation, deluxe rooms, family suites, premium villas, resort stay, room booking, luxury resort"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="Our Rooms | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="Discover premium rooms and luxury villas at Sree Raaga Resorts, offering exceptional comfort, modern amenities, and a relaxing getaway surrounded by nature."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden  min-h-screen">
         
@@ -377,7 +404,7 @@ const Rooms = () => {
                       <div className="flex flex-col flex-grow select-none px-6 md:px-0">
                         <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                           <div>
-                            <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                            <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 ">
                               {room.name}
                             </h3>
                             {room.category && (
@@ -506,10 +533,10 @@ const Rooms = () => {
                       <div className="flex flex-col flex-grow select-none px-6 md:px-0">
                         <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                           <div>
-                            <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 group-hover:text-[#c8a64d]">
+                            <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 ">
                               {room.name}
                             </h3>
-                            {room.category && (
+                            {/* {room.category && (
                               <div className="flex items-center gap-2 mt-1.5">
                                 <span className="text-xs text-[#c8a64d]  font-bold tracking-[2px] block uppercase">
                                   {room.category}
@@ -520,7 +547,7 @@ const Rooms = () => {
                                   </span>
                                 )}
                               </div>
-                            )}
+                            )} */}
                           </div>
                           <div className="text-right">
                             <span className="text-lg md:text-xl font-semibold text-gray-800">
@@ -615,11 +642,11 @@ const Rooms = () => {
 
      {/* ================= FOLLOW US ON INSTAGRAM ================= */}
       <section className="bg-[#fdfeff] text-[#0d2b4e]">
-        <div className="py-12 text-center mb-12">
+        <div className="py-8 md:py-12 text-center mb-12">
           <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-jost font-semibold block mb-2">
             Social Media
           </span>
-          <h2 className="text-[36px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
+          <h2 className="text-[33px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
             Follow us on Instagram 
             {/* <Instagram size={26} className="text-[#c8a64d] mt-2" /> */}
           </h2>
@@ -645,7 +672,7 @@ const Rooms = () => {
                 - Mobile: flex-none, fixed width (75% of screen), snap to center
                 - Desktop (sm+): auto width (fills grid cell), disable snapping
               */
-              className="flex-none w-[75%] sm:w-auto snap-center sm:snap-align-none relative aspect-square overflow-hidden group shadow-sm"
+              className="flex-none w-[100%] sm:w-auto snap-center sm:snap-align-none relative aspect-square overflow-hidden group shadow-sm"
             >
               <img 
                 src={img} 

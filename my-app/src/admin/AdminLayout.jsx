@@ -593,14 +593,14 @@ const  AdminLayout=()=> {
             >
               {/* BRANDING / HEADER */}
               <div className="p-6 flex items-center justify-between border-b border-white/5">
-                <div>
-                  <h2 className="text-xl font-bold flex items-center gap-2">
-                    <span className="text-[#C8A64D]">Sree</span>
-                    <span className="text-[#C8A64D]">Raaga</span>
-                    <span className="text-[#C8A64D]">Resorts</span>
-                  </h2>
-                  <p className="text-xs text-white/40 mt-1">Admin Panel</p>
-                </div>
+            <div>
+  <img
+    src="/logo.png"
+    alt="Sree Raaga Resorts"
+    className="h-12 w-auto object-contain"
+  />
+  <p className="text-xs text-white/40 mt-2">Admin Panel</p>
+</div>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-white hover:text-[#C8A64D]"
@@ -668,15 +668,14 @@ const  AdminLayout=()=> {
 
       {/* SIDEBAR */}
       <aside className="w-64 border-r border-white/5 hidden md:flex flex-col bg-[#071524] h-screen sticky top-0 flex-shrink-0">
-
-        <div className="p-6">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <span className="text-[#C8A64D]">Sree</span>
-            <span className="text-[#C8A64D]">Raaga</span>
-            <span className="text-[#C8A64D]">Resorts</span>
-          </h2>
-          <p className="text-xs text-white/40 mt-1">Admin Panel</p>
-        </div>
+<div className="p-6">
+  <img
+    src="/logo.png"
+    alt="Sree Raaga Resorts"
+    className="h-18 w-auto object-contain"
+  />
+  <p className="text-xs text-white/40 mt-2">Admin Panel</p>
+</div>
 
         <div className="flex-1 px-4 space-y-1">
           {navItems.map((item) => (

@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import Experience from "../components/ExperienceSlider"
 import "swiper/css";
+import { Helmet } from "react-helmet";
 import "swiper/css/navigation";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -406,6 +407,22 @@ export default function Home() {
 
 return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+      <Helmet>
+        <title>Sree Raaga Resorts | Experience Unparalleled Comfort</title>
+        <meta 
+          name="description" 
+          content="Stay with us and feel like home at Sree Raaga Resorts. Book luxury private villas, enjoy exceptional gastronomy, and discover unique day-out packages." 
+        />
+        <meta 
+          name="keywords" 
+          content="Sree Raaga Resorts, luxury resorts, private villas, resort booking, multi-cuisine restaurant, day-out packages" 
+        />
+        {/* Optional Open Graph tags for better social sharing */}
+        <meta property="og:title" content="Sree Raaga Resorts | Luxury Stay & Experiences" />
+        <meta property="og:description" content="Experience unparalleled comfort with our luxury villas, exceptional dining, and unique day-out packages." />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden ">
         
@@ -1002,7 +1019,7 @@ return (
                     <div
                       key={key}
                       onClick={() => handleTabClick(key)}
-                      className="cursor-pointer group flex flex-col items-start justify-center px-4 md:px-0 transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
+                      className="cursor-pointer group flex flex-col items-start justify-center px-7 md:px-0 transition-all duration-300 py-6 border-b border-[#0d2b4e]/5 last:border-b-0"
                     >
                      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                         isActive ? "max-h-[200px] opacity-100 mt-2" : "max-h-[100px] opacity-30 "
@@ -1015,7 +1032,7 @@ return (
   </div>
 
                       <h3
-                        className={`text-xl md:text-4xl font-semibold tracking-wide font-corm mb-1  transition-colors duration-300 ${tabColor}`}
+                        className={`text-2xl md:text-4xl font-bold md:font-semibold tracking-wide font-corm mb-1  transition-colors duration-300 ${tabColor}`}
                       >
                         {tabData[key].title}
                       </h3>
@@ -1302,9 +1319,9 @@ return (
 
             {/* Rooms Dropdown */}
             {isRoomsOpen && (
-              <div className="absolute top-[105%] md:top-[120%] left-0 w-full md:w-64 bg-[#f7d6b8] text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none animate-in fade-in zoom-in-95 duration-200">
+              <div className="absolute top-[105%] md:top-[120%] left-0 w-full md:w-74 bg-[#f7d6b8] text-neutral-800 rounded-2xl py-7 px-3 shadow-2xl  z-50 font-jost text-left select-none animate-in fade-in zoom-in-95 duration-200">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-sm">Rooms</span>
+                  <span className="font-bold text-sm">Rooms</span>
                   <div className="flex items-center gap-4">
                     <button
                       type="button"
@@ -1312,7 +1329,7 @@ return (
                         e.stopPropagation();
                         if (roomsCount > 1) setRoomsCount(roomsCount - 1);
                       }}
-                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                      className="w-8 h-8 rounded-full  flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
                     >
                       -
                     </button>
@@ -1325,7 +1342,7 @@ return (
                         e.stopPropagation();
                         setRoomsCount(roomsCount + 1);
                       }}
-                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                      className="w-8 h-8 rounded-full  flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
                     >
                       +
                     </button>
@@ -1360,12 +1377,12 @@ return (
 
             {/* Guests Dropdown */}
             {isGuestsOpen && (
-              <div className="absolute top-[105%] md:top-[120%] right-0 md:left-0 w-full md:w-72 bg-[#f7d6b8] text-neutral-800 rounded-2xl p-5 shadow-2xl border border-neutral-100 z-50 font-jost text-left select-none space-y-4 animate-in fade-in zoom-in-95 duration-200">
+              <div className="absolute top-[105%] md:top-[120%] right-0 md:left-0 w-full md:w-72 bg-[#f7d6b8] text-neutral-800 rounded-2xl p-5 shadow-2xl  z-50 font-jost text-left select-none space-y-4 animate-in fade-in zoom-in-95 duration-200">
                 {/* Adults */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-sm">Adults</div>
-                    <div className="text-xs text-neutral-400">Ages 13 or above</div>
+                    <div className="font-bold text-sm">Adults</div>
+                    {/* <div className="text-xs text-neutral-400">Ages 13 or above</div> */}
                   </div>
                   <div className="flex items-center gap-4">
                     <button
@@ -1374,7 +1391,7 @@ return (
                         e.stopPropagation();
                         if (adultsCount > 0) setAdultsCount(adultsCount - 1);
                       }}
-                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                      className="w-8 h-8 rounded-full  flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
                     >
                       -
                     </button>
@@ -1387,20 +1404,20 @@ return (
                         e.stopPropagation();
                         setAdultsCount(adultsCount + 1);
                       }}
-                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                      className="w-8 h-8 rounded-full  flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
                     >
                       +
                     </button>
                   </div>
                 </div>
 
-                <div className="border-t border-neutral-100"></div>
+                <div className=""></div>
 
                 {/* Children */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-sm">Children</div>
-                    <div className="text-xs text-neutral-400">Ages 0 - 12</div>
+                    <div className="font-bold text-sm">Children</div>
+                    {/* <div className="text-xs text-neutral-400">Ages 0 - 12</div> */}
                   </div>
                   <div className="flex items-center gap-4">
                     <button
@@ -1410,7 +1427,7 @@ return (
                         if (childrenCount > 0)
                           setChildrenCount(childrenCount - 1);
                       }}
-                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                      className="w-8 h-8 rounded-full  flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
                     >
                       -
                     </button>
@@ -1423,7 +1440,7 @@ return (
                         e.stopPropagation();
                         setChildrenCount(childrenCount + 1);
                       }}
-                      className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
+                      className="w-8 h-8 rounded-full  flex items-center  justify-center text-neutral-600 hover:bg-neutral-100 hover:text-black transition cursor-pointer"
                     >
                       +
                     </button>
@@ -1432,12 +1449,11 @@ return (
               </div>
             )}
           </div>
-
           {/* CHECK AVAILABILITY BUTTON */}
           <div className="p-1 mt-2 md:mt-0 w-full md:w-auto shrink-0">
             <button
               type="submit"
-              className="w-full md:w-auto px-8 py-4 md:py-4 rounded-2xl md:rounded-xl bg-[#f3dac6] hover:bg-[#011b3c] hover:text-white text-neutral-900 font-medium tracking-[1px] uppercase text-xs md:text-sm transition-all duration-300 shadow-sm hover:shadow shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap"
+              className="w-full md:w-auto px-8 py-4 md:py-4 rounded-2xl md:rounded-xl bg-[#C8A64D] hover:bg-[#011b3c] hover:text-white text-neutral-900 font-medium tracking-[1px] uppercase text-xs md:text-sm transition-all duration-300 shadow-sm hover:shadow shrink-0 cursor-pointer flex items-center justify-center whitespace-nowrap"
             >
               Check Availability
             </button>
@@ -1448,11 +1464,11 @@ return (
 
   {/* ================= FOLLOW US ON INSTAGRAM ================= */}
       <section className="bg-[#fdfeff] text-[#0d2b4e]">
-        <div className="py-12 text-center mb-12">
+        <div className="py-8 md:py-12 text-center mb-12">
           <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-jost font-semibold block mb-2">
             Social Media
           </span>
-          <h2 className="text-[36px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
+          <h2 className="text-[33px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
             Follow us on Instagram <InstagramIcon size={26} className="text-[#c8a64d] mt-2" />
           </h2>
         </div>
@@ -1477,7 +1493,7 @@ return (
                 - Mobile: flex-none, fixed width (75% of screen), snap to center
                 - Desktop (sm+): auto width (fills grid cell), disable snapping
               */
-              className="flex-none w-[75%] sm:w-auto snap-center sm:snap-align-none relative aspect-square overflow-hidden group shadow-sm"
+              className="flex-none w-[100%] sm:w-auto snap-center sm:snap-align-none relative aspect-square overflow-hidden group shadow-sm"
             >
               <img 
                 src={img} 

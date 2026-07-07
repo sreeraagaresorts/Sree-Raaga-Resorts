@@ -326,18 +326,17 @@ const AdminRoomsManagement = () => {
         </div>
 
         <div className="flex items-center gap-3">
-        
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-[#C8A64D] text-black px-6 py-3 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
+            className="bg-[#C8A64D] text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] min-w-[150px]"
           >
             <Plus size={16} /> Add Room
           </button>
           <Link
             to="/admin/bookings"
-            className="bg-[#C8A64D] text-black px-6 py-3 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
+            className="bg-[#C8A64D] text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] min-w-[150px]"
           >
-          Booking
+            Booking
           </Link>
         </div>
       </div>
@@ -421,7 +420,7 @@ const AdminRoomsManagement = () => {
                     <BedDouble size={18} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[17px] text-white">Room {unit.roomNumber}</h3>
+                    <h3 className="font-bold text-[17px] text-white">{unit.roomNumber}</h3>
                     <span className="text-xs text-white/70 block mt-0.5 leading-tight font-medium">{room.name}</span>
                     <span className="text-[11px] text-white/30 block leading-tight">{room.category}</span>
                   </div>

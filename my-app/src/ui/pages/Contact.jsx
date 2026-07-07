@@ -4,7 +4,7 @@ import { MapPin, Mail, Phone } from "lucide-react";
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useToast } from "../components/Toast";
-
+import { Helmet } from "react-helmet";
 import { API_URL } from "../../config/api";
 
 const Contact = () => {
@@ -101,6 +101,33 @@ setPhone(formatted);
 
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+     <Helmet>
+  <title>Contact Us | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Get in touch with Sree Raaga Resorts for bookings, inquiries, and event reservations. Contact our team to plan your perfect stay, family getaway, corporate outing, or special celebration."
+  />
+
+  <meta
+    name="keywords"
+    content="Contact Sree Raaga Resorts, resort booking, resort contact, luxury resort, resort reservations, event booking, family resort, corporate outing, weekend getaway"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="Contact Us | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="Have questions or want to book your stay? Contact Sree Raaga Resorts for reservations, events, day-out packages, and personalized assistance."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className=" text-[#0d2b4e]  overflow-x-hidden">
         
@@ -207,7 +234,7 @@ setPhone(formatted);
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="w-full py-5 bg-[#f5dec2] text-[#0d2b4e] hover:bg-[#ebd0b0] font-semibold uppercase tracking-[2px] text-[17px] transition cursor-pointer shadow-sm disabled:bg-gray-200"
+                  className="w-full py-5 bg-[#c8a64d] text-[#0d2b4e] hover:bg-[#eec661]  font-semibold uppercase tracking-[2px] text-[17px] transition cursor-pointer shadow-sm  disabled:bg-gray-200"
                 >
                   {status === "sending" ? "SENDING MESSAGE..." : "SEND YOUR MESSAGE"}
                 </button>
@@ -266,37 +293,53 @@ setPhone(formatted);
           </div>
         </section>
 
-        {/* INSTAGRAM SECTION */}
-        <section className="pt-24 bg-[#fdfeff] text-center">
-          <div className=" space-y-12">
-            <div>
-              <span className="text-[#c8a64d] text-[17px] uppercase tracking-[4px] font-semibold mb-2 block">
-                INSTAGRAM
-              </span>
-              <h2 className="text-3xl md:text-[70px] font-corm  text-[#0d2b4e] font-medium">
-                Follow us on Instagram
-              </h2>
-            </div>
+     {/* ================= FOLLOW US ON INSTAGRAM ================= */}
+      <section className="bg-[#fdfeff] text-[#0d2b4e]">
+        <div className="py-8 md:py-8 md:py-12 text-center mb-12">
+          <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-jost font-semibold block mb-2">
+            Social Media
+          </span>
+          <h2 className="text-[33px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
+            Follow us on Instagram 
+            {/* <Instagram size={26} className="text-[#c8a64d] mt-2" /> */}
+          </h2>
+        </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-5  ">
-              {[
-                "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=600",
-                "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
-                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600",
-                "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
-                "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600"
-              ].map((imgUrl, i) => (
-                <div key={i} className="aspect-square overflow-hidden shadow-sm hover:opacity-90 transition duration-300">
-                  <img
-                    src={imgUrl}
-                    alt={`Resort view ${i + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
+        {/* 
+          Wrapper Changes: 
+          - Mobile: flex, overflow-x-auto, snap-x (for swiping), hidden scrollbars
+          - Desktop (sm+): switch to grid, remove overflow and snapping 
+        */}
+        <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 overflow-x-auto snap-x snap-mandatory sm:overflow-visible sm:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {[
+            "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=600",
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600",
+            "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
+            "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=600"
+          ].map((img, i) => (
+            <div 
+              key={i} 
+              /* 
+                Item Changes:
+                - Mobile: flex-none, fixed width (75% of screen), snap to center
+                - Desktop (sm+): auto width (fills grid cell), disable snapping
+              */
+              className="flex-none w-[100%] sm:w-auto snap-center sm:snap-align-none relative aspect-square overflow-hidden group shadow-sm"
+            >
+              <img 
+                src={img} 
+                alt={`Instagram Showcase ${i}`} 
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+              />
+              <div className="absolute inset-0 bg-[#0d2b4e]/60 opacity-0 group-hover:opacity-100 transition duration-300 z-10 flex items-center justify-center">
+                {/* <Instagram size={28} className="text-white" /> */}
+              </div>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </section>
+
 
       </div>
       <Footer />

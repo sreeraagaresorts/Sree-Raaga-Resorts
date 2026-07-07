@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ChevronDown } from "lucide-react";
+import { Helmet } from "react-helmet";
 
 const faqData = {
   payments: {
@@ -69,6 +70,33 @@ const FAQ = () => {
 
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+    <Helmet>
+  <title>FAQ | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Find answers to frequently asked questions about Sree Raaga Resorts, including bookings, check-in and check-out times, accommodations, amenities, dining, events, day-out packages, and resort policies."
+  />
+
+  <meta
+    name="keywords"
+    content="Sree Raaga Resorts FAQ, resort FAQs, booking questions, check-in time, check-out time, resort policies, day-out packages, accommodations, amenities, dining, event booking"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="FAQ | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="Get answers to the most common questions about bookings, stays, amenities, dining, events, and policies at Sree Raaga Resorts."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e]  min-h-screen">
         

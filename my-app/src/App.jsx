@@ -18,8 +18,8 @@ import Register from "./ui/UserReg/Register";
 import FAQ from "./ui/pages/FAQ";
 import LegalLayout from "./ui/pages/LegalLayout";
 import NotFound from "./ui/pages/NotFound";
-import DayOut from "./ui/pages/DayOut";
-import Corporate from "./ui/pages/Corporate";
+// import DayOut from "./ui/pages/DayOut";
+// import Corporate from "./ui/pages/Corporate";
 import CustomCursor from "./ui/components/CustomCursor";
 
 // PRIVACY SUBPAGES
@@ -80,8 +80,8 @@ const App = () => {
         <Route path="/events" element={<Events />} />
         <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/day-out" element={<DayOut />} />
-        <Route path="/corporate" element={<Corporate />} />
+        {/* <Route path="/day-out" element={<DayOut />} /> */}
+        {/* <Route path="/corporate" element={<Corporate />} /> */}
         <Route path="/faq" element={<FAQ />} />
         {/* LEGAL PAGES WITH UNIFIED LAYOUT */}
         <Route element={<LegalLayout />}>

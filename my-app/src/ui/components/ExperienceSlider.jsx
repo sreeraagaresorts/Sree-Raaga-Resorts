@@ -108,15 +108,32 @@ const Exp = () => {
   };
 
   return (
-    <div className=" md:flex md:min-h-screen bg-[#fdfeff] md:pb-10 flex-col justify-center overflow-hidden font-jost relative">
+    <div className="exp-slider-container md:flex md:min-h-screen bg-[#fdfeff] md:pb-10 flex-col justify-center overflow-hidden font-jost relative">
 
-      {/* Required Fonts */}
+      {/* Required Fonts & Slide CSS Variables */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
 
         .font-corm { font-family: "Cormorant Garamond", serif; }
         .font-jost { font-family: "Jost", sans-serif; }
+
+        .exp-slider-container {
+          --slide-width: 100vw;
+          --slide-offset-mult: 100%;
+        }
+        @media (min-width: 768px) {
+          .exp-slider-container {
+            --slide-width: 55vw;
+            --slide-offset-mult: 115%;
+          }
+        }
+        @media (min-width: 1024px) {
+          .exp-slider-container {
+            --slide-width: 35vw;
+            --slide-offset-mult: 115%;
+          }
+        }
       `}</style>
 
       {/* Main Slider Container */}
@@ -134,9 +151,9 @@ const Exp = () => {
           return (
             <div
               key={`${item.id}-${index}`}
-              className="absolute top-1/2 left-1/2 w-[90vw] md:w-[55vw] lg:w-[35vw] group"
+              className="absolute top-1/2 left-1/2 w-[var(--slide-width)] group"
               style={{
-                transform: `translate(calc(-50% + ${offset * 115}%), calc(-50% - ${isCenter ? 90 : 0}px))`,
+                transform: `translate(calc(-50% + ${offset} * var(--slide-offset-mult)), calc(-50% - ${isCenter ? 90 : 0}px))`,
                 opacity: Math.abs(offset) > 1 ? 0 : 1,
                 visibility: Math.abs(offset) > 1 ? 'hidden' : 'visible',
                 zIndex: 10 - Math.abs(offset),
@@ -158,7 +175,7 @@ const Exp = () => {
 
                   {/* Hover Enquire Overlay — only shown on center slide */}
                   {isCenter && item._id && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                    <div className="absolute inset-0 flex items-center justify-center  opacity-0 group-hover:opacity-100 transition-opacity duration-400">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -173,7 +190,7 @@ const Exp = () => {
                 </div>
 
                 {/* Text Container */}
-                <div className="md:px-2 text-left">
+                <div className="px-5 md:px-2 text-left">
                   <h3 className="text-2xl lg:text-[28px] font-bold text-gray-500 font-corm hover:text-[#c8a64d] transition duration-300">
                     {item.title}
                   </h3>

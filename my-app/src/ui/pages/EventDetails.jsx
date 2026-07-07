@@ -17,6 +17,7 @@ import Navbar from "../components/RoomNav";
 import Footer from "../components/Footer";
 import { useToast } from "../components/Toast";
 import { API_URL } from "../../config/api";
+import { Helmet } from "react-helmet";
 
 const fallbackEventDetails = {
   "1": {
@@ -200,6 +201,33 @@ const handleEnquiry = async (e) => {
 
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+      <Helmet>
+  <title>Event Details | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Explore event details at Sree Raaga Resorts. Discover weddings, corporate events, family celebrations, conferences, and special occasions hosted in our elegant venues with exceptional hospitality."
+  />
+
+  <meta
+    name="keywords"
+    content="Sree Raaga Resorts events, event details, wedding venue, corporate events, conference venue, birthday celebration, anniversary party, banquet hall, resort events, event booking"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="Event Details | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="Learn more about upcoming and featured events at Sree Raaga Resorts, including weddings, celebrations, corporate gatherings, and exclusive experiences."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden min-h-screen pt-28 md:pt-36">
         

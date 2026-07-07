@@ -303,13 +303,13 @@ function CopyCode({ code }) {
     <button
       onClick={handle}
       title="Copy code"
-      className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#C8A64D]/10 hover:bg-[#C8A64D]/20 border border-[#C8A64D]/20 text-[#C8A64D] text-xs font-bold tracking-widest rounded transition cursor-pointer group"
+      className="inline-flex items-center gap-1.5   bg-[#C8A64D]/10 hover:bg-[#C8A64D]/20 border border-[#C8A64D]/20 text-[#C8A64D] text-[17px] font-bold tracking-widest rounded transition cursor-pointer group"
     >
-      <Tag className="w-3 h-3" />
+      <Tag className="w-1 h-1" />
       {code}
       {copied
-        ? <CheckCircle2 className="w-3 h-3 text-green-400" />
-        : <Copy className="w-3 h-3 text-white group-hover:text-[#C8A64D]" />}
+        ? <CheckCircle2 className="w-2 h-2 text-green-400" />
+        : <Copy className="w-2 h-2 text-white group-hover:text-[#C8A64D]" />}
     </button>
   );
 }
@@ -524,18 +524,20 @@ export default function AdminDiscounts() {
                       : `₹${Number(c.discount_value).toLocaleString("en-IN")} OFF`;
                   return (
                     <tr key={c._id || i} className="border-b border-white/5 hover:bg-white/2 transition">
-                      <td className="px-5 py-4 text-center">
+                      <td className="px-2 py-4 text-center">
                         <CopyCode code={c.code} />
-                        {c.description && (
-                          <p className="text-[14px] px-4 py-2 text-white mt-1 max-w-[250px] truncate">{c.description}</p>
-                        )}
+                       
                       </td>
                       <td className="px-5 py-4 text-center text-white font-medium">
                         {c.name || "—"}
                         {c.target_service && c.target_service !== "ALL" && (
                           <span className="ml-1.5 text-[10px] text-[#C8A64D] bg-[#C8A64D]/10 border border-[#C8A64D]/20 px-1.5 py-0.5 rounded">
                             {c.target_service}
+                            
                           </span>
+                        )}
+                         {c.description && (
+                          <p className="text-[14px] px-4 py-2 text-white mx-auto mt-1 max-w-[250px] truncate">{c.description}</p>
                         )}
                       </td>
                       <td className="px-5 py-4 text-center">

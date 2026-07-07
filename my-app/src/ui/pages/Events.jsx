@@ -5,7 +5,7 @@ import { Phone, Mail, ArrowRight, Calendar, AlertCircle, Sparkles, Maximize, Use
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { API_URL } from "../../config/api";
-
+import { Helmet } from "react-helmet";
 import wifiIcon from "../../assets/icons/wifi.png";
 import buggyIcon from "../../assets/icons/car.png";
 import tvIcon from "../../assets/icons/tv.png";
@@ -77,6 +77,33 @@ function WaterSportsIcon({ className = "" }) {
 }
   return (
     <>
+    {/* 2. ADD HELMET COMPONENT HERE */}
+    <Helmet>
+  <title>Events | Sree Raaga Resorts</title>
+
+  <meta
+    name="description"
+    content="Host unforgettable events at Sree Raaga Resorts. From dream weddings and corporate gatherings to birthdays, anniversaries, family celebrations, and social events, we offer elegant venues and exceptional hospitality."
+  />
+
+  <meta
+    name="keywords"
+    content="Sree Raaga Resorts events, wedding venue, corporate events, banquet hall, birthday party, anniversary celebration, family functions, resort event venue, conference hall, event booking"
+  />
+
+  {/* Open Graph Tags */}
+  <meta
+    property="og:title"
+    content="Events | Sree Raaga Resorts"
+  />
+
+  <meta
+    property="og:description"
+    content="Discover premium event venues at Sree Raaga Resorts for weddings, corporate meetings, celebrations, conferences, and memorable occasions with world-class hospitality."
+  />
+
+  <meta property="og:type" content="website" />
+</Helmet>
       <Navbar />
       <div className="bg-[#fdfeff] text-[#0d2b4e]  min-h-screen overflow-x-hidden">
 

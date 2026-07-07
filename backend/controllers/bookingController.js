@@ -139,10 +139,15 @@ exports.createBooking = async (req, res) => {
       rooms: roomCount,
       room_number: room_number || null,
       total_price,
-      status: 'pending',
+      status: 'confirmed',
       payment_method: payment_method || 'online'
     });
     await booking.save();
+
+    // Sync room unit status if room_number is specified
+    if (booking.room_number) {
+      await syncRoomUnitStatus(booking.room_id, booking.room_number, 'confirmed');
+    }
 
     // Fetch details for email notification
     try {

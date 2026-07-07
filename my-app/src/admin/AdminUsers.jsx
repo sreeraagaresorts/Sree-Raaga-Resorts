@@ -224,7 +224,7 @@ const AdminUsers = () => {
                 : 'bg-[#071524] text-white/50 border-white/10 hover:bg-white/5'
             }`}
           >
-            {tab === 'guests' ? 'Guests' : tab === 'admins' ? 'Administrators' : 'Admin History'}
+            {tab === 'guests' ? 'Users' : tab === 'admins' ? 'Administrators' : 'Admin History'}
           </button>
         ))}
       </div>

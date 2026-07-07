@@ -24,10 +24,10 @@ exports.getRooms = async (req, res) => {
     const Booking = require("../models/Booking");
     const populatedRooms = await Promise.all(
       rooms.map(async (room) => {
-        // Find active bookings (pending, confirmed, checked_in) where checkout has not passed
+        // Find active bookings (confirmed, checked_in) where checkout has not passed
         const activeBookings = await Booking.find({
           room_id: room.id,
-          status: { $in: ["pending", "confirmed", "checked_in"] },
+          status: { $in: ["confirmed", "checked_in"] },
           check_out: { $gte: new Date() }
         });
 
@@ -79,7 +79,7 @@ exports.getRoom = async (req, res) => {
     const Booking = require("../models/Booking");
     const activeBookings = await Booking.find({
       room_id: room.id,
-      status: { $in: ["pending", "confirmed", "checked_in"] },
+      status: { $in: ["confirmed", "checked_in"] },
       check_out: { $gte: new Date() }
     });
 
@@ -155,9 +155,10 @@ exports.createRoom = async (req, res) => {
     const prefix = roomNumber || "RM";
     const statuses = [];
     const count = Number(totalRooms) || 1;
+    const isNum = !isNaN(Number(prefix));
     for (let i = 1; i <= count; i++) {
       statuses.push({
-        roomNumber: `${prefix}-${100 + i}`,
+        roomNumber: isNum ? `${100 + i}` : `${prefix}-${100 + i}`,
         status: "Available"
       });
     }
@@ -261,9 +262,10 @@ exports.updateRoom = async (req, res) => {
       if (updatedStatuses.length !== newTotal || currentRoomDoc.roomNumber !== roomNumber) {
         const prefix = roomNumber || "RM";
         updatedStatuses = [];
+        const isNum = !isNaN(Number(prefix));
         for (let i = 1; i <= newTotal; i++) {
           updatedStatuses.push({
-            roomNumber: `${prefix}-${100 + i}`,
+            roomNumber: isNum ? `${100 + i}` : `${prefix}-${100 + i}`,
             status: "Available"
           });
         }

@@ -68,17 +68,19 @@ const UserLayout = () => {
       <aside className="w-64 border-r border-[#0d2b4e]/10 hidden lg:flex flex-col bg-[#0d2b4e] h-screen fixed left-0 top-0 z-20">
         
         {/* BRANDING */}
-        <div className="p-6">
-          <Link to="/" className="flex items-baseline gap-2">
-            <h1 className="text-2xl text-[#c8a64d] font-semibold whitespace-nowrap">
-              Sree Raaga
-            </h1>
-            <span className="text-2xl text-[#c8a64d] font-semibold whitespace-nowrap">
-              Resorts
-            </span>
-          </Link>
-          <p className="text-[10px] text-white uppercase tracking-[2px] mt-4 font-light">Guest Portal</p>
-        </div>
+       <div className="p-6">
+  <Link to="/" className="inline-block">
+    <img
+      src="./logo.png" // Replace with your logo path
+      alt="Sree Raaga Resorts"
+      className="h-18 w-auto object-contain"
+    />
+  </Link>
+
+  <p className="text-[10px] text-white uppercase tracking-[2px] mt-4 font-light">
+    Guest Portal
+  </p>
+</div>
 
         {/* NAVIGATION */}
         <nav className="flex-1 px-4 space-y-1.5 mt-4">
@@ -140,22 +142,22 @@ const UserLayout = () => {
               className="fixed inset-y-0 left-0 w-64 bg-[#0d2b4e] border-r border-white/5 z-50 lg:hidden flex flex-col min-h-screen"
             >
               {/* BRANDING / HEADER */}
-              <div className="p-6 flex items-center justify-between border-b border-white/5">
-                <Link to="/" className="flex items-baseline gap-2">
-                  <h1 className="text-2xl text-[#c8a64d] tracking-wide font-semibold whitespace-nowrap">
-                    Sree Raaga
-                  </h1>
-                  <span className="text-[9px] tracking-[3px] uppercase text-white/50 whitespace-nowrap">
-                    Resorts
-                  </span>
-                </Link>
-                <button
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-white/80 hover:text-[#c8a64d] transition cursor-pointer"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
+            <div className="p-6 flex items-center justify-between border-b border-white/5">
+  <Link to="/" className="inline-block">
+    <img
+      src="./logo.png"
+      alt="Sree Raaga Resorts"
+      className="h-14 w-auto object-contain"
+    />
+  </Link>
+
+  <button
+    onClick={() => setIsMobileMenuOpen(false)}
+    className="text-white/80 hover:text-[#c8a64d] transition cursor-pointer"
+  >
+    <X className="w-6 h-6" />
+  </button>
+</div>
 
               {/* NAVIGATION */}
               <nav className="flex-1 px-4 space-y-1.5 mt-6">
