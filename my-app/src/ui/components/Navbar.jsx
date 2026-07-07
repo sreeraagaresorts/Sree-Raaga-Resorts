@@ -101,6 +101,7 @@ const Navbar = () => {
   const [cursorHovered, setCursorHovered] = useState(false);
   const [showRoomsSubmenu, setShowRoomsSubmenu] = useState(false);
   const lastScrollY = useRef(0);
+  
 
   // Animation Refs
   const overlayRef = useRef(null);
@@ -276,8 +277,8 @@ const Navbar = () => {
           scrolled: {
             y: 0, // Keep at initial position
             opacity: 1,
-            backgroundColor: "rgba(13, 43, 78, 0.85)", // bg-[#0d2b4e]/85
-            backdropFilter: "blur(12px)", // backdrop-blur-md
+          backgroundColor: "rgb(13 43 78)" ,// 
+            // backdropFilter: "blur(12px)", // backdrop-blur-md
             borderBottomColor: "rgba(255, 255, 255, 0.15)", // subtle border
             boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)", // soft shadow
             paddingTop: "24px", // Keep initial padding
@@ -501,15 +502,15 @@ const Navbar = () => {
   </div>
 
         {/* RIGHT COLUMN: Luxury Beige Panel (Resort Info) */}
-        <div className="hidden lg:flex lg:w-[40%] bg-[#f5dec2] text-[#0d2b4e] flex-col justify-center items-center px-12 py-16 relative z-10 overflow-y-auto">
+        <div className="hidden lg:flex lg:w-[40%] bg-[#f5dec2] text-[#0d2b4e] flex-col justify-start items-center px-12 pt-32 pb-16 relative z-10 overflow-y-auto">
           <div 
             ref={infoPanelRef}
-            className="flex flex-col items-center text-center space-y-10 max-w-sm w-full"
+            className="flex flex-col items-center text-center space-y-10 max-w-sm w-full my-auto"
           >
             {/* Top Logo / Brand */}
           <div className="flex flex-col items-center">
   <img
-    src="/logo.png"
+    src="/logo2.png"
     alt="Sree Raaga Resorts"
     className="h-16 md:h-20 w-auto object-contain"
   />

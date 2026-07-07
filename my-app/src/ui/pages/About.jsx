@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import restaurantIcon from "../../assets/images/icons/restaurant.svg";
@@ -66,6 +66,7 @@ const amenities = [
 
 const About = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   return (
     <>
@@ -115,7 +116,7 @@ const About = () => {
             <h1 className="text-4xl md:text-[92px] font-medium   font-corm leading-tight">
               About Sree Raaga Resorts
             </h1>
-          </div>
+          </div>  
         </section>
 
         <section className="relative py-20  md:py-48 px-4 md:px-6 bg-[#fdfeff] text-[#0d2b4e] overflow-hidden">
@@ -219,6 +220,72 @@ const About = () => {
             ))}
           </div>
         </section>
+
+        {/* ================= VIDEO SECTION ================= */}
+        <section 
+          className={`relative w-full my-16  flex items-center justify-center bg-cover bg-center transition-all duration-700 ${isVideoOpen ? 'aspect-video max-h-[90vh]' : 'h-[500px] md:h-[750px]'}`}
+          style={{
+            backgroundImage: !isVideoOpen ? "url('https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=2000')" : "none",
+            backgroundColor: "#000"
+          }}
+        >
+          {!isVideoOpen ? (
+            <>
+              {/* Dark overlay for text readability */}
+              <div className="absolute inset-0 bg-[#04121a]/30"></div>
+              
+              <div className="relative z-10 flex flex-col items-center text-center text-white select-none px-4">
+                <span className="text-white/90 uppercase tracking-[4px] text-xs md:text-[13px] font-medium mb-4 block font-jost">
+          
+                </span>
+                
+                <h2 className="text-4xl md:text-6xl lg:text-[75px] font-medium font-corm mb-12 leading-tight">
+                  A Wonder Of Nature
+                </h2>
+                
+                <button 
+                  onClick={() => setIsVideoOpen(true)}
+                  className="group flex flex-col items-center gap-4 cursor-pointer transition-all duration-300 hover:scale-105"
+                >
+                  <div className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/20 transition-all">
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="1.2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      className="w-5 h-5 md:w-6 md:h-6 text-white ml-1"
+                    >
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </div>
+                  <span className="text-white/80 uppercase tracking-[3px] text-[10px] md:text-xs font-semibold group-hover:text-white transition-colors mt-2">
+                    PLAY INTRO VIDEO
+                  </span>
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="absolute inset-0 w-full h-full z-20">
+              <button 
+                onClick={() => setIsVideoOpen(false)}
+                className="absolute top-4 right-4 md:top-8 md:right-8 z-30 w-10 h-10 bg-black/50 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition backdrop-blur cursor-pointer border border-white/20"
+                title="Close Video"
+              >
+                <X size={20} />
+              </button>
+              <video
+                src="/IMG_3557.MP4"
+                title="Sree Raaga Resorts Intro"
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover"
+              ></video>
+            </div>
+          )}
+        </section>
       
         {/* ================= SPLIT FEATURE ROWS ================= */}
         <section className="md:py-24 px-6 bg-[#fdfeff] ">
@@ -319,7 +386,7 @@ const About = () => {
     "Enjoy our refreshing swimming pool, perfect for relaxation, leisure, and a rejuvenating experience.",
 },
 {
-  title: "Activities",
+  title: "Adventures Activities",
   image:
     "./adv1.jpg",
   description:
@@ -360,7 +427,7 @@ const About = () => {
             Amenities
           </span>
 
-          <h3 className="font-corm text-4xl lg:text-6xl font-light leading-tight mb-8">
+          <h3 className="font-corm text-4xl lg:text-6xl font-light  mb-8">
             {exp.title}
           </h3>
 

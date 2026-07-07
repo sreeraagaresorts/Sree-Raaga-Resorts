@@ -1066,7 +1066,7 @@ return (
     "Enjoy our refreshing swimming pool, perfect for relaxation, leisure, and a rejuvenating experience.",
 },
 {
-  title: "Activities",
+  title: "Adventures Activities",
   image:
     "./adv1.jpg",
   description:
@@ -1107,7 +1107,7 @@ return (
             Experience
           </span>
 
-          <h3 className="font-corm text-4xl lg:text-6xl font-light leading-tight mb-8">
+          <h3 className="font-corm text-4xl lg:text-6xl font-light  mb-8">
             {exp.title}
           </h3>
 

@@ -261,7 +261,17 @@ const Navbar = () => {
       
       <motion.header
         initial="initial"
-        animate={!isVisible ? "hidden" : isScrolled ? "scrolled" : "initial"}
+    animate={
+  isOpen
+    ? "menuOpen"
+    : !isVisible
+    ? "hidden"
+    : isScrolled
+    ? "scrolled"
+    : "initial"
+}
+
+
         variants={{
           initial: {
             y: 0,
@@ -291,7 +301,17 @@ const Navbar = () => {
             borderBottomColor: "rgba(255, 255, 255, 0.1)",
             paddingTop: "24px", // Keep height base consistent
             paddingBottom: "24px"
-          }
+          },
+          menuOpen: {
+  y: 0,
+  opacity: 1,
+  backgroundColor: "rgba(13, 43, 78, 0)", // transparent
+  backdropFilter: "blur(0px)",
+  borderBottomColor: "rgba(255,255,255,0.15)",
+  boxShadow: "0 0 0 rgba(0,0,0,0)",
+  paddingTop: "24px",
+  paddingBottom: "24px",
+},
         }}
         transition={{ type: "spring", stiffness: 100, damping: 18, mass: 1 }}
         className="fixed top-0 left-0 right-0 z-50 border-b flex flex-col  items-center"
@@ -500,25 +520,24 @@ const Navbar = () => {
     </div>
   </div>
 
-        {/* RIGHT COLUMN: Luxury Beige Panel (Resort Info) */}
-        <div className="hidden lg:flex lg:w-[40%] bg-[#f5dec2] text-[#0d2b4e] flex-col justify-center items-center px-12 py-16 relative z-10 overflow-y-auto">
+       {/* RIGHT COLUMN: Luxury Beige Panel (Resort Info) */}
+        <div className="hidden lg:flex lg:w-[40%] bg-[#f5dec2] text-[#0d2b4e] flex-col justify-start items-center px-12 pt-32 pb-16 relative z-10 overflow-y-auto">
           <div 
             ref={infoPanelRef}
-            className="flex flex-col items-center text-center space-y-10 max-w-sm w-full"
+            className="flex flex-col items-center text-center space-y-10 max-w-sm w-full my-auto"
           >
             {/* Top Logo / Brand */}
-            <div className="flex flex-col items-center ">
-              <span className="text-[#0d2b4e] uppercase tracking-[2px] text-3xl font-corm  font-semibold block">
-                Sree Raaga
-              </span>
-              <span className="text-[#c8a64d] uppercase tracking-[4px] text-[14px] font-semibold mt-1">
-                Luxury Resorts
-              </span>
-            </div>
+          <div className="flex flex-col items-center">
+  <img
+    src="/logo2.png"
+    alt="Sree Raaga Resorts"
+    className="h-16 md:h-20 w-auto object-contain"
+  />
+</div>
 
             {/* Elegant Tagline / Heading */}
             <h2 className="text-[40px] font-medium font-corm  text-[#0d2b4e] leading-tight">
-              Resort & Spa Sree Raaga
+              Luxury Resort
             </h2>
 
             {/* Divider line (subtle) */}

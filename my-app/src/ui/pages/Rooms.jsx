@@ -442,7 +442,7 @@ const Rooms = () => {
                           </div>
                           <div className="flex items-center">
                             <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                            <span>{room.beds || "1 Bed"} Bed</span>
+                            <span>{room.beds || "1 Bed"}</span>
                           </div>
                           <div className="flex items-center">
                             <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
@@ -571,7 +571,7 @@ const Rooms = () => {
                           </div>
                           <div className="flex items-center">
                             <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                            <span>{room.beds || "1 Bed"} Bed</span>
+                            <span>{room.beds || "1 Bed"}</span>
                           </div>
                           <div className="flex items-center">
                             <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />

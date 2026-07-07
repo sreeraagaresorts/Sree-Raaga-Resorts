@@ -518,6 +518,40 @@ Luxury Beyond Expectations
               </div>
             </div>
 
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+  <div className="lg:col-span-6 lg:order-2 h-[350px] lg:h-[500px]">
+    <WindowReveal
+      src="./workspace.jpg"
+      alt="Workspace"
+      className="h-full w-full"
+    />
+  </div>
+
+  <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0">
+    <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
+      06
+    </span>
+
+    <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
+      Workspace
+    </h3>
+
+    <p className="text-[#2d5b8a] font-jost font-medium text-sm md:text-[17px] leading-relaxed">
+      Stay productive in a calm and inspiring environment. Our dedicated workspace offers comfortable seating, high-speed Wi-Fi, charging points, and a peaceful atmosphere, making it ideal for remote work, business meetings, or focused study sessions.
+    </p>
+
+    <div className="pt-4">
+      <Link
+        to="/about"
+        className="inline-flex items-center gap-4 px-10 py-5 bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transtion duration-300 text-black uppercase tracking-wider font-medium"
+      >
+        <span>—</span>
+        Discover More
+      </Link>
+    </div>
+  </div>
+</div>
+
           </div>
         </section>
 

@@ -389,8 +389,8 @@ const AdminMenu = () => {
     return acc;
   }, {});
 
-  // Define display order — Starters first, then the rest
-  const categoryOrder = ["Starters", "Breakfast", "Main Course", "Biryani", "Rice & Noodles", "Desserts", "Beverages"];
+  // Define display order — Breakfast first, then the rest
+  const categoryOrder = ["Breakfast", "Starters", "Main Course", "Biryani", "Rice & Noodles", "Desserts", "Beverages"];
   const sortedGroupedDishes = Object.entries(groupedDishes).sort(([a], [b]) => {
     const ai = categoryOrder.indexOf(a);
     const bi = categoryOrder.indexOf(b);
