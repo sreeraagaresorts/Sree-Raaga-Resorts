@@ -248,6 +248,7 @@ export default function Home() {
   // API states
   const [rooms, setRooms] = useState([]);
   const [loadingRooms, setLoadingRooms] = useState(true);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   
 
   // Mock rooms for fallback if API is empty or loading fails
@@ -293,7 +294,12 @@ export default function Home() {
   const [animate, setAnimate] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   
-
+useEffect(() => {
+    // Delays the iframe rendering until after the initial page load finishes
+    // You can also wrap this in a small setTimeout if it's still stuttering
+    const timer = setTimeout(() => setIsVideoLoaded(true), 100); 
+    return () => clearTimeout(timer);
+  }, []);
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -428,23 +434,25 @@ return (
         
         {/* ================= HERO SECTION ================= */}
         <section className="relative h-screen flex items-center justify-center">
-           <motion.div
-    style={{ y: heroY }}
-    className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden"
-  >
-    {/* Responsive Vimeo Background Video */}
-    <iframe
-      src="https://player.vimeo.com/video/1207972432?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1"
-      className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2"
-      frameBorder="0"
-      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-      referrerPolicy="strict-origin-when-cross-origin"
-      title="Sree Raaga Resorts"
-    ></iframe>
+          <motion.div
+      style={{ y: heroY }}
+      className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden bg-[#111]" // Add a fallback background color
+    >
+      {/* Only render the heavy iframe AFTER the initial mount */}
+      {isVideoLoaded && (
+        <iframe
+          src="https://player.vimeo.com/video/1207972432?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1"
+          className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 transition-opacity duration-1000 ease-in-out opacity-100 animate-fade-in"
+          frameBorder="0"
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          title="Sree Raaga Resorts"
+        ></iframe>
+      )}
 
-    {/* Dark Overlay for Text Readability */}
-    <div className="absolute inset-0 bg-black/45"></div>
-  </motion.div>
+      {/* Dark Overlay for Text Readability */}
+      <div className="absolute inset-0 bg-black/45"></div>
+    </motion.div>
 
           <div className="relative z-10 text-center px-5 max-w-5xl text-white mt-[-130px] md:mt-0">
             <span className="text-white uppercase tracking-[3px] text-[13px] font-jost font-medium block mb-4 md:hidden">
