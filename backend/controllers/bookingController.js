@@ -72,34 +72,44 @@ exports.createBooking = async (req, res) => {
 
     // Check specific room number availability if provided
     if (room_number) {
-      const unit = room.roomStatuses.find(u => u.roomNumber === room_number);
-      if (!unit) {
-        return res.status(400).json({
-          success: false,
-          message: `Room unit "${room_number}" does not belong to category "${room.name}".`
-        });
+      const roomNumbers = room_number.split(",").map(num => num.trim());
+      for (const num of roomNumbers) {
+        const unit = room.roomStatuses.find(u => u.roomNumber === num);
+        if (!unit) {
+          return res.status(400).json({
+            success: false,
+            message: `Room unit "${num}" does not belong to category "${room.name}".`
+          });
+        }
+
+        if (unit.status !== "Available") {
+          return res.status(400).json({
+            success: false,
+            message: `Room unit "${num}" is currently marked as "${unit.status}" and cannot be booked.`
+          });
+        }
       }
 
-      if (unit.status !== "Available") {
-        return res.status(400).json({
-          success: false,
-          message: `Room unit "${room_number}" is currently marked as "${unit.status}" and cannot be booked.`
-        });
-      }
-
-      // Check for overlapping bookings on this specific room number
-      const existingOverlapping = await Booking.findOne({
-        room_number,
+      // Check for overlapping bookings on these specific room numbers
+      const overlappingBookings = await Booking.find({
         status: { $ne: "cancelled" },
         $or: [
           { check_in: { $lt: end }, check_out: { $gt: start } }
         ]
       });
-      if (existingOverlapping) {
-        return res.status(400).json({
-          success: false,
-          message: `Room unit "${room_number}" is already booked for these dates.`
+
+      for (const num of roomNumbers) {
+        const isOverlapping = overlappingBookings.some(ob => {
+          if (!ob.room_number) return false;
+          const obRooms = ob.room_number.split(",").map(r => r.trim());
+          return obRooms.includes(num);
         });
+        if (isOverlapping) {
+          return res.status(400).json({
+            success: false,
+            message: `Room unit "${num}" is already booked for these dates.`
+          });
+        }
       }
     }
 
@@ -138,7 +148,12 @@ exports.createBooking = async (req, res) => {
       children: children || 0,
       rooms: roomCount,
       room_number: room_number || null,
-      total_price,
+      total_price: req.body.total_price !== undefined ? Number(req.body.total_price) : total_price,
+      subtotal: req.body.subtotal !== undefined ? Number(req.body.subtotal) : (nights * roomPrice * roomCount),
+      services_price: req.body.services_price !== undefined ? Number(req.body.services_price) : 0,
+      discount_price: req.body.discount_price !== undefined ? Number(req.body.discount_price) : 0,
+      gst_amount: req.body.gst_amount !== undefined ? Number(req.body.gst_amount) : 0,
+      coupon_code: req.body.coupon_code || null,
       status: 'confirmed',
       payment_method: payment_method || 'online'
     });
@@ -196,7 +211,8 @@ exports.getUserBookings = async (req, res) => {
           ...b.toObject(),
           room_name: room ? room.name : null,
           room_image: room ? room.image : null,
-          room_price: room ? room.price : null
+          room_price: room ? room.price : null,
+          room_gst_percentage: room ? room.gst_percentage : 8
         };
       })
     );
@@ -227,6 +243,7 @@ exports.getAllBookings = async (req, res) => {
         return {
           ...b.toObject(),
           room_name: room ? room.name : null,
+          room_gst_percentage: room ? room.gst_percentage : 8,
           guest_name: user ? user.full_name : null,
           guest_email: user ? user.email : null,
           guest_phone: user ? user.phone : null
@@ -254,20 +271,29 @@ const syncRoomUnitStatus = async (roomId, roomNumber, bookingStatus) => {
   try {
     const room = await Room.findOne({ id: roomId });
     if (!room) return;
-    const unit = room.roomStatuses.find(u => u.roomNumber === roomNumber);
-    if (!unit) return;
+    
+    const roomNumbers = roomNumber.split(",").map(num => num.trim());
+    let updated = false;
 
-    let newStatus = "Available";
-    if (bookingStatus === "confirmed") {
-      newStatus = "Reserved";
-    } else if (bookingStatus === "checked_in") {
-      newStatus = "Occupied";
-    } else if (bookingStatus === "cancelled") {
-      newStatus = "Available";
+    for (const num of roomNumbers) {
+      const unit = room.roomStatuses.find(u => u.roomNumber === num);
+      if (unit) {
+        let newStatus = "Available";
+        if (bookingStatus === "confirmed") {
+          newStatus = "Reserved";
+        } else if (bookingStatus === "checked_in") {
+          newStatus = "Occupied";
+        } else if (bookingStatus === "cancelled") {
+          newStatus = "Available";
+        }
+        unit.status = newStatus;
+        updated = true;
+      }
     }
     
-    unit.status = newStatus;
-    await room.save();
+    if (updated) {
+      await room.save();
+    }
   } catch (err) {
     console.error("Failed to sync room unit status:", err);
   }
@@ -312,30 +338,49 @@ exports.updateBookingStatus = async (req, res) => {
     }
 
     if (room_number !== undefined) {
+      if (booking.status === "checked_in" || booking.status === "cancelled") {
+        return res.status(400).json({
+          success: false,
+          message: "Cannot assign or change room number after check-in or cancellation."
+        });
+      }
       if (room_number) {
         const room = await Room.findOne({ id: booking.room_id });
         if (!room) {
           return res.status(404).json({ success: false, message: "Room type not found." });
         }
-        const unit = room.roomStatuses.find(u => u.roomNumber === room_number);
-        if (!unit) {
-          return res.status(400).json({ success: false, message: `Room unit "${room_number}" does not belong to category "${room.name}".` });
+        
+        const roomNumbers = room_number.split(",").map(num => num.trim());
+        
+        // Validate each room number exists in this category
+        for (const num of roomNumbers) {
+          const unit = room.roomStatuses.find(u => u.roomNumber === num);
+          if (!unit) {
+            return res.status(400).json({ success: false, message: `Room unit "${num}" does not belong to category "${room.name}".` });
+          }
         }
         
-        // Check for overlapping bookings on this specific room number (excluding this booking itself)
-        const existingOverlapping = await Booking.findOne({
+        // Check for overlapping bookings on these specific room numbers (excluding this booking itself)
+        const overlappingBookings = await Booking.find({
           id: { $ne: booking.id },
-          room_number,
           status: { $ne: "cancelled" },
           $or: [
             { check_in: { $lt: booking.check_out }, check_out: { $gt: booking.check_in } }
           ]
         });
-        if (existingOverlapping) {
-          return res.status(400).json({
-            success: false,
-            message: `Room unit "${room_number}" is already booked for these dates.`
+
+        for (const num of roomNumbers) {
+          const isOverlapping = overlappingBookings.some(ob => {
+            if (!ob.room_number) return false;
+            const obRooms = ob.room_number.split(",").map(r => r.trim());
+            return obRooms.includes(num);
           });
+          if (isOverlapping) {
+            return res.status(400).json({
+              success: false,
+              message: `Room unit "${num}" is already booked for these dates.`
+            });
+          }
         }
       }
       updateFields.room_number = room_number || null;
@@ -481,7 +526,7 @@ exports.createRazorpayOrder = async (req, res) => {
       });
     }
 
-    const { room_id, check_in, check_out, rooms } = req.body;
+    const { room_id, check_in, check_out, rooms, total_amount } = req.body;
     if (!room_id || !check_in || !check_out) {
       return res.status(400).json({
         success: false,
@@ -540,7 +585,7 @@ exports.createRazorpayOrder = async (req, res) => {
       });
     }
 
-    const total_price = nights * roomPrice * roomCount;
+    const total_price = total_amount !== undefined ? Number(total_amount) : (nights * roomPrice * roomCount);
 
     const razorpay = new Razorpay({
       key_id,
@@ -590,7 +635,13 @@ exports.verifyRazorpayPayment = async (req, res) => {
       check_out,
       adults,
       children,
-      rooms
+      rooms,
+      total_price: req_total_price,
+      subtotal,
+      services_price,
+      discount_price,
+      gst_amount,
+      coupon_code
     } = req.body;
 
     if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature || !room_id || !check_in || !check_out) {
@@ -657,7 +708,8 @@ exports.verifyRazorpayPayment = async (req, res) => {
       });
     }
 
-    const total_price = nights * roomPrice * roomCount;
+    const computed_price = nights * roomPrice * roomCount;
+    const final_total_price = req_total_price !== undefined ? Number(req_total_price) : computed_price;
 
     const booking = new Booking({
       user_id: Number(user_id),
@@ -667,7 +719,12 @@ exports.verifyRazorpayPayment = async (req, res) => {
       adults: adults || 1,
       children: children || 0,
       rooms: roomCount,
-      total_price,
+      total_price: final_total_price,
+      subtotal: subtotal !== undefined ? Number(subtotal) : computed_price,
+      services_price: services_price !== undefined ? Number(services_price) : 0,
+      discount_price: discount_price !== undefined ? Number(discount_price) : 0,
+      gst_amount: gst_amount !== undefined ? Number(gst_amount) : 0,
+      coupon_code: coupon_code || null,
       status: 'confirmed',
       payment_method: 'online',
       razorpay_payment_id: razorpay_payment_id

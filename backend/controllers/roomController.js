@@ -106,6 +106,24 @@ exports.getRoom = async (req, res) => {
   }
 };
 
+const getUniqueRoomNumber = async (baseNum, prefix, isNum, currentRoomIdToIgnore = null) => {
+  let candidate = isNum ? `${baseNum}` : `${prefix}-${baseNum}`;
+  let suffix = baseNum;
+  
+  while (true) {
+    const query = { "roomStatuses.roomNumber": candidate };
+    if (currentRoomIdToIgnore !== null) {
+      query.id = { $ne: currentRoomIdToIgnore };
+    }
+    const duplicate = await Room.findOne(query);
+    if (!duplicate) {
+      return candidate;
+    }
+    suffix++;
+    candidate = isNum ? `${suffix}` : `${prefix}-${suffix}`;
+  }
+};
+
 exports.createRoom = async (req, res) => {
   try {
     const {
@@ -156,18 +174,26 @@ exports.createRoom = async (req, res) => {
     const statuses = [];
     const count = Number(totalRooms) || 1;
     const isNum = !isNaN(Number(prefix));
+    let baseOffset = isNum ? Number(prefix) - 1 : 100;
     for (let i = 1; i <= count; i++) {
+      const generatedNum = await getUniqueRoomNumber(baseOffset + i, prefix, isNum);
       statuses.push({
-        roomNumber: isNum ? `${100 + i}` : `${prefix}-${100 + i}`,
+        roomNumber: generatedNum,
         status: "Available"
       });
+      if (isNum) {
+        const parsedGenerated = parseInt(generatedNum);
+        if (!isNaN(parsedGenerated) && parsedGenerated >= baseOffset + i) {
+          baseOffset = parsedGenerated - i;
+        }
+      }
     }
 
     const room = new Room({
       roomNumber,
       name,
       price: parseFloat(price),
-      gst_percentage: Number(gst_percentage) || 12,
+      gst_percentage: Number(gst_percentage) || 8,
       image,
       images: extraImages,
       category: category || "Executive Rooms",
@@ -263,11 +289,19 @@ exports.updateRoom = async (req, res) => {
         const prefix = roomNumber || "RM";
         updatedStatuses = [];
         const isNum = !isNaN(Number(prefix));
+        let baseOffset = isNum ? Number(prefix) - 1 : 100;
         for (let i = 1; i <= newTotal; i++) {
+          const generatedNum = await getUniqueRoomNumber(baseOffset + i, prefix, isNum, currentRoomDoc.id);
           updatedStatuses.push({
-            roomNumber: isNum ? `${100 + i}` : `${prefix}-${100 + i}`,
+            roomNumber: generatedNum,
             status: "Available"
           });
+          if (isNum) {
+            const parsedGenerated = parseInt(generatedNum);
+            if (!isNaN(parsedGenerated) && parsedGenerated >= baseOffset + i) {
+              baseOffset = parsedGenerated - i;
+            }
+          }
         }
       }
     }
@@ -276,7 +310,7 @@ exports.updateRoom = async (req, res) => {
       roomNumber,
       name,
       price: parseFloat(price),
-      gst_percentage: Number(gst_percentage) || 12,
+      gst_percentage: Number(gst_percentage) || 8,
       category: category || "Executive Rooms",
       totalRooms: newTotal,
       roomStatuses: updatedStatuses,

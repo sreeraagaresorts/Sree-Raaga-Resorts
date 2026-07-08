@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const CustomCursor = () => {
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith("/admin");
   const cursorRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
+    if (isAdminPage) return;
     // 1. PERFORMANCE BOOST: Don't run the cursor script on mobile screens (under 768px)
     if (window.innerWidth < 768) return;
 
@@ -57,7 +61,9 @@ const CustomCursor = () => {
       window.removeEventListener("mousemove", moveCursor);
       window.removeEventListener("mouseover", handleMouseOver);
     };
-  }, []);
+  }, [isAdminPage]);
+
+  if (isAdminPage) return null;
 
   return (
     <div

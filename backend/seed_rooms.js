@@ -121,11 +121,7 @@ generateRooms(
 );
 
 const run = async () => {
-  const uri = process.env.MONGO_URI;
-  if (!uri) {
-    console.error("MONGO_URI not found.");
-    process.exit(1);
-  }
+  const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/sree_raaga_resort";
 
   console.log("Connecting to DB...");
   await mongoose.connect(uri);

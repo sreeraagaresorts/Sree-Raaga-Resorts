@@ -394,7 +394,7 @@ const Rooms = () => {
                         >
                           <Heart
                             className={`w-5 h-5 transition-colors duration-300 ${
-                              isInWishlist(room.id) ? "fill-[#c8a64d] text-[#c8a64d]" : "text-gray-400 hover:text-[#c8a64d]"
+                              isInWishlist(room.id) ? "fill-[#ff0000] text-[#ff0000]" : "text-gray-400 hover:text-[#c8a64d]"
                             }`}
                           />
                         </button>
@@ -404,7 +404,7 @@ const Rooms = () => {
                       <div className="flex flex-col flex-grow select-none px-6 md:px-0">
                         <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                           <div>
-                            <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 ">
+                            <h3 className="text-3xl md:text-4xl font-medium font-jost text-[#0d2b4e] transition-colors duration-300 ">
                               {room.name}
                             </h3>
                             {room.category && (
@@ -533,7 +533,7 @@ const Rooms = () => {
                       <div className="flex flex-col flex-grow select-none px-6 md:px-0">
                         <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                           <div>
-                            <h3 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 ">
+                            <h3 className="text-3xl md:text-4xl font-medium font-jost text-[#0d2b4e] transition-colors duration-300 ">
                               {room.name}
                             </h3>
                             {/* {room.category && (

@@ -71,13 +71,13 @@ const UserLayout = () => {
        <div className="p-6">
   <Link to="/" className="inline-block">
     <img
-      src="./logo.png" // Replace with your logo path
+      src="/logo.png" // Replace with your logo path
       alt="Sree Raaga Resorts"
       className="h-18 w-auto object-contain"
     />
   </Link>
 
-  <p className="text-[10px] text-white uppercase tracking-[2px] mt-4 font-light">
+  <p className="text-[10px] text-white uppercase tracking-[2px] mt-4 font-semibold">
     Guest Portal
   </p>
 </div>
@@ -101,7 +101,7 @@ const UserLayout = () => {
         </nav>
 
         {/* SIDEBAR FOOTER */}
-        <div className="border-t border-white/10 p-4 space-y-2">
+        <div className="border-t border-white/10 p-4 space-y-2 ">
           <button 
             onClick={() => navigate("/")}
             className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-white font-medium text-[14px] hover:text-[#c8a64d] hover:bg-white/5 rounded transition cursor-pointer uppercase tracking-wider bg-transparent border-0"
@@ -178,7 +178,7 @@ const UserLayout = () => {
               </nav>
 
               {/* FOOTER */}
-              <div className="border-t border-white/10 p-4 space-y-2">
+              <div className="border-t border-white/10 p-4 pb-12 space-y-2 mt-[-20px] md:mt-0">
                 <button
                   onClick={() => navigate("/")}
                   className="w-full flex items-center gap-2 px-4 py-2.5 text-xs text-white/70 hover:text-[#c8a64d] hover:bg-white/5 rounded transition cursor-pointer uppercase tracking-wider bg-transparent border-0"

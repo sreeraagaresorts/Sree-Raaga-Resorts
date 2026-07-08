@@ -286,7 +286,7 @@ const Navbar = () => {
           scrolled: {
             y: 0, // Keep at initial position
             opacity: 1,
-            backgroundColor: "rgba(13, 43, 78, 0.85)", // bg-[#0d2b4e]/85
+            backgroundColor: "rgb(13, 43, 78)", // bg-[#0d2b4e]/85
             backdropFilter: "blur(12px)", // backdrop-blur-md
             borderBottomColor: "rgba(255, 255, 255, 0.15)", // subtle border
             boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)", // soft shadow

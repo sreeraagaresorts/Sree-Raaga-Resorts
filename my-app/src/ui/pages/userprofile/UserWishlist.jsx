@@ -80,24 +80,24 @@ const UserWishlist = () => {
       <h1 className="text-3xl font-medium mb-6 text-[#0d2b4e] border-b border-gray-200/50 pb-3">My Wishlist</h1>
 
       {wishlist.length === 0 ? (
-        <div className="bg-white border border-gray-200/50 rounded-none p-12 text-center text-gray-500 font-light shadow-sm">
+        <div className="bg-white border border-gray-200/50  p-12 text-center text-gray-500 font-light shadow-sm">
           <Heart size={40} className="mx-auto text-rose-500/50 mb-3" />
           <p className="text-lg font-medium">Your wishlist is empty.</p>
           <p className="text-xs mt-1 text-gray-600 font-medium">Explore our luxury rooms and save your favorites here!</p>
-          <Link to="/rooms" className="mt-4 inline-block bg-[#c8a64d] text-white px-6 py-4 rounded-none font-semibold text-xs uppercase tracking-widest hover:bg-[#b09141] transition shadow-sm">
+          <Link to="/rooms" className="mt-4 inline-block bg-[#c8a64d] text-white px-6 py-4  font-semibold text-xs uppercase tracking-widest hover:bg-[#b09141] transition shadow-sm">
             Browse Rooms
           </Link>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-6">
           {wishlist.map((item) => (
-            <div key={item.id || item._id} className="bg-white border border-gray-200/50 rounded-none overflow-hidden shadow-sm flex flex-col justify-between hover:border-[#c8a64d]/40 transition duration-300">
+            <div key={item.id || item._id} className="bg-white border border-gray-200/50  overflow-hidden shadow-sm flex flex-col justify-between hover:border-[#c8a64d]/40 transition duration-300">
               <div>
                 <div className="h-48 relative bg-gray-100">
                   <img src={getImageUrl(item.image)} alt={item.name} className="w-full h-full object-cover" />
                   <button 
                     onClick={() => handleRemove(item.id)}
-                    className="absolute top-3 right-3 p-1.5 bg-black/60 rounded-full text-rose-400 hover:bg-black/80 hover:text-rose-500 cursor-pointer border-0"
+                    className="absolute top-3 right-3 p-1.5 bg-black/60  text-rose-400 hover:bg-black/80 hover:text-rose-500 cursor-pointer border-0"
                     title="Remove from Wishlist"
                   >
                     <Trash2 size={14} />
@@ -105,11 +105,11 @@ const UserWishlist = () => {
                 </div>
 
                 <div className="p-5 space-y-2">
-                  <h2 className="text-xl font-light text-[#0d2b4e]">{item.name}</h2>
-                  <p className="text-[#c8a64d] font-bold text-sm">₹{parseFloat(item.price).toLocaleString()} <span className="text-gray-500 font-normal text-xs">/ night</span></p>
-                  <p className="text-gray-500 text-xs line-clamp-2 mt-1 leading-relaxed font-light">{item.description}</p>
+                  <h2 className="text-xl font-medium text-[#0d2b4e]">{item.name}</h2>
+                  <p className="text-[#c8a64d] font-bold text-lg">₹{parseFloat(item.price).toLocaleString()} <span className="text-gray-500 font-medium text-[17px]">/ night</span></p>
+                  <p className="text-gray-500 text-xs line-clamp-2 mt-1 leading-relaxed font-medium">{item.description}</p>
                   
-                  <div className="flex gap-4 text-[9px] text-gray-500 border-t border-gray-200/50 pt-3 mt-3 uppercase tracking-wider font-light">
+                  <div className="flex gap-4 text-[14px] text-gray-500 border-t border-gray-200/50 pt-3 mt-3 uppercase tracking-wider font-medium">
                     <span className="flex items-center gap-1"><BedDouble size={12} className="text-[#c8a64d]" /> {item.beds || "KING BED"}</span>
                     <span className="flex items-center gap-1"><Maximize size={12} className="text-[#c8a64d]" /> {item.area || "500 SQ FT"}</span>
                   </div>
@@ -117,9 +117,12 @@ const UserWishlist = () => {
               </div>
 
               <div className="p-5 border-t border-gray-200/50">
-                <Link to={`/rooms/${item.id}`} className="w-full bg-[#c8a64d] text-white py-2.5 rounded-none font-semibold flex items-center justify-center gap-1 text-xs uppercase tracking-widest hover:bg-[#b09141] transition shadow-sm">
-                  Book Stay Now <ArrowRight size={12} />
-                </Link>
+               <Link
+  to={`/rooms/${item.id}`}
+  className="block w-full rounded-none bg-[#c8a64d] text-white py-3 font-semibold rounded-none flex items-center justify-center gap-1 text-xs uppercase tracking-widest hover:bg-[#b09141] transition shadow-sm"
+>
+  Book Stay Now <ArrowRight size={12} />
+</Link>
               </div>
             </div>
           ))}

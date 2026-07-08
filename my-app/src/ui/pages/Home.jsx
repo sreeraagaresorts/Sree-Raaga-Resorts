@@ -1212,7 +1212,7 @@ return (
         <div className="bg-[#fdfeff] ">
           <div className="max-w-6xl mx-auto text-center mb-16">
   <span className="text-[#c8a64d] uppercase tracking-[3px] text-[14px] font-jost font-semibold block mt-14 md:mt-0 md:mb-8">
-    There's so much to discover
+    Events & Packagesflex items-center pt-4 justify-center gap-2 text-xs text-gray-100 hover:text-yellow-500 transition mb-4 uppercase tracking-wider
   </span>
 
   <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold font-corm text-[#0d2b4e] ">

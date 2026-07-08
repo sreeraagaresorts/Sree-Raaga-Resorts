@@ -132,12 +132,12 @@ const AdminLogin = () => {
           {/* Back Link */}
         <Link 
           to="/" 
-          className="flex items-center pt-4 justify-center gap-2 text-xs text-gray-100 hover:text-yellow-500 transition mb-4 uppercase tracking-wider"
+          className="flex items-center py-7 justify-center gap-2 text-xs text-gray-100 hover:text-yellow-500 transition  uppercase tracking-wider"
         >
           <ArrowLeft size={12} /> Back to Homepage
         </Link>
 
-        <p className="text-[12px] text-center text-gray-400 mt-4 uppercase tracking-widest">
+        <p className="text-[12px] text-center text-gray-400  uppercase tracking-widest">
           Restricted area. Admin access only.
         </p>
       </motion.div>

@@ -10,7 +10,7 @@ try {
 } catch (err) {}
 
 const run = async () => {
-  const uri = process.env.MONGO_URI;
+  const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/sree_raaga_resort";
   await mongoose.connect(uri);
   const rooms = await Room.find({});
   console.log("Current Rooms in Database:");

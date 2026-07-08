@@ -411,27 +411,27 @@ const Menu = () => {
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-end gap-1 md:gap-2 mb-1">
-                           <h4 className="flex items-center gap-1 md:gap-2 min-w-0">
+                            <h4 className="flex items-start gap-1 md:gap-2 min-w-0">
   {(dish.isDrink === true || dish.isDrink === "true") ? (
     <img
       src="/drinks.svg"
       alt="Drink"
-      className="w-4 h-4 md:w-5 md:h-5 object-contain shrink-0"
+      className="w-4 h-4 md:w-5 md:h-5 object-contain shrink-0 mt-1 md:mt-1.5"
     />
   ) : (
     <img
       src={dish.isVegetarian ? "/veg.png" : "/nonveg.png"}
       alt={dish.isVegetarian ? "Veg" : "Non-Veg"}
-      className="w-3.5 h-3.5 md:w-4 md:h-4 object-contain shrink-0"
+      className="w-3.5 h-3.5 md:w-4 md:h-4 object-contain shrink-0 mt-1 md:mt-1.5"
     />
   )}
 
-  <span className="text-[22px] md:text-2xl font-medium font-corm text-[#0d2b4e] truncate whitespace-nowrap overflow-hidden text-ellipsis block min-w-0" title={dish.name}>
+  <span className="text-[22px] md:text-2xl font-medium font-corm text-[#0d2b4e] block min-w-0" title={dish.name}>
     {dish.name}
   </span>
 </h4>
                             {/* Dotted connector */}
-                            <div className="flex-1 border-b border-dotted border-gray-300 md:mx-2 mb-1.5 min-w-6px] md:min-w-[20px]" />
+                            <div className="flex-1 border-b border-dotted border-gray-300 md:mx-2 mb-1.5 min-w-[6px] md:min-w-[20px]" />
                             <span className="text-[15px] md:text-[17px] font-semibold text-black shrink-0">
                               ₹{parseFloat(dish.price).toLocaleString()}
                             </span>

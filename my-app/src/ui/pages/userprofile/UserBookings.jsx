@@ -7,6 +7,7 @@ import html2pdf from "html2pdf.js";
 
 const UserBookings = () => {
   const [bookings, setBookings] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,18 +18,25 @@ const UserBookings = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    const fetchBookings = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${API_URL}/api/bookings/my-bookings`, {
+        const bookingsRes = await axios.get(`${API_URL}/api/bookings/my-bookings`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        if (res.data.success) {
-          setBookings(res.data.data);
+        
+        const roomsRes = await axios.get(`${API_URL}/api/rooms`);
+        
+        if (bookingsRes.data.success) {
+          setBookings(bookingsRes.data.data);
         } else {
-          throw new Error(res.data.message || "Failed to fetch bookings.");
+          throw new Error(bookingsRes.data.message || "Failed to fetch bookings.");
+        }
+        
+        if (roomsRes.data.success) {
+          setRooms(roomsRes.data.data);
         }
       } catch (err) {
         console.error(err);
@@ -38,7 +46,7 @@ const UserBookings = () => {
       }
     };
 
-    fetchBookings();
+    fetchData();
   }, []);
 
   const getImageUrl = (image) => {
@@ -48,14 +56,24 @@ const UserBookings = () => {
     return `${API_URL}/uploads/${image}`;
   };
 
+  const getBookingPricing = (b) => {
+    const matchingRoom = rooms.find(r => r.id === b.room_id || r.name === b.room_name);
+    const gstRate = b.room_gst_percentage !== undefined ? b.room_gst_percentage : (matchingRoom && matchingRoom.gst_percentage !== undefined ? matchingRoom.gst_percentage : 12);
+    const isNewCalculation = b.subtotal !== undefined && b.subtotal > 0;
+    const subtotal = isNewCalculation ? b.subtotal : parseFloat(b.total_price || 0);
+    const services = b.services_price || 0;
+    const discount = b.discount_price || 0;
+    const gst = isNewCalculation ? b.gst_amount : (subtotal * gstRate) / 100;
+    const total = isNewCalculation ? b.total_price : (subtotal + gst - discount);
+    return { subtotal, services, discount, gst, total };
+  };
+
   const handleDownloadInvoice = (booking) => {
     const start = new Date(booking.check_in);
     const end = new Date(booking.check_out);
     const nights = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) || 1;
-    const totalPrice = parseFloat(booking.total_price || 0);
-    const basePrice = totalPrice / 1.18;
-    const gstAmount = totalPrice - basePrice;
-    const amountDue = (booking.payment_method === "online" || booking.status === "confirmed" || booking.status === "checked_in") ? 0 : totalPrice;
+    const pricing = getBookingPricing(booking);
+    const amountDue = (booking.payment_method === "online" || booking.status === "confirmed" || booking.status === "checked_in") ? 0 : pricing.total;
     const paidDate = (booking.payment_method === "online" || booking.status === "confirmed" || booking.status === "checked_in")
       ? new Date(booking.created_at).toLocaleDateString("en-GB")
       : "N/A";
@@ -76,10 +94,13 @@ const UserBookings = () => {
         <!-- Brand & Invoice Number -->
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
           <tr>
-            <td style="vertical-align: top;">
-              <h2 style="font-family: Georgia, serif; font-size: 34px; color: #0d2b4e; margin: 0; text-transform: uppercase; font-weight: bold; letter-spacing: 2px;">Sree Raaga</h2>
-              <span style="font-size: 14px; text-transform: uppercase; color: #c8a64d; font-weight: bold; letter-spacing: 4px; display: block; margin-top: 5px;">Resorts</span>
-            </td>
+        <td style="vertical-align: top;">
+  <img
+    src="/logo2.png"
+    alt="Sree Raaga Resorts"
+    style="height: 90px; width: auto; display: block;"
+  />
+</td>
             <td style="text-align: right; vertical-align: top;">
               <h3 style="font-family: Georgia, serif; font-size: 26px; color: #0d2b4e; margin: 0; font-weight: 300;">Invoice</h3>
               <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">#BK-${booking.id.toString().padStart(6, "0")}</p>
@@ -132,44 +153,64 @@ const UserBookings = () => {
           <thead>
             <tr style="background-color: #f8f5ee;">
               <th style="padding: 10px; border: 1px solid #d1d5db; text-align: left; font-size: 14px; font-weight: bold; color: #0d2b4e; text-transform: uppercase;">Description</th>
-              <th style="padding: 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; font-weight: bold; color: #0d2b4e; text-transform: uppercase;">Price</th>
-              <th style="padding: 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; font-weight: bold; color: #0d2b4e; text-transform: uppercase;">GST (18%)</th>
-              <th style="padding: 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; font-weight: bold; color: #0d2b4e; text-transform: uppercase;">Total</th>
+              <th style="padding: 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; font-weight: bold; color: #0d2b4e; text-transform: uppercase; width: 150px;">Amount</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td style="padding: 15px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e; line-height: 1.5;">
-                <strong>${booking.rooms || 1} x ${booking.room_name} Room Stay</strong><br />
-                <span style="font-size: 13px; color: rgba(13, 43, 78, 0.7); font-weight: normal; display: block; margin-top: 3px;">
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e; line-height: 1.5;">
+                <strong>Room Stay (${booking.rooms || 1} x ${booking.room_name})</strong><br />
+                <span style="font-size: 12px; color: rgba(13, 43, 78, 0.7); display: block; margin-top: 3px;">
                   ${formattedCheckIn} to ${formattedCheckOut} (${nights} Nights)
                 </span>
               </td>
-              <td style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e;">
-                ₹${basePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e; vertical-align: top;">
+                ₹${pricing.subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
               </td>
-              <td style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e;">
-                ₹${gstAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+            </tr>
+            ${pricing.services > 0 ? `
+            <tr>
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e;">
+                <strong>Extra Services</strong>
               </td>
-              <td style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; font-weight: bold; color: #0d2b4e;">
-                ₹${totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e;">
+                ₹${pricing.services.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              </td>
+            </tr>
+            ` : ''}
+            ${pricing.discount > 0 ? `
+            <tr>
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e;">
+                <strong>Coupon Discount ${booking.coupon_code ? `('${booking.coupon_code}')` : ''}</strong>
+              </td>
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #10b981; font-weight: bold;">
+                - ₹${pricing.discount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              </td>
+            </tr>
+            ` : ''}
+            <tr>
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e;">
+                <strong>GST</strong>
+              </td>
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e;">
+                ₹${pricing.gst.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
               </td>
             </tr>
             <tr style="background-color: #f9fafb; font-weight: bold; font-size: 15px;">
-              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Total</td>
-              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e;">
-                ₹${totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Total</td>
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e; font-size: 16px;">
+                ₹${pricing.total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
               </td>
             </tr>
             <tr style="background-color: #f9fafb; font-weight: bold; font-size: 15px;">
-              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Paid Date</td>
-              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e; font-weight: normal;">
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Paid Date</td>
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e; font-weight: normal;">
                 ${paidDate}
               </td>
             </tr>
             <tr style="background-color: #f9fafb; font-weight: bold; font-size: 15px;">
-              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Amount Due</td>
-              <td colspan="2" style="padding: 15px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e;">
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; color: #0d2b4e;">Amount Due</td>
+              <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; color: #0d2b4e;">
                 ₹${amountDue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
               </td>
             </tr>
@@ -293,9 +334,24 @@ const UserBookings = () => {
                         {booking.rooms || 1} {(booking.rooms || 1) === 1 ? "Room" : "Rooms"} + {booking.adults} Adults{booking.children > 0 ? `, ${booking.children} Children` : ""}
                       </p>
                     </div>
-                    <div>
-                      <p className="text-gray-500 text-center text-[10px] uppercase tracking-widest font-medium">Total Price</p>
-                      <p className="font-bold mt-1 text-center text-[#c8a64d] text-sm">₹{parseFloat(booking.total_price).toLocaleString()}</p>
+                    <div className="text-left md:text-right">
+                      <p className="text-gray-500 text-[10px] uppercase tracking-widest font-medium">Pricing Details</p>
+                      {(() => {
+                        const p = getBookingPricing(booking);
+                        return (
+                          <div className="mt-1 space-y-0.5 text-[11px] text-gray-700">
+                            <div>Base Price: ₹{p.subtotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                            {p.services > 0 && (
+                              <div>Services: ₹{p.services.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                            )}
+                            {p.discount > 0 && (
+                              <div className="text-emerald-600 font-semibold">Discount: -₹{p.discount.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                            )}
+                            <div>GST: ₹{p.gst.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                            <div className="font-bold text-[#c8a64d] text-[15px] pt-1 border-t border-gray-100 mt-1">Total: ₹{p.total.toLocaleString()}</div>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>

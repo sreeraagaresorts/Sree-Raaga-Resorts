@@ -345,7 +345,7 @@ const RoomDetails = () => {
     }
 
     let gst = 0;
-    const gstRate = room.gst_percentage !== undefined ? room.gst_percentage : 12;
+    const gstRate = room.gst_percentage !== undefined ? room.gst_percentage : 8;
     const taxableAmount = Math.max(0, subtotalWithServices - discount);
     gst = (taxableAmount * gstRate) / 100;
 
@@ -355,6 +355,7 @@ const RoomDetails = () => {
       services,
       discount,
       gst,
+      gstRate,
       total: Math.max(0, taxableAmount + gst)
     };
   };
@@ -458,7 +459,13 @@ const RoomDetails = () => {
                   check_out: checkOut,
                   adults,
                   children,
-                  rooms
+                  rooms,
+                  total_price: totals.total,
+                  subtotal: totals.subtotal,
+                  services_price: totals.services,
+                  discount_price: totals.discount,
+                  gst_amount: totals.gst,
+                  coupon_code: appliedCoupon ? appliedCoupon.code : null
                 })
               });
 
@@ -505,7 +512,13 @@ const RoomDetails = () => {
             adults,
             children,
             rooms,
-            payment_method: "cash"
+            payment_method: "cash",
+            total_price: totals.total,
+            subtotal: totals.subtotal,
+            services_price: totals.services,
+            discount_price: totals.discount,
+            gst_amount: totals.gst,
+            coupon_code: appliedCoupon ? appliedCoupon.code : null
           })
         });
 
@@ -557,6 +570,7 @@ const RoomDetails = () => {
   }
 
   const totals = calculateTotal();
+  const isBookingFull = availability && (availability.available === false || rooms > availability.remainingRooms);
   const gallery = getGalleryImages();
   const visibleImagesCount = 3; 
   const maxGalleryIndex = Math.max(0, gallery.length - visibleImagesCount);
@@ -813,7 +827,7 @@ const RoomDetails = () => {
             <span className="text-gray-400 text-xs block text-right ">Checking availability...</span>
           ) : availability ? (
             availability.available && availability.remainingRooms >= rooms ? (
-              <span className="text-emerald-600 text-xs font-semibold block text-right mt-2">
+              <span className="text-emerald-600 text-[14px] font-semibold block text-right mt-2">
                 Available! ( Only {availability.remainingRooms}  room left )
               </span>
             ) : (
@@ -826,8 +840,8 @@ const RoomDetails = () => {
           
           {/* Price Details */}
           {checkIn && checkOut && (
-            <div className=" rounded-2xl  mt-6 select-none">
-              <h3 className="text-[20px] font-bold font-corm text-[#3d2c23] mb-6">Price Details</h3>
+            <div className=" rounded-2xl  mt-6 select-none border border-black/10 p-2">
+              <h3 className="text-[20px] font-semibold font-jost  text-[#3d2c23] mb-6">Price Details</h3>
               <div className="space-y-3 text-[15px]">
                 
                 <div className="flex justify-between items-start">
@@ -852,7 +866,7 @@ const RoomDetails = () => {
                 )}
 
                 <div className="flex justify-between items-start pt-1">
-                  <div className="text-gray-800 text-[14px]">GST</div>
+                  <div className="text-gray-800 text-[14px]">GST ({totals.gstRate}%)</div>
                   <div className="text-gray-800 text-[14px] font-medium">₹ {totals.gst.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
                 </div>
               </div>
@@ -881,10 +895,16 @@ const RoomDetails = () => {
           <>
             <button
               onClick={handleBooking}
-              disabled={bookingLoading || (availability && (availability.available === false || rooms > availability.remainingRooms))}
-              className="w-full mt-4 py-5 bg-[#f5d7b8] hover:bg-[#0d2b4e] px-3 text-[#0d2b4e] hover:text-white transition font-bold uppercase tracking-[2.5px] text-[17px] shadow-md disabled:bg-gray-100 disabled:text-gray-400 cursor-pointer"
+              disabled={bookingLoading || isBookingFull}
+              className={`w-full mt-4 py-5 px-3 transition font-bold uppercase tracking-[2.5px] text-[17px] shadow-md cursor-pointer ${
+                isBookingFull
+                  ? "bg-[#0d2b4e] hover:bg-[#f5d7b8] hover:text-[#0d2b4e] text-white opacity-90 cursor-not-allowed"
+                  : bookingLoading
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-[#f5d7b8] hover:bg-[#0d2b4e] text-[#0d2b4e] hover:text-white"
+              }`}
             >
-              {bookingLoading ? "Processing..." : availability && (availability.available === false || rooms > availability.remainingRooms) ? "BOOKING FULL" : `BOOK YOUR STAY NOW`}
+              {bookingLoading ? "Processing..." : isBookingFull ? "BOOKING FULL" : `BOOK YOUR STAY NOW`}
             </button>
             <p className="text-center text-[12px] text-gray-500 mt-[-4px] select-none font-jost">
               By proceeding you agree to our <Link to="/privacy-policy" className="underline hover:text-[#0d2b4e] transition">Privacy Policy</Link> and <Link to="/terms-conditions" className="underline hover:text-[#0d2b4e] transition">T&C</Link>.
@@ -997,7 +1017,7 @@ const RoomDetails = () => {
                 <div className="flex flex-wrap items-center gap-6 text-[17px] text-gray-500 font-jost">
                   <div className="flex items-center">
                     <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                    <span>{room.area || "30 M²"} SQM</span>
+                    <span>{room.area || "30 M²"} Sqft</span>
                   </div>
                   <div className="flex items-center">
                     <Users className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
@@ -1009,7 +1029,7 @@ const RoomDetails = () => {
                   </div>
                   <div className="flex items-center">
                     <Bath className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                    <span>{room.bathrooms || "1 Bath"} Bathroom</span>
+                    <span>{room.bathrooms || "1 Bath"} </span>
                   </div>
                 </div>
               </div>
@@ -1198,15 +1218,19 @@ const RoomDetails = () => {
                   Room Rules
                 </h3>
                 
-                <ul className="space-y-4  text-[17px] text-gray-700 list-disc pl-5 select-none">
-                  <li>Please carry a valid ID for Verification</li>
-                  <li>Early check-in & check-out may be possible <br /> upon request, subject to availability</li>
-                  <li>Check-in from 9:00 AM - Anytime</li>
-                  <li>Check-out: 11:00 AM</li>
-                  <li>Self-check-in with lockbox</li>
-                  <li>No smoking</li>
-                  <li>Pets are allowed</li>
-                </ul>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+                  <ul className="space-y-4 text-[17px] text-gray-700 list-disc pl-5 select-none">
+                    <li>Please carry a valid ID for Verification</li>
+                    <li>Early check-in & check-out may be possible <br /> upon request, subject to availability</li>
+                    <li>Check-in from 9:00 AM - Anytime</li>
+                    <li>Check-out: 11:00 AM</li>
+                  </ul>
+                  <ul className="space-y-4 text-[17px] text-gray-700 list-disc pl-5 select-none">
+                    <li>Self-check-in with lockbox</li>
+                    <li>No smoking</li>
+                    <li>Pets are allowed</li>
+                  </ul>
+                </div>
               </div>
 
               <hr className="border-gray-200/60" />
@@ -1298,7 +1322,7 @@ const RoomDetails = () => {
                   <div className="flex flex-col select-none px-6 md:px-0">
                     <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                       <div>
-                        <h4 className="text-3xl md:text-4xl font-medium font-corm  text-[#0d2b4e] transition-colors duration-300 ">
+                        <h4 className="text-3xl md:text-3xl font-medium font-jost  text-[#0d2b4e] transition-colors duration-300 ">
                           {item.name}
                         </h4>
                         {item.category && (

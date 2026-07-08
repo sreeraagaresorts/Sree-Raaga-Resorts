@@ -9,6 +9,7 @@ const InvoicePage = () => {
   const navigate = useNavigate();
   const [booking, setBooking] = useState(null);
   const [user, setUser] = useState(null);
+  const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -26,6 +27,11 @@ const InvoicePage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        const roomsRes = await axios.get(`${API_URL}/api/rooms`);
+        if (roomsRes.data.success) {
+          setRooms(roomsRes.data.data);
+        }
 
         if (res.data.success) {
           const foundBooking = res.data.data.find((b) => b.id === Number(bookingId));
@@ -87,9 +93,12 @@ const InvoicePage = () => {
   const start = new Date(booking.check_in);
   const end = new Date(booking.check_out);
   const nights = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) || 1;
-  const totalPrice = parseFloat(booking.total_price || 0);
-  const basePrice = totalPrice / 1.18;
-  const gstAmount = totalPrice - basePrice;
+  const matchingRoom = rooms.find(r => r.id === booking.room_id || r.name === booking.room_name);
+  const gstRate = booking.room_gst_percentage !== undefined ? booking.room_gst_percentage : (matchingRoom && matchingRoom.gst_percentage !== undefined ? matchingRoom.gst_percentage : 12);
+  const isNewCalculation = booking.subtotal !== undefined && booking.subtotal > 0;
+  const basePrice = isNewCalculation ? booking.subtotal : parseFloat(booking.total_price || 0);
+  const gstAmount = isNewCalculation ? booking.gst_amount : (basePrice * gstRate) / 100;
+  const totalPrice = isNewCalculation ? booking.total_price : (basePrice + gstAmount - (booking.discount_price || 0));
   const amountDue = (booking.payment_method === "online" || booking.status === "confirmed" || booking.status === "checked_in") ? 0 : totalPrice;
   const paidDate = (booking.payment_method === "online" || booking.status === "confirmed" || booking.status === "checked_in")
     ? new Date(booking.created_at).toLocaleDateString("en-GB")
@@ -153,14 +162,13 @@ const InvoicePage = () => {
         <div className="space-y-8">
           {/* Brand & Invoice Number */}
           <div className="flex justify-between items-start">
-            <div>
-              <h2 className="text-4xl font-serif text-[#0d2b4e] tracking-widest uppercase font-semibold leading-none">
-                Sree Raaga
-              </h2>
-              <span className="text-[15px] tracking-[4px] uppercase text-[#c8a64d] font-bold block mt-1.5">
-                Resorts
-              </span>
-            </div>
+           <div>
+  <img
+    src="/logo.png" // Replace with your actual logo path
+    alt="Sree Raaga Resorts"
+    className="h-16 md:h-20 w-auto"
+  />
+</div>
             <div className="text-right">
               <h3 className="text-3xl font-serif text-[#0d2b4e] font-light">
                 Invoice 
@@ -213,47 +221,61 @@ const InvoicePage = () => {
               <thead>
                 <tr className="bg-[#f8f5ee] text-[15px] uppercase tracking-wider font-bold text-[#0d2b4e]">
                   <th className="py-2.5 px-4 border border-gray-300">Description</th>
-                  <th className="py-2.5 px-4 text-right border border-gray-300">Price</th>
-                  <th className="py-2.5 px-4 text-right border border-gray-300">GST (18%)</th>
-                  <th className="py-2.5 px-4 text-right border border-gray-300">Total</th>
+                  <th className="py-2.5 px-4 text-right border border-gray-300 w-40">Amount</th>
                 </tr>
               </thead>
               <tbody className="text-[16px] font-normal text-[#0d2b4e]">
                 <tr>
                   <td className="py-4 px-4 leading-relaxed border border-gray-300">
-                    {booking.rooms || 1} x {booking.room_name} Room Stay<br />
+                    <strong>Room Stay ({booking.rooms || 1} x {booking.room_name})</strong><br />
                     <span className="text-[15px] text-[#0d2b4e]/90 mt-1 block font-medium">
                       {new Date(booking.check_in).toLocaleDateString("en-GB")} to {new Date(booking.check_out).toLocaleDateString("en-GB")} ({nights} Nights)
                     </span>
                   </td>
                   <td className="py-4 px-4 text-right border border-gray-300">
-                    ₹{basePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    ₹{(booking.subtotal || basePrice).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
+                </tr>
+                {booking.services_price > 0 && (
+                  <tr>
+                    <td className="py-4 px-4 border border-gray-300 font-semibold">Extra Services</td>
+                    <td className="py-4 px-4 text-right border border-gray-300">
+                      ₹{booking.services_price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    </td>
+                  </tr>
+                )}
+                {booking.discount_price > 0 && (
+                  <tr>
+                    <td className="py-4 px-4 border border-gray-300 font-semibold">Coupon Discount {booking.coupon_code ? `('${booking.coupon_code}')` : ''}</td>
+                    <td className="py-4 px-4 text-right border border-gray-300 text-emerald-600 font-bold">
+                      - ₹{booking.discount_price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    </td>
+                  </tr>
+                )}
+                <tr>
+                  <td className="py-4 px-4 border border-gray-300 font-semibold">GST</td>
                   <td className="py-4 px-4 text-right border border-gray-300">
-                    ₹{gstAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
-                  </td>
-                  <td className="py-4 px-4 text-right font-bold border border-gray-300">
-                    ₹{totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    ₹{(booking.gst_amount || gstAmount).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
                 </tr>
                 {/* Subtotal row */}
                 <tr className="font-bold text-[18px] bg-gray-50/50">
-                  <td className="py-4 px-4 border border-gray-300" colSpan="2">Total</td>
-                  <td className="py-4 px-4 text-right border border-gray-300" colSpan="2">
+                  <td className="py-4 px-4 border border-gray-300">Total</td>
+                  <td className="py-4 px-4 text-right border border-gray-300">
                     ₹{totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
                 </tr>
                 {/* Paid Date row */}
                 <tr className="font-bold text-[18px] bg-gray-50/50">
-                  <td className="py-4 px-4 border border-gray-300" colSpan="2">Paid Date</td>
-                  <td className="py-4 px-4 text-right border border-gray-300 font-medium" colSpan="2">
+                  <td className="py-4 px-4 border border-gray-300">Paid Date</td>
+                  <td className="py-4 px-4 text-right border border-gray-300 font-medium">
                     {paidDate}
                   </td>
                 </tr>
                 {/* Amount Due row */}
                 <tr className="font-bold text-[18px] bg-gray-50/50">
-                  <td className="py-4 px-4 border border-gray-300" colSpan="2">Amount Due</td>
-                  <td className="py-4 px-4 text-right border border-gray-300" colSpan="2">
+                  <td className="py-4 px-4 border border-gray-300">Amount Due</td>
+                  <td className="py-4 px-4 text-right border border-gray-300">
                     ₹{amountDue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>
                 </tr>

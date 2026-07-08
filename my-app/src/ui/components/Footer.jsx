@@ -186,23 +186,28 @@ const Footer = () => {
             <div className="grid grid-cols-2 gap-4  text-[16px]">
            <div>
                <ul className="space-y-3">
+                 <li>
+                  <Link to="/" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
+                    Home
+                  </Link>
+                </li>
                 <li>
-                  <Link to="/about" className="text-whitehover:text-[#c8a64d] transition">
+                  <Link to="/about" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link to="/rooms" className="text-whitehover:text-[#c8a64d] transition">
-                    Our Rooms
+                  <Link to="/rooms" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
+                    Rooms
                   </Link>
                 </li>
                 <li>
-                  <Link to="/events" className="text-whitehover:text-[#c8a64d] transition">
-                    Day Out
+                  <Link to="/amenities" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
+                    Amenities
                   </Link>
                 </li>
                     <li>
-                  <Link to="/faq" className="text-whitehover:text-[#c8a64d] transition">
+                  <Link to="/faq" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
                     FAQ
                   </Link>
                 </li>
@@ -211,21 +216,27 @@ const Footer = () => {
            <div>
             <ul className="space-y-3">
               <li>
-                  <Link to="/events" className="text-whitehover:text-[#c8a64d] transition">
-                    Events
+                  <Link to="/dine" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
+                    Dine
                   </Link>
                 </li>
                 <li>
-                  <Link to="/menu" className="text-whitehover:text-[#c8a64d] transition">
-                    Restaurant & Bar
+                  <Link to="/menu" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
+                    Resort Menu
                   </Link>
                 </li>
                 
                 <li>
-                  <Link to="/contact" className="text-whitehover:text-[#c8a64d] transition">
-                    Contact
+                  <Link to="/events" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
+                    Events
                   </Link>
                 </li>
+                   <li>
+                  <Link to="/contact" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
+                    Contact Us
+                  </Link>
+                </li>
+                
             </ul>
            </div>
 

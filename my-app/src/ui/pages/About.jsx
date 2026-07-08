@@ -240,7 +240,7 @@ const About = () => {
                 </span>
                 
                 <h2 className="text-4xl md:text-6xl lg:text-[75px] font-medium font-corm mb-12 leading-tight">
-                  A Wonder Of Nature
+                  Experience Resort Living
                 </h2>
                 
                 <button 
