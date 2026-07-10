@@ -754,7 +754,7 @@ exports.verifyRazorpayPayment = async (req, res) => {
       success: true,
       message: "Online payment verified and booking confirmed successfully.",
       bookingId: booking.id,
-      total_price
+      total_price: final_total_price
     });
   } catch (error) {
     console.error("Payment verification failed:", error);
