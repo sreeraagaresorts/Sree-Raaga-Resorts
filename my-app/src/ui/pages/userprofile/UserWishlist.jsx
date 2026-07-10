@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Heart, Maximize, BedDouble, Trash2, ArrowRight, RefreshCw } from "lucide-react";
+import { Heart, Maximize, BedDouble, Trash2, ArrowRight, RefreshCw, Bath, Users, Tag } from "lucide-react";
 import { useToast } from "../../components/Toast";
 import { API_URL } from "../../../config/api";
 
@@ -109,9 +109,24 @@ const UserWishlist = () => {
                   <p className="text-[#c8a64d] font-bold text-lg">₹{parseFloat(item.price).toLocaleString()} <span className="text-gray-500 font-medium text-[17px]">/ night</span></p>
                   <p className="text-gray-500 text-xs line-clamp-2 mt-1 leading-relaxed font-medium">{item.description}</p>
                   
-                  <div className="flex gap-4 text-[14px] text-gray-500 border-t border-gray-200/50 pt-3 mt-3 uppercase tracking-wider font-medium">
-                    <span className="flex items-center gap-1"><BedDouble size={12} className="text-[#c8a64d]" /> {item.beds || "KING BED"}</span>
-                    <span className="flex items-center gap-1"><Maximize size={12} className="text-[#c8a64d]" /> {item.area || "500 SQ FT"}</span>
+                  <div className="flex flex-wrap gap-x-4 gap-y-2 text-[14px] text-gray-500 border-t border-gray-200/50 pt-3 mt-3  tracking-wider ">
+                       {item.area && (
+                      <span className="flex items-center gap-1"><Maximize size={12} className="text-[#c8a64d]" /> {item.area}</span>
+                    )}
+                       {item.guests && (
+                      <span className="flex items-center gap-1"><Users size={12} className="text-[#c8a64d]" /> {item.guests}</span>
+                    )}
+                    {item.beds && (
+                      <span className="flex items-center gap-1"><BedDouble size={12} className="text-[#c8a64d]" /> {item.beds}</span>
+                    )}
+               
+                    {item.bathrooms && (
+                      <span className="flex items-center gap-1"><Bath size={12} className="text-[#c8a64d]" /> {item.bathrooms}</span>
+                    )}
+                 
+                    {/* {item.category && (
+                      <span className="flex items-center gap-1"><Tag size={12} className="text-[#c8a64d]" /> {item.category}</span>
+                    )} */}
                   </div>
                 </div>
               </div>

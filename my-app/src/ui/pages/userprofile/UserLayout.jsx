@@ -145,7 +145,7 @@ const UserLayout = () => {
             <div className="p-6 flex items-center justify-between border-b border-white/5">
   <Link to="/" className="inline-block">
     <img
-      src="./logo.png"
+      src="/logo.png"
       alt="Sree Raaga Resorts"
       className="h-14 w-auto object-contain"
     />

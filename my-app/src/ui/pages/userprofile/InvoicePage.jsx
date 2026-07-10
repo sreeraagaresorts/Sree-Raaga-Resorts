@@ -164,7 +164,7 @@ const InvoicePage = () => {
           <div className="flex justify-between items-start">
            <div>
   <img
-    src="/logo.png" // Replace with your actual logo path
+    src="/gold.png" 
     alt="Sree Raaga Resorts"
     className="h-16 md:h-20 w-auto"
   />
@@ -253,7 +253,7 @@ const InvoicePage = () => {
                   </tr>
                 )}
                 <tr>
-                  <td className="py-4 px-4 border border-gray-300 font-semibold">GST</td>
+                  <td className="py-4 px-4 border border-gray-300 font-semibold">GST ({gstRate}%)</td>
                   <td className="py-4 px-4 text-right border border-gray-300">
                     ₹{(booking.gst_amount || gstAmount).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                   </td>

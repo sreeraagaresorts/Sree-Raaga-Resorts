@@ -65,7 +65,7 @@ const UserBookings = () => {
     const discount = b.discount_price || 0;
     const gst = isNewCalculation ? b.gst_amount : (subtotal * gstRate) / 100;
     const total = isNewCalculation ? b.total_price : (subtotal + gst - discount);
-    return { subtotal, services, discount, gst, total };
+    return { subtotal, services, discount, gst, total, gstRate };
   };
 
   const handleDownloadInvoice = (booking) => {
@@ -96,7 +96,7 @@ const UserBookings = () => {
           <tr>
         <td style="vertical-align: top;">
   <img
-    src="/logo2.png"
+    src="/gold.png"
     alt="Sree Raaga Resorts"
     style="height: 90px; width: auto; display: block;"
   />
@@ -116,10 +116,7 @@ const UserBookings = () => {
                 <p style="font-size: 13px; color: rgba(13, 43, 78, 0.7); margin: 0; text-transform: uppercase; font-weight: bold;">Invoice date:</p>
                 <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">${formattedCreated}</p>
               </td>
-              <td style="text-align: right; vertical-align: top; width: 50%;">
-                <p style="font-size: 13px; color: rgba(13, 43, 78, 0.7); margin: 0; text-transform: uppercase; font-weight: bold;">Due date:</p>
-                <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">${formattedCheckIn}</p>
-              </td>
+          
             </tr>
           </table>
         </div>
@@ -160,9 +157,17 @@ const UserBookings = () => {
             <tr>
               <td style="padding: 12px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e; line-height: 1.5;">
                 <strong>Room Stay (${booking.rooms || 1} x ${booking.room_name})</strong><br />
-                <span style="font-size: 12px; color: rgba(13, 43, 78, 0.7); display: block; margin-top: 3px;">
-                  ${formattedCheckIn} to ${formattedCheckOut} (${nights} Nights)
-                </span>
+              <span
+  style={{
+    fontSize: "12px",
+    color: "rgba(13, 43, 78, 0.7)",
+    display: "block",
+    marginTop: "3px",
+    fontWeight: 400,
+  }}
+>
+  ${formattedCheckIn} to ${formattedCheckOut} (${nights} Nights)
+</span>
               </td>
               <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e; vertical-align: top;">
                 ₹${pricing.subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
@@ -190,7 +195,7 @@ const UserBookings = () => {
             ` : ''}
             <tr>
               <td style="padding: 12px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e;">
-                <strong>GST</strong>
+                <strong>GST (${pricing.gstRate}%)</strong>
               </td>
               <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e;">
                 ₹${pricing.gst.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}

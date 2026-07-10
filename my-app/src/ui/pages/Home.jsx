@@ -435,24 +435,24 @@ return (
         {/* ================= HERO SECTION ================= */}
         <section className="relative h-screen flex items-center justify-center">
           <motion.div
-      style={{ y: heroY }}
-      className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden bg-[#111]" // Add a fallback background color
-    >
-      {/* Only render the heavy iframe AFTER the initial mount */}
-      {isVideoLoaded && (
-        <iframe
-          src="https://player.vimeo.com/video/1207972432?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1"
-          className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 transition-opacity duration-1000 ease-in-out opacity-100 animate-fade-in"
-          frameBorder="0"
-          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          title="Sree Raaga Resorts"
-        ></iframe>
-      )}
+            style={{ y: heroY }}
+            className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden bg-[#111]"
+          >
+            {/* Local video — plays instantly from /public, no external network needed */}
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              className="absolute top-1/2 left-1/2 w-auto h-auto min-w-full min-h-full max-w-none -translate-x-1/2 -translate-y-1/2 object-cover"
+            >
+              <source src="/IMG_3557.MP4" type="video/mp4" />
+            </video>
 
-      {/* Dark Overlay for Text Readability */}
-      <div className="absolute inset-0 bg-black/45"></div>
-    </motion.div>
+            {/* Dark Overlay for Text Readability */}
+            <div className="absolute inset-0 bg-black/45"></div>
+          </motion.div>
 
           <div className="relative z-10 text-center px-5 max-w-5xl text-white mt-[-130px] md:mt-0">
             <span className="text-white uppercase tracking-[3px] text-[13px] font-jost font-medium block mb-4 md:hidden">

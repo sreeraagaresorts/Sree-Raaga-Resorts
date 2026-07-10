@@ -585,18 +585,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
 
             <form onSubmit={handleSave} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Room Number
-                  </label>
-                  <input
-                    required
-                    placeholder="e.g. HE-101"
-                    value={roomNumber}
-                    onChange={(e) => setRoomNumber(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
-                  />
-                </div>
+
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
                     Number of Units
@@ -733,14 +722,14 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <div className="flex items-center  mb-2">
+                  <div className="flex items-center  mt-[-11px]">
                     <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-0">
                       Room Image
                     </label>
                     <button
                       type="button"
                       onClick={() => setShow360Input(!show360Input)}
-                      className="  text-yellow-500 px-2 py-1 rounded text-[10px]  transition  border-0 "
+                      className="  text-yellow-500   uppercase transition     "
                     >
                       {show360Input ? "Hide 360 View" : "+ Add 360 View"}
                     </button>
@@ -775,9 +764,11 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                 </div>
 
                 <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Extra Images (Details Gallery)
-                  </label>
+                  <div className="flex items-center mb-2" style={{minHeight: '28px'}}>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-0">
+                      Extra Images (Details Gallery)
+                    </label>
+                  </div>
                   <div className="border border-dashed border-white/20 p-4 rounded-lg text-center bg-[#071524] relative h-[120px] flex flex-col justify-center items-center">
                     <input
                       type="file"
@@ -796,14 +787,14 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
 
               {show360Input && (
                 <div>
-                  <label className="block text-yellow-500 text-[10px] uppercase tracking-widest mb-1 font-bold">
+                  <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1 font-bold">
                     360 View Iframe HTML
                   </label>
                   <textarea
                     placeholder='<iframe src="..."></iframe>'
                     value={view360Iframe}
                     onChange={(e) => setView360Iframe(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-xs font-mono"
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white text-xs font-mono"
                     rows={2}
                   />
                 </div>

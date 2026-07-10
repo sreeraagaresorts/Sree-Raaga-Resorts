@@ -433,6 +433,9 @@ const RoomDetails = () => {
           throw new Error(orderData.message || "Failed to initiate online order.");
         }
 
+        // Detect demo/mock mode (no real Razorpay keys configured)
+        const isDemoMode = !orderData.key_id || orderData.key_id === "rzp_test_mockkeyid12";
+
         const options = {
           key: orderData.key_id,
           amount: orderData.amount,
@@ -442,6 +445,13 @@ const RoomDetails = () => {
           image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=120&h=120",
           order_id: orderData.order_id,
           handler: async function (response) {
+            // If running in demo/mock mode, skip server-side signature verification
+            if (isDemoMode) {
+              toast.success("Demo Mode: Booking request processed successfully!");
+              navigate("/dashboard/bookings");
+              return;
+            }
+
             try {
               setBookingLoading(true);
               const verifyRes = await fetch(`${API_URL}/api/bookings/verify-payment`, {
