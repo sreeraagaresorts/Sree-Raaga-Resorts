@@ -5,7 +5,7 @@ const AuditLog = require("../models/AuditLog");
 
 exports.register = async (req, res) => {
   try {
-    const { full_name, email, phone, password } = req.body;
+    const { full_name, email, phone, password, is_manual } = req.body;
 
     if (!full_name || !email || !phone || !password) {
       return res.status(400).json({
@@ -41,7 +41,8 @@ exports.register = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
-      role
+      role,
+      is_manual: is_manual || false
     });
     await user.save();
 
@@ -168,7 +169,7 @@ exports.getProfile = async (req, res) => {
 // Admin-only: Get all users
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({}, 'id full_name email phone role created_at').sort({ id: -1 });
+    const users = await User.find({}, 'id full_name email phone role is_manual created_at').sort({ id: -1 });
 
     res.json({
       success: true,

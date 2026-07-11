@@ -6,6 +6,8 @@ import Footer from '../components/Footer';
 import { useToast } from "../components/Toast";
 import { API_URL } from "../../config/api";
 import { Helmet } from "react-helmet";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Menu = () => {
   const toast = useToast();
@@ -199,6 +201,13 @@ const Menu = () => {
       setPlacingOrder(false);
     }
   };
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Animate only once
+      offset: 100,    // Trigger animation 100px before element
+    });
+  }, []);
 
   return (
     <>
@@ -241,15 +250,15 @@ const Menu = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white px-4 md:px-6 w-full max-w-7xl mt-12 md:mt-0">
-            <span className="text-white uppercase tracking-[4px] md:tracking-[6px] block text-sm md:text-[17px] font-semibold">
+            <span className="text-white uppercase tracking-[4px] md:tracking-[6px] block text-sm md:text-[17px] font-semibold" data-aos="fade-up">
               Restaurant
             </span>
-            <h1 className="text-5xl md:text-[92px] font-medium font-corm leading-tight mb-6 md:mb-8">
+            <h1 className="text-5xl md:text-[92px] font-medium font-corm leading-tight mb-6 md:mb-8" data-aos="fade-up" data-aos-delay="100">
               Restaurant Menu
             </h1>
             
             {/* Details Row */}
-            <div className="flex flex-wrap justify-center gap-x-6 md:gap-x-8 gap-y-3 pt-6 md:pt-8 border-t border-white/20 text-[11px] md:text-sm tracking-widest text-white/80">
+            <div data-aos="fade-up" data-aos-delay="200" className="flex flex-wrap justify-center gap-x-6 md:gap-x-8 gap-y-3 pt-6 md:pt-8 border-t border-white/20 text-[11px] md:text-sm tracking-widest text-white/80">
               <div className="flex items-center gap-1.5 md:gap-2">
                 <Phone size={13} className="text-[#c8a64d]" />
                 <span><a href="tel:918904381155">+91 8904381155</a></span>
@@ -276,7 +285,7 @@ const Menu = () => {
         </section>
 
         {/* ================= MENU HIGHLIGHTS SECTION ================= */}
-        <section className="py-12 md:py-16 w-full max-w-7xl lg:max-w-[160vh] mx-auto px-4 md:px-6 pb-20 md:pb-28">
+        <section className="py-12 md:py-16 w-full max-w-7xl lg:max-w-[160vh] mx-auto px-4 md:px-6 pb-20 md:pb-28" data-aos="fade-up" data-aos-delay="300">
           
           <div className="text-center mb-8 md:mb-10 select-none">
             <span className="text-[#c8a64d] uppercase tracking-[3px] md:tracking-[4px] mb-2 md:mb-3 text-sm md:text-[17px] font-semibold block">

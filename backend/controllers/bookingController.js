@@ -20,7 +20,7 @@ const logAction = async (userId, actionType, details) => {
 // 1. Create a booking
 exports.createBooking = async (req, res) => {
   try {
-    const { room_id, check_in, check_out, adults, children, user_id: bodyUserId, payment_method, rooms, room_number } = req.body;
+    const { room_id, check_in, check_out, adults, children, user_id: bodyUserId, payment_method, rooms, room_number, booking_source } = req.body;
     let user_id = req.user.id;
 
     if (req.user.role === "admin" && bodyUserId) {
@@ -155,9 +155,30 @@ exports.createBooking = async (req, res) => {
       gst_amount: req.body.gst_amount !== undefined ? Number(req.body.gst_amount) : 0,
       coupon_code: req.body.coupon_code || null,
       status: 'confirmed',
-      payment_method: payment_method || 'online'
+      payment_method: payment_method || 'online',
+      payment_status: req.body.payment_status !== undefined ? req.body.payment_status : (payment_method === 'pay_later' ? 'Unpaid' : 'Paid'),
+      booking_source: booking_source || 'Direct'
     });
     await booking.save();
+
+    // Increment coupon used_count if a coupon was applied
+    if (req.body.coupon_code) {
+      try {
+        const Coupon = require("../models/Coupon");
+        const updatedCoupon = await Coupon.findOneAndUpdate(
+          { code: req.body.coupon_code.toUpperCase() },
+          { $inc: { used_count: 1 } },
+          { new: true }
+        );
+        // Auto-expire if usage limit reached
+        if (updatedCoupon && updatedCoupon.used_count >= updatedCoupon.total_uses) {
+          updatedCoupon.status = "expired";
+          await updatedCoupon.save();
+        }
+      } catch (couponErr) {
+        console.error("[Coupon] Failed to increment used_count:", couponErr);
+      }
+    }
 
     // Sync room unit status if room_number is specified
     if (booking.room_number) {
@@ -302,7 +323,7 @@ const syncRoomUnitStatus = async (roomId, roomNumber, bookingStatus) => {
 // 4. Update booking status or details (Admin only)
 exports.updateBookingStatus = async (req, res) => {
   try {
-    const { status, payment_method, room_number } = req.body;
+    const { status, payment_method, room_number, check_in, check_out, payment_status } = req.body;
     const { id } = req.params;
 
     const booking = await Booking.findOne({ id: Number(id) });
@@ -316,7 +337,7 @@ exports.updateBookingStatus = async (req, res) => {
     const updateFields = {};
 
     if (status !== undefined) {
-      const validStatuses = ['pending', 'confirmed', 'checked_in', 'cancelled'];
+      const validStatuses = ['pending', 'confirmed', 'checked_in', 'checked_out', 'cancelled'];
       if (!validStatuses.includes(status)) {
         return res.status(400).json({
           success: false,
@@ -327,7 +348,7 @@ exports.updateBookingStatus = async (req, res) => {
     }
 
     if (payment_method !== undefined) {
-      const validMethods = ['cash', 'online'];
+      const validMethods = ['cash', 'online', 'credit_card', 'bank_transfer', 'pay_later'];
       if (!validMethods.includes(payment_method)) {
         return res.status(400).json({
           success: false,
@@ -335,6 +356,39 @@ exports.updateBookingStatus = async (req, res) => {
         });
       }
       updateFields.payment_method = payment_method;
+      updateFields.payment_status = payment_method === "pay_later" ? "Unpaid" : "Paid";
+    }
+
+    if (payment_status !== undefined) {
+      updateFields.payment_status = payment_status;
+    }
+
+    if (check_in !== undefined || check_out !== undefined) {
+      const start = new Date(check_in !== undefined ? check_in : booking.check_in);
+      const end = new Date(check_out !== undefined ? check_out : booking.check_out);
+      
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        return res.status(400).json({ success: false, message: "Invalid date format." });
+      }
+      if (start >= end) {
+        return res.status(400).json({ success: false, message: "Check-out date must be after check-in date." });
+      }
+
+      updateFields.check_in = start;
+      updateFields.check_out = end;
+
+      // Recalculate price
+      const Room = require("../models/Room");
+      const room = await Room.findOne({ id: booking.room_id });
+      if (room) {
+        const diffTime = Math.abs(end - start);
+        const nights = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+        const roomPrice = Number(room.price) || 0;
+        const roomCount = Number(booking.rooms) || 1;
+        
+        updateFields.subtotal = nights * roomPrice * roomCount;
+        updateFields.total_price = updateFields.subtotal + (Number(booking.services_price) || 0) - (Number(booking.discount_price) || 0) + (Number(booking.gst_amount) || 0);
+      }
     }
 
     if (room_number !== undefined) {
@@ -730,6 +784,25 @@ exports.verifyRazorpayPayment = async (req, res) => {
       razorpay_payment_id: razorpay_payment_id
     });
     await booking.save();
+
+    // Increment coupon used_count if a coupon was applied
+    if (coupon_code) {
+      try {
+        const Coupon = require("../models/Coupon");
+        const updatedCoupon = await Coupon.findOneAndUpdate(
+          { code: coupon_code.toUpperCase() },
+          { $inc: { used_count: 1 } },
+          { new: true }
+        );
+        // Auto-expire if usage limit reached
+        if (updatedCoupon && updatedCoupon.used_count >= updatedCoupon.total_uses) {
+          updatedCoupon.status = "expired";
+          await updatedCoupon.save();
+        }
+      } catch (couponErr) {
+        console.error("[Coupon] Failed to increment used_count:", couponErr);
+      }
+    }
 
     // Fetch details for email notification (confirmed online)
     try {

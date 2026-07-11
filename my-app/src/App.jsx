@@ -21,6 +21,7 @@ import NotFound from "./ui/pages/NotFound";
 // import DayOut from "./ui/pages/DayOut";
 // import Corporate from "./ui/pages/Corporate";
 import CustomCursor from "./ui/components/CustomCursor";
+import SmoothScroll from "./ui/components/SmoothScroll";
 
 // PRIVACY SUBPAGES
 import PrivacyGeneral from "./ui/pages/privacy/General";
@@ -65,9 +66,9 @@ import AdminDiscounts from "./admin/AdminDiscounts";
 const App = () => {
   return (
     <>
-    
-<CustomCursor />
-      <Routes>
+      <CustomCursor />
+      <SmoothScroll>
+        <Routes>
 
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<Home />} />
@@ -151,12 +152,11 @@ const App = () => {
         <Route path="discounts" element={<AdminDiscounts />} />
       </Route>
       
-      {/* CATCH ALL 404 */}
-      <Route path="*" element={<NotFound />} />
+        {/* CATCH ALL 404 */}
+        <Route path="*" element={<NotFound />} />
 
-      </Routes>
-
-  
+        </Routes>
+      </SmoothScroll>
     </>
   );
 };

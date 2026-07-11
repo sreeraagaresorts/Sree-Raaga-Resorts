@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, default: "user" },
+  is_manual: { type: Boolean, default: false },
   wishlist: [{ type: Number, default: [] }],
   created_at: { type: Date, default: Date.now }
 });

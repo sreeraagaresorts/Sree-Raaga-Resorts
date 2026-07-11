@@ -107,18 +107,36 @@ const AdminDashboard = () => {
 
     bookings.forEach((b) => {
       const price = parseFloat(b.total_price) || 0;
+      const isPayLater = b.payment_method === "pay_later" && b.status !== "cancelled" && b.status !== "checked_out";
+
       if (b.status === "confirmed" || b.status === "checked_in") {
-        totalRevenue += price;
+        if (!isPayLater) {
+          // Only count as revenue if payment is not deferred
+          totalRevenue += price;
+        }
         const bookingDate = new Date(b.created_at).toDateString();
-        if (bookingDate === todayStr) {
-          todaysRevenue += price;
-        } else if (bookingDate === yesterdayStr) {
-          yesterdaysRevenue += price;
+        if (!isPayLater) {
+          if (bookingDate === todayStr) {
+            todaysRevenue += price;
+          } else if (bookingDate === yesterdayStr) {
+            yesterdaysRevenue += price;
+          }
         }
       } else if (b.status === "pending") {
         pendingPayments += price;
 
         // Pending trends
+        const createdDate = new Date(b.created_at);
+        if (createdDate >= sevenDaysAgo && createdDate <= now) {
+          pendingThisWeek += price;
+        } else if (createdDate >= fourteenDaysAgo && createdDate < sevenDaysAgo) {
+          pendingLastWeek += price;
+        }
+      }
+
+      // Pay Later bookings = outstanding dues → add to pending payments
+      if (isPayLater) {
+        pendingPayments += price;
         const createdDate = new Date(b.created_at);
         if (createdDate >= sevenDaysAgo && createdDate <= now) {
           pendingThisWeek += price;
@@ -550,22 +568,92 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="bg-[#081A2F] border border-white/5 p-6 rounded-xl flex flex-col justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-white mb-1">
-              Room Inventory
-            </h3>
-            <p className="text-xs text-white/50 mb-6">
-              Total rooms created on backend
-            </p>
-          </div>
+        {/* RIGHT — Room Inventory Donut Chart */}
+        {(() => {
+          const occupied = bookings.filter(b => b.status === "checked_in").length;
+          const reserved = bookings.filter(b => b.status === "confirmed").length;
+          const available = Math.max(0, roomsCount - occupied - reserved);
+          const total = roomsCount || 1;
 
-          <div className="flex flex-col items-center justify-center h-[200px] text-white/30">
-            <span className="text-6xl font-light text-[#C8A64D] mb-2">{roomsCount}</span>
-            <span className="text-sm font-semibold uppercase tracking-wider text-white/60">Rooms Available</span>
-          </div>
-        </div>
+          const occupancyPct = Math.round((occupied / total) * 100);
+
+          // Donut math
+          const cx = 80, cy = 80, r = 58, strokeW = 18;
+          const circ = 2 * Math.PI * r;
+
+          const segments = [
+            { value: occupied, color: "#2dd4bf", label: "Occupied" },
+            { value: reserved, color: "#f59e0b", label: "Reserved" },
+            { value: available, color: "#e2e8f0", label: "Available" },
+          ];
+
+          let cumulative = 0;
+          const arcs = segments.map(seg => {
+            const dash = (seg.value / total) * circ;
+            const gap = circ - dash;
+            const offset = circ - cumulative;
+            cumulative += dash;
+            return { ...seg, dash, gap, offset };
+          });
+
+          return (
+            <div className="bg-[#081A2F] border border-white/5 p-6 rounded-xl flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-white mb-1">Room Inventory</h3>
+                <p className="text-xs text-white/50 mb-4">Current occupancy status</p>
+              </div>
+
+              <div className="flex flex-col items-center justify-center gap-4">
+                {/* SVG Donut */}
+                <div className="relative">
+                  <svg width="160" height="160" viewBox="0 0 160 160">
+                    {/* Background track */}
+                    <circle
+                      cx={cx} cy={cy} r={r}
+                      fill="none"
+                      stroke="#1e3a5f"
+                      strokeWidth={strokeW}
+                    />
+                    {/* Coloured segments */}
+                    {arcs.map((arc, i) =>
+                      arc.value > 0 ? (
+                        <circle
+                          key={i}
+                          cx={cx} cy={cy} r={r}
+                          fill="none"
+                          stroke={arc.color}
+                          strokeWidth={strokeW}
+                          strokeDasharray={`${arc.dash} ${arc.gap}`}
+                          strokeDashoffset={arc.offset}
+                          strokeLinecap="round"
+                          transform={`rotate(-90 ${cx} ${cy})`}
+                        />
+                      ) : null
+                    )}
+                    {/* Centre text */}
+                    <text x={cx} y={cy - 6} textAnchor="middle" fill="#2dd4bf" fontSize="20" fontWeight="bold">
+                      {occupancyPct}%
+                    </text>
+                    <text x={cx} y={cy + 12} textAnchor="middle" fill="#94a3b8" fontSize="9">
+                      OCCUPANCY
+                    </text>
+                  </svg>
+                </div>
+
+                {/* Legend */}
+                <div className="flex items-center justify-center gap-4 text-xs">
+                  {segments.map((s, i) => (
+                    <div key={i} className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-sm inline-block flex-shrink-0" style={{ backgroundColor: s.color }} />
+                      <span className="text-white/60">{s.label}</span>
+                      <span className="text-white font-semibold">({s.value})</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       {/* BOTTOM SECTION */}

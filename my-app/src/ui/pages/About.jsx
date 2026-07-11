@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
@@ -14,6 +14,8 @@ import tvIcon from "../../assets/icons/tv.png";
 import roomServiceIcon from "../../assets/icons/services.png";
 import laundryIcon from "../../assets/icons/laundry.png";
 import housekeepingIcon from "../../assets/icons/cleaning.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 // Custom "Window Open" Reveal scroll animation component
 function WindowReveal({ src, alt, className = "", delay = 0 }) {
@@ -67,7 +69,13 @@ const amenities = [
 const About = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Animate only once
+      offset: 100,    // Trigger animation 100px before element
+    });
+  }, []);
   return (
     <>
     {/* 2. ADD HELMET COMPONENT HERE */}
@@ -110,10 +118,10 @@ const About = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white select-none">
-            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
+            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold " data-aos="fade-up" >
               Sree Raaga Resorts
             </span>
-            <h1 className="text-4xl md:text-[92px] font-medium   font-corm leading-tight">
+            <h1 className="text-4xl md:text-[92px] font-medium   font-corm leading-tight" data-aos="fade-up" data-aos-delay="100">
               About Sree Raaga Resorts
             </h1>
           </div>  
@@ -239,11 +247,11 @@ const About = () => {
           
                 </span>
                 
-                <h2 className="text-4xl md:text-6xl lg:text-[75px] font-medium font-corm mb-12 leading-tight">
+                <h2 className="text-4xl md:text-6xl lg:text-[75px] font-medium font-corm mb-12 leading-tight" data-aos="fade-up" data-aos-delay="200"> 
                   Experience Resort Living
                 </h2>
                 
-                <button 
+                <button  data-aos="fade-up" data-aos-delay="300"
                   onClick={() => setIsVideoOpen(true)}
                   className="group flex flex-col items-center gap-4 cursor-pointer transition-all duration-300 hover:scale-105"
                 >
@@ -302,7 +310,7 @@ const About = () => {
                   className="w-full h-full shadow-xl "
                 />
               </div>
-              <div className="flex flex-col items-start select-none">
+              <div className="flex flex-col items-start select-none" data-aos="fade-left" data-aos-delay="200">
                 <h2 className="text-3xl md:text-5xl font-medium font-corm  text-[#0d2b4e] mb-6">
                   Sophisticated Comfort
                 </h2>
@@ -317,7 +325,7 @@ const About = () => {
 
             {/* Row 2: A Unique Experience */}
             <div className="max-w-[150vh] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mt-[-90px] md:mt-[-60px] ">
-              <div className="order-2 md:order-1 flex flex-col items-start select-none">
+              <div className="order-2 md:order-1 flex flex-col items-start select-none" data-aos="fade-right" data-aos-delay="200">
                 <h2 className=" text-3xl md:text-5xl font-medium font-corm  text-[#0d2b4e] mb-6">
                   A Unique Experience
                 </h2>
@@ -344,7 +352,7 @@ const About = () => {
         {/* Icons Row */}
         
        {/* ================= RESORT FACILITIES ================= */}
-<section className="bg-[#fdfeff] py-14">
+<section className="bg-[#fdfeff] py-14" data-aos="fade-up" data-aos-delay="200">
   {/* Section Heading */}
   <div className="max-w-6xl mx-auto text-center mb-12">
     <h2 className="text-4xl md:text-6xl font-medium font-corm text-[#0d2b4e]">
@@ -375,7 +383,7 @@ const About = () => {
   </div>
 </section>
 
-        <section className="bg-[#fdfeff] ">
+        <section className="bg-[#fdfeff] " data-aos="fade-up" data-aos-delay="300">
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
     {[
      {
@@ -424,7 +432,7 @@ const About = () => {
         {/* Content */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8 text-white">
           <span className="uppercase tracking-widest text-[17px] font-jost mb-10">
-            Amenities
+            Experience
           </span>
 
           <h3 className="font-corm text-4xl lg:text-6xl font-light  mb-8">

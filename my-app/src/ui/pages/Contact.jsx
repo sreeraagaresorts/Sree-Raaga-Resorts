@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { motion } from "motion/react";
 import { MapPin, Mail, Phone } from "lucide-react";
 import Navbar from '../components/Navbar'
@@ -6,6 +6,8 @@ import Footer from '../components/Footer'
 import { useToast } from "../components/Toast";
 import { Helmet } from "react-helmet";
 import { API_URL } from "../../config/api";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Contact = () => {
   const toast = useToast();
@@ -98,6 +100,13 @@ setPhone(formatted);
       setStatus("");
     }
   };
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Animate only once
+      offset: 100,    // Trigger animation 100px before element
+    });
+  }, []);
 
   return (
     <>
@@ -141,17 +150,17 @@ setPhone(formatted);
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white select-none">
-            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
+            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold " data-aos="fade-up" >
               contact us
             </span>
-            <h1 className="text-5xl md:text-[92px] font-medium font-corm leading-tight">
+            <h1 className="text-5xl md:text-[92px] font-medium font-corm leading-tight" data-aos="fade-up" data-aos-delay="100">
               Get in touch with us today
             </h1>
           </div>
         </section>
 
         {/* LEAVE US YOUR INFO FORM SECTION */}
-        <section className="py-24 px-6 bg-[#fdfeff] text-center">
+        <section className="py-24 px-6 bg-[#fdfeff] text-center" data-aos="fade-up" data-aos-delay="200">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="flex flex-col items-center">
               <div className="w-12 h-12 rounded-full bg-[#c8a64d]/10 flex items-center justify-center text-[#c8a64d] mb-4">
@@ -244,7 +253,7 @@ setPhone(formatted);
         </section>
 
         {/* LOCATION MAP SECTION */}
-        <section className="flex flex-col lg:flex-row items-stretch lg:h-[781px]">
+        <section className="flex flex-col lg:flex-row items-stretch lg:h-[781px]" data-aos="fade-in" data-aos-delay="300">
           {/* Map Left */}
           <div className="w-full lg:w-1/2 min-h-[450px] lg:min-h-0 lg:h-full bg-gray-100 relative">
             <iframe

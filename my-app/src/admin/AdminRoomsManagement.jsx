@@ -336,7 +336,7 @@ const AdminRoomsManagement = () => {
             to="/admin/bookings"
             className="bg-[#C8A64D] text-black px-6 py-3 rounded-lg flex items-center justify-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] min-w-[150px]"
           >
-            Booking
+            My Booking
           </Link>
         </div>
       </div>

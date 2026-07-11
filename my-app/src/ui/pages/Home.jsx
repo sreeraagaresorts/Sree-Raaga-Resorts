@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "motion/react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import Experience from "../components/ExperienceSlider"
@@ -409,7 +411,13 @@ useEffect(() => {
     navigate("/rooms", { state: { checkIn, checkOut, guests: adultsCount + childrenCount, rooms: roomsCount } });
   };
  
-
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Animate only once
+      offset: 100,    // Trigger animation 100px before element
+    });
+  }, []);
 
 return (
     <>
@@ -959,14 +967,14 @@ return (
           <div className="">
                <div className="max-w-6xl mx-auto text-center ">
           
-              <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
+              <h2  className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]"  data-aos="fade-up" data-aos-delay="100">
                 Resort Facilities
               </h2>
             </div>
         
 
             {/* Icons Row */}
-            <div className="max-w-[180vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-4 mb-12 md:mb-32">
+            <div className="max-w-[180vh] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-8 gap-x-4 justify-center items-center py-4 mb-12 md:mb-32" data-aos="fade-up" data-aos-delay="300">
   {amenities.map((item, idx) => (
     <div
       key={idx}
@@ -989,17 +997,17 @@ return (
 
             {/* Exceptional Gastronomy Header */}
             <div className="text-center mb-20 select-none">
-             <span className="uppercase tracking-[3px] text-sm font-semibold font-jost text-[#c8a64d]">
+             <span className="uppercase tracking-[3px] text-sm font-semibold font-jost text-[#c8a64d]" data-aos="fade-up" data-aos-delay="500">
           Sree Raaga Resorts
         </span>
-              <h2 className="text-3xl md:text-[60px] font-medium font-corm px-2  text-[#0d2b4e] leading-snug">
+              <h2 className="text-3xl md:text-[60px] font-medium font-corm px-2  text-[#0d2b4e] leading-snug" data-aos="fade-up" data-aos-delay="600">
                 Exceptional Gastronomy In <br className="hidden md:inline" /> Beautiful Spaces
               </h2>
             </div>
             
 
             {/* Gastronomy Interactive Split */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center" data-aos="fade-up" data-aos-delay="700">
               
               {/* Left: Dynamic tab image */}
               <div className="lg:col-span-6 relative group w-full  h-[450px] md:h-[90vh]">
@@ -1011,7 +1019,7 @@ return (
                 {/* Custom circular interaction overlay: BOOK NOW */}
                 <Link 
                   to="/rooms"
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-30 h-30 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
                 >
                   <span className="text-[11px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
                     Book Now
@@ -1067,7 +1075,7 @@ return (
         </section>
 
         {/* ================= EXPERIENCES GRID ================= */}
-   <section className="bg-white">
+   <section className="bg-white" data-aos="fade-in" data-aos-delay="800">
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
     {[
      {
@@ -1169,17 +1177,17 @@ return (
         {/* FIX: Removed bg-[#fdfeff] from this div so it doesn't cover the images behind it */}
         <div className="order-2 lg:order-none relative z-10 min-h-[350px] lg:min-h-[700px] flex items-center justify-center lg:px-8 mt-10 lg:mt-0 pointer-events-none">
           {/* Added pointer-events-none to the wrapper, and pointer-events-auto to the content so buttons still work, preventing the transparent box from blocking clicks to the images if needed */}
-          <div className="max-w-3xl text-center pointer-events-auto">
+          <div className="max-w-3xl text-center pointer-events-auto" data-aos="fade-up" data-aos-delay="700">
             <span className="uppercase tracking-[3px] text-[12px] lg:text-sm font-semibold font-jost text-[#c8a64d]">
               Sree Raaga Resorts
             </span>
 
-            <h2 className="font-corm text-[#0d2b4e] text-[32px] md:text-5xl lg:text-[60px] leading-[1.2] font-semibold mt-4 mb-6 lg:mb-10">
+            <h2 className="font-corm text-[#0d2b4e] text-[32px] md:text-5xl lg:text-[60px] leading-[1.2] font-semibold mt-4 mb-6 lg:mb-10" data-aos="fade-up" data-aos-delay="800">
               DayOut Packages
               <br />
             </h2>
 
-            <p className="text-gray-600 text-[15px] lg:text-[17px] leading-relaxed max-w-2xl font-medium mx-auto mb-10 lg:mb-12">
+            <p className="text-gray-600 text-[15px] lg:text-[17px] leading-relaxed max-w-2xl font-medium mx-auto mb-10 lg:mb-12" data-aos="fade-up" data-aos-delay="900">
               Enjoy a perfect day of relaxation, adventure, delicious cuisine, and
               memorable experiences crafted for families, friends, and corporate
               groups.
@@ -1188,7 +1196,7 @@ return (
             <Link
               to="/about"
               className="inline-flex items-center gap-4 px-8 lg:px-10 py-4 lg:py-5 bg-[#efd3b2] hover:bg-[#0d2b4e] hover:text-white transition duration-300 text-black uppercase tracking-wider font-medium text-xs lg:text-sm"
-            >
+          data-aos="fade-up" data-aos-delay="1000"  >
               <span>—</span>
               Discover More
             </Link>
@@ -1199,7 +1207,7 @@ return (
         <div className="order-1 lg:order-none flex flex-row gap-4 lg:block w-full z-0 max-w-lg mx-auto lg:max-w-none">
           
           {/* Left Image */}
-          <div className="w-1/2 lg:w-auto lg:absolute lg:left-12 lg:top-16">
+          <div className="w-1/2 lg:w-auto lg:absolute lg:left-12 lg:top-16" data-aos="fade-right" data-aos-delay="700">
             <img
               src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200"
               alt="Restaurant"
@@ -1208,7 +1216,7 @@ return (
           </div>
 
           {/* Right Image */}
-          <div className="w-1/2 lg:w-auto lg:absolute lg:right-12 lg:top-16">
+          <div className="w-1/2 lg:w-auto lg:absolute lg:right-12 lg:top-16" data-aos="fade-left" data-aos-delay="700">
             <img
               src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=1200"
               alt="Pool Bar"
@@ -1223,11 +1231,11 @@ return (
         {/* ================= UNIQUE EXPERIENCES ================= */}
         <div className="bg-[#fdfeff] ">
           <div className="max-w-6xl mx-auto text-center mb-16">
-  <span className="text-[#c8a64d] uppercase tracking-[3px] text-[14px] font-jost font-semibold block mt-14 md:mt-0 md:mb-8">
-    Events & Packagesflex items-center pt-4 justify-center gap-2 text-xs text-gray-100 hover:text-yellow-500 transition mb-4 uppercase tracking-wider
+  <span className="text-[#c8a64d] uppercase tracking-[3px] text-[14px] font-jost font-semibold block mt-14 md:mt-0 md:mb-8" data-aos="fade-up" data-aos-delay="1100">
+   Events and Packages
   </span>
 
-  <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold font-corm text-[#0d2b4e] ">
+  <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold font-corm text-[#0d2b4e] " data-aos="fade-up" data-aos-delay="1200">
     Unique Experiences
   </h2>
   </div>
@@ -1245,10 +1253,10 @@ return (
       <div className="absolute inset-0 bg-black/50"></div>
 
       <div className="relative z-10 w-full max-w-5xl mx-auto text-center px-4 md:px-6">
-        <span className="text-[#D8BF72] uppercase tracking-[2px] text-[13px] md:text-[15px] font-semibold block mb-3 md:mb-4">
+        <span className="text-[#D8BF72] uppercase tracking-[2px] text-[13px] md:text-[15px] font-semibold block mb-3 md:mb-4" data-aos="fade-up" data-aos-delay="1100">
           Instant Booking
         </span>
-        <h2 className="text-white text-3xl md:text-[64px] font-bold mb-10 font-corm leading-tight">
+        <h2 className="text-white text-3xl md:text-[64px] font-bold mb-10 font-corm leading-tight" data-aos="fade-up" data-aos-delay="1100">
           Book Your Stay Now
         </h2>
 
@@ -1256,7 +1264,7 @@ return (
         <form
           onSubmit={handleSearch}
           className="w-full max-w-6xl mx-auto bg-white rounded-3xl md:rounded-2xl p-3.5 md:p-4 flex flex-col md:flex-row items-stretch md:items-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-neutral-800"
-        >
+      data-aos="fade-up" data-aos-delay="1100"  >
           {/* DATE */}
           <div className="relative w-full md:flex-1 flex items-center justify-between px-4 md:px-6 py-4 md:py-3 border-b md:border-b-0 md:border-r border-neutral-200 cursor-pointer group transition-all duration-300">
             <DatePicker

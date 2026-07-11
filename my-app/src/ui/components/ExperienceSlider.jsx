@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/api';
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Exp = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -107,8 +109,16 @@ const Exp = () => {
     }
   };
 
+    useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Animate only once
+      offset: 100,    // Trigger animation 100px before element
+    });
+  }, []);
+
   return (
-    <div className="exp-slider-container md:flex md:min-h-screen bg-[#fdfeff] md:pb-10 flex-col justify-center overflow-hidden font-jost relative">
+    <div className="exp-slider-container md:flex md:min-h-screen bg-[#fdfeff] md:pb-10 flex-col justify-center overflow-hidden font-jost relative" data-aos="fade-up" data-aos-delay="1300">
 
       {/* Required Fonts & Slide CSS Variables */}
       <style>{`

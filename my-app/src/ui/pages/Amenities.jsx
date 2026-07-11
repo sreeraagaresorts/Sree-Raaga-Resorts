@@ -12,6 +12,8 @@ import tvIcon from "../../assets/icons/tv.png";
 import roomServiceIcon from "../../assets/icons/services.png";
 import laundryIcon from "../../assets/icons/laundry.png";
 import housekeepingIcon from "../../assets/icons/cleaning.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const amenities = [
   { icon: wifiIcon, name: "Wifi & Internet" },
@@ -215,7 +217,13 @@ const Amenities = () => {
     e.preventDefault();
     navigate("/rooms", { state: { checkIn, checkOut, guests: adultsCount + childrenCount, rooms: roomsCount } });
   };
-
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Animate only once
+      offset: 100,    // Trigger animation 100px before element
+    });
+  }, []);
   return (
     <>
     {/* 2. ADD HELMET COMPONENT HERE */}
@@ -256,11 +264,11 @@ const Amenities = () => {
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
-          <div className="relative z-10 text-center text-white px-4 max-w-3xl space-y-4">
-            <span className="text-white uppercase tracking-[6px]  text-[17px] font-semibold font-jost">
+          <div className="relative z-10 text-center text-white px-4 max-w-3xl space-y-4" data-aos="fade-up">
+            <span className="text-white uppercase tracking-[6px]  text-[17px] font-semibold font-jost"  >
               Sree Raaga Resorts 
             </span>
-            <h1 className="text-5xl md:text-[92px] font-medium font-corm leading-tight tracking-wide text-white">
+            <h1 className="text-5xl md:text-[92px] font-medium font-corm leading-tight tracking-wide text-white" data-aos="fade-up" data-aos-delay="100">
               Our Amenities
             </h1>
             {/* <p className="text-white/80 font-jost font-light text-xs md:text-sm tracking-widest uppercase max-w-2xl mx-auto leading-relaxed">
@@ -270,10 +278,10 @@ const Amenities = () => {
         </section>
 
         {/* ================= 2. WATER SPORTS DESCRIPTION SECTION ================= */}
-        <section className="md:py-24 py-18 px-6 bg-[] text-center">
+        <section className="md:py-24 py-18 px-6 bg-[] text-center" data-aos="fade-up" data-aos-delay="300">
           <div className="max-w-3xl mx-auto space-y-6">
             <div className="text-[#c8a64d] flex justify-center">
-              <WaterSportsIcon className="w-12 h-12" />
+              <img src="./diamond.png" alt=""  className="w-9 h-9 "/>
             </div>
             <span className="text-[#c8a64d] text-[17px] uppercase tracking-[4px] font-semibold font-jost block">
               LUXURY RESORT
@@ -310,7 +318,7 @@ Luxury Beyond Expectations
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 space-y-6 px-6 md:px-0">
+              <div className="lg:col-span-6 space-y-6 px-6 md:px-0" data-aos="fade-left" data-aos-delay="100">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   01
                 </span>
@@ -333,7 +341,7 @@ Luxury Beyond Expectations
             </div>
 
             {/* ITEM 02: Childrens Play Area */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center" >
               <div className="lg:col-span-6 lg:order-2 h-[350px] lg:h-[500px]">
                 <WindowReveal 
                   src="./play.jpg" 
@@ -341,7 +349,7 @@ Luxury Beyond Expectations
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0">
+              <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0" data-aos="fade-right" data-aos-delay="100">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   02
                 </span>
@@ -372,7 +380,7 @@ Luxury Beyond Expectations
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 space-y-6 px-6 md:px-0">
+              <div className="lg:col-span-6 space-y-6 px-6 md:px-0" data-aos="fade-left" data-aos-delay="100">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   03
                 </span>
@@ -403,7 +411,7 @@ Luxury Beyond Expectations
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0">
+              <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0" data-aos="fade-right" data-aos-delay="100">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   04
                 </span>
@@ -434,7 +442,7 @@ Luxury Beyond Expectations
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 space-y-6 px-6 md:px-0">
+              <div className="lg:col-span-6 space-y-6 px-6 md:px-0"data-aos="fade-left" data-aos-delay="100"  >
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   05
                 </span>
@@ -465,7 +473,7 @@ Luxury Beyond Expectations
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0">
+              <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0" data-aos="fade-right" data-aos-delay="100">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   06
                 </span>
@@ -496,7 +504,7 @@ Luxury Beyond Expectations
                   className="h-full w-full"
                 />
               </div>
-              <div className="lg:col-span-6 space-y-6 px-6 md:px-0">
+              <div className="lg:col-span-6 space-y-6 px-6 md:px-0" data-aos="fade-left" data-aos-delay="100">
                 <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
                   07
                 </span>
@@ -527,9 +535,9 @@ Luxury Beyond Expectations
     />
   </div>
 
-  <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0">
+  <div className="lg:col-span-6 lg:order-1 space-y-6 px-6 md:px-0" data-aos="fade-right" data-aos-delay="100">
     <span className="font-corm text-[#c8a64d]/30 text-8xl font-light block leading-none select-none">
-      06
+      08
     </span>
 
     <h3 className="text-3xl md:text-5xl font-corm font-medium text-[#0d2b4e] tracking-wide">
@@ -799,7 +807,7 @@ Luxury Beyond Expectations
     </section>
 
          {/* ================= FACILITIES & INTERACTIVE GASTRONOMY ================= */}
-            <section className="pt-24  bg-[#fdfeff] text-[#0d2b4e]">
+            <section className="pt-24  bg-[#fdfeff] text-[#0d2b4e]" data-aos="fade-up" data-aos-delay="100">
               <div className="">
                    <div className="max-w-6xl mx-auto text-center mb-16">
               
@@ -855,7 +863,7 @@ Luxury Beyond Expectations
                     {/* Custom circular interaction overlay: BOOK NOW */}
                     <Link 
                       to="/rooms"
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-30 h-30 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
                     >
                       <span className="text-[11px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
                         Book Now

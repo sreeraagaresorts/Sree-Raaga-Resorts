@@ -311,35 +311,44 @@ body {
 /* For Firefox */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #C8A64D #011b3c; /* thumb color, track color */
+  scrollbar-color: #C8A64D #011b3c; 
 }
 
-/* For WebKit browsers (Chrome, Safari, Edge) */
-::-webkit-scrollbar {
+/* For WebKit browsers (Chrome, Safari, Edge) - Apply ONLY to root HTML */
+html::-webkit-scrollbar {
   width: 12px;  /* Width of vertical scrollbar */
   height: 12px; /* Height of horizontal scrollbar */
 }
 
-::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track {
   background: #F7F4EC; /* Matches your --color-white */
   border-radius: 8px;
 }
 
-::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb {
   background-color: #C8A64D; /* Matches your --color-yellow-500 */
   border-radius: 10px;
   /* Adds a border matching the track to create a "floating" thumb effect */
   border: 3px solid #F7F4EC; 
 }
 
-::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover {
   background-color: #030a22; /* Matches your --color-black for hover state */
 }
 
 /* Optional: Style the corner where horizontal and vertical scrollbars meet */
-::-webkit-scrollbar-corner {
+html::-webkit-scrollbar-corner {
   background: #F7F4EC; 
 }
+
+/* Prevent double scrollbar by hiding scrollbars on body */
+body::-webkit-scrollbar {
+  display: none;
+}
+body {
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
 .react-datepicker-wrapper {
   width: 100%;
 }

@@ -42,6 +42,26 @@ const connectDB = async () => {
     } catch (migError) {
       console.error("[Migration Error] Failed to auto-confirm pending bookings:", migError);
     }
+
+    // Auto-migrate legacy manual guest accounts on startup
+    try {
+      const User = require("../models/User");
+      const bcrypt = require("bcryptjs");
+      const usersToMigrate = await User.find({ is_manual: { $ne: true } });
+      let migratedCount = 0;
+      for (const user of usersToMigrate) {
+        if (user.password && bcrypt.compareSync("SreeRaagaGuest@123", user.password)) {
+          user.is_manual = true;
+          await user.save();
+          migratedCount++;
+        }
+      }
+      if (migratedCount > 0) {
+        console.log(`[Migration] Successfully marked ${migratedCount} legacy manual guest accounts as is_manual: true.`);
+      }
+    } catch (migError) {
+      console.error("[Migration Error] Failed to auto-migrate legacy manual guest accounts:", migError);
+    }
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
     process.exit(1);

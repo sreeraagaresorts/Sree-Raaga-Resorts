@@ -12,6 +12,8 @@ import tvIcon from "../../assets/icons/tv.png";
 import roomServiceIcon from "../../assets/icons/services.png";
 import laundryIcon from "../../assets/icons/laundry.png";
 import housekeepingIcon from "../../assets/icons/cleaning.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const amenitiesList = [
   { icon: wifiIcon, name: "Wifi & Internet" },
@@ -75,6 +77,15 @@ function WaterSportsIcon({ className = "" }) {
     </svg>
   );
 }
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Animate only once
+      offset: 100,    // Trigger animation 100px before element
+    });
+  }, []);
+
   return (
     <>
     {/* 2. ADD HELMET COMPONENT HERE */}
@@ -118,10 +129,10 @@ function WaterSportsIcon({ className = "" }) {
           <div className="absolute inset-0 bg-black/60"></div>
 
           <div className="relative z-10 text-center text-white px-4 mt-20 select-none  space-y-4">
-            <span className="text-white text-[17px] uppercase tracking-[6px] font-semibold block mb-2">
+            <span className="text-white text-[17px] uppercase tracking-[6px] font-semibold block mb-2" data-aos="fade-up" >
               Events & Packages
             </span>
-            <h1 className="text-4xl md:text-[92px] font-medium font-corm  leading-tight">
+            <h1 className="text-4xl md:text-[92px] font-medium font-corm  leading-tight" data-aos="fade-up" data-aos-delay="100">
               Tailored Packages for Every Celebration
             </h1>
             {/* <p className="text-white/80 font-medium text-xs md:text-[17px] max-w-xl mx-auto leading-relaxed">
@@ -131,10 +142,12 @@ function WaterSportsIcon({ className = "" }) {
         </section>
 
         {/* INTRODUCTION BLOCK */}
-     <section className="py-24 px-6 bg-[] text-center">
+     <section className="py-24 px-6 bg-[] text-center" data-aos="fade-up" data-aos-delay="200">
           <div className="max-w-3xl mx-auto space-y-6">
             <div className="text-[#c8a64d] flex justify-center">
-              <WaterSportsIcon className="w-12 h-12" />
+              {/* <WaterSportsIcon className="w-12 h-12" /> */}
+                            <img src="./diamond.png" alt=""  className="w-9 h-9 "/>
+
             </div>
             <span className="text-[#c8a64d] text-xs uppercase tracking-[4px] font-semibold font-jost block">
               LUXURY RESORT
@@ -222,7 +235,7 @@ function WaterSportsIcon({ className = "" }) {
                       </div>
 
                       {/* Event Details */}
-                      <div className={`lg:col-span-5 ${isEven ? "lg:offset-1" : ""} flex flex-col justify-center h-full py-2 px-5 md:ml-22 text-left`}>
+                      <div className={`lg:col-span-5 ${isEven ? "lg:offset-1" : ""} flex flex-col justify-center h-full py-2 px-5  text-left`} data-aos="fade-up" data-aos-delay="100">
                         <div>
                           <div className="flex justify-between items-end mb-4 border-b border-gray-100 pb-4">
                             <div>
@@ -280,7 +293,7 @@ function WaterSportsIcon({ className = "" }) {
 
 
         {/* ================= RESORT FACILITIES SECTION ================= */}
-        <section className="py-24 px-6 bg-[#fdfeff] border-t border-gray-100">
+        <section className="py-24 px-6 bg-[#fdfeff] border-t border-gray-100" data-aos="fade-up" data-aos-delay="100">
           <div className="max-w-6xl mx-auto text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-medium font-corm text-[#0d2b4e]">
               Resort Facilities

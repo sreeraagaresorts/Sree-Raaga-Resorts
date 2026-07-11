@@ -102,7 +102,7 @@ const UserBookings = () => {
   />
 </td>
             <td style="text-align: right; vertical-align: top;">
-              <h3 style="font-family: Georgia, serif; font-size: 26px; color: #0d2b4e; margin: 0; font-weight: 300;">Invoice</h3>
+              <h3 style="font-family: Georgia, serif; font-size: 26px; color: #0d2b4e; margin: 0; font-weight: 300; text-transform:uppercase;">Invoice</h3>
               <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">#BK-${booking.id.toString().padStart(6, "0")}</p>
             </td>
           </tr>
@@ -134,7 +134,7 @@ const UserBookings = () => {
                 </p>
               </td>
               <td style="text-align: right; vertical-align: top; width: 50%;">
-                <h4 style="font-family: Georgia, serif; font-size: 18px; margin: 0 0 8px 0; font-weight: normal; color: #0d2b4e;">Customer</h4>
+                <h4 style="font-family: Georgia, serif; font-size: 18px; margin: 0 0 8px 0; font-weight: normal; color: #0d2b4e; text-transform:uppercase;">Customer</h4>
                 <p style="font-size: 15px; font-weight: bold; margin: 0; color: #0d2b4e;">${customerName}</p>
                 <p style="font-size: 14px; color: rgba(13, 43, 78, 0.8); margin: 5px 0 0 0; line-height: 1.5;">
                   ${customerEmail}<br />
@@ -278,11 +278,11 @@ const UserBookings = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-[#0d2b4e]">
-      <div className="flex justify-between items-center border-b border-gray-200/50 pb-3 mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-200/50 pb-3 mb-6">
         <h1 className="text-3xl font-medium text-[#0d2b4e]">My Bookings</h1>
         <Link
           to="/rooms"
-          className="bg-[#c8a64d] text-white px-5 py-3 font-semibold text-xs uppercase tracking-widest hover:bg-[#b09141] transition cursor-pointer"
+          className="bg-[#c8a64d] text-white px-5 py-3 font-semibold text-xs uppercase tracking-widest hover:bg-[#b09141] transition cursor-pointer w-full sm:w-auto text-center"
         >
           Browse Rooms
         </Link>
@@ -333,27 +333,20 @@ const UserBookings = () => {
                       <p className="text-gray-500 text-[11px] uppercase tracking-widest font-medium">Check Out</p>
                       <p className="font-semibold mt-1  text-[#0d2b4e]">{new Date(booking.check_out).toLocaleDateString("en-GB")}</p>
                     </div>
-                    <div>
+                    <div className="col-span-2 md:col-span-1">
                       <p className="text-gray-500 text-[11px] uppercase tracking-widest font-medium">Rooms</p>
                       <p className="font-semibold mt-1 text-[#0d2b4e]">
                         {booking.rooms || 1} {(booking.rooms || 1) === 1 ? "Room" : "Rooms"} + {booking.adults} Adults{booking.children > 0 ? `, ${booking.children} Children` : ""}
                       </p>
                     </div>
-                    <div className="text-left md:text-right">
+                    <div className="col-span-2 md:col-span-1 text-left md:text-right">
                       <p className="text-gray-500 text-[10px] uppercase tracking-widest font-medium">Pricing Details</p>
                       {(() => {
                         const p = getBookingPricing(booking);
                         return (
                           <div className="mt-1 space-y-0.5 text-[11px] text-gray-700">
-                            <div>Base Price: ₹{p.subtotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
-                            {p.services > 0 && (
-                              <div>Services: ₹{p.services.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
-                            )}
-                            {p.discount > 0 && (
-                              <div className="text-emerald-600 font-semibold">Discount: -₹{p.discount.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
-                            )}
-                            <div>GST: ₹{p.gst.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
-                            <div className="font-bold text-[#c8a64d] text-[15px] pt-1 border-t border-gray-100 mt-1">Total: ₹{p.total.toLocaleString()}</div>
+                       
+                            <div className="font-bold text-[#c8a64d] text-[17px] pt-1 border-t border-gray-100 mt-1">Total: ₹{p.total.toLocaleString()}</div>
                           </div>
                         );
                       })()}
@@ -361,8 +354,8 @@ const UserBookings = () => {
                   </div>
                 </div>
 
-                <div className="border-t border-gray-200/50 pt-4 mt-6 font-medium flex justify-between items-center text-[12px] sm:text-[14px] text-gray-500">
-                  <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                <div className="border-t border-gray-200/50 pt-4 mt-6 font-medium flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-[12px] sm:text-[14px] text-gray-500">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
                     <span>Booking ID: BK-{booking.id.toString().padStart(4, "0")}</span>
                     <span className="text-gray-300 hidden sm:inline">|</span>
                     <span>Booked on: {new Date(booking.created_at).toLocaleDateString("en-GB")}</span>
@@ -370,7 +363,7 @@ const UserBookings = () => {
                   {(booking.status === "confirmed" || booking.status === "checked_in") && (
                     <button
                       onClick={() => handleDownloadInvoice(booking)}
-                      className="px-4 py-2 bg-[#c8a64d] text-white font-semibold uppercase tracking-wider text-[12px] hover:bg-[#b09141] transition inline-flex items-center gap-1.5 cursor-pointer border-0"
+                      className="w-full sm:w-auto justify-center px-4 py-2 bg-[#c8a64d] text-white font-semibold uppercase tracking-wider text-[12px] hover:bg-[#b09141] transition inline-flex items-center gap-1.5 cursor-pointer border-0"
                     >
                       <Download className="w-3.5 h-3.5" /> Download Invoice
                     </button>
@@ -384,7 +377,7 @@ const UserBookings = () => {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-8 pt-4">
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-8 pt-4">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -397,19 +390,21 @@ const UserBookings = () => {
                 Prev
               </button>
               
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-10 h-10 border text-xs font-semibold transition ${
-                    currentPage === page
-                      ? "bg-[#c8a64d] border-[#c8a64d] text-white"
-                      : "border-[#0d2b4e]/20 text-[#0d2b4e] hover:border-[#c8a64d] hover:text-[#c8a64d] cursor-pointer bg-white"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+              <div className="flex flex-wrap gap-2 justify-center">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-10 h-10 border text-xs font-semibold transition ${
+                      currentPage === page
+                        ? "bg-[#c8a64d] border-[#c8a64d] text-white"
+                        : "border-[#0d2b4e]/20 text-[#0d2b4e] hover:border-[#c8a64d] hover:text-[#c8a64d] cursor-pointer bg-white"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
 
               <button
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}

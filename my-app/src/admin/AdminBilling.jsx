@@ -14,7 +14,9 @@ import {
   RefreshCw,
   Calendar,
   Copy,
+  History,
 } from 'lucide-react';
+
 
 const AdminBilling = () => {
   const toast = useToast();
@@ -107,7 +109,8 @@ const AdminBilling = () => {
   const getStats = () => {
     let totalRevenue = 0;
     let pendingPayments = 0;
-    let refundRequests = 0; // count cancelled bookings (respecting time filter)
+    let payLaterDueCount = 0;
+    let refundRequests = 0;
     let todaysCollections = 0;
     let todaysCancellations = 0;
 
@@ -116,10 +119,12 @@ const AdminBilling = () => {
     bookings.forEach((b) => {
       const price = parseFloat(b.total_price);
       const bookingDate = new Date(b.created_at).toDateString();
+      const isPayLaterDue = b.payment_method === "pay_later" &&
+        b.status !== "cancelled" && b.status !== "checked_out";
 
       // Today-specific stats (independent of timeFilter)
       if (bookingDate === todayStr) {
-        if (b.status === "confirmed" || b.status === "checked_in") {
+        if ((b.status === "confirmed" || b.status === "checked_in") && !isPayLaterDue) {
           todaysCollections += price;
         } else if (b.status === "cancelled") {
           todaysCancellations += 1;
@@ -128,7 +133,11 @@ const AdminBilling = () => {
 
       // Filtered stats (respect timeFilter)
       if (filterByTime(b.created_at)) {
-        if (b.status === "confirmed" || b.status === "checked_in") {
+        if (isPayLaterDue) {
+          // Pay-later = outstanding due, counts as pending not revenue
+          pendingPayments += price;
+          payLaterDueCount += 1;
+        } else if (b.status === "confirmed" || b.status === "checked_in") {
           totalRevenue += price;
         } else if (b.status === "pending") {
           pendingPayments += price;
@@ -141,6 +150,7 @@ const AdminBilling = () => {
     return {
       totalRevenue,
       pendingPayments,
+      payLaterDueCount,
       refundRequests,
       todaysCollections,
       todaysCancellations,
@@ -162,16 +172,33 @@ const AdminBilling = () => {
   }));
 
   // Map bookings to payment records
-  const payments = bookings.map((b) => ({
-    id: b.id.toString(),
-    paymentId: b.razorpay_payment_id || `PAY-${b.id.toString().padStart(4, "0")}`,
-    bookingId: `BK-${b.id.toString().padStart(4, "0")}`,
-    customerName: b.guest_name,
-    amount: parseFloat(b.total_price),
-    gateway: b.payment_method === "online" ? "Razorpay" : "Offline (Cash)",
-    paymentStatus: b.status === "confirmed" || b.status === "checked_in" ? "Paid" : b.status === "cancelled" ? "Refunded" : "Pending",
-    createdAt: new Date(b.created_at)
-  }));
+  const payments = bookings.map((b) => {
+    const isPayLaterDue = b.payment_method === "pay_later" &&
+      b.status !== "cancelled" && b.status !== "checked_out";
+    const methodLabel =
+      b.payment_method === "online" || b.payment_method === "razorpay" ? "Razorpay" :
+      b.payment_method === "cash" ? "Cash" :
+      b.payment_method === "credit_card" ? "Credit Card" :
+      b.payment_method === "bank_transfer" ? "Bank Transfer" :
+      b.payment_method === "pay_later" ? "Pay Later" :
+      b.payment_method || "—";
+    const paymentStatus =
+      isPayLaterDue ? "Due" :
+      b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out" ? "Paid" :
+      b.status === "cancelled" ? "Refunded" : "Pending";
+    return {
+      id: b.id.toString(),
+      paymentId: b.razorpay_payment_id || `PAY-${b.id.toString().padStart(4, "0")}`,
+      bookingId: `BK-${b.id.toString().padStart(4, "0")}`,
+      customerName: b.guest_name,
+      customerPhone: b.guest_phone,
+      amount: parseFloat(b.total_price),
+      gateway: methodLabel,
+      paymentStatus,
+      isPayLaterDue,
+      createdAt: new Date(b.created_at)
+    };
+  });
 
   // Map bookings to cancellation records
   const cancellations = bookings
@@ -186,7 +213,32 @@ const AdminBilling = () => {
       createdAt: new Date(b.created_at)
     }));
 
-  // Filtering
+  // Map checked-out bookings to booking history
+  const history = bookings
+    .filter((b) => b.status === "checked_out")
+    .map((b) => ({
+      id: b.id.toString(),
+      bookingId: `BK-${b.id.toString().padStart(4, "0")}`,
+      customerName: b.guest_name,
+      customerEmail: b.guest_email,
+      customerPhone: b.guest_phone,
+      roomName: b.room_name || `Room #${b.room_id}`,
+      roomNumber: b.room_number || "—",
+      checkIn: b.check_in ? new Date(b.check_in) : null,
+      checkOut: b.check_out ? new Date(b.check_out) : null,
+      amount: parseFloat(b.total_price),
+      paymentMethod: b.payment_method === "online" || b.payment_method === "razorpay"
+        ? "Razorpay"
+        : b.payment_method === "cash"
+        ? "Cash"
+        : b.payment_method === "credit_card"
+        ? "Credit Card"
+        : b.payment_method === "bank_transfer"
+        ? "Bank Transfer"
+        : b.payment_method || "—",
+      couponCode: b.coupon_code || null,
+      createdAt: new Date(b.created_at),
+    }));
   const filteredInvoices = invoices.filter(
     (inv) =>
       filterByTime(inv.createdAt) &&
@@ -209,6 +261,14 @@ const AdminBilling = () => {
       (cancel.bookingId.toLowerCase().includes(searchQuery.toLowerCase()) ||
       cancel.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       cancel.customerEmail.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const filteredHistory = history.filter(
+    (h) =>
+      filterByTime(h.createdAt) &&
+      (h.bookingId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      h.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (h.customerEmail && h.customerEmail.toLowerCase().includes(searchQuery.toLowerCase())))
   );
 
   // Export to Excel (XLSX Workbook containing Invoices, Payments, and Cancellations)
@@ -246,16 +306,32 @@ const AdminBilling = () => {
       "Status": "Cancelled"
     }));
 
+    const historyData = filteredHistory.map(h => ({
+      "Booking Ref": h.bookingId,
+      "Guest Name": h.customerName,
+      "Guest Email": h.customerEmail || "N/A",
+      "Guest Phone": h.customerPhone ? formatPhoneNumber(h.customerPhone) : "N/A",
+      "Room": h.roomName,
+      "Room No": h.roomNumber,
+      "Check In": h.checkIn ? h.checkIn.toLocaleDateString("en-GB") : "—",
+      "Check Out": h.checkOut ? h.checkOut.toLocaleDateString("en-GB") : "—",
+      "Amount Paid (INR)": h.amount,
+      "Payment Method": h.paymentMethod,
+      "Coupon Used": h.couponCode || "None",
+    }));
+
     // 2. Create worksheets
     const wsInvoices = XLSX.utils.json_to_sheet(invoicesData);
     const wsPayments = XLSX.utils.json_to_sheet(paymentsData);
     const wsCancellations = XLSX.utils.json_to_sheet(cancellationsData);
+    const wsHistory = XLSX.utils.json_to_sheet(historyData);
 
     // 3. Create workbook and append sheets
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, wsInvoices, "Invoices");
     XLSX.utils.book_append_sheet(wb, wsPayments, "Payments");
     XLSX.utils.book_append_sheet(wb, wsCancellations, "Cancellations");
+    XLSX.utils.book_append_sheet(wb, wsHistory, "Booking History");
 
     // 4. Trigger download
     XLSX.writeFile(wb, filename);
@@ -481,9 +557,14 @@ const AdminBilling = () => {
 
           <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
             <div className="flex justify-between text-white/50 text-base mb-2">
-              Pending Payments <Activity className="w-5 h-5 text-amber-400" />
+              Pending & Due <Activity className="w-5 h-5 text-amber-400" />
             </div>
             <h2 className="text-white text-2xl font-bold">₹{stats.pendingPayments.toLocaleString()}</h2>
+            {stats.payLaterDueCount > 0 && (
+              <p className="text-amber-400 text-xs mt-1 font-semibold">
+                {stats.payLaterDueCount} pay-later due{stats.payLaterDueCount > 1 ? "s" : ""}
+              </p>
+            )}
           </div>
 
           <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
@@ -514,6 +595,21 @@ const AdminBilling = () => {
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>
             ))}
+            {/* Booking History tab — special button with icon */}
+            <button
+              onClick={() => setActiveTab('history')}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
+                activeTab === 'history'
+                  ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                  : 'bg-[#071524] text-white/50 border-white/10 hover:bg-white/5'
+              }`}
+            >
+              <History className="w-4 h-4" />
+              Booking History
+              <span className="ml-1 bg-purple-500/30 text-purple-300 text-xs px-2 py-0.5 rounded-full font-bold">
+                {history.length}
+              </span>
+            </button>
           </div>
 
           <div className="relative w-full sm:w-64 lg:w-80">
@@ -618,13 +714,27 @@ const AdminBilling = () => {
                             </div>
                           </td>
                           <td className="p-3 text-center text-[16px] text-white">{pay.bookingId}</td>
-                          <td className="p-3 text-center text-white">{pay.customerName}</td>
-                          <td className="p-3 text-[16px] text-white text-center">{pay.gateway}</td>
-                          <td className="p-3 font-bold text-center  text-emerald-400">₹{pay.amount.toLocaleString()}</td>
+                          <td className="p-3 text-center text-white">
+                            <div>{pay.customerName}</div>
+                            {pay.isPayLaterDue && pay.customerPhone && (
+                              <div className="text-amber-400/70 text-xs mt-0.5">{pay.customerPhone}</div>
+                            )}
+                          </td>
+                          <td className="p-3 text-[16px] text-white text-center">
+                            {pay.gateway}
+                            {pay.isPayLaterDue && (
+                              <div className="text-amber-400 text-xs mt-0.5 font-semibold">⚠ Due on checkout</div>
+                            )}
+                          </td>
+                          <td className={`p-3 font-bold text-center ${pay.isPayLaterDue ? "text-amber-400" : "text-emerald-400"}`}>
+                            ₹{pay.amount.toLocaleString()}
+                          </td>
                           <td className="p-3 text-center text-[#c8a64d]">
                             <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
                               pay.paymentStatus === "Paid"
                                 ? "bg-green-500/10 text-green-400 border-green-500/20"
+                                : pay.paymentStatus === "Due"
+                                ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
                                 : pay.paymentStatus === "Refunded"
                                 ? "bg-red-500/10 text-red-400 border-red-500/20"
                                 : "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
@@ -679,6 +789,76 @@ const AdminBilling = () => {
                   </table>
                 )
               )}
+
+              {/* BOOKING HISTORY — checked_out guests */}
+              {activeTab === 'history' && (
+                filteredHistory.length === 0 ? (
+                  <div className="p-10 text-center text-white/40">
+                    <History className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                    No checked-out guests yet. Completed stays will appear here.
+                  </div>
+                ) : (
+                  <table className="w-full text-base text-white/70">
+                    <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
+                      <tr>
+                        <th className="p-3 text-center text-purple-400">Booking Ref</th>
+                        <th className="p-3 text-center text-purple-400">Guest</th>
+                        <th className="p-3 text-center text-purple-400">Room</th>
+                        <th className="p-3 text-center text-purple-400">Stay Dates</th>
+                        <th className="p-3 text-center text-purple-400">Amount Paid</th>
+                        <th className="p-3 text-center text-purple-400">Payment Method</th>
+                        <th className="p-3 text-center text-purple-400">Coupon</th>
+                        <th className="p-3 text-center text-purple-400">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredHistory.map((h) => (
+                        <tr key={h.id} className="border-t border-white/5 hover:bg-purple-500/5 transition text-center">
+                          <td className="p-3 font-semibold text-white">{h.bookingId}</td>
+                          <td className="p-3">
+                            <div className="text-white font-medium">{h.customerName}</div>
+                            {h.customerEmail && <div className="text-white/50 text-xs mt-0.5">{h.customerEmail}</div>}
+                            {h.customerPhone && <div className="text-white/50 text-xs">{formatPhoneNumber(h.customerPhone)}</div>}
+                          </td>
+                          <td className="p-3">
+                            <div className="text-white">{h.roomName}</div>
+                            {h.roomNumber !== "—" && <div className="text-white/50 text-xs mt-0.5">#{h.roomNumber}</div>}
+                          </td>
+                          <td className="p-3 text-xs">
+                            <div className="text-white">
+                              {h.checkIn ? h.checkIn.toLocaleDateString("en-GB") : "—"}
+                            </div>
+                            <div className="text-white/40 my-0.5">→</div>
+                            <div className="text-white">
+                              {h.checkOut ? h.checkOut.toLocaleDateString("en-GB") : "—"}
+                            </div>
+                          </td>
+                          <td className="p-3 font-bold text-emerald-400">₹{h.amount.toLocaleString()}</td>
+                          <td className="p-3">
+                            <span className="text-sm px-2.5 py-1 rounded-full border font-semibold bg-blue-500/10 text-blue-300 border-blue-500/20">
+                              {h.paymentMethod}
+                            </span>
+                          </td>
+                          <td className="p-3">
+                            {h.couponCode ? (
+                              <span className="text-xs px-2 py-1 rounded-full bg-[#C8A64D]/10 text-[#C8A64D] border border-[#C8A64D]/20 font-semibold">
+                                {h.couponCode}
+                              </span>
+                            ) : (
+                              <span className="text-white/30 text-xs">None</span>
+                            )}
+                          </td>
+                          <td className="p-3">
+                            <span className="text-sm px-3 py-1 rounded-full border font-semibold bg-purple-500/10 text-purple-300 border-purple-500/20">
+                              Checked Out
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )
+              )}
             </>
           )}
         </div>
@@ -688,4 +868,3 @@ const AdminBilling = () => {
 }
 
 export default AdminBilling;
-

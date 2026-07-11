@@ -43,14 +43,36 @@ const AdminBookings = () => {
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [assignBooking, setAssignBooking] = useState(null);
   const [selectedRooms, setSelectedRooms] = useState([]);
+
+  // Edit Dates Modal State
+  const [editBooking, setEditBooking] = useState(null);
+  const [editCheckIn, setEditCheckIn] = useState("");
+  const [editCheckOut, setEditCheckOut] = useState("");
+  const [updatingDates, setUpdatingDates] = useState(false);
+
+  // Settle Payment & Check Out State
+  const [checkoutBooking, setCheckoutBooking] = useState(null);
+  const [settlePaymentMethod, setSettlePaymentMethod] = useState("cash");
   const [assignSaving, setAssignSaving] = useState(false);
 
   // Manual guest registration details
-  const [guestMode, setGuestMode] = useState("existing");
+  const [guestMode, setGuestMode] = useState("new");
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
-  const [guestPhone, setGuestPhone] = useState("");
+  const [guestPhone, setGuestPhone] = useState("+91");
   const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [bookingSource, setBookingSource] = useState("Direct");
+
+  const handlePhoneChange = (e) => {
+    const val = e.target.value;
+    if (!val.startsWith("+91")) {
+      setGuestPhone("+91");
+      return;
+    }
+    const rawDigits = val.substring(3).replace(/\D/g, "");
+    const limitedDigits = rawDigits.slice(0, 10);
+    setGuestPhone(`+91${limitedDigits}`);
+  };
 
   const fetchBookings = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -167,6 +189,13 @@ const AdminBookings = () => {
     return list;
   }, [rooms, bookings, checkIn, checkOut]);
 
+  const filteredAvailableRoomNumbers = React.useMemo(() => {
+    if (!selectedRoom) return [];
+    return availableRoomNumbers.filter(
+      (item) => item.roomId.toString() === selectedRoom.toString()
+    );
+  }, [availableRoomNumbers, selectedRoom]);
+
   const assignAvailableRooms = React.useMemo(() => {
     if (!assignBooking) return [];
 
@@ -275,28 +304,30 @@ const AdminBookings = () => {
     setSelectedRoom("");
     setAdults(1);
     setChildren(0);
-    setGuestMode("existing");
+    setGuestMode("new");
     setGuestName("");
     setGuestEmail("");
-    setGuestPhone("");
+    setGuestPhone("+91");
     setPaymentMethod("cash");
+    setBookingSource("Direct");
     setIsFormOpen(true);
   };
 
   const handleCreateBooking = async (e) => {
     e.preventDefault();
     if (!selectedRoom || !checkIn || !checkOut) {
-      toast.warning("Please select a room and enter check-in/check-out dates.");
+      toast.warning("Please select a room category and room number, and enter check-in/check-out dates.");
       return;
     }
 
-    if (guestMode === "existing" && !selectedUser) {
-      toast.warning("Please select a guest account.");
+    if (!guestName || !guestEmail || !guestPhone) {
+      toast.warning("Please enter all guest details.");
       return;
     }
 
-    if (guestMode === "new" && (!guestName || !guestEmail || !guestPhone)) {
-      toast.warning("Please enter all new guest details.");
+    const phoneRegex = /^\+91\d{10}$/;
+    if (!phoneRegex.test(guestPhone)) {
+      toast.warning("Phone number must be a valid 10-digit number starting with +91");
       return;
     }
 
@@ -306,29 +337,26 @@ const AdminBookings = () => {
     try {
       let finalUserId = null;
 
-      if (guestMode === "new") {
-        // Register the new user first
-        const regRes = await fetch(`${API_URL}/api/auth/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            full_name: guestName,
-            email: guestEmail,
-            phone: guestPhone,
-            password: "SreeRaagaGuest@123",
-          }),
-        });
+      // Register the new user first
+      const regRes = await fetch(`${API_URL}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          full_name: guestName,
+          email: guestEmail,
+          phone: guestPhone,
+          password: "SreeRaagaGuest@123",
+          is_manual: true,
+        }),
+      });
 
-        const regData = await regRes.json();
-        if (!regRes.ok) {
-          throw new Error(regData.message || "Failed to register new guest.");
-        }
-        finalUserId = regData.userId;
-      } else {
-        finalUserId = Number(selectedUser);
+      const regData = await regRes.json();
+      if (!regRes.ok) {
+        throw new Error(regData.message || "Failed to register new guest.");
       }
+      finalUserId = regData.userId;
 
       // Create the booking
       const response = await fetch(`${API_URL}/api/bookings`, {
@@ -346,6 +374,7 @@ const AdminBookings = () => {
           children: Number(children),
           room_number: selectedRoomNumber || null,
           payment_method: paymentMethod,
+          booking_source: bookingSource,
         }),
       });
 
@@ -409,6 +438,121 @@ const AdminBookings = () => {
       setBookings((prev) => prev.map((b) => b.id === id ? { ...b, payment_method: paymentMethod } : b));
     } catch (err) {
       toast.error(err.message || "Failed to update payment method.");
+    }
+  };
+
+  const handleOpenEditDatesModal = (booking) => {
+    setEditBooking(booking);
+    setEditCheckIn(new Date(booking.check_in).toISOString().split("T")[0]);
+    setEditCheckOut(new Date(booking.check_out).toISOString().split("T")[0]);
+  };
+
+  const handleUpdateDates = async (e) => {
+    e.preventDefault();
+    if (!editCheckIn || !editCheckOut) {
+      toast.warning("Please specify both check-in and check-out dates.");
+      return;
+    }
+    if (new Date(editCheckIn) >= new Date(editCheckOut)) {
+      toast.warning("Check-out date must be after check-in date.");
+      return;
+    }
+
+    setUpdatingDates(true);
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API_URL}/api/bookings/${editBooking.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          check_in: editCheckIn,
+          check_out: editCheckOut,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update booking dates.");
+      }
+
+      toast.success("Booking dates updated successfully!");
+      loadBookings(true);
+      setEditBooking(null);
+    } catch (err) {
+      toast.error(err.message || "Failed to update booking dates.");
+    } finally {
+      setUpdatingDates(false);
+    }
+  };
+
+  const handleCheckInClick = (b) => {
+    const today = new Date();
+    const checkInDate = new Date(b.check_in);
+    
+    const todayZero = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const checkInZero = new Date(checkInDate.getFullYear(), checkInDate.getMonth(), checkInDate.getDate());
+    
+    let confirmMsg = "Are you sure you want to check in this guest today?";
+    if (todayZero.getTime() !== checkInZero.getTime()) {
+      const todayStr = today.toLocaleDateString("en-GB");
+      const checkInStr = checkInDate.toLocaleDateString("en-GB");
+      confirmMsg = `Today is ${todayStr}. The booking check-in date is ${checkInStr}.\nAre you sure you want to perform check-in on this date?`;
+    }
+
+    if (window.confirm(confirmMsg)) {
+      handleUpdateStatus(b.id, "checked_in");
+    }
+  };
+
+  const handleCheckOutClick = (b) => {
+    if (b.payment_method === "pay_later") {
+      setCheckoutBooking(b);
+      setSettlePaymentMethod("cash");
+    } else {
+      if (window.confirm("Are you sure you want to check out this guest?")) {
+        handleUpdateStatus(b.id, "checked_out");
+      }
+    }
+  };
+
+  const handleSettleAndCheckOut = async (e) => {
+    e.preventDefault();
+    if (!window.confirm("Confirm payment received and check out this guest?")) {
+      return;
+    }
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API_URL}/api/bookings/${checkoutBooking.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          status: "checked_out",
+          payment_method: settlePaymentMethod,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to settle payment and check out.");
+      }
+
+      toast.success("Payment settled and guest checked out successfully!");
+      setBookings((prev) =>
+        prev.map((b) =>
+          b.id === checkoutBooking.id
+            ? { ...b, status: "checked_out", payment_method: settlePaymentMethod, payment_status: "Paid" }
+            : b
+        )
+      );
+      setCheckoutBooking(null);
+    } catch (err) {
+      toast.error(err.message || "Failed to check out.");
     }
   };
 
@@ -541,6 +685,7 @@ const AdminBookings = () => {
                     <td className="p-4 ">
                       <div className="text-white font-medium text-[16px]">{b.room_name}</div>
                       <div className="text-[16px] text-white mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
+                      <div className="text-[12px] text-yellow-500/80 mt-1 font-semibold">Source: {b.booking_source || "Direct"}</div>
                     </td>
 
                     {/* ASSIGN ROOM */}
@@ -576,10 +721,19 @@ const AdminBookings = () => {
 
                     {/* DATES */}
                     <td className="p-4 text-[16px] ">
-                      <div className="flex items-center gap-">
+                      <div className="flex items-center gap-1.5">
                         <span>{new Date(b.check_in).toLocaleDateString("en-GB")}</span>
                         <ArrowRight className="w-3.5 h-3.5 text-white/30" />
                         <span>{new Date(b.check_out).toLocaleDateString("en-GB")}</span>
+                        {(b.status === "confirmed" || b.status === "pending") && (
+                          <button
+                            onClick={() => handleOpenEditDatesModal(b)}
+                            className="p-1 bg-white/5 hover:bg-white/10 text-yellow-400 hover:text-yellow-300 rounded transition cursor-pointer"
+                            title="Edit Stay Dates"
+                          >
+                            <Edit size={12} />
+                          </button>
+                        )}
                       </div>
                       <div className="text-[16px] text-white mt-1">
                         Guests: {b.adults} Adults {b.children > 0 && `, ${b.children} Children`}
@@ -587,8 +741,17 @@ const AdminBookings = () => {
                     </td>
 
                     {/* AMOUNT */}
-                    <td className="p-4 text-[#C8A64D] font-bold text-[18px] ">
-                      ₹{parseFloat(b.total_price).toLocaleString()}
+                    <td className="p-4 text-center">
+                      <div className="text-[#C8A64D] font-bold text-[18px]">
+                        ₹{parseFloat(b.total_price).toLocaleString()}
+                      </div>
+                      {/* <span className={`text-[10px] px-2 py-0.5 rounded border font-bold mt-1 inline-block ${
+                        b.payment_status === "Unpaid"
+                          ? "bg-red-500/10 text-red-400 border-red-500/20"
+                          : "bg-green-500/10 text-green-400 border-green-500/20"
+                      }`}>
+                        {b.payment_status || "Paid"}
+                      </span> */}
                     </td>
 
                     {/* PAYMENT METHOD */}
@@ -597,10 +760,16 @@ const AdminBookings = () => {
                         className={`text-[15px] px-3 py-1.5 rounded-full border font-semibold uppercase ${
                           b.payment_method === "online"
                             ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"
+                            : b.payment_method === "credit_card"
+                            ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
+                            : b.payment_method === "bank_transfer"
+                            ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                            : b.payment_method === "pay_later"
+                            ? "bg-orange-500/10 text-red-400 border-orange-500/20"
                             : "bg-[#C8A64D]/10 text-[#C8A64D] border-[#C8A64D]/20"
                         }`}
                       >
-                        {b.payment_method || "cash"}
+                        {b.payment_method === "online" ? "Razorpay" : (b.payment_method || "cash").replace("_", " ")}
                       </span>
                     </td>
 
@@ -612,70 +781,64 @@ const AdminBookings = () => {
                             ? "bg-green-500/10 text-green-400 border-green-500/20"
                             : b.status === "checked_in"
                             ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                            : b.status === "checked_out"
+                            ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
                             : b.status === "cancelled"
                             ? "bg-red-500/10 text-red-400 border-red-500/20"
                             : "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
                         }`}
                       >
-                        {b.status}
+                        {b.status.replace("_", " ")}
                       </span>
                     </td>
 
                     {/* ACTIONS */}
                     <td className="p-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        {/* Check In Button */}
-                        <button
-                          onClick={() => {
-                            if (!b.room_number) {
-                              toast.error("Please assign a room before checking in.");
-                              return;
-                            }
-                            if (b.status === "confirmed") {
-                              handleUpdateStatus(b.id, "checked_in");
-                            }
-                          }}
-                          disabled={b.status !== "confirmed"}
-                          className={`p-1.5 rounded transition ${
-                            b.status === "confirmed"
-                              ? "bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 cursor-pointer"
-                              : "bg-white/5 text-white/20 cursor-not-allowed opacity-30"
-                          }`}
-                          title={
-                            b.status !== "confirmed"
-                              ? "Cannot Check In"
-                              : !b.room_number
-                              ? "Assign a room to Check In"
-                              : "Check In"
-                          }
-                        >
-                          <UserCheck size={14} />
-                        </button>
+                      <div className="flex flex-wrap items-center justify-center ">
+                        {/* Check In / Check Out Button */}
+                        {b.status === "confirmed" && (
+                          <button
+                            onClick={() => {
+                              if (!b.room_number) {
+                                toast.error("Please assign a room before checking in.");
+                                return;
+                              }
+                              handleCheckInClick(b);
+                            }}
+                            className="px-2 py-1 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 rounded cursor-pointer transition text-xs font-semibold"
+                          >
+                            Check In
+                          </button>
+                        )}
+                        {b.status === "checked_in" && (
+                          <button
+                            onClick={() => handleCheckOutClick(b)}
+                            className="px-2 py-1 bg-green-500/10 text-green-400 hover:bg-green-500/20 rounded cursor-pointer transition text-xs font-semibold"
+                          >
+                            Check Out
+                          </button>
+                        )}
+
+
 
                         {/* Cancel Button */}
-                        <button
-                          onClick={() => {
-                            if (b.status === "confirmed") {
+                        {b.status === "confirmed" && (
+                          <button
+                            onClick={() => {
                               if (window.confirm("Are you sure you want to cancel this booking?")) {
                                 handleUpdateStatus(b.id, "cancelled");
                               }
-                            }
-                          }}
-                          disabled={b.status !== "confirmed"}
-                          className={`p-1.5 rounded transition ${
-                            b.status === "confirmed"
-                              ? "bg-red-500/10 text-red-400 hover:bg-red-500/20 cursor-pointer"
-                              : "bg-white/5 text-white/20 cursor-not-allowed opacity-30"
-                          }`}
-                          title={b.status === "confirmed" ? "Cancel Booking" : "Cannot Cancel"}
-                        >
-                          <XCircle size={14} />
-                        </button>
+                            }}
+                            className="px-2 py-1 bg-yellow-500/20 text-red-400 hover:bg-yellow-500/70 rounded cursor-pointer transition text-xs font-semibold"
+                          >
+                            Cancel
+                          </button>
+                        )}
 
                         {/* Delete Button */}
                         <button
                           onClick={() => handleDelete(b.id)}
-                          className="px-2.5 py-1.5 bg-white/10 text-white/60 hover:bg-red-500/20 hover:text-red-400 rounded cursor-pointer transition text-xs font-semibold"
+                          className="px-2 py-1 bg-white/10 text-white/60 hover:bg-red-500/20 hover:text-red-400 rounded cursor-pointer transition text-xs font-semibold"
                           title="Delete Booking Record"
                         >
                           Delete
@@ -693,7 +856,7 @@ const AdminBookings = () => {
       {/* NEW BOOKING MODAL */}
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#081A2F] w-full max-w-2xl p-6 rounded-xl border border-white/10 space-y-4">
+          <div className="bg-[#081A2F] w-full max-w-3xl p-6 rounded-xl border border-white/10 space-y-4">
             <div className="flex justify-between items-center pb-2 border-b border-white/5">
               <h2 className="text-xl font-bold">New Booking Creation</h2>
               <button 
@@ -706,121 +869,46 @@ const AdminBookings = () => {
 
             <form onSubmit={handleCreateBooking} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Guest Selection Mode */}
-                <div className="col-span-1 md:col-span-2">
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Guest Selection Mode</label>
-                  <div className="flex gap-6 bg-[#071524] p-3 rounded-lg border border-white/5">
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-white/80 hover:text-white">
-                      <input
-                        type="radio"
-                        name="guestMode"
-                        value="existing"
-                        checked={guestMode === "existing"}
-                        onChange={() => setGuestMode("existing")}
-                        className="accent-yellow-500"
-                      />
-                      Select Existing User
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-white/80 hover:text-white">
-                      <input
-                        type="radio"
-                        name="guestMode"
-                        value="new"
-                        checked={guestMode === "new"}
-                        onChange={() => setGuestMode("new")}
-                        className="accent-yellow-500"
-                      />
-                      Register New Guest
-                    </label>
-                  </div>
-                </div>
-
-                {/* Guest Selection or Fields */}
-                {guestMode === "existing" ? (
+                {/* Guest Information */}
+                <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 bg-yellow-500/5 p-4 rounded-lg border border-yellow-500/10">
+                  <h3 className="col-span-1 md:col-span-3 text-xs font-semibold text-yellow-500 uppercase tracking-widest border-b border-yellow-500/10 pb-2 mb-1">
+                    Guest Information
+                  </h3>
                   <div>
-                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Guest / User Account</label>
-                    <select
-                      value={selectedUser}
-                      onChange={(e) => setSelectedUser(e.target.value)}
-                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-                    >
-                      <option value="">-- Select Guest --</option>
-                      {users.filter(u => u.role !== "admin").map((user) => (
-                        <option key={user.id} value={user.id}>
-                          {user.full_name} ({user.email})
-                        </option>
-                      ))}
-                    </select>
+                    <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Full Name</label>
+                    <input
+                      type="text"
+                      placeholder="Enter the Name"
+                      value={guestName}
+                      onChange={(e) => setGuestName(e.target.value)}
+                      required
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
+                    />
                   </div>
-                ) : (
-                  <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 bg-yellow-500/5 p-4 rounded-lg border border-yellow-500/10">
-                    <h3 className="col-span-1 md:col-span-3 text-xs font-semibold text-yellow-500 uppercase tracking-widest border-b border-yellow-500/10 pb-2 mb-1">
-                      New Guest Information
-                    </h3>
-                    <div>
-                      <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Full Name</label>
-                      <input
-                        type="text"
-                        placeholder="John Doe"
-                        value={guestName}
-                        onChange={(e) => setGuestName(e.target.value)}
-                        className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Email Address</label>
-                      <input
-                        type="email"
-                        placeholder="john@example.com"
-                        value={guestEmail}
-                        onChange={(e) => setGuestEmail(e.target.value)}
-                        className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Phone Number</label>
-                      <input
-                        type="tel"
-                        placeholder="+91 9876543210"
-                        value={guestPhone}
-                        onChange={(e) => setGuestPhone(e.target.value)}
-                        className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Email Address</label>
+                    <input
+                      type="email"
+                      placeholder="Enter Email"
+                      value={guestEmail}
+                      onChange={(e) => setGuestEmail(e.target.value)}
+                      required
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
+                    />
                   </div>
-                )}
-
-                {/* Room Number dropdown */}
-                <div className={guestMode === "new" ? "col-span-1 md:col-span-2" : ""}>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Room Number (Available Only)</label>
-                  <select
-                    value={selectedRoomNumber}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setSelectedRoomNumber(val);
-                      const found = availableRoomNumbers.find(item => item.roomNumber === val);
-                      if (found) {
-                        setSelectedRoom(found.roomId.toString());
-                      } else {
-                        setSelectedRoom("");
-                      }
-                    }}
-                    required
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-                  >
-                    <option value="">-- Select Room Number --</option>
-                    {availableRoomNumbers.map((item) => (
-                      <option key={item.roomNumber} value={item.roomNumber}>
-                        {item.roomNumber} ({item.roomName}) - ₹{parseFloat(item.price).toLocaleString()} / night
-                      </option>
-                    ))}
-                  </select>
-                  {availableRoomNumbers.length === 0 && (
-                    <p className="text-[11px] text-red-400 mt-1">No available rooms found for the selected check-in/out dates.</p>
-                  )}
+                  <div>
+                    <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Phone Number</label>
+                    <input
+                      type="tel"
+                      placeholder="+919876543210"
+                      value={guestPhone}
+                      onChange={handlePhoneChange}
+                      required
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
+                    />
+                  </div>
                 </div>
-
-                {/* Dates range picker */}
+ {/* Dates range picker */}
                 <div className="col-span-1 md:col-span-2 relative">
                   <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check In - Check Out</label>
                   <DatePicker
@@ -867,6 +955,52 @@ const AdminBookings = () => {
                     ]}
                   />
                 </div>
+                {/* Room Category dropdown */}
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Room Category</label>
+                  <select
+                    value={selectedRoom}
+                    onChange={(e) => {
+                      setSelectedRoom(e.target.value);
+                      setSelectedRoomNumber("");
+                    }}
+                    required
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                  >
+                    <option value="">-- Select Category --</option>
+                    {rooms.map((room) => (
+                      <option key={room.id} value={room.id}>
+                        {room.name} - ₹{parseFloat(room.price).toLocaleString()} / night
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Room Number dropdown */}
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Room Number (Available Only)</label>
+                  <select
+                    value={selectedRoomNumber}
+                    onChange={(e) => setSelectedRoomNumber(e.target.value)}
+                    required
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                  >
+                    <option value="">-- Select Room Number --</option>
+                    {filteredAvailableRoomNumbers.map((item) => (
+                      <option key={item.roomNumber} value={item.roomNumber}>
+                        {item.roomNumber}
+                      </option>
+                    ))}
+                  </select>
+                  {!selectedRoom && (
+                    <p className="text-[11px] text-yellow-500/60 mt-1">Please select a room category first.</p>
+                  )}
+                  {selectedRoom && filteredAvailableRoomNumbers.length === 0 && (
+                    <p className="text-[11px] text-red-400 mt-1">No available rooms found in this category.</p>
+                  )}
+                </div>
+
+               
 
                 {/* Adults */}
                 <div>
@@ -902,8 +1036,24 @@ const AdminBookings = () => {
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
                   >
-                    <option value="cash">Cash Payment</option>
-                    <option value="online">Online Payment</option>
+                    <option value="cash">Cash</option>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                    <option value="pay_later">Pay Later</option>
+                  </select>
+                </div>
+
+                {/* Booking Source */}
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Booking Source</label>
+                  <select
+                    value={bookingSource}
+                    onChange={(e) => setBookingSource(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                  >
+                    <option value="Direct">Walk In</option>
+                    <option value="MakeMyTrip">MakeMyTrip</option>
+                    <option value="Goibibo">Goibibo</option>
                   </select>
                 </div>
               </div>
@@ -1014,6 +1164,137 @@ const AdminBookings = () => {
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* EDIT DATES MODAL */}
+      {editBooking && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#081A2F] w-full max-w-md p-6 rounded-xl border border-white/10 space-y-4 text-left">
+            <div className="flex justify-between items-center pb-2 border-b border-white/5">
+              <h2 className="text-lg font-bold text-white">Edit Booking Dates</h2>
+              <button 
+                onClick={() => setEditBooking(null)}
+                className="text-white/60 hover:text-white cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateDates} className="space-y-4">
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check-In Date</label>
+                <input
+                  type="date"
+                  value={editCheckIn}
+                  onChange={(e) => setEditCheckIn(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#C8A64D]"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check-Out Date</label>
+                <input
+                  type="date"
+                  value={editCheckOut}
+                  onChange={(e) => setEditCheckOut(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#C8A64D]"
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditBooking(null)}
+                  className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white rounded font-semibold cursor-pointer border-0 transition text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={updatingDates}
+                  className="px-4 py-2 bg-[#C8A64D] hover:bg-[#b09141] text-black rounded font-bold border-0 cursor-pointer transition text-sm disabled:opacity-50"
+                >
+                  {updatingDates ? "Updating..." : "Save Dates"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* SETTLE PAYMENT & CHECK OUT MODAL */}
+      {checkoutBooking && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#081A2F] w-full max-w-md p-6 rounded-xl border border-white/10 space-y-4 text-left">
+            <div className="flex justify-between items-center pb-2 border-b border-white/5">
+              <h2 className="text-[18px] font-bold text-white">Settle Outstanding Due & Check Out</h2>
+              <button 
+                onClick={() => setCheckoutBooking(null)}
+                className="text-white/60 hover:text-white cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSettleAndCheckOut} className="space-y-4">
+              <div className="bg-white/5 p-4 rounded-lg border border-white/5 space-y-2 text-left">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-white/40 text-xs uppercase">Booking ID</p>
+                    <p className="text-white font-bold text-sm">BK-{checkoutBooking.id.toString().padStart(4, "0")}</p>
+                  </div>
+                  <div>
+                    <p className="text-white/40 text-xs uppercase">Outstanding Due</p>
+                    <p className="text-red-400 font-bold text-lg">₹{parseFloat(checkoutBooking.total_price).toLocaleString()}</p>
+                  </div>
+                </div>
+                {checkoutBooking.guest_phone && (
+                  <div className="border-t border-white/5 pt-2">
+                    <p className="text-white/40 text-xs uppercase">Guest Phone</p>
+                    <a
+                      href={`tel:${checkoutBooking.guest_phone}`}
+                      className="text-yellow-400 hover:text-yellow-300 font-bold text-sm block mt-0.5 hover:underline"
+                    >
+                      {formatPhoneNumber(checkoutBooking.guest_phone)}
+                    </a>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Select Settle Payment Method</label>
+                <select
+                  value={settlePaymentMethod}
+                  onChange={(e) => setSettlePaymentMethod(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#C8A64D]"
+                  required
+                >
+                  <option value="cash" className="text-black bg-white">Cash</option>
+                  <option value="credit_card" className="text-black bg-white">Credit Card</option>
+                  <option value="bank_transfer" className="text-black bg-white">Bank Transfer</option>
+                </select>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setCheckoutBooking(null)}
+                  className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white rounded font-semibold cursor-pointer border-0 transition text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-[#C8A64D] hover:bg-[#b09141] text-black rounded font-bold border-0 cursor-pointer transition text-sm"
+                >
+                  Confirm and Paid
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

@@ -1,11 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import { Phone, Mail } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Helmet } from "react-helmet";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Dine = () => {
+
+    useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Animate only once
+      offset: 100,    // Trigger animation 100px before element
+    });
+  }, []);
+
   return (
     <>
     {/* 2. ADD HELMET COMPONENT HERE */}
@@ -47,18 +59,18 @@ const Dine = () => {
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
           <div className="relative z-10 text-center text-white select-none">
-            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
+            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold  " data-aos="fade-up">
               Sree Raaga Resorts
             </span>
-            <h1 className="text-4xl md:text-[92px] font-medium font-corm leading-tight">
+            <h1 className="text-4xl md:text-[92px] font-medium font-corm leading-tight" data-aos="fade-up" data-aos-delay="100">
               Dining Experience
             </h1>
           </div>
         </section>
 
         {/* Intro Section */}
-        <section className="py-20 max-w-4xl mx-auto px-6 text-center select-none">
-          <span className="text-[#c8a64d] uppercase tracking-[3px] mb-4 text-[17px] font-semibold  block">
+        <section className="py-20 max-w-4xl mx-auto px-6 text-center select-none" data-aos="fade-up" data-aos-delay="200">
+          <span className="text-[#c8a64d] uppercase tracking-[3px] mb-4 text-[17px] font-semibold  block" >
             Culinary Delights
           </span>
           <h2 className="text-3xl md:text-4xl font-medium font-corm text-[#0d2b4e] leading-snug mb-8">
@@ -91,7 +103,7 @@ const Dine = () => {
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />
             </div>
-            <div className="space-y-6 px-6">
+            <div className="space-y-6 px-6 " data-aos="fade-left" >
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Restaurant
               </span>
@@ -112,9 +124,9 @@ const Dine = () => {
             </div>
           </div>
 
-          {/* Section 2: Coffee Shop */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div className="space-y-6 px-6 lg:order-1 order-2">
+          {/* Section 2: Coffee Shop */} 
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center" >
+            <div className="space-y-6 px-6 lg:order-1 order-2" data-aos="fade-right" >
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Garden Cafe
               </span>
@@ -151,7 +163,7 @@ const Dine = () => {
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />
             </div>
-            <div className="space-y-6 px-6">
+            <div className="space-y-6 px-6" data-aos="fade-left" >
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Lounge
               </span>
@@ -174,7 +186,7 @@ const Dine = () => {
 
           {/* Section 4: Sports Bar */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div className="space-y-6 px-6 lg:order-1 order-2">
+            <div className="space-y-6 px-6 lg:order-1 order-2" data-aos="fade-right" >
               <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-semibold  block">
                 Gaming Lounge
               </span>

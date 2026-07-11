@@ -7,6 +7,8 @@ import Footer from "../components/Footer";
 import { useToast } from "../components/Toast";
 import { Helmet } from "react-helmet";
 import { API_URL } from "../../config/api";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const fallbackRooms = [
   {
@@ -273,6 +275,13 @@ const Rooms = () => {
     if (lowerParam === "duplex-villa" || lowerParam === "duplex villa") return "Duplex Villa";
     return categoryParam;
   };
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Animate only once
+      offset: 100,    // Trigger animation 100px before element
+    });
+  }, []);
 
   return (
     <>
@@ -315,11 +324,11 @@ const Rooms = () => {
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
-          <div className="relative z-10 text-center text-white px-4 mt-20 select-none">
-            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold ">
+          <div className="relative z-10 text-center text-white px-4 mt-20 select-none" >
+            <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold " data-aos="fade-up">
               Sree Raaga Resorts Accommodation
             </span>
-            <h1 className="text-5xl md:text-[92px] font-medium font-corm  leading-tight">
+            <h1 className="text-5xl md:text-[92px] font-medium font-corm  leading-tight" data-aos="fade-up" data-aos-delay="100">
               {getCategoryTitle()}
             </h1>
           </div>
@@ -330,11 +339,11 @@ const Rooms = () => {
           
           {/* Header Introduction */}
           <div className="row justify-center text-center mb-20 select-none">
-            <div className="max-w-2xl mx-auto px-6 md:px-0">
-              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-[16px]  font-semibold ">
+            <div className="max-w-2xl mx-auto px-6 md:px-0" >
+              <span className="text-[#c8a64d] uppercase tracking-[6px] block mb-2 text-[16px]  font-semibold " data-aos="fade-up" data-aos-delay="200" >
                 Our Accommodations
               </span>
-              <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]  mb-6">
+              <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]  mb-6" data-aos="fade-up" data-aos-delay="200">
                 Discover Our Rooms & Suites and Villas
               </h2>
               {/* <p className="text-gray-500 text-sm md:text-base leading-relaxed  max-w-2xl mx-auto">
@@ -608,7 +617,7 @@ const Rooms = () => {
         </section>
 
         {/* ================= HOTEL FACILITIES SECTION ================= */}
-        <section className="md:py-24 px-6 bg-[#fdfeff]">
+        <section className="md:py-24 px-6 bg-[#fdfeff]" data-aos="fade-up" data-aos-delay="100">
          <div className="max-w-6xl mx-auto text-center mb-16">
           
               <h2 className="text-4xl md:text-6xl font-medium font-corm  text-[#0d2b4e]">
