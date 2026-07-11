@@ -582,9 +582,9 @@ const AdminDashboard = () => {
           const circ = 2 * Math.PI * r;
 
           const segments = [
-            { value: occupied, color: "#2dd4bf", label: "Occupied" },
-            { value: reserved, color: "#C8A64D]", label: "Reserved" },
-            { value: available, color: "#e2e8f0", label: "Available" },
+            { value: occupied, color: "#B3923E", label: "Occupied" },
+            { value: reserved, color: "#C8A64D", label: "Reserved" },
+            { value: available, color: "#152b44", label: "Available" },
           ];
 
           let cumulative = 0;
@@ -611,7 +611,7 @@ const AdminDashboard = () => {
                     <circle
                       cx={cx} cy={cy} r={r}
                       fill="none"
-                      stroke="#1e3a5f"
+                      stroke="#071524"
                       strokeWidth={strokeW}
                     />
                     {/* Coloured segments */}
@@ -631,7 +631,7 @@ const AdminDashboard = () => {
                       ) : null
                     )}
                     {/* Centre text */}
-                    <text x={cx} y={cy - 6} textAnchor="middle" fill="#2dd4bf" fontSize="20" fontWeight="bold">
+                    <text x={cx} y={cy - 6} textAnchor="middle" fill="#B3923E" fontSize="20" fontWeight="bold">
                       {occupancyPct}%
                     </text>
                     <text x={cx} y={cy + 12} textAnchor="middle" fill="#94a3b8" fontSize="9">

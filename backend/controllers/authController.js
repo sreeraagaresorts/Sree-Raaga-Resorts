@@ -264,6 +264,36 @@ exports.deleteUser = async (req, res) => {
       });
     }
 
+    // Delete all bookings associated with the user and release their rooms
+    try {
+      const Booking = require("../models/Booking");
+      const Room = require("../models/Room");
+      const userBookings = await Booking.find({ user_id: Number(id) });
+      
+      for (const b of userBookings) {
+        if (b.room_number) {
+          const room = await Room.findOne({ id: b.room_id });
+          if (room) {
+            const roomNumbers = b.room_number.split(",").map(num => num.trim());
+            let updated = false;
+            for (const num of roomNumbers) {
+              const unit = room.roomStatuses.find(u => u.roomNumber === num);
+              if (unit) {
+                unit.status = "Available";
+                updated = true;
+              }
+            }
+            if (updated) {
+              await room.save();
+            }
+          }
+        }
+        await Booking.findOneAndDelete({ id: b.id });
+      }
+    } catch (bookingCleanupErr) {
+      console.error("[Cleanup Error] Failed to delete user bookings/sync rooms:", bookingCleanupErr);
+    }
+
     // Log to AuditLog
     try {
       const adminUser = await User.findOne({ id: req.user.id });
