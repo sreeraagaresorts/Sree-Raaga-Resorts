@@ -296,22 +296,47 @@ const syncRoomUnitStatus = async (roomId, roomNumber, bookingStatus) => {
     const room = await Room.findOne({ id: roomId });
     if (!room) return;
     
+    const Booking = require("../models/Booking");
+    const allBookings = await Booking.find({ room_id: roomId });
     const roomNumbers = roomNumber.split(",").map(num => num.trim());
     let updated = false;
 
     for (const num of roomNumbers) {
       const unit = room.roomStatuses.find(u => u.roomNumber === num);
       if (unit) {
-        let newStatus = "Available";
-        if (bookingStatus === "confirmed") {
-          newStatus = "Reserved";
-        } else if (bookingStatus === "checked_in") {
-          newStatus = "Occupied";
-        } else if (bookingStatus === "cancelled") {
-          newStatus = "Available";
+        if (unit.status === "Maintenance") continue;
+
+        // Find if there is any active stay today for this room unit
+        const todaysBooking = allBookings.find(b => {
+          if (!b.room_number) return false;
+          const assignedNumbers = b.room_number.split(",").map(r => r.trim());
+          if (!assignedNumbers.includes(unit.roomNumber)) return false;
+
+          // Check if stay is active today
+          const today = new Date();
+          const t = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+          const start = new Date(b.check_in);
+          const s = new Date(start.getFullYear(), start.getMonth(), start.getDate()).getTime();
+          const end = new Date(b.check_out);
+          const e = new Date(end.getFullYear(), end.getMonth(), end.getDate()).getTime();
+
+          const isActiveToday = t >= s && t < e;
+          return isActiveToday && ["confirmed", "checked_in"].includes(b.status);
+        });
+
+        let targetStatus = "Available";
+        if (todaysBooking) {
+          if (todaysBooking.status === "checked_in") {
+            targetStatus = "Occupied";
+          } else if (todaysBooking.status === "confirmed") {
+            targetStatus = "Reserved";
+          }
         }
-        unit.status = newStatus;
-        updated = true;
+
+        if (unit.status !== targetStatus) {
+          unit.status = targetStatus;
+          updated = true;
+        }
       }
     }
     
