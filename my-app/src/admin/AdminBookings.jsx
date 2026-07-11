@@ -693,7 +693,7 @@ const AdminBookings = () => {
 
       {/* TABLE */}
       {loading ? (
-        <div className="flex items-center gap-2 text-white/60 justify-center py-12">
+        <div className="flex items-center gap-2  justify-center py-12">
           <RefreshCw className="animate-spin w-6 h-6 text-[#C8A64D]" />
           <span>Loading bookings...</span>
         </div>
@@ -705,7 +705,7 @@ const AdminBookings = () => {
         <div className="bg-[#081A2F] border border-white/10  rounded-xl overflow-hidden shadow-2xl">
           <div className="overflow-x-auto">
             <table className="w-full text-base border-collapse">
-              <thead className="bg-[#071524] text-white/60 text-sm uppercase tracking-wider border-b border-white/10">
+              <thead className="bg-[#071524]  text-sm uppercase tracking-wider border-b border-white/10">
                 <tr>
                   <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Guest Details</th>
                   <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Room Booked</th>
@@ -726,15 +726,15 @@ const AdminBookings = () => {
                     {/* GUEST */}
                     <td className="px-4 py-3">
                       <div className="font-semibold text-[15px]">{b.guest_name}</div>
-                      <div className="text-[13px] text-white/60 mt-0.5">{b.guest_email}</div>
-                      {b.guest_phone && <div className="text-[13px] text-white/50 mt-0.5">{formatPhoneNumber(b.guest_phone)}</div>}
+                      <div className="text-[14px] text-white mt-0.5">{b.guest_email}</div>
+                      {b.guest_phone && <div className="text-[14px] text-white mt-0.5">{formatPhoneNumber(b.guest_phone)}</div>}
                     </td>
 
                     {/* ROOM */}
                     <td className="px-4 py-3">
                       <div className="text-white font-medium text-[15px]">{b.room_name}</div>
-                      <div className="text-[13px] text-white/60 mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
-                      <div className="text-[11px] text-yellow-500/80 mt-1 font-semibold">Source: {b.booking_source || "Direct"}</div>
+                      <div className="text-[14px] text-white mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
+                      <div className="text-[12px] text-yellow-500/80 mt-1 font-semibold">Source: {b.booking_source || "Direct"}</div>
                     </td>
 
                     {/* ASSIGN ROOM */}
@@ -747,7 +747,7 @@ const AdminBookings = () => {
                           {(b.status === "confirmed" || b.status === "pending") && (
                             <button
                               onClick={() => handleOpenAssignModal(b)}
-                              className="p-1 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded transition cursor-pointer"
+                              className="p-1 bg-white/5 hover:bg-white/10  hover:text-white rounded transition cursor-pointer"
                               title="Change Assigned Room"
                             >
                               <Edit size={12} />
@@ -763,7 +763,7 @@ const AdminBookings = () => {
                             Assign Room
                           </button>
                         ) : (
-                          <span className="text-xs text-white/40 italic">Not Assigned</span>
+                          <span className="text-xs text-white italic">Not Assigned</span>
                         )
                       )}
                     </td>
@@ -784,7 +784,7 @@ const AdminBookings = () => {
                           </button>
                         )}
                       </div>
-                      <div className="text-[13px] text-white/60 mt-1">
+                      <div className="text-[14px]  mt-1">
                         Guests: {b.adults} Adults {b.children > 0 && `, ${b.children} Children`}
                       </div>
                     </td>
@@ -898,7 +898,7 @@ const AdminBookings = () => {
                         {/* Delete Button */}
                         <button
                           onClick={() => handleDelete(b.id)}
-                          className="px-2 py-1 bg-white/10 text-white/60 hover:bg-red-500/20 hover:text-red-400 rounded cursor-pointer transition text-xs font-semibold"
+                          className="px-2 py-1 bg-white/10  hover:bg-red-500/20 hover:text-red-400 rounded cursor-pointer transition text-xs font-semibold"
                           title="Delete Booking Record"
                         >
                           Delete
@@ -921,7 +921,7 @@ const AdminBookings = () => {
               <h2 className="text-xl font-bold">New Booking Creation</h2>
               <button 
                 onClick={() => setIsFormOpen(false)}
-                className="text-white/60 hover:text-white cursor-pointer"
+                className=" hover:text-white cursor-pointer"
               >
                 <X />
               </button>
@@ -1053,10 +1053,10 @@ const AdminBookings = () => {
                     ))}
                   </select>
                   {!selectedRoom && (
-                    <p className="text-[11px] text-yellow-500/60 mt-1">Please select a room category first.</p>
+                    <p className="text-[12px] text-yellow-500/60 mt-1">Please select a room category first.</p>
                   )}
                   {selectedRoom && filteredAvailableRoomNumbers.length === 0 && (
-                    <p className="text-[11px] text-red-400 mt-1">No available rooms found in this category.</p>
+                    <p className="text-[12px] text-red-400 mt-1">No available rooms found in this category.</p>
                   )}
                 </div>
 
@@ -1236,7 +1236,7 @@ const AdminBookings = () => {
               <h2 className="text-lg font-bold text-white">Edit Booking Dates</h2>
               <button 
                 onClick={() => setEditBooking(null)}
-                className="text-white/60 hover:text-white cursor-pointer"
+                className=" hover:text-white cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -1294,7 +1294,7 @@ const AdminBookings = () => {
               <h2 className="text-[18px] font-bold text-white">Settle Outstanding Due & Check Out</h2>
               <button 
                 onClick={() => setCheckoutBooking(null)}
-                className="text-white/60 hover:text-white cursor-pointer"
+                className=" hover:text-white cursor-pointer"
               >
                 <X size={18} />
               </button>
