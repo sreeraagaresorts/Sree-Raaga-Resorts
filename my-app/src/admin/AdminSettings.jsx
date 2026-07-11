@@ -1,14 +1,140 @@
 import React, { useState, useEffect } from "react";
-import { Save, RefreshCw, Building, Shield, Settings, Mail, Phone, MapPin, Clock, Percent, CalendarDays } from "lucide-react";
+import {
+  Save, RefreshCw, Building, Shield, Settings, Mail, Phone, MapPin,
+  Clock, Percent, CalendarDays, UtensilsCrossed, BellRing, UserCheck,
+  Users, PackageSearch, ShieldCheck, MailOpen, Printer, Sparkles,
+  ChevronRight,
+} from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
 
+/* ─── Add-on module definitions ─────────────────────────────── */
+const ADDONS = [
+  {
+    id: "restaurant",
+    icon: UtensilsCrossed,
+    label: "Restaurant & POS",
+    desc: "Manage dine-in orders, tables, billing and point-of-sale operations.",
+    color: "#f97316",
+    bg: "rgba(249,115,22,0.08)",
+    border: "rgba(249,115,22,0.2)",
+  },
+  {
+    id: "roomservice",
+    icon: BellRing,
+    label: "Room Service",
+    desc: "Track and fulfil in-room food & amenity requests from guests.",
+    color: "#3b82f6",
+    bg: "rgba(59,130,246,0.08)",
+    border: "rgba(59,130,246,0.2)",
+  },
+  {
+    id: "attendance",
+    icon: UserCheck,
+    label: "Attendance",
+    desc: "Record daily staff attendance, leaves and shift scheduling.",
+    color: "#10b981",
+    bg: "rgba(16,185,129,0.08)",
+    border: "rgba(16,185,129,0.2)",
+  },
+  {
+    id: "staff",
+    icon: Users,
+    label: "Staff Management",
+    desc: "Manage employee profiles, roles, payroll and performance records.",
+    color: "#a855f7",
+    bg: "rgba(168,85,247,0.08)",
+    border: "rgba(168,85,247,0.2)",
+  },
+  {
+    id: "inventory",
+    icon: PackageSearch,
+    label: "Inventory & Purchases",
+    desc: "Monitor stock levels, supplier orders and purchase history.",
+    color: "#C8A64D",
+    bg: "rgba(200,166,77,0.08)",
+    border: "rgba(200,166,77,0.2)",
+  },
+  {
+    id: "roles",
+    icon: ShieldCheck,
+    label: "Roles Management",
+    desc: "Define permission sets and assign granular access control to staff.",
+    color: "#ef4444",
+    bg: "rgba(239,68,68,0.08)",
+    border: "rgba(239,68,68,0.2)",
+  },
+  {
+    id: "emailtpl",
+    icon: MailOpen,
+    label: "Email Templates",
+    desc: "Customise automated guest emails for booking, check-in and feedback.",
+    color: "#06b6d4",
+    bg: "rgba(6,182,212,0.08)",
+    border: "rgba(6,182,212,0.2)",
+  },
+  {
+    id: "printer",
+    icon: Printer,
+    label: "Printer",
+    desc: "Configure receipt and invoice printers for front-desk and restaurant.",
+    color: "#64748b",
+    bg: "rgba(100,116,139,0.08)",
+    border: "rgba(100,116,139,0.2)",
+  },
+];
+
+/* ─── Add-on Card (Now Default Active) ───────────────────────── */
+const AddonCard = ({ addon }) => {
+  const Icon = addon.icon;
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: hovered ? addon.bg : "rgba(8,26,47,0.6)",
+        border: `1px solid ${hovered ? addon.border : "rgba(255,255,255,0.06)"}`,
+        transition: "all 0.25s ease",
+        transform: hovered ? "translateY(-3px)" : "translateY(0)",
+        boxShadow: hovered ? `0 8px 32px ${addon.bg}` : "none",
+      }}
+      className="relative rounded-xl p-5 flex flex-col gap-3 cursor-pointer overflow-hidden"
+    >
+      {/* Icon */}
+      <div
+        className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+        style={{ background: addon.bg, border: `1px solid ${addon.border}` }}
+      >
+        <Icon size={22} style={{ color: addon.color }} />
+      </div>
+
+      {/* Text */}
+      <div>
+        <p className="text-white font-semibold text-sm mb-1">{addon.label}</p>
+        <p className="text-white/40 text-xs leading-relaxed">{addon.desc}</p>
+      </div>
+
+
+
+      {/* Subtle glow circle */}
+      {hovered && (
+        <div
+          className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full pointer-events-none"
+          style={{ background: addon.color, opacity: 0.07, filter: "blur(20px)" }}
+        />
+      )}
+    </div>
+  );
+};
+
+/* ─── Main Component ─────────────────────────────────────────── */
 const AdminSettings = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // Form states
   const [resortName, setResortName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
@@ -21,19 +147,15 @@ const AdminSettings = () => {
 
   const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
-  useEffect(() => {
-    fetchSettings();
-  }, []);
+  useEffect(() => { fetchSettings(); }, []);
 
   const fetchSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/api/settings`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const res = await fetch(`${API_URL}/api/settings`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await response.json();
+      const data = await res.json();
       if (data.success && data.data) {
         const s = data.data;
         setResortName(s.resortName || "");
@@ -48,7 +170,7 @@ const AdminSettings = () => {
       } else {
         toast.error(data.message || "Failed to load settings.");
       }
-    } catch (err) {
+    } catch {
       toast.error("Error connecting to settings server.");
     } finally {
       setLoading(false);
@@ -59,32 +181,21 @@ const AdminSettings = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      const response = await fetch(`${API_URL}/api/settings`, {
+      const res = await fetch(`${API_URL}/api/settings`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
-          resortName,
-          contactEmail,
-          contactPhone,
-          address,
-          checkInTime,
-          checkOutTime,
+          resortName, contactEmail, contactPhone, address,
+          checkInTime, checkOutTime,
           gstRate: Number(gstRate),
           minAdvanceDays: Number(minAdvanceDays),
           enableEmailAlerts,
         }),
       });
-
-      const data = await response.json();
-      if (data.success) {
-        toast.success("Settings saved successfully!");
-      } else {
-        toast.error(data.message || "Failed to save settings.");
-      }
-    } catch (err) {
+      const data = await res.json();
+      if (data.success) toast.success("Settings saved successfully!");
+      else toast.error(data.message || "Failed to save settings.");
+    } catch {
       toast.error("Error saving settings.");
     } finally {
       setSaving(false);
@@ -94,198 +205,70 @@ const AdminSettings = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-white">
-        <RefreshCw className="animate-spin text-yellow-500 mb-4" size={32} />
+        <RefreshCw className="animate-spin text-[#C8A64D] mb-4" size={32} />
         <p className="text-white/60">Loading system settings...</p>
       </div>
     );
   }
 
+  const inputCls =
+    "w-full bg-[#050F1C] border border-white/10 rounded-lg p-3 outline-none focus:border-[#C8A64D] transition text-white placeholder:text-white/20 text-sm";
+  const labelCls = "block text-[#C8A64D] text-[10px] uppercase tracking-widest mb-1.5 font-semibold";
+
   return (
-    <div className="space-y-6 text-white max-w-5xl mx-auto">
-      {/* HEADER */}
+    <div className="space-y-6 text-white max-w-5xl mx-auto pb-16">
+
+      {/* ── HEADER ── */}
       <div className="flex justify-between items-center border-b border-white/5 pb-6">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Settings className="text-[#C8A64D]" size={24} /> Settings Panel
+            <Sparkles className="text-[#C8A64D]" size={22} /> Add-on Features
           </h1>
-          <p className="text-white/50 text-sm">
-            Configure resort metadata, guest reservation rules, and email options.
-          </p>
+          {/* <p className="text-white/40 text-sm mt-0.5">
+            Configure resort metadata, guest reservation rules and feature modules.
+          </p> */}
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-8">
-        {/* SECTION 1: Resort Details */}
-        <div className="bg-[#081A2F] border border-white/10 p-6 rounded-xl space-y-6">
-          <h2 className="text-lg font-semibold text-[#C8A64D] border-b border-white/5 pb-3 flex items-center gap-2">
-            <Building size={20} /> Resort Information
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Resort Name</label>
-              <input
-                type="text"
-                required
-                value={resortName}
-                onChange={(e) => setResortName(e.target.value)}
-                className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white"
-                placeholder="e.g. Sree Raaga Resorts"
-              />
-            </div>
-
-            <div>
-              <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Contact Email</label>
-              <div className="relative">
-                <input
-                  type="email"
-                  required
-                  value={contactEmail}
-                  onChange={(e) => setContactEmail(e.target.value)}
-                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 pl-10 outline-none focus:border-yellow-500 transition text-white"
-                  placeholder="info@sreeraagaresorts.in"
-                />
-                <Mail className="absolute left-3 top-3.5 text-white/40" size={18} />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Contact Phone</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  required
-                  value={contactPhone}
-                  onChange={(e) => setContactPhone(e.target.value)}
-                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 pl-10 outline-none focus:border-yellow-500 transition text-white"
-                  placeholder="+91 98765 43210"
-                />
-                <Phone className="absolute left-3 top-3.5 text-white/40" size={18} />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Address</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  required
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 pl-10 outline-none focus:border-yellow-500 transition text-white"
-                  placeholder="Resort address"
-                />
-                <MapPin className="absolute left-3 top-3.5 text-white/40" size={18} />
-              </div>
-            </div>
-          </div>
+      {/* ══ SYSTEM MODULES (Active by default) ══ */}
+      <div className="space-y-4">
+  
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {ADDONS.map((addon) => (
+            <AddonCard key={addon.id} addon={addon} />
+          ))}
         </div>
+<div className="flex items-center justify-center gap-1 text-center text-white text-sm pt-1">
+  <a
+    href="https://wa.me/916362604933"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-white transition-colors underline"
+  >
+    Click here
+  </a>
+  <span> to add these features.</span>
+</div>
+      </div>
 
-        {/* SECTION 2: Rules & Policy */}
-        <div className="bg-[#081A2F] border border-white/10 p-6 rounded-xl space-y-6">
-          <h2 className="text-lg font-semibold text-[#C8A64D] border-b border-white/5 pb-3 flex items-center gap-2">
-            <Shield size={20} /> Booking & Policy Rules
-          </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            <div>
-              <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Check-In Time</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  required
-                  value={checkInTime}
-                  onChange={(e) => setCheckInTime(e.target.value)}
-                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 pl-10 outline-none focus:border-yellow-500 transition text-white"
-                  placeholder="e.g. 12:00 PM"
-                />
-                <Clock className="absolute left-3 top-3.5 text-white/40" size={18} />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Check-Out Time</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  required
-                  value={checkOutTime}
-                  onChange={(e) => setCheckOutTime(e.target.value)}
-                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 pl-10 outline-none focus:border-yellow-500 transition text-white"
-                  placeholder="e.g. 11:00 AM"
-                />
-                <Clock className="absolute left-3 top-3.5 text-white/40" size={18} />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">GST Rate (%)</label>
-              <div className="relative">
-                <input
-                  type="number"
-                  required
-                  min="0"
-                  max="100"
-                  value={gstRate}
-                  onChange={(e) => setGstRate(e.target.value)}
-                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 pl-10 outline-none focus:border-yellow-500 transition text-white"
-                  placeholder="e.g. 12"
-                />
-                <Percent className="absolute left-3 top-3.5 text-white/40" size={18} />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Min Advance (Days)</label>
-              <div className="relative">
-                <input
-                  type="number"
-                  required
-                  min="0"
-                  value={minAdvanceDays}
-                  onChange={(e) => setMinAdvanceDays(e.target.value)}
-                  className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 pl-10 outline-none focus:border-yellow-500 transition text-white"
-                  placeholder="e.g. 1"
-                />
-                <CalendarDays className="absolute left-3 top-3.5 text-white/40" size={18} />
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-2">
-            <label className="flex items-center gap-3 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={enableEmailAlerts}
-                onChange={(e) => setEnableEmailAlerts(e.target.checked)}
-                className="w-5 h-5 rounded border-white/10 bg-[#071524] text-yellow-500 focus:ring-yellow-500 accent-[#C8A64D]"
-              />
-              <span className="text-sm text-white/80">Send automated email alerts to customers on registration and booking updates.</span>
-            </label>
-          </div>
-        </div>
-
-        {/* SAVE BUTTON */}
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={saving}
-            className="bg-[#C8A64D] text-black px-6 py-3 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition disabled:opacity-50"
-          >
-            {saving ? (
-              <>
-                <RefreshCw className="animate-spin" size={18} /> Saving...
-              </>
-            ) : (
-              <>
-                <Save size={18} /> Save Settings
-              </>
-            )}
-          </button>
-        </div>
-      </form>
     </div>
   );
 };
+
+/* ── Reusable Save Button ── */
+const SaveBtn = ({ saving }) => (
+  <button
+    type="submit"
+    disabled={saving}
+    className="bg-[#C8A64D] text-[#071524] px-6 py-2.5 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141] transition disabled:opacity-50 text-sm"
+  >
+    {saving ? (
+      <><RefreshCw className="animate-spin" size={16} /> Saving...</>
+    ) : (
+      <><Save size={16} /> Save Settings</>
+    )}
+  </button>
+);
 
 export default AdminSettings;

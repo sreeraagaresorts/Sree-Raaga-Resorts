@@ -10,7 +10,7 @@ import {
   CalendarDays,
   Users,
   Edit3,
-  Plus,
+  Settings,
   LogOut,
   Bell,
   CreditCard,
@@ -33,7 +33,7 @@ const navItems = [
   { name: "Restaurant Menu", path: "/admin/menu", icon: UtensilsCrossed },
   { name: "Enquiries",         path: "/admin/enquiries",  icon: MessageSquare },
   { name: "Discounts & Coupons",path: "/admin/discounts",  icon: Ticket },
-  { name: "Add On Features",           path: "/admin/settings",  icon: Plus },
+  { name: "Add-On Features",           path: "/admin/settings",  icon: Settings },
 ];
 
 const  AdminLayout=()=> {
