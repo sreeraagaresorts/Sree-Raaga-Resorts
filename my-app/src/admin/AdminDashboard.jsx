@@ -583,7 +583,7 @@ const AdminDashboard = () => {
 
           const segments = [
             { value: occupied, color: "#2dd4bf", label: "Occupied" },
-            { value: reserved, color: "#f59e0b", label: "Reserved" },
+            { value: reserved, color: "#C8A64D]", label: "Reserved" },
             { value: available, color: "#e2e8f0", label: "Available" },
           ];
 
