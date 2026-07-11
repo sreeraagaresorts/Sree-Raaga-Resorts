@@ -61,7 +61,7 @@ const AdminBookings = () => {
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("+91");
   const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [bookingSource, setBookingSource] = useState("Direct");
+  const [bookingSource, setBookingSource] = useState("Walkin");
 
   // Custom Confirmation Modal State
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
@@ -322,7 +322,7 @@ const AdminBookings = () => {
     setGuestEmail("");
     setGuestPhone("+91");
     setPaymentMethod("cash");
-    setBookingSource("Direct");
+    setBookingSource("Walkin");
     setIsFormOpen(true);
   };
 
@@ -734,7 +734,15 @@ const AdminBookings = () => {
                     <td className="px-4 py-3">
                       <div className="text-white font-medium text-[15px]">{b.room_name}</div>
                       <div className="text-[14px] text-white mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
-                      <div className="text-[12px] text-yellow-500/80 mt-1 font-semibold">Source: {b.booking_source || "Direct"}</div>
+                      <div className="text-[12px] text-yellow-500/80 mt-1 font-semibold">
+                        Source: {
+                          (b.payment_method === "online" || b.payment_method === "razorpay")
+                            ? "Website"
+                            : (b.booking_source === "Direct" || !b.booking_source)
+                            ? "Walkin"
+                            : b.booking_source
+                        }
+                      </div>
                     </td>
 
                     {/* ASSIGN ROOM */}
@@ -1112,7 +1120,7 @@ const AdminBookings = () => {
                     onChange={(e) => setBookingSource(e.target.value)}
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
                   >
-                    <option value="Direct">Walk In</option>
+                    <option value="Walkin">Walkin</option>
                     <option value="MakeMyTrip">MakeMyTrip</option>
                     <option value="Goibibo">Goibibo</option>
                   </select>
