@@ -351,7 +351,7 @@ const syncRoomUnitStatus = async (roomId, roomNumber, bookingStatus) => {
 // 4. Update booking status or details (Admin only)
 exports.updateBookingStatus = async (req, res) => {
   try {
-    const { status, payment_method, room_number, check_in, check_out, payment_status } = req.body;
+    const { status, payment_method, room_number, check_in, check_out, payment_status, cancellation_reason } = req.body;
     const { id } = req.params;
 
     const booking = await Booking.findOne({ id: Number(id) });
@@ -373,6 +373,9 @@ exports.updateBookingStatus = async (req, res) => {
         });
       }
       updateFields.status = status;
+      if (status === "cancelled" && cancellation_reason !== undefined) {
+        updateFields.cancellation_reason = cancellation_reason || null;
+      }
     }
 
     if (payment_method !== undefined) {
@@ -516,11 +519,22 @@ exports.updateBookingStatus = async (req, res) => {
 
     // Log to AuditLog
     if (req.user) {
-      logAction(
-        req.user.id,
-        "Booking Update",
-        `Updated booking #${updatedBooking.id} (Status: ${updatedBooking.status})`
-      );
+      if (status === "cancelled") {
+        const guestUser = await User.findOne({ id: updatedBooking.user_id });
+        const guestName = guestUser ? guestUser.full_name : `User #${updatedBooking.user_id}`;
+        const reasonText = cancellation_reason ? ` Reason: ${cancellation_reason}` : "";
+        logAction(
+          req.user.id,
+          "Booking Cancellation",
+          `Cancelled booking #${updatedBooking.id} for ${guestName} (Room: ${updatedBooking.room_number || "Unassigned"}, Check-in: ${new Date(updatedBooking.check_in).toLocaleDateString("en-GB")}).${reasonText}`
+        );
+      } else {
+        logAction(
+          req.user.id,
+          "Booking Update",
+          `Updated booking #${updatedBooking.id} (Status: ${updatedBooking.status})`
+        );
+      }
     }
 
     res.json({

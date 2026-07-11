@@ -23,6 +23,7 @@ const bookingSchema = new mongoose.Schema({
   coupon_code: { type: String, default: null },
   booking_source: { type: String, default: "Walk-in" },
   is_manual: { type: Boolean, default: false },
+  cancellation_reason: { type: String, default: null },
   created_at: { type: Date, default: Date.now }
 });
 

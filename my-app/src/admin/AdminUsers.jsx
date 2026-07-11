@@ -14,6 +14,10 @@ const AdminUsers = () => {
   const [historyLogs, setHistoryLogs] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [activeMenuUserId, setActiveMenuUserId] = useState(null);
+  const now = new Date();
+  const [historyFilterYear, setHistoryFilterYear] = useState(String(now.getFullYear()));
+  const [historyFilterMonth, setHistoryFilterMonth] = useState(String(now.getMonth() + 1));
+  const [historyFilterDay, setHistoryFilterDay] = useState("");
 
   const loadHistoryLogs = async () => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
@@ -140,6 +144,127 @@ const AdminUsers = () => {
     return u.role !== "admin" && !u.is_manual;
   });
 
+  const renderHistory = () => {
+    const now2 = new Date();
+    const months = [
+      { v: "1", l: "January" }, { v: "2", l: "February" }, { v: "3", l: "March" },
+      { v: "4", l: "April" }, { v: "5", l: "May" }, { v: "6", l: "June" },
+      { v: "7", l: "July" }, { v: "8", l: "August" }, { v: "9", l: "September" },
+      { v: "10", l: "October" }, { v: "11", l: "November" }, { v: "12", l: "December" }
+    ];
+    const years = Array.from(new Set(historyLogs.map(l => new Date(l.timestamp).getFullYear()))).sort((a, b) => b - a);
+    if (!years.includes(now2.getFullYear())) years.unshift(now2.getFullYear());
+
+    const filteredLogs = historyLogs.filter(log => {
+      const d = new Date(log.timestamp);
+      if (historyFilterYear && d.getFullYear() !== Number(historyFilterYear)) return false;
+      if (historyFilterMonth && (d.getMonth() + 1) !== Number(historyFilterMonth)) return false;
+      if (historyFilterDay && d.getDate() !== Number(historyFilterDay)) return false;
+      return true;
+    });
+
+    const getRowClass = (actionType) => {
+      const t = (actionType || "").toLowerCase();
+      if (t.includes("delete")) return "bg-red-500/10 hover:bg-red-500/15";
+      if (t === "logout") return "bg-purple-500/10 hover:bg-purple-500/15";
+      if (t === "booking cancellation") return "bg-orange-500/10 hover:bg-orange-500/15";
+      return "hover:bg-white/5";
+    };
+
+    const getBadgeClass = (actionType) => {
+      const t = (actionType || "").toLowerCase();
+      if (t.includes("delete")) return "bg-red-500/10 text-red-400 border-red-500/20";
+      if (t === "logout") return "bg-purple-500/10 text-purple-400 border-purple-500/20";
+      if (t === "login") return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+      if (t === "booking cancellation") return "bg-orange-500/10 text-orange-400 border-orange-500/20";
+      return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+    };
+
+    return (
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <select
+            value={historyFilterYear}
+            onChange={e => { setHistoryFilterYear(e.target.value); setHistoryFilterMonth(""); setHistoryFilterDay(""); }}
+            className="bg-[#071524] border border-white/10 text-white text-sm px-3 py-2 rounded-lg outline-none focus:border-[#C8A64D] cursor-pointer"
+          >
+            <option value="">All Years</option>
+            {years.map(y => <option key={y} value={y}>{y}</option>)}
+          </select>
+          <select
+            value={historyFilterMonth}
+            onChange={e => { setHistoryFilterMonth(e.target.value); setHistoryFilterDay(""); }}
+            className="bg-[#071524] border border-white/10 text-white text-sm px-3 py-2 rounded-lg outline-none focus:border-[#C8A64D] cursor-pointer"
+          >
+            <option value="">All Months</option>
+            {months.map(m => <option key={m.v} value={m.v}>{m.l}</option>)}
+          </select>
+          <select
+            value={historyFilterDay}
+            onChange={e => setHistoryFilterDay(e.target.value)}
+            className="bg-[#071524] border border-white/10 text-white text-sm px-3 py-2 rounded-lg outline-none focus:border-[#C8A64D] cursor-pointer"
+          >
+            <option value="">All Days</option>
+            {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+              <option key={d} value={d}>{String(d).padStart(2, "0")}</option>
+            ))}
+          </select>
+          {(historyFilterMonth || historyFilterDay) && (
+            <button
+              onClick={() => { setHistoryFilterMonth(String(now2.getMonth() + 1)); setHistoryFilterDay(""); setHistoryFilterYear(String(now2.getFullYear())); }}
+              className="text-xs text-white/50 hover:text-[#C8A64D] underline cursor-pointer bg-transparent border-0"
+            >
+              Reset to Current Month
+            </button>
+          )}
+          <span className="ml-auto text-xs text-white/40">{filteredLogs.length} record{filteredLogs.length !== 1 ? "s" : ""}</span>
+        </div>
+        {filteredLogs.length === 0 ? (
+          <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl text-white/50">
+            No history records found for the selected period.
+          </div>
+        ) : (
+          <div className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider">
+                  <tr>
+                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Timestamp</th>
+                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Administrator</th>
+                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Action Type</th>
+                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Details</th>
+                    <th className="p-4 text-center font-semibold text-[#c8a64d]">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredLogs.map((log) => (
+                    <tr key={log.id} className={`border-t border-white/5 transition ${getRowClass(log.actionType)}`}>
+                      <td className="p-4 text-white/80 text-xs whitespace-nowrap">
+                        {new Date(log.timestamp).toLocaleString("en-IN")}
+                      </td>
+                      <td className="p-4 font-semibold text-white/90">{log.adminName}</td>
+                      <td className="p-4">
+                        <span className={`text-xs px-2.5 py-0.5 rounded border font-semibold inline-flex items-center gap-1 ${getBadgeClass(log.actionType)}`}>
+                          {log.actionType}
+                        </span>
+                      </td>
+                      <td className="p-4 text-white/80 text-xs">{log.details}</td>
+                      <td className="p-4 text-center">
+                        <span className="text-xs px-2.5 py-0.5 rounded border font-semibold bg-green-500/10 text-green-400 border-green-500/20">
+                          {log.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6 text-white max-w-[180vh] mx-auto">
       {/* HEADER */}
@@ -153,63 +278,64 @@ const AdminUsers = () => {
       </div>
 
       {/* STATS CARDS */}
-      {!loading && !error && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Total Guests */}
-          <div className="bg-[#061f24]/80 border border-cyan-500/20 p-5 rounded-xl hover:border-cyan-500/30 transition">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-white/60 text-xs">Guests</p>
-                <h2 className="text-2xl font-bold text-white mt-1">
-                  {users.filter((u) => u.role !== "admin" && !u.is_manual).length}
-                </h2>
-                <div className="flex items-center gap-1 text-xs mt-2 text-cyan-400 font-semibold">
-                  Guest Accounts
+      {!loading && !error && (() => {
+        const guestUsers = users.filter((u) => u.role !== "admin" && !u.is_manual);
+        const totalUsers = guestUsers.length;
+        const activeUserIds = new Set(bookings.filter(b => b.status !== "cancelled").map(b => b.user_id));
+        const activeUsers = guestUsers.filter(u => activeUserIds.has(u.id)).length;
+        const inactiveUsers = totalUsers - activeUsers;
+        return (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Total Users */}
+            <div className="bg-[#061f24]/80 border border-cyan-500/20 p-5 rounded-xl hover:border-cyan-500/30 transition">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-white/60 text-xs uppercase tracking-wider">Total Users</p>
+                  <h2 className="text-3xl font-bold text-white mt-1">{totalUsers}</h2>
+                  <div className="flex items-center gap-1 text-xs mt-2 text-cyan-400 font-semibold">
+                    Registered Accounts
+                  </div>
+                </div>
+                <div className="w-10 h-10 bg-cyan-500/10 border border-cyan-500/10 rounded-lg flex items-center justify-center">
+                  <Users className="w-5 h-5 text-cyan-400" />
                 </div>
               </div>
-              <div className="w-10 h-10 bg-cyan-500/10 border border-cyan-500/10 rounded-lg flex items-center justify-center">
-                <Users className="w-5 h-5 text-cyan-400" />
-              </div>
             </div>
-          </div>
 
-          {/* Total Administrators */}
-          <div className="bg-[#241a06]/80 border border-yellow-500/20 p-5 rounded-xl hover:border-yellow-500/30 transition">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-white/60 text-xs">Administrators</p>
-                <h2 className="text-2xl font-bold text-white mt-1">
-                  {users.filter((u) => u.role === "admin").length}
-                </h2>
-                <div className="flex items-center gap-1 text-xs mt-2 text-yellow-400 font-semibold">
-                  Staff Members
+            {/* Active Users */}
+            <div className="bg-[#062419]/80 border border-green-500/20 p-5 rounded-xl hover:border-green-500/30 transition">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-white/60 text-xs uppercase tracking-wider">Active Users</p>
+                  <h2 className="text-3xl font-bold text-white mt-1">{activeUsers}</h2>
+                  <div className="flex items-center gap-1 text-xs mt-2 text-green-400 font-semibold">
+                    Have Bookings
+                  </div>
+                </div>
+                <div className="w-10 h-10 bg-green-500/10 border border-green-500/10 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-green-400" />
                 </div>
               </div>
-              <div className="w-10 h-10 bg-yellow-500/10 border border-yellow-500/10 rounded-lg flex items-center justify-center">
-                <Shield className="w-5 h-5 text-yellow-400" />
-              </div>
             </div>
-          </div>
 
-          {/* Total Accounts */}
-          <div className="bg-[#1f0624]/80 border border-purple-500/20 p-5 rounded-xl hover:border-purple-500/30 transition">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-white/60 text-xs">Total Accounts</p>
-                <h2 className="text-2xl font-bold text-white mt-1">
-                  {users.filter((u) => !u.is_manual).length}
-                </h2>
-                <div className="flex items-center gap-1 text-xs mt-2 text-purple-400 font-semibold">
-                  Guests & Staff
+            {/* Inactive Users */}
+            <div className="bg-[#1a0606]/80 border border-red-500/20 p-5 rounded-xl hover:border-red-500/30 transition">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-white/60 text-xs uppercase tracking-wider">Inactive Users</p>
+                  <h2 className="text-3xl font-bold text-white mt-1">{inactiveUsers}</h2>
+                  <div className="flex items-center gap-1 text-xs mt-2 text-red-400 font-semibold">
+                    No Bookings Yet
+                  </div>
                 </div>
-              </div>
-              <div className="w-10 h-10 bg-purple-500/10 border border-purple-500/10 rounded-lg flex items-center justify-center">
-                <Users className="w-5 h-5 text-purple-400" />
+                <div className="w-10 h-10 bg-red-500/10 border border-red-500/10 rounded-lg flex items-center justify-center">
+                  <TrendingDown className="w-5 h-5 text-red-400" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* TABS */}
       <div className="flex flex-wrap gap-3 text-base font-bold uppercase tracking-wider w-full sm:w-auto border-b border-white/5 pb-4">
@@ -242,64 +368,9 @@ const AdminUsers = () => {
           <span>Loading guest profiles...</span>
         </div>
       ) : activeTab === "history" ? (
-        historyLogs.length === 0 ? (
-          <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl text-white/50">
-            No administration actions recorded yet.
-          </div>
-        ) : (
-          <div className="bg-[#081A2F] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-[#071524] text-white/60 text-xs uppercase tracking-wider">
-                  <tr>
-                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Timestamp</th>
-                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Administrator</th>
-                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Action Type</th>
-                    <th className="p-4 text-left font-semibold text-[#c8a64d]">Details</th>
-                    <th className="p-4 text-center font-semibold text-[#c8a64d]">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {historyLogs.map((log) => (
-                    <tr
-                      key={log.id}
-                      className={`border-t border-white/5 transition ${
-                        log.actionType && log.actionType.toLowerCase().includes("delete")
-                          ? "bg-red-500/10 text-red-100 hover:bg-red-500/15"
-                          : "hover:bg-white/5"
-                      }`}
-                    >
-                      <td className="p-4 text-white text-xs">
-                        {new Date(log.timestamp).toLocaleString("en-IN")}
-                      </td>
-                      <td className="p-4 font-semibold text-white/90">{log.adminName}</td>
-                      <td className="p-4">
-                        <span
-                          className={`text-xs px-2.5 py-0.5 rounded border font-semibold inline-flex items-center gap-1 ${
-                            log.actionType && log.actionType.toLowerCase().includes("delete")
-                              ? "bg-red-500/10 text-red-400 border-red-500/20"
-                              : log.actionType === "Login"
-                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                              : "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                          }`}
-                        >
-                          {log.actionType}  
-                        </span>
-                      </td>
-                      <td className="p-4 text-white">{log.details}</td>
-                      <td className="p-4 text-center">
-                        <span className="text-xs px-2.5 py-0.5 rounded border font-semibold bg-green-500/10 text-green-400 border-green-500/20">
-                          {log.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )
+        renderHistory()
       ) : displayedUsers.length === 0 ? (
+
         <div className="bg-[#081A2F] border border-white/10 p-12 text-center rounded-xl text-white/50">
           {activeTab === "admins"
             ? "No registered administrator profiles found."

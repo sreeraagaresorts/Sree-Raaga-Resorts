@@ -5,6 +5,7 @@ const router = express.Router();
 const {
   register,
   login,
+  logout,
   getProfile,
   updateProfile,
   getAllUsers,
@@ -23,6 +24,7 @@ const adminMiddleware = require("../middleware/adminMiddleware");
 router.post("/register", register);
 
 router.post("/login", login);
+router.post("/logout", verifyToken, logout);
 
 router.get(
   "/profile",

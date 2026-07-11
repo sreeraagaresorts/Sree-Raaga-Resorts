@@ -66,6 +66,10 @@ const AdminBookings = () => {
   // Custom Confirmation Modal State
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
 
+  // Cancel Booking Modal State
+  const [cancelModal, setCancelModal] = useState({ isOpen: false, booking: null });
+  const [cancelReason, setCancelReason] = useState("");
+
   const showConfirm = (title, message, type = "primary", onConfirm) => {
     setConfirmModal({
       isOpen: true,
@@ -407,16 +411,18 @@ const AdminBookings = () => {
     }
   };
 
-  const handleUpdateStatus = async (id, status) => {
+  const handleUpdateStatus = async (id, status, reason = "") => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
+      const body = { status };
+      if (status === "cancelled") body.cancellation_reason = reason;
       const response = await fetch(`${API_URL}/api/bookings/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify(body),
       });
 
       const data = await response.json();
@@ -425,7 +431,7 @@ const AdminBookings = () => {
       }
 
       toast.success(`Booking status changed to ${status}!`);
-      setBookings((prev) => prev.map((b) => b.id === id ? { ...b, status } : b));
+      setBookings((prev) => prev.map((b) => b.id === id ? { ...b, status, ...(status === "cancelled" ? { cancellation_reason: reason } : {}) } : b));
     } catch (err) {
       toast.error(err.message || "Failed to update booking status.");
     }
@@ -890,14 +896,8 @@ const AdminBookings = () => {
                         {b.status === "confirmed" && (
                           <button
                             onClick={() => {
-                              showConfirm(
-                                "Cancel Booking",
-                                "Are you sure you want to cancel this booking?",
-                                "destructive",
-                                () => {
-                                  handleUpdateStatus(b.id, "cancelled");
-                                }
-                              );
+                              setCancelReason("");
+                              setCancelModal({ isOpen: true, booking: b });
                             }}
                             className="px-2 py-1 bg-yellow-500/20 text-red-400 hover:bg-yellow-500/70 rounded cursor-pointer transition text-xs font-semibold"
                           >
@@ -1367,6 +1367,66 @@ const AdminBookings = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* CANCEL BOOKING MODAL */}
+      {cancelModal.isOpen && cancelModal.booking && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4">
+          <div className="bg-[#081A2F] border border-white/10 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-5">
+            {/* Header */}
+            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+              <div className="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0">
+                <RefreshCw className="w-5 h-5 text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Cancel Booking</h3>
+                <p className="text-xs text-white/50 mt-0.5">
+                  Booking #{cancelModal.booking.id} — {cancelModal.booking.guest_name}
+                </p>
+              </div>
+            </div>
+
+            {/* Reason Textarea */}
+            <div>
+              <label className="block text-xs font-semibold text-[#C8A64D] uppercase tracking-wider mb-2">
+                Reason for Cancellation <span className="text-red-400">*</span>
+              </label>
+              <textarea
+                value={cancelReason}
+                onChange={e => setCancelReason(e.target.value)}
+                rows={4}
+                placeholder="Enter the reason for cancelling this booking (e.g. Guest requested, No-show, Overbooking, etc.)..."
+                className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#C8A64D] resize-none placeholder:text-white/30 leading-relaxed"
+              />
+              {!cancelReason.trim() && (
+                <p className="text-xs text-white/40 mt-1.5">A reason is required to proceed with cancellation.</p>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <button
+                type="button"
+                disabled={!cancelReason.trim()}
+                onClick={() => {
+                  handleUpdateStatus(cancelModal.booking.id, "cancelled", cancelReason.trim());
+                  setCancelModal({ isOpen: false, booking: null });
+                  setCancelReason("");
+                }}
+                className="flex-1 px-4 py-2.5 rounded-lg bg-red-500 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm transition cursor-pointer"
+              >
+                Confirm Cancellation
+              </button>
+              <button
+                type="button"
+                onClick={() => { setCancelModal({ isOpen: false, booking: null }); setCancelReason(""); }}
+                className="flex-1 px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-white font-semibold text-sm transition cursor-pointer"
+              >
+                Go Back
+              </button>
+            </div>
           </div>
         </div>
       )}

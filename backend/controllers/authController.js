@@ -166,6 +166,25 @@ exports.getProfile = async (req, res) => {
   }
 };
 
+// Admin logout — logs the event and returns success
+exports.logout = async (req, res) => {
+  try {
+    if (req.user && req.user.role === "admin") {
+      const adminUser = await User.findOne({ id: req.user.id });
+      const adminName = adminUser ? adminUser.full_name : req.user.email;
+      await AuditLog.create({
+        adminName,
+        actionType: "Logout",
+        details: `Logged out successfully`
+      });
+    }
+    res.json({ success: true, message: "Logged out successfully." });
+  } catch (error) {
+    console.error("[Logout Error]", error);
+    res.status(500).json({ success: false, message: "Server error during logout." });
+  }
+};
+
 // Admin-only: Get all users
 exports.getAllUsers = async (req, res) => {
   try {

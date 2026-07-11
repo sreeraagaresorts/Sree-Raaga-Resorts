@@ -562,7 +562,16 @@ const  AdminLayout=()=> {
     };
   }, []);
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    try {
+      const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+      if (token) {
+        await fetch(`${API_URL}/api/auth/logout`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
+    } catch (_) {}
     localStorage.removeItem("adminToken");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
