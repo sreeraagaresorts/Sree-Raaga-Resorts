@@ -23,7 +23,7 @@ const AdminBookings = () => {
   const [error, setError] = useState(null);
 
   // Filters
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("Today");
   const [searchQuery, setSearchQuery] = useState("");
 
   // New booking form details
@@ -675,12 +675,12 @@ const AdminBookings = () => {
           onChange={(e) => setStatusFilter(e.target.value)}
           className="bg-[#071524] px-3 py-2 rounded-lg text-sm border border-white/10 text-white outline-none focus:border-[#C8A64D]"
         >
-          <option value="All">All Bookings</option>
+          <option value="Today">Checking In Today</option>
           <option value="confirmed">Confirmed</option>
           <option value="checked_in">Checked In</option>
+          <option value="Reservations">Reservations (Other Dates)</option>
           <option value="cancelled">Cancelled</option>
-          <option value="Today">Checking In Today</option>
-          <option value="Reservations">Reservations</option>
+          <option value="All">All Bookings</option>
         </select>
       </div>
 
@@ -734,7 +734,7 @@ const AdminBookings = () => {
                     <td className="px-4 py-3">
                       <div className="text-white font-medium text-[15px]">{b.room_name}</div>
                       <div className="text-[14px] text-white mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
-                      <div className="text-[12px] text-yellow-500/80 mt-1 font-semibold">
+                      <div className="text-[12px] text-yellow-500 mt-1 font-semibold">
                         Source: {
                           (b.payment_method === "online" || b.payment_method === "razorpay")
                             ? "Website"

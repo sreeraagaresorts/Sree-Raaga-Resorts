@@ -20,7 +20,7 @@ import {
 
 const AdminBilling = () => {
   const toast = useToast();
-  const [activeTab, setActiveTab] = useState('invoices');
+  const [activeTab, setActiveTab] = useState('history');
   const [timeFilter, setTimeFilter] = useState('monthly');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -582,31 +582,53 @@ const AdminBilling = () => {
       <div className="bg-[#081A2F] rounded-xl border border-white/5 overflow-hidden">
         <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-b border-white/5 gap-4 print:hidden">
           <div className="flex flex-wrap gap-3 text-base font-bold uppercase tracking-wider w-full sm:w-auto">
-            {['invoices', 'payments', 'cancellations'].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
-                  activeTab === tab
-                    ? 'bg-[#C8A64D] text-[#071524] border-[#C8A64D] hover:bg-[#C8A64D]/90'
-                    : 'bg-[#071524]  border-white/10 hover:bg-white/5'
-                }`}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
-            {/* Booking History tab — special button with icon */}
+            {/* Booking History tab */}
             <button
               onClick={() => setActiveTab('history')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
                 activeTab === 'history'
-                  ? 'bg-[#C8A64D] text-black '
+                  ? 'bg-[#C8A64D] text-black border-[#C8A64D]'
                   : 'bg-[#071524]  border-white/10 hover:bg-white/5'
               }`}
             >
               <History className="w-4 h-4" />
               Booking History
-       
+            </button>
+
+            {/* Payments tab */}
+            <button
+              onClick={() => setActiveTab('payments')}
+              className={`px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
+                activeTab === 'payments'
+                  ? 'bg-[#C8A64D] text-[#071524] border-[#C8A64D] hover:bg-[#C8A64D]/90'
+                  : 'bg-[#071524]  border-white/10 hover:bg-white/5'
+              }`}
+            >
+              Payments
+            </button>
+
+            {/* Invoices tab */}
+            <button
+              onClick={() => setActiveTab('invoices')}
+              className={`px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
+                activeTab === 'invoices'
+                  ? 'bg-[#C8A64D] text-[#071524] border-[#C8A64D] hover:bg-[#C8A64D]/90'
+                  : 'bg-[#071524]  border-white/10 hover:bg-white/5'
+              }`}
+            >
+              Invoices
+            </button>
+
+            {/* Cancellations tab */}
+            <button
+              onClick={() => setActiveTab('cancellations')}
+              className={`px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
+                activeTab === 'cancellations'
+                  ? 'bg-[#C8A64D] text-[#071524] border-[#C8A64D] hover:bg-[#C8A64D]/90'
+                  : 'bg-[#071524]  border-white/10 hover:bg-white/5'
+              }`}
+            >
+              Cancellations
             </button>
           </div>
 
@@ -614,7 +636,7 @@ const AdminBilling = () => {
             <Search className="w-4 h-4 text-white/40 absolute left-3 top-3" />
             <input
               className="w-full bg-[#071524] border border-white/10 pl-9 pr-3 py-2.5 rounded text-base text-white focus:outline-none focus:border-[#C8A64D]"
-              placeholder={`Search ${activeTab}...`}
+              placeholder={`Search ${activeTab === 'history' ? 'booking history' : activeTab}...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
