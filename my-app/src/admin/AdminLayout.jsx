@@ -26,8 +26,9 @@ import {
 const navItems = [
   { name: "Dashboard", path: "/admin", icon: LayoutDashboard },
     { name: "Bookings", path: "/admin/bookings", icon: Calendar },
+      { name: "Billing & Payments", path: "/admin/billing", icon: CreditCard },
     { name: "Rooms Management", path: "/admin/rooms-mgmt", icon: BedDouble },
-  { name: "Billing & Payments", path: "/admin/billing", icon: CreditCard },
+
   { name: "Guests", path: "/admin/users", icon: Users },
   { name: "Manage Hotel", path: "/admin/hotel-mgmt", icon: CalendarDays },
   { name: "Restaurant Menu", path: "/admin/menu", icon: UtensilsCrossed },

@@ -945,7 +945,7 @@ const AdminBookings = () => {
                     Guest Information
                   </h3>
                   <div>
-                    <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Full Name</label>
+                    <label className="block text-yellow-500 text-[12px] uppercase tracking-wider mb-1.5">Full Name</label>
                     <input
                       type="text"
                       placeholder="Enter the Name"
@@ -955,24 +955,25 @@ const AdminBookings = () => {
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
                     />
                   </div>
+                 
                   <div>
-                    <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Email Address</label>
+                    <label className="block text-yellow-500 text-[12px] uppercase tracking-wider mb-1.5">Phone Number</label>
                     <input
-                      type="email"
-                      placeholder="Enter Email"
-                      value={guestEmail}
-                      onChange={(e) => setGuestEmail(e.target.value)}
+                      type="tel"
+                      placeholder="Enter Your Phone Number"
+                      value={guestPhone}
+                      onChange={handlePhoneChange}
                       required
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
                     />
                   </div>
-                  <div>
-                    <label className="block text-yellow-500 text-[10px] uppercase tracking-wider mb-1.5">Phone Number</label>
+                   <div>
+                    <label className="block text-yellow-500 text-[12px] uppercase tracking-wider mb-1.5">Email Address</label>
                     <input
-                      type="tel"
-                      placeholder="+919876543210"
-                      value={guestPhone}
-                      onChange={handlePhoneChange}
+                      type="email"
+                      placeholder="Enter Email (Optional)"
+                      value={guestEmail}
+                      onChange={(e) => setGuestEmail(e.target.value)}
                       required
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
                     />
