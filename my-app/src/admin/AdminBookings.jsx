@@ -61,7 +61,7 @@ const AdminBookings = () => {
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("+91");
   const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [bookingSource, setBookingSource] = useState("Walkin");
+  const [bookingSource, setBookingSource] = useState("Walk-in");
 
   // Custom Confirmation Modal State
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
@@ -322,7 +322,7 @@ const AdminBookings = () => {
     setGuestEmail("");
     setGuestPhone("+91");
     setPaymentMethod("cash");
-    setBookingSource("Walkin");
+    setBookingSource("Walk-in");
     setIsFormOpen(true);
   };
 
@@ -738,8 +738,10 @@ const AdminBookings = () => {
                         Source: {
                           (b.payment_method === "online" || b.payment_method === "razorpay")
                             ? "Website"
-                            : (b.booking_source === "Direct" || !b.booking_source)
-                            ? "Walkin"
+                            : (b.booking_source === "Direct" || b.booking_source === "Walkin" || !b.booking_source)
+                            ? "Walk-in"
+                            : b.booking_source === "MakeMyTrip"
+                            ? "Make My Trip"
                             : b.booking_source
                         }
                       </div>
@@ -1120,8 +1122,8 @@ const AdminBookings = () => {
                     onChange={(e) => setBookingSource(e.target.value)}
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
                   >
-                    <option value="Walkin">Walkin</option>
-                    <option value="MakeMyTrip">MakeMyTrip</option>
+                    <option value="Walk-in">Walk-in</option>
+                    <option value="Make My Trip">Make My Trip</option>
                     <option value="Goibibo">Goibibo</option>
                   </select>
                 </div>
