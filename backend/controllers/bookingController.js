@@ -157,7 +157,8 @@ exports.createBooking = async (req, res) => {
       status: 'confirmed',
       payment_method: payment_method || 'online',
       payment_status: req.body.payment_status !== undefined ? req.body.payment_status : (payment_method === 'pay_later' ? 'Unpaid' : 'Paid'),
-      booking_source: booking_source || 'Direct'
+      booking_source: booking_source || 'Direct',
+      is_manual: req.user.role === 'admin' || req.body.is_manual === true || false
     });
     await booking.save();
 
@@ -348,7 +349,7 @@ exports.updateBookingStatus = async (req, res) => {
     }
 
     if (payment_method !== undefined) {
-      const validMethods = ['cash', 'online', 'credit_card', 'bank_transfer', 'pay_later'];
+      const validMethods = ['cash', 'online', 'credit_card', 'bank_transfer', 'pay_later', 'upi'];
       if (!validMethods.includes(payment_method)) {
         return res.status(400).json({
           success: false,

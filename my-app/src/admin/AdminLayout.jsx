@@ -192,6 +192,7 @@ const  AdminLayout=()=> {
         if (dataB.success && dataB.data) {
           dataB.data.forEach((b) => {
             seenBookings.current.add(b.id);
+            if (b.is_manual) return;
             if (b.status === "pending") {
               pendingBookingsCount++;
             }
@@ -329,6 +330,10 @@ const  AdminLayout=()=> {
         const dataB = await resB.json();
         if (dataB.success && dataB.data) {
           dataB.data.forEach((b) => {
+            if (b.is_manual) {
+              seenBookings.current.add(b.id);
+              return;
+            }
             if (b.status === "pending") {
               pendingBookingsCount++;
             }

@@ -22,6 +22,7 @@ const bookingSchema = new mongoose.Schema({
   gst_amount: { type: Number, default: 0 },
   coupon_code: { type: String, default: null },
   booking_source: { type: String, default: "Direct" },
+  is_manual: { type: Boolean, default: false },
   created_at: { type: Date, default: Date.now }
 });
 

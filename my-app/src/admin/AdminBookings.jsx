@@ -375,6 +375,7 @@ const AdminBookings = () => {
           room_number: selectedRoomNumber || null,
           payment_method: paymentMethod,
           booking_source: bookingSource,
+          is_manual: true,
         }),
       });
 
@@ -479,7 +480,7 @@ const AdminBookings = () => {
       }
 
       toast.success("Booking dates updated successfully!");
-      loadBookings(true);
+      fetchBookings(true);
       setEditBooking(null);
     } catch (err) {
       toast.error(err.message || "Failed to update booking dates.");
@@ -605,7 +606,7 @@ const AdminBookings = () => {
 
         <button
           onClick={handleOpenForm}
-          className="bg-[#C8A64D] text-black px-3 py-0.5 rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
+          className="bg-[#C8A64D] text-black px-4 py-2 text-sm rounded-lg flex items-center gap-2 font-bold cursor-pointer hover:bg-[#b09141]"
         >
           <Plus size={16} /> New Booking
         </button>
@@ -658,14 +659,14 @@ const AdminBookings = () => {
             <table className="w-full text-base border-collapse">
               <thead className="bg-[#071524] text-white/60 text-sm uppercase tracking-wider border-b border-white/10">
                 <tr>
-                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Guest Details</th>
-                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Room booked</th>
-                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Assign Room</th>
-                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Reservation Dates</th>
-                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Amount</th>
-                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Payment</th>
-                  <th className="p-4 text-left font-semibold text-[#c8a64d] ">Status</th>
-                  <th className="p-4 text-center font-semibold text-[#c8a64d]">Actions</th>
+                  <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Guest Details</th>
+                  <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Room Booked</th>
+                  <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Assign Room</th>
+                  <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Reservation Dates</th>
+                  <th className="px-4 py-3 text-center font-semibold text-[#c8a64d]">Amount</th>
+                  <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Payment</th>
+                  <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Status</th>
+                  <th className="px-4 py-3 text-center font-semibold text-[#c8a64d]">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -675,21 +676,21 @@ const AdminBookings = () => {
                     className="border-b border-white/10 hover:bg-white/5 transition"
                   >
                     {/* GUEST */}
-                    <td className="p-4 ">
-                      <div className="font-semibold text-[16px]">{b.guest_name}</div>
-                      <div className="text-[16px] text-white mt-0.5">{b.guest_email}</div>
-                      {b.guest_phone && <div className="text-[16px] text-white mt-0.5">{formatPhoneNumber(b.guest_phone)}</div>}
+                    <td className="px-4 py-3">
+                      <div className="font-semibold text-[15px]">{b.guest_name}</div>
+                      <div className="text-[13px] text-white/60 mt-0.5">{b.guest_email}</div>
+                      {b.guest_phone && <div className="text-[13px] text-white/50 mt-0.5">{formatPhoneNumber(b.guest_phone)}</div>}
                     </td>
 
                     {/* ROOM */}
-                    <td className="p-4 ">
-                      <div className="text-white font-medium text-[16px]">{b.room_name}</div>
-                      <div className="text-[16px] text-white mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
-                      <div className="text-[12px] text-yellow-500/80 mt-1 font-semibold">Source: {b.booking_source || "Direct"}</div>
+                    <td className="px-4 py-3">
+                      <div className="text-white font-medium text-[15px]">{b.room_name}</div>
+                      <div className="text-[13px] text-white/60 mt-0.5">ID: BK-{b.id.toString().padStart(4, "0")}</div>
+                      <div className="text-[11px] text-yellow-500/80 mt-1 font-semibold">Source: {b.booking_source || "Direct"}</div>
                     </td>
 
                     {/* ASSIGN ROOM */}
-                    <td className="p-4 ">
+                    <td className="px-4 py-3">
                       {b.room_number ? (
                         <div className="flex items-center gap-1.5">
                           <span className="text-xs text-green-400 font-semibold border border-green-500/20 bg-green-500/10 px-2 py-1 rounded">
@@ -720,7 +721,7 @@ const AdminBookings = () => {
                     </td>
 
                     {/* DATES */}
-                    <td className="p-4 text-[16px] ">
+                    <td className="px-4 py-3 text-[15px]">
                       <div className="flex items-center gap-1.5">
                         <span>{new Date(b.check_in).toLocaleDateString("en-GB")}</span>
                         <ArrowRight className="w-3.5 h-3.5 text-white/30" />
@@ -735,17 +736,17 @@ const AdminBookings = () => {
                           </button>
                         )}
                       </div>
-                      <div className="text-[16px] text-white mt-1">
+                      <div className="text-[13px] text-white/60 mt-1">
                         Guests: {b.adults} Adults {b.children > 0 && `, ${b.children} Children`}
                       </div>
                     </td>
 
                     {/* AMOUNT */}
-                    <td className="p-4 text-center">
-                      <div className="text-[#C8A64D] font-bold text-[18px]">
+                    <td className="px-4 py-3 text-center">
+                      <div className="text-[#C8A64D] font-bold text-[16px]">
                         ₹{parseFloat(b.total_price).toLocaleString()}
                       </div>
-                      {/* <span className={`text-[10px] px-2 py-0.5 rounded border font-bold mt-1 inline-block ${
+                      {/* <span className={`text-[10px] px-3 py-1 rounded border font-bold mt-1.5 inline-block ${
                         b.payment_status === "Unpaid"
                           ? "bg-red-500/10 text-red-400 border-red-500/20"
                           : "bg-green-500/10 text-green-400 border-green-500/20"
@@ -755,13 +756,15 @@ const AdminBookings = () => {
                     </td>
 
                     {/* PAYMENT METHOD */}
-                    <td className="p-4 ">
+                    <td className="px-4 py-3">
                       <span
-                        className={`text-[15px] px-3 py-1.5 rounded-full border font-semibold uppercase ${
+                        className={`text-xs px-2.5 py-1 rounded-full border font-semibold uppercase ${
                           b.payment_method === "online"
                             ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"
                             : b.payment_method === "credit_card"
                             ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
+                            : b.payment_method === "upi"
+                            ? "bg-teal-500/10 text-teal-400 border-teal-500/20"
                             : b.payment_method === "bank_transfer"
                             ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
                             : b.payment_method === "pay_later"
@@ -769,14 +772,20 @@ const AdminBookings = () => {
                             : "bg-[#C8A64D]/10 text-[#C8A64D] border-[#C8A64D]/20"
                         }`}
                       >
-                        {b.payment_method === "online" ? "Razorpay" : (b.payment_method || "cash").replace("_", " ")}
+                        {b.payment_method === "online" 
+                          ? "Razorpay" 
+                          : b.payment_method === "credit_card" 
+                          ? "Debit/Credit Card" 
+                          : b.payment_method === "pay_later"
+                          ? "Unpaid"
+                          : (b.payment_method || "cash").replace("_", " ")}
                       </span>
                     </td>
 
                     {/* STATUS */}
-                    <td className="p-4 ">
+                    <td className="px-4 py-3">
                       <span
-                        className={`text-[16px] px-3 py-1.5 rounded-full border font-semibold ${
+                        className={`text-xs px-2.5 py-1 rounded-full border font-semibold ${
                           b.status === "confirmed"
                             ? "bg-green-500/10 text-green-400 border-green-500/20"
                             : b.status === "checked_in"
@@ -793,8 +802,8 @@ const AdminBookings = () => {
                     </td>
 
                     {/* ACTIONS */}
-                    <td className="p-4 text-center">
-                      <div className="flex flex-wrap items-center justify-center ">
+                    <td className="px-4 py-3 text-center">
+                      <div className="flex flex-wrap items-center justify-center gap-1.5">
                         {/* Check In / Check Out Button */}
                         {b.status === "confirmed" && (
                           <button
@@ -818,8 +827,6 @@ const AdminBookings = () => {
                             Check Out
                           </button>
                         )}
-
-
 
                         {/* Cancel Button */}
                         {b.status === "confirmed" && (
@@ -1036,10 +1043,11 @@ const AdminBookings = () => {
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
                   >
-                    <option value="cash">Cash</option>
-                    <option value="credit_card">Credit Card</option>
-                    <option value="bank_transfer">Bank Transfer</option>
                     <option value="pay_later">Pay Later</option>
+                    <option value="cash">Cash</option>
+                    <option value="upi">UPI</option>
+                    <option value="credit_card">Debit/Credit Card</option>
+                    <option value="bank_transfer">Bank Transfer</option>
                   </select>
                 </div>
 
@@ -1273,7 +1281,8 @@ const AdminBookings = () => {
                   required
                 >
                   <option value="cash" className="text-black bg-white">Cash</option>
-                  <option value="credit_card" className="text-black bg-white">Credit Card</option>
+                  <option value="upi" className="text-black bg-white">UPI</option>
+                  <option value="credit_card" className="text-black bg-white">Debit/Credit Card</option>
                   <option value="bank_transfer" className="text-black bg-white">Bank Transfer</option>
                 </select>
               </div>
