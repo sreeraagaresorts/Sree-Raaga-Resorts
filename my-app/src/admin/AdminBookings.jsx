@@ -609,15 +609,34 @@ const AdminBookings = () => {
   };
 
   const filteredBookings = bookings.filter((b) => {
-    const matchesStatus =
-      statusFilter === "All" || (b.status || "").toLowerCase() === statusFilter.toLowerCase();
-
     const matchesSearch =
       (b.guest_name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       (b.guest_email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       (b.room_name || "").toLowerCase().includes(searchQuery.toLowerCase());
 
-    return matchesStatus && matchesSearch;
+    // Date Filter Logic (Local Timezone Safe)
+    const getLocalDateString = (dateInput) => {
+      if (!dateInput) return "";
+      const d = new Date(dateInput);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
+
+    const todayStr = getLocalDateString(new Date());
+    const checkInStr = getLocalDateString(b.check_in);
+
+    let matchesFilter = true;
+    if (statusFilter === "Today") {
+      matchesFilter = checkInStr === todayStr;
+    } else if (statusFilter === "Reservations") {
+      matchesFilter = checkInStr !== todayStr;
+    } else if (statusFilter !== "All") {
+      matchesFilter = (b.status || "").toLowerCase() === statusFilter.toLowerCase();
+    }
+
+    return matchesSearch && matchesFilter;
   });
 
   return (
@@ -656,10 +675,12 @@ const AdminBookings = () => {
           onChange={(e) => setStatusFilter(e.target.value)}
           className="bg-[#071524] px-3 py-2 rounded-lg text-sm border border-white/10 text-white outline-none focus:border-[#C8A64D]"
         >
-          <option value="All">All Statuses</option>
+          <option value="All">All Bookings</option>
           <option value="confirmed">Confirmed</option>
           <option value="checked_in">Checked In</option>
           <option value="cancelled">Cancelled</option>
+          <option value="Today">Checking In Today</option>
+          <option value="Reservations">Reservations</option>
         </select>
       </div>
 
