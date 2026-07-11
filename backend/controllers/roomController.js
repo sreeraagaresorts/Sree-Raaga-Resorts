@@ -22,6 +22,37 @@ exports.getRooms = async (req, res) => {
     const rooms = await Room.find({}).sort({ id: -1 });
 
     const Booking = require("../models/Booking");
+
+    // Auto-heal/sync physical room unit statuses with database bookings
+    for (const room of rooms) {
+      const allBookings = await Booking.find({ room_id: room.id });
+      let modified = false;
+
+      for (const unit of room.roomStatuses) {
+        if (unit.status === "Occupied") {
+          const hasActiveCheckedIn = allBookings.some(
+            b => b.status === "checked_in" && b.room_number && b.room_number.split(",").map(r => r.trim()).includes(unit.roomNumber)
+          );
+          if (!hasActiveCheckedIn) {
+            unit.status = "Available";
+            modified = true;
+          }
+        } else if (unit.status === "Reserved") {
+          const hasActiveReserved = allBookings.some(
+            b => ["confirmed", "pending"].includes(b.status) && b.room_number && b.room_number.split(",").map(r => r.trim()).includes(unit.roomNumber)
+          );
+          if (!hasActiveReserved) {
+            unit.status = "Available";
+            modified = true;
+          }
+        }
+      }
+
+      if (modified) {
+        await room.save();
+      }
+    }
+
     const populatedRooms = await Promise.all(
       rooms.map(async (room) => {
         // Find active bookings (confirmed, checked_in) where checkout has not passed
