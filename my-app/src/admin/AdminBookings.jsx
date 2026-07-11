@@ -63,6 +63,19 @@ const AdminBookings = () => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [bookingSource, setBookingSource] = useState("Direct");
 
+  // Custom Confirmation Modal State
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
+
+  const showConfirm = (title, message, type = "primary", onConfirm) => {
+    setConfirmModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+      onConfirm
+    });
+  };
+
   const handlePhoneChange = (e) => {
     const val = e.target.value;
     if (!val.startsWith("+91")) {
@@ -503,9 +516,9 @@ const AdminBookings = () => {
       confirmMsg = `Today is ${todayStr}. The booking check-in date is ${checkInStr}.\nAre you sure you want to perform check-in on this date?`;
     }
 
-    if (window.confirm(confirmMsg)) {
+    showConfirm("Confirm Guest Check-In", confirmMsg, "primary", () => {
       handleUpdateStatus(b.id, "checked_in");
-    }
+    });
   };
 
   const handleCheckOutClick = (b) => {
@@ -513,72 +526,86 @@ const AdminBookings = () => {
       setCheckoutBooking(b);
       setSettlePaymentMethod("cash");
     } else {
-      if (window.confirm("Are you sure you want to check out this guest?")) {
-        handleUpdateStatus(b.id, "checked_out");
-      }
-    }
-  };
-
-  const handleSettleAndCheckOut = async (e) => {
-    e.preventDefault();
-    if (!window.confirm("Confirm payment received and check out this guest?")) {
-      return;
-    }
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-    try {
-      const response = await fetch(`${API_URL}/api/bookings/${checkoutBooking.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          status: "checked_out",
-          payment_method: settlePaymentMethod,
-        }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to settle payment and check out.");
-      }
-
-      toast.success("Payment settled and guest checked out successfully!");
-      setBookings((prev) =>
-        prev.map((b) =>
-          b.id === checkoutBooking.id
-            ? { ...b, status: "checked_out", payment_method: settlePaymentMethod, payment_status: "Paid" }
-            : b
-        )
+      showConfirm(
+        "Confirm Guest Check-Out",
+        "Are you sure you want to check out this guest?",
+        "primary",
+        () => {
+          handleUpdateStatus(b.id, "checked_out");
+        }
       );
-      setCheckoutBooking(null);
-    } catch (err) {
-      toast.error(err.message || "Failed to check out.");
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this booking?")) return;
+  const handleSettleAndCheckOut = (e) => {
+    e.preventDefault();
+    showConfirm(
+      "Confirm Settlement & Check-Out",
+      "Confirm payment received and check out this guest?",
+      "primary",
+      async () => {
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/bookings/${checkoutBooking.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              status: "checked_out",
+              payment_method: settlePaymentMethod,
+            }),
+          });
 
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-    try {
-      const response = await fetch(`${API_URL}/api/bookings/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to settle payment and check out.");
+          }
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete booking.");
+          toast.success("Payment settled and guest checked out successfully!");
+          setBookings((prev) =>
+            prev.map((b) =>
+              b.id === checkoutBooking.id
+                ? { ...b, status: "checked_out", payment_method: settlePaymentMethod, payment_status: "Paid" }
+                : b
+            )
+          );
+          setCheckoutBooking(null);
+        } catch (err) {
+          toast.error(err.message || "Failed to check out.");
+        }
       }
+    );
+  };
 
-      toast.success("Booking deleted successfully!");
-      setBookings((prev) => prev.filter((b) => b.id !== id));
-    } catch (err) {
-      toast.error(err.message || "Failed to delete booking.");
-    }
+  const handleDelete = (id) => {
+    showConfirm(
+      "Delete Booking Record",
+      "Are you sure you want to permanently delete this booking record? This action cannot be undone.",
+      "destructive",
+      async () => {
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/bookings/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to delete booking.");
+          }
+
+          toast.success("Booking deleted successfully!");
+          setBookings((prev) => prev.filter((b) => b.id !== id));
+        } catch (err) {
+          toast.error(err.message || "Failed to delete booking.");
+        }
+      }
+    );
   };
 
   const filteredBookings = bookings.filter((b) => {
@@ -832,9 +859,14 @@ const AdminBookings = () => {
                         {b.status === "confirmed" && (
                           <button
                             onClick={() => {
-                              if (window.confirm("Are you sure you want to cancel this booking?")) {
-                                handleUpdateStatus(b.id, "cancelled");
-                              }
+                              showConfirm(
+                                "Cancel Booking",
+                                "Are you sure you want to cancel this booking?",
+                                "destructive",
+                                () => {
+                                  handleUpdateStatus(b.id, "cancelled");
+                                }
+                              );
                             }}
                             className="px-2 py-1 bg-yellow-500/20 text-red-400 hover:bg-yellow-500/70 rounded cursor-pointer transition text-xs font-semibold"
                           >
@@ -1303,6 +1335,49 @@ const AdminBookings = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOM CONFIRMATION MODAL */}
+      {confirmModal.isOpen && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4">
+          <div className="bg-[#081A2F] border border-white/10 rounded-2xl p-6 max-w-xl w-full text-center space-y-4 shadow-2xl">
+            <div className="mx-auto w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 mb-2">
+              <RefreshCw className={`w-6 h-6 ${confirmModal.type === "destructive" ? "text-red-400 animate-spin" : "text-[#C8A64D]"}`} />
+            </div>
+            
+            <h3 className="text-lg font-bold text-white tracking-wide">
+              {confirmModal.title}
+            </h3>
+            
+            <p className="text-[20px] text-white  leading-relaxed">
+              {confirmModal.message}
+            </p>
+            
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setConfirmModal({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null })}
+                className="flex-1 px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 text-white font-semibold transition cursor-pointer text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (confirmModal.onConfirm) confirmModal.onConfirm();
+                  setConfirmModal({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
+                }}
+                className={`flex-1 px-4 py-3 rounded-lg font-bold transition cursor-pointer text-sm ${
+                  confirmModal.type === "destructive"
+                    ? "bg-red-500 hover:bg-red-600 text-white"
+                    : "bg-[#C8A64D] hover:bg-[#b09141] text-black"
+                }`}
+              >
+                Confirm
+              </button>
+            </div>
           </div>
         </div>
       )}
