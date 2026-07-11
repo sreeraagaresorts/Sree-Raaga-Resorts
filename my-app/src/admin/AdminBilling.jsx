@@ -441,7 +441,7 @@ const AdminBilling = () => {
       <div className="flex flex-col lg:flex-row justify-between gap-4 border-b border-white/5 pb-6 print:hidden items-start lg:items-end">
         <div>
           <h1 className="text-2xl font-bold">Billing & Payments</h1>
-          <p className="text-white/50 text-base">
+          <p className=" text-base text-white/50">
             Manage invoices, payments and cancellations
           </p>
         </div>
@@ -543,20 +543,20 @@ const AdminBilling = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 print:hidden">
           <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
-            <div className="flex justify-between text-white/50 text-base mb-2">
+            <div className="flex justify-between  text-base mb-2">
               Total Revenue <IndianRupee className="w-5 h-5 text-emerald-400" />
             </div>
             <h2 className="text-white text-2xl font-bold">₹{stats.totalRevenue.toLocaleString()}</h2>
           </div>
              <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
-            <div className="flex justify-between text-white/50 text-base mb-2">
+            <div className="flex justify-between  text-base mb-2">
               Today's Revenue <Wallet className="w-5 h-5 text-emerald-400" />
             </div>
             <h2 className="text-white text-2xl font-bold">₹{stats.todaysCollections.toLocaleString()}</h2>
           </div>
 
           <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
-            <div className="flex justify-between text-white/50 text-base mb-2">
+            <div className="flex justify-between  text-base mb-2">
               Pending & Due <Activity className="w-5 h-5 text-amber-400" />
             </div>
             <h2 className="text-white text-2xl font-bold">₹{stats.pendingPayments.toLocaleString()}</h2>
@@ -568,7 +568,7 @@ const AdminBilling = () => {
           </div>
 
           <div className="bg-[#081A2F] p-6 rounded-xl border border-white/5 shadow-md">
-            <div className="flex justify-between text-white/50 text-base mb-2">
+            <div className="flex justify-between  text-base mb-2">
                Today's Cancellations <Undo2 className="w-5 h-5 text-red-400" />
             </div>
             <h2 className="text-white text-2xl font-bold">{stats.todaysCancellations} Bookings</h2>
@@ -589,7 +589,7 @@ const AdminBilling = () => {
                 className={`px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
                   activeTab === tab
                     ? 'bg-[#C8A64D] text-[#071524] border-[#C8A64D] hover:bg-[#C8A64D]/90'
-                    : 'bg-[#071524] text-white/50 border-white/10 hover:bg-white/5'
+                    : 'bg-[#071524]  border-white/10 hover:bg-white/5'
                 }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -600,15 +600,13 @@ const AdminBilling = () => {
               onClick={() => setActiveTab('history')}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg cursor-pointer transition text-sm font-semibold border ${
                 activeTab === 'history'
-                  ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-                  : 'bg-[#071524] text-white/50 border-white/10 hover:bg-white/5'
+                  ? 'bg-[#C8A64D] text-black '
+                  : 'bg-[#071524]  border-white/10 hover:bg-white/5'
               }`}
             >
               <History className="w-4 h-4" />
               Booking History
-              <span className="ml-1 bg-purple-500/30 text-purple-300 text-xs px-2 py-0.5 rounded-full font-bold">
-                {history.length}
-              </span>
+       
             </button>
           </div>
 
@@ -706,7 +704,7 @@ const AdminBilling = () => {
                                   navigator.clipboard.writeText(pay.paymentId);
                                   toast.success("Payment ID copied to clipboard!");
                                 }}
-                                className="p-1 text-white/50  hover:text-[#C8A64D] hover:bg-white/5 rounded transition cursor-pointer bg-transparent border-0"
+                                className="p-1   hover:text-[#C8A64D] hover:bg-white/5 rounded transition cursor-pointer bg-transparent border-0"
                                 title="Copy Payment ID"
                               >
                                 <Copy className="w-3.5 h-3.5" />
@@ -801,14 +799,14 @@ const AdminBilling = () => {
                   <table className="w-full text-base text-white/70">
                     <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
                       <tr>
-                        <th className="p-3 text-center text-purple-400">Booking Ref</th>
-                        <th className="p-3 text-center text-purple-400">Guest</th>
-                        <th className="p-3 text-center text-purple-400">Room</th>
-                        <th className="p-3 text-center text-purple-400">Stay Dates</th>
-                        <th className="p-3 text-center text-purple-400">Amount Paid</th>
-                        <th className="p-3 text-center text-purple-400">Payment Method</th>
-                        <th className="p-3 text-center text-purple-400">Coupon</th>
-                        <th className="p-3 text-center text-purple-400">Status</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Booking Ref</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Guest</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Room</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Stay Dates</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Amount Paid</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Payment Method</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Coupon</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -817,18 +815,18 @@ const AdminBilling = () => {
                           <td className="p-3 font-semibold text-white">{h.bookingId}</td>
                           <td className="p-3">
                             <div className="text-white font-medium">{h.customerName}</div>
-                            {h.customerEmail && <div className="text-white/50 text-xs mt-0.5">{h.customerEmail}</div>}
-                            {h.customerPhone && <div className="text-white/50 text-xs">{formatPhoneNumber(h.customerPhone)}</div>}
+                            {h.customerEmail && <div className="text-white text-xs mt-0.5">{h.customerEmail}</div>}
+                            {h.customerPhone && <div className="text-white text-xs">{formatPhoneNumber(h.customerPhone)}</div>}
                           </td>
                           <td className="p-3">
                             <div className="text-white">{h.roomName}</div>
-                            {h.roomNumber !== "—" && <div className="text-white/50 text-xs mt-0.5">#{h.roomNumber}</div>}
+                            {h.roomNumber !== "—" && <div className="text-white text-xs mt-0.5">#{h.roomNumber}</div>}
                           </td>
                           <td className="p-3 text-xs">
                             <div className="text-white">
                               {h.checkIn ? h.checkIn.toLocaleDateString("en-GB") : "—"}
                             </div>
-                            <div className="text-white/40 my-0.5">→</div>
+                            <div className="text-white my-0.5">→</div>
                             <div className="text-white">
                               {h.checkOut ? h.checkOut.toLocaleDateString("en-GB") : "—"}
                             </div>
@@ -845,7 +843,7 @@ const AdminBilling = () => {
                                 {h.couponCode}
                               </span>
                             ) : (
-                              <span className="text-white/30 text-xs">None</span>
+                              <span className="text-white text-xs">None</span>
                             )}
                           </td>
                           <td className="p-3">

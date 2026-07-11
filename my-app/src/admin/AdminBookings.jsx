@@ -1387,13 +1387,7 @@ const AdminBookings = () => {
             </p>
             
             <div className="flex gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setConfirmModal({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null })}
-                className="flex-1 px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 text-white font-semibold transition cursor-pointer text-sm"
-              >
-                Cancel
-              </button>
+             
               <button
                 type="button"
                 onClick={() => {
@@ -1407,6 +1401,13 @@ const AdminBookings = () => {
                 }`}
               >
                 Confirm
+              </button>
+               <button
+                type="button"
+                onClick={() => setConfirmModal({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null })}
+                className="flex-1 px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 text-white font-semibold transition cursor-pointer text-sm"
+              >
+                Cancel
               </button>
             </div>
           </div>
