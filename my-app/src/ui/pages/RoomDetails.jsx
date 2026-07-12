@@ -1232,7 +1232,7 @@ const RoomDetails = () => {
                   <ul className="space-y-4 text-[17px] text-gray-700 list-disc pl-5 select-none">
                     <li>Please carry a valid ID for Verification</li>
                     <li>Early check-in & check-out may be possible <br /> upon request, subject to availability</li>
-                    <li>Check-in from 1 :00 PM - Anytime</li>
+                    <li>Check-in from 1:00 PM - Anytime</li>
                     <li>Check-out: 12:00 PM</li>
                   </ul>
                   <ul className="space-y-4 text-[17px] text-gray-700 list-disc pl-5 select-none">

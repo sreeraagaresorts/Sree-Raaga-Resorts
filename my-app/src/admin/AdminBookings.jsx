@@ -633,13 +633,13 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
 
     let matchesFilter = true;
     
-    // Hide checked_out bookings from standard views to simulate them moving to History
+// Hide checked_out AND cancelled bookings from standard views to simulate them moving to History
     if (statusFilter === "Today") {
-      matchesFilter = checkInStr === todayStr && b.status !== "checked_out";
+      matchesFilter = checkInStr === todayStr && b.status !== "checked_out" && b.status !== "cancelled";
     } else if (statusFilter === "Reservations") {
-      matchesFilter = checkInStr !== todayStr && b.status !== "checked_out";
+      matchesFilter = checkInStr !== todayStr && b.status !== "checked_out" && b.status !== "cancelled";
     } else if (statusFilter === "All") {
-      matchesFilter = b.status !== "checked_out";
+      matchesFilter = b.status !== "checked_out" && b.status !== "cancelled";
     } else {
       matchesFilter = (b.status || "").toLowerCase() === statusFilter.toLowerCase();
     }
@@ -720,7 +720,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                   <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Guest Details</th>
                   <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Room Booked</th>
                   <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Assign Room</th>
-                  <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Reservation Dates</th>
+                  <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Booking Dates</th>
                   <th className="px-4 py-3 text-center font-semibold text-[#c8a64d]">Amount</th>
                   <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Payment</th>
                   <th className="px-4 py-3 text-left font-semibold text-[#c8a64d]">Status</th>
@@ -812,7 +812,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                     {/* AMOUNT */}
                     <td className="px-4 py-3 text-center">
                       <div className="text-[#C8A64D] font-bold text-[16px]">
-                        ₹{parseFloat(b.total_price).toLocaleString()}
+                        ₹{(b.total_price).toLocaleString()}
                       </div>
                     </td>
 
@@ -1250,7 +1250,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
               </button>
             </div>
 
-         <form onSubmit={handleUpdateDates} className="space-y-4">
+   <form onSubmit={handleUpdateDates} className="space-y-4">
               <div className="relative">
                 <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check In - Check Out Dates</label>
                 <DatePicker

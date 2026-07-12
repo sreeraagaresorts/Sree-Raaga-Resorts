@@ -245,7 +245,7 @@ const AdminSettings = () => {
   </p>
 
   <div className="flex items-center justify-center gap-2 mt-2 text-lg">
-    <span>Contact Us</span>
+    <span></span>
 
  <a
   href="https://wa.me/916362604933?text=%F0%9F%91%8B%20Hi!%20I'm%20interested%20in%20adding%20more%20features%20to%20my%20Resort%20Management%20System."
@@ -253,9 +253,15 @@ const AdminSettings = () => {
   rel="noopener noreferrer"
   className="hover:text-white transition-colors"
 >
-  <button className="flex items-center justify-center p-2 rounded-md bg-green-600 hover:bg-green-700 transition-colors">
-    <MessageCircle size={16} className="text-white" />
-  </button>
+<button className="flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-green-600 hover:bg-green-700 transition-colors text-white font-medium cursor-pointer">
+    <span>Contact Us</span>
+  <img
+    src="/whatsapp.png"
+    alt="WhatsApp"
+    className="w-5 h-5 invert mb-1"
+  />
+
+</button>
 </a>
   </div>
 </div>

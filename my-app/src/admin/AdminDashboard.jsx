@@ -108,10 +108,14 @@ const AdminDashboard = () => {
     let pendingLastWeek = 0;
 
     bookings.forEach((b) => {
-      const price = parseFloat(b.total_price) || 0;
+      const price = Math.floor(b.total_price || 0);
       const isPayLater = b.payment_method === "pay_later" && b.status !== "cancelled" && b.status !== "checked_out";
-
-      if (b.status === "confirmed" || b.status === "checked_in") {
+// const status = (b.status || "").toLowerCase();
+  if (
+  b.status === "confirmed" ||
+  b.status === "checked_in" ||
+  b.status === "checked_out"
+) {
         if (!isPayLater) {
           // Only count as revenue if payment is not deferred
           totalRevenue += price;
@@ -146,8 +150,8 @@ const AdminDashboard = () => {
           pendingLastWeek += price;
         }
       }
-
-      if (b.status === "checked_in") {
+const status = (b.status || "").toLowerCase();
+     if (status === "checked_in" || status === "checked in") {
         checkedInCount += 1;
       }
 
@@ -211,7 +215,10 @@ const AdminDashboard = () => {
     }
     const usersTrend = `${usersTrendVal >= 0 ? "+" : ""}${usersTrendVal.toFixed(1)}%`;
     const usersTrendPositive = usersTrendVal >= 0;
-
+console.log("Bookings:", bookings);
+console.log("Today's Revenue:", todaysRevenue);
+console.log("Checked In:", checkedInCount);
+console.log("Rooms Count:", roomsCount);
     return {
       totalRevenue,
       todaysRevenue,
@@ -251,11 +258,12 @@ const AdminDashboard = () => {
       const bookingDate = new Date(b.created_at || b.check_in);
       const bookingMonth = bookingDate.getMonth();
       const bookingYear = bookingDate.getFullYear();
-      const price = parseFloat(b.total_price) || 0;
+      const price = Math.floor(b.total_price || 0);
 
       const monthObj = data.find(m => m.monthIndex === bookingMonth && m.year === bookingYear);
       if (monthObj) {
-        if (b.status === "confirmed" || b.status === "checked_in") {
+        const status = (b.status || "").toLowerCase();
+        if (status === "confirmed" || status === "checked_in") {
           monthObj.revenue += price;
         } else if (b.status === "pending") {
           monthObj.pending += price;
@@ -279,7 +287,7 @@ const AdminDashboard = () => {
   const stats = [
     { 
       label: "Today's Revenue", 
-      value: `₹${metrics.todaysRevenue.toLocaleString()}`, 
+      value: `₹${parseInt(metrics.todaysRevenue, 10).toLocaleString()}`,
       icon: IndianRupee, 
       trend: metrics.revenueTrend, 
       isPositive: metrics.revenueTrendPositive,
@@ -324,7 +332,7 @@ const AdminDashboard = () => {
     id: b.id,
     name: b.guest_name,
     room: b.room_name,
-    amount: parseFloat(b.total_price),
+    amount: Math.floor(b.total_price || 0),
     status: b.status,
     date: new Date(b.created_at).toLocaleDateString("en-GB"),
   }));
@@ -584,9 +592,9 @@ const AdminDashboard = () => {
           const circ = 2 * Math.PI * r;
 
           const segments = [
-            { value: occupied, color: "#06ce13", label: "Occupied" },
+            { value: occupied, color: "#05df72", label: "Occupied" },
             { value: reserved, color: "#d00718", label: "Reserved" },
-            { value: available, color: "#B3923E", label: "Available" },
+            { value: available, color: "#c8a64d", label: "Available" },
           ];
 
           let cumulative = 0;

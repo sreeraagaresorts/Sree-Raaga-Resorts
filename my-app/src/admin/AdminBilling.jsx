@@ -110,7 +110,7 @@ const AdminBilling = () => {
   };
 
   // Calculate dynamic stats
-  const getStats = () => {
+ const getStats = () => {
     let totalRevenue = 0;
     let pendingPayments = 0;
     let payLaterDueCount = 0;
@@ -121,27 +121,33 @@ const AdminBilling = () => {
     const todayStr = new Date().toDateString();
 
     bookings.forEach((b) => {
-      const price = parseFloat(b.total_price);
-      const bookingDate = new Date(b.created_at).toDateString();
+    const price = Math.floor(b.total_price || 0);
+      // Ensure we have a valid date for comparison
+      const createdAt = new Date(b.created_at);
+      const bookingDateStr = createdAt.toDateString();
+      
       const isPayLaterDue = b.payment_method === "pay_later" &&
         b.status !== "cancelled" && b.status !== "checked_out";
 
-      // Today-specific stats (independent of timeFilter)
-      if (bookingDate === todayStr) {
-        if ((b.status === "confirmed" || b.status === "checked_in") && !isPayLaterDue) {
+      // 1. TODAY'S REVENUE (Revenue collected specifically today)
+      // We check if it was 'checked_out' today OR 'confirmed'/'checked_in' and paid today
+      if (bookingDateStr === todayStr || (b.check_out && new Date(b.check_out).toDateString() === todayStr)) {
+        if ((b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out") && !isPayLaterDue) {
           todaysCollections += price;
-        } else if (b.status === "cancelled") {
-          todaysCancellations += 1;
         }
       }
 
-      // Filtered stats (respect timeFilter)
+      // 2. TODAY'S CANCELLATIONS
+      if (b.status === "cancelled" && bookingDateStr === todayStr) {
+        todaysCancellations += 1;
+      }
+
+      // 3. FILTERED STATS (Revenue & Pending - respects your timeFilter)
       if (filterByTime(b.created_at)) {
         if (isPayLaterDue) {
-          // Pay-later = outstanding due, counts as pending not revenue
           pendingPayments += price;
           payLaterDueCount += 1;
-        } else if (b.status === "confirmed" || b.status === "checked_in") {
+        } else if (b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out") {
           totalRevenue += price;
         } else if (b.status === "pending") {
           pendingPayments += price;
@@ -170,7 +176,7 @@ const AdminBilling = () => {
     customerName: b.guest_name,
     customerEmail: b.guest_email,
     customerPhone: b.guest_phone,
-    amount: parseFloat(b.total_price),
+    amount:Math.floor(b.total_price || 0),
     status: b.status === "confirmed" || b.status === "checked_in" ? "Paid Invoice" : b.status === "cancelled" ? "Cancelled" : "Pending",
     createdAt: new Date(b.created_at)
   }));
@@ -196,7 +202,7 @@ const AdminBilling = () => {
       bookingId: `BK-${b.id.toString().padStart(4, "0")}`,
       customerName: b.guest_name,
       customerPhone: b.guest_phone,
-      amount: parseFloat(b.total_price),
+      amount: Math.floor(b.total_price || 0),
       gateway: methodLabel,
       paymentStatus,
       isPayLaterDue,
@@ -213,15 +219,16 @@ const AdminBilling = () => {
       customerName: b.guest_name,
       customerEmail: b.guest_email,
       customerPhone: b.guest_phone,
-      amount: parseFloat(b.total_price),
+      amount: Math.floor(b.total_price || 0),
       createdAt: new Date(b.created_at)
     }));
 
-  // Map checked-out bookings to booking history
+// Map checked-out AND cancelled bookings to booking history
   const history = bookings
-    .filter((b) => b.status === "checked_out")
+    .filter((b) => b.status === "checked_out" || b.status === "cancelled")
     .map((b) => ({
       id: b.id.toString(),
+      status: b.status, // <-- ADD THIS LINE to track the status
       bookingId: `BK-${b.id.toString().padStart(4, "0")}`,
       customerName: b.guest_name,
       customerEmail: b.guest_email,
@@ -233,7 +240,7 @@ const AdminBilling = () => {
       roomNumber: b.room_number || "—",
       checkIn: b.check_in ? new Date(b.check_in) : null,
       checkOut: b.check_out ? new Date(b.check_out) : null,
-      amount: parseFloat(b.total_price),
+      amount: Math.floor(b.total_price || 0),
       paymentMethod: b.payment_method === "online" || b.payment_method === "razorpay"
         ? "Razorpay"
         : b.payment_method === "cash"
@@ -869,8 +876,12 @@ const AdminBilling = () => {
                             </span>
                           </td>
                           <td className="p-3">
-                            <span className="text-sm px-3 py-1 rounded-full border font-semibold bg-purple-500/10 text-purple-300 border-purple-500/20">
-                              Checked Out
+                            <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
+                              h.status === 'cancelled' 
+                                ? 'bg-red-500/10 text-red-400 border-red-500/20' 
+                                : 'bg-purple-500/10 text-purple-300 border-purple-500/20'
+                            }`}>
+                              {h.status === 'cancelled' ? 'Cancelled' : 'Checked Out'}
                             </span>
                           </td>
                           <td className="p-3">
@@ -915,8 +926,12 @@ const AdminBilling = () => {
           </div>
           <div>
             <span className="block text-white/40 uppercase text-xs font-semibold tracking-wider">Status</span>
-            <span className="text-purple-400 font-bold bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20 mt-1 inline-block text-xs uppercase">
-              Checked Out
+            <span className={`font-bold px-2 py-0.5 rounded border mt-1 inline-block text-xs uppercase ${
+              selectedHistoryBooking.status === 'cancelled'
+                ? 'text-red-400 bg-red-500/10 border-red-500/20'
+                : 'text-purple-400 bg-purple-500/10 border-purple-500/20'
+            }`}>
+              {selectedHistoryBooking.status === 'cancelled' ? 'Cancelled' : 'Checked Out'}
             </span>
           </div>
         </div>
