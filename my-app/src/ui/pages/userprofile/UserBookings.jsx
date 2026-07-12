@@ -360,8 +360,11 @@ const UserBookings = () => {
                     <span className="text-gray-300 hidden sm:inline">|</span>
                     <span>Booked on: {new Date(booking.created_at).toLocaleDateString("en-GB")}</span>
                   </div>
-                  {(booking.status === "confirmed" || booking.status === "checked_in") && (
-                    <button
+{(
+  booking.status === "confirmed" ||
+  booking.status === "checked_in" ||
+  booking.status === "checked_out"
+) && (                    <button
                       onClick={() => handleDownloadInvoice(booking)}
                       className="w-full sm:w-auto justify-center px-4 py-2 bg-[#c8a64d] text-white font-semibold uppercase tracking-wider text-[12px] hover:bg-[#b09141] transition inline-flex items-center gap-1.5 cursor-pointer border-0"
                     >
