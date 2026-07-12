@@ -141,7 +141,8 @@ const AdminUsers = () => {
     if (activeTab === "admins") {
       return u.role === "admin";
     }
-    return u.role !== "admin" && !u.is_manual;
+    // Removed `!u.is_manual` so manual guest walk-ins successfully display in the Users Table
+    return u.role !== "admin";
   });
 
   const renderHistory = () => {
@@ -166,17 +167,18 @@ const AdminUsers = () => {
     const getRowClass = (actionType) => {
       const t = (actionType || "").toLowerCase();
       if (t.includes("delete")) return "bg-red-500/10 hover:bg-red-500/15";
-      if (t === "logout") return "bg-purple-500/10 hover:bg-purple-500/15";
-      if (t === "booking cancellation") return "bg-orange-500/10 hover:bg-orange-500/15";
+      if (t === "logout") return " ";
+      if (t === "booking cancellation") return "";
       return "hover:bg-white/5";
     };
 
     const getBadgeClass = (actionType) => {
       const t = (actionType || "").toLowerCase();
       if (t.includes("delete")) return "bg-red-500/10 text-red-400 border-red-500/20";
-      if (t === "logout") return "bg-purple-500/10 text-purple-400 border-purple-500/20";
+      if (t === "logout") return "bg-red-500/20  border-red-500/20";
       if (t === "login") return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
-      if (t === "booking cancellation") return "bg-orange-500/10 text-orange-400 border-orange-500/20";
+    
+      if (t === "booking deletion") return "bg-red-500/20 text-orange-400 border-orange-500/20";
       return "bg-amber-500/10 text-amber-400 border-amber-500/20";
     };
 
@@ -211,11 +213,15 @@ const AdminUsers = () => {
           </select>
           {(historyFilterMonth || historyFilterDay) && (
             <button
-              onClick={() => { setHistoryFilterMonth(String(now2.getMonth() + 1)); setHistoryFilterDay(""); setHistoryFilterYear(String(now2.getFullYear())); }}
-              className="text-xs text-white/50 hover:text-[#C8A64D] underline cursor-pointer bg-transparent border-0"
-            >
-              Reset to Current Month
-            </button>
+  onClick={() => {
+    setHistoryFilterMonth(String(now2.getMonth() + 1));
+    setHistoryFilterDay("");
+    setHistoryFilterYear(String(now2.getFullYear()));
+  }}
+  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#C8A64D]/30 bg-[#C8A64D]/10 text-[#C8A64D] text-sm font-medium hover:bg-[#C8A64D] hover:text-black transition-all duration-200 cursor-pointer"
+>
+  Reset to Current Month
+</button>
           )}
           <span className="ml-auto text-xs text-white/40">{filteredLogs.length} record{filteredLogs.length !== 1 ? "s" : ""}</span>
         </div>
@@ -279,7 +285,8 @@ const AdminUsers = () => {
 
       {/* STATS CARDS */}
       {!loading && !error && (() => {
-        const guestUsers = users.filter((u) => u.role !== "admin" && !u.is_manual);
+        // Updated stat calculation to include manual guests, ensuring total counts map perfectly 
+        const guestUsers = users.filter((u) => u.role !== "admin");
         const totalUsers = guestUsers.length;
         const activeUserIds = new Set(bookings.filter(b => b.status !== "cancelled").map(b => b.user_id));
         const activeUsers = guestUsers.filter(u => activeUserIds.has(u.id)).length;
@@ -415,7 +422,15 @@ const AdminUsers = () => {
                       </span>
                     </td>
                     <td className="p-4 text-white  text-xs">
-                      {new Date(u.created_at).toLocaleDateString("en-GB")}
+                      <div className="flex flex-col items-center justify-center gap-1">
+                        {new Date(u.created_at).toLocaleDateString("en-GB")}
+                        {/* New indicator helping Admins distinguish Online Users vs Walk-Ins */}
+                        {u.is_manual ? (
+                          <span className="bg-white/10 text-white/70 px-2 py-0.5 rounded text-[10px] uppercase font-bold border border-white/10">Walk-in</span>
+                        ) : (
+                          <span className="bg-blue-500/10 text-blue-300 px-2 py-0.5 rounded text-[10px] uppercase font-bold border border-blue-500/20">Online</span>
+                        )}
+                      </div>
                     </td>
                     {activeTab === "guests" && (
                       <td className="p-2 text-center relative">
@@ -590,4 +605,3 @@ const AdminUsers = () => {
 };
 
 export default AdminUsers;
-

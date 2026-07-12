@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Save, RefreshCw, Building, Shield, Settings, Mail, Phone, MapPin,
   Clock, Percent, CalendarDays, UtensilsCrossed, BellRing, UserCheck,
-  Users, PackageSearch, ShieldCheck, MailOpen, Printer, Sparkles,
+  Users, PackageSearch,MessageCircle , ShieldCheck, MailOpen, Printer, Sparkles,
   ChevronRight,
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
@@ -222,7 +222,7 @@ const AdminSettings = () => {
       <div className="flex justify-between items-center border-b border-white/5 pb-6">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Sparkles className="text-[#C8A64D]" size={22} /> Add-on Features
+            <Sparkles className="text-[#C8A64D]" size={22} /> Add-on Modules
           </h1>
           {/* <p className="text-white/40 text-sm mt-0.5">
             Configure resort metadata, guest reservation rules and feature modules.
@@ -238,17 +238,28 @@ const AdminSettings = () => {
             <AddonCard key={addon.id} addon={addon} />
           ))}
         </div>
-<div className="flex items-center justify-center gap-1 text-center text-white text-sm pt-1">
-  <a
-    href="https://wa.me/916362604933"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="hover:text-white transition-colors underline"
-  >
-    Click here
-  </a>
-  <span> to add these features.</span>
+<div className="text-center text-white">
+  <p className="text-lg">
+    Expand your Resort management system with powerful add-on modules designed
+    for your business.
+  </p>
+
+  <div className="flex items-center justify-center gap-2 mt-2 text-lg">
+    <span>Contact Us</span>
+
+ <a
+  href="https://wa.me/916362604933?text=%F0%9F%91%8B%20Hi!%20I'm%20interested%20in%20adding%20more%20features%20to%20my%20Resort%20Management%20System."
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hover:text-white transition-colors"
+>
+  <button className="flex items-center justify-center p-2 rounded-md bg-green-600 hover:bg-green-700 transition-colors">
+    <MessageCircle size={16} className="text-white" />
+  </button>
+</a>
+  </div>
 </div>
+
       </div>
 
 

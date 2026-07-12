@@ -628,7 +628,7 @@ const RoomDetails = () => {
                 <ChevronDown size={16} className="text-gray-400" />
               </button>
             }
-            calendarClassName="custom-datepicker"
+            calendarClassName="custom-datepicker mt-14"
             popperModifiers={[
               {
                 name: "preventOverflow",
@@ -1232,8 +1232,8 @@ const RoomDetails = () => {
                   <ul className="space-y-4 text-[17px] text-gray-700 list-disc pl-5 select-none">
                     <li>Please carry a valid ID for Verification</li>
                     <li>Early check-in & check-out may be possible <br /> upon request, subject to availability</li>
-                    <li>Check-in from 9:00 AM - Anytime</li>
-                    <li>Check-out: 11:00 AM</li>
+                    <li>Check-in from 1 :00 PM - Anytime</li>
+                    <li>Check-out: 12:00 PM</li>
                   </ul>
                   <ul className="space-y-4 text-[17px] text-gray-700 list-disc pl-5 select-none">
                     <li>Self-check-in with lockbox</li>
@@ -1436,7 +1436,7 @@ const RoomDetails = () => {
                           </p>
                         </div>
                         <div className="mt-4 pt-3 border-t border-gray-200/60">
-                          <p className="text-[10px] text-gray-400">Book and save with code {c.code}</p>
+                          <p className="text-[12px] text-gray-800">Book and save with code {c.code}</p>
                         </div>
                       </div>
                     ))}

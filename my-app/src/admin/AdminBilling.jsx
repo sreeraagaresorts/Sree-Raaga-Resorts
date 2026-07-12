@@ -15,8 +15,9 @@ import {
   Calendar,
   Copy,
   History,
+  MoreVertical,
+  X
 } from 'lucide-react';
-
 
 const AdminBilling = () => {
   const toast = useToast();
@@ -28,6 +29,9 @@ const AdminBilling = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Modal State for Booking History details
+  const [selectedHistoryBooking, setSelectedHistoryBooking] = useState(null);
 
   const fetchBookings = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -222,6 +226,9 @@ const AdminBilling = () => {
       customerName: b.guest_name,
       customerEmail: b.guest_email,
       customerPhone: b.guest_phone,
+      adults: b.adults || 1,
+      children: b.children || 0,
+      source: b.booking_source || "Walk-in",
       roomName: b.room_name || `Room #${b.room_id}`,
       roomNumber: b.room_number || "—",
       checkIn: b.check_in ? new Date(b.check_in) : null,
@@ -238,7 +245,10 @@ const AdminBilling = () => {
         : b.payment_method || "—",
       couponCode: b.coupon_code || null,
       createdAt: new Date(b.created_at),
+       checkedInAt: b.checked_in_at ? new Date(b.checked_in_at) : null,
+    checkedOutAt: b.checked_out_at ? new Date(b.checked_out_at) : null,
     }));
+
   const filteredInvoices = invoices.filter(
     (inv) =>
       filterByTime(inv.createdAt) &&
@@ -441,7 +451,7 @@ const AdminBilling = () => {
       <div className="flex flex-col lg:flex-row justify-between gap-4 border-b border-white/5 pb-6 print:hidden items-start lg:items-end">
         <div>
           <h1 className="text-2xl font-bold">Billing & Payments</h1>
-          <p className=" text-base text-white/50">
+          <p className=" text-base text-white">
             Manage invoices, payments and cancellations
           </p>
         </div>
@@ -827,8 +837,8 @@ const AdminBilling = () => {
                         <th className="p-3 text-center text-[#c8a64d]">Stay Dates</th>
                         <th className="p-3 text-center text-[#c8a64d]">Amount Paid</th>
                         <th className="p-3 text-center text-[#c8a64d]">Payment Method</th>
-                        <th className="p-3 text-center text-[#c8a64d]">Coupon</th>
                         <th className="p-3 text-center text-[#c8a64d]">Status</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -837,8 +847,7 @@ const AdminBilling = () => {
                           <td className="p-3 font-semibold text-white">{h.bookingId}</td>
                           <td className="p-3">
                             <div className="text-white font-medium">{h.customerName}</div>
-                            {h.customerEmail && <div className="text-white text-xs mt-0.5">{h.customerEmail}</div>}
-                            {h.customerPhone && <div className="text-white text-xs">{formatPhoneNumber(h.customerPhone)}</div>}
+                            {h.customerPhone && <div className="text-white text-xs mt-0.5">{formatPhoneNumber(h.customerPhone)}</div>}
                           </td>
                           <td className="p-3">
                             <div className="text-white">{h.roomName}</div>
@@ -860,18 +869,18 @@ const AdminBilling = () => {
                             </span>
                           </td>
                           <td className="p-3">
-                            {h.couponCode ? (
-                              <span className="text-xs px-2 py-1 rounded-full bg-[#C8A64D]/10 text-[#C8A64D] border border-[#C8A64D]/20 font-semibold">
-                                {h.couponCode}
-                              </span>
-                            ) : (
-                              <span className="text-white text-xs">None</span>
-                            )}
-                          </td>
-                          <td className="p-3">
                             <span className="text-sm px-3 py-1 rounded-full border font-semibold bg-purple-500/10 text-purple-300 border-purple-500/20">
                               Checked Out
                             </span>
+                          </td>
+                          <td className="p-3">
+                            <button 
+                              onClick={() => setSelectedHistoryBooking(h)}
+                              className="p-2 bg-white/5 hover:bg-white/10 rounded-full transition cursor-pointer flex items-center justify-center mx-auto text-white hover:text-white"
+                              title="View Details"
+                            >
+                              <MoreVertical size={18} />
+                            </button>
                           </td>
                         </tr>
                       ))}
@@ -883,6 +892,117 @@ const AdminBilling = () => {
           )}
         </div>
       </div>
+
+   {/* DETAILED BOOKING HISTORY MODAL */}
+{selectedHistoryBooking && (
+  <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4">
+    <div className="bg-[#081A2F] border border-white/10 rounded-2xl p-6 max-w-xl w-full shadow-2xl relative text-left">
+      <button
+        onClick={() => setSelectedHistoryBooking(null)}
+        className="absolute top-5 right-5 text-white/50 hover:text-white transition cursor-pointer bg-transparent border-0 select-none"
+      >
+        <X size={20} />
+      </button>
+      <h3 className="text-xl font-bold text-white mb-4 border-b border-white/10 pb-3 tracking-wide">
+        Historical Stay Audit Ledger
+      </h3>
+
+      <div className="space-y-5 text-sm">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <span className="block text-white/40 uppercase text-xs font-semibold tracking-wider">Booking Reference</span>
+            <span className="text-white font-medium text-base font-mono">{selectedHistoryBooking.bookingId}</span>
+          </div>
+          <div>
+            <span className="block text-white/40 uppercase text-xs font-semibold tracking-wider">Status</span>
+            <span className="text-purple-400 font-bold bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20 mt-1 inline-block text-xs uppercase">
+              Checked Out
+            </span>
+          </div>
+        </div>
+
+        {/* Guest Info */}
+        <div className="bg-white/5 p-4 rounded-lg border border-white/5">
+          <span className="block text-[#C8A64D] uppercase text-xs font-semibold mb-3 tracking-widest">Guest Profile</span>
+          <div className="grid grid-cols-2 gap-y-3 gap-x-4">
+            <div>
+              <span className="block text-white/50 text-[11px] uppercase tracking-wider">Name</span>
+              <span className="text-white font-medium">{selectedHistoryBooking.customerName}</span>
+            </div>
+            <div>
+              <span className="block text-white/50 text-[11px] uppercase tracking-wider">Phone Number</span>
+              <span className="text-white font-mono">{selectedHistoryBooking.customerPhone ? formatPhoneNumber(selectedHistoryBooking.customerPhone) : "—"}</span>
+            </div>
+            <div className="col-span-2">
+              <span className="block text-white/50 text-[11px] uppercase tracking-wider">Email Address</span>
+              <span className="text-white break-all font-mono text-xs">{selectedHistoryBooking.customerEmail || "—"}</span>
+            </div>
+            <div>
+              <span className="block text-white/50 text-[11px] uppercase tracking-wider">Room Category</span>
+              <span className="text-white">{selectedHistoryBooking.roomName}</span>
+            </div>
+            <div>
+              <span className="block text-white/50 text-[11px] uppercase tracking-wider">Assigned Room No</span>
+              <span className="text-green-400 font-bold">{selectedHistoryBooking.roomNumber !== "—" ? `#${selectedHistoryBooking.roomNumber}` : "Not Assigned"}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Stay & Operations Timings */}
+        <div className="bg-white/5 p-4 rounded-lg border border-white/5">
+          <span className="block text-[#C8A64D] uppercase text-xs font-semibold mb-3 tracking-widest">Stay Duration & Timings</span>
+          <div className="grid grid-cols-2 gap-y-3 gap-x-4">
+            <div>
+              <span className="block text-white/50 text-[11px] uppercase tracking-wider">Check-In</span>
+              <span className="text-white block font-medium">
+                {selectedHistoryBooking.checkIn ? selectedHistoryBooking.checkIn.toLocaleDateString("en-GB") : "—"}
+              </span>
+              <span className="text-[11px] text-white/40 block mt-0.5 font-mono">
+                Logged: {selectedHistoryBooking.checkedInAt ? selectedHistoryBooking.checkedInAt.toLocaleString("en-GB", {hour: '2-digit', minute:'2-digit', second:'2-digit'}) : "N/A"}
+              </span>
+            </div>
+            <div>
+              <span className="block text-white/50 text-[11px] uppercase tracking-wider">Check-Out</span>
+              <span className="text-white block font-medium">
+                {selectedHistoryBooking.checkOut ? selectedHistoryBooking.checkOut.toLocaleDateString("en-GB") : "—"}
+              </span>
+              <span className="text-purple-300 font-semibold text-[11px] block mt-0.5 font-mono">
+                Logged: {selectedHistoryBooking.checkedOutAt ? selectedHistoryBooking.checkedOutAt.toLocaleString("en-GB", {hour: '2-digit', minute:'2-digit', second:'2-digit'}) : "Just Now / Processing"}
+              </span>
+            </div>
+            <div className="col-span-2 pt-2 border-t border-white/5 mt-1">
+              <div className="flex justify-between items-center">
+                <div>
+                  <span className="block text-white/50 text-[11px] uppercase tracking-wider">Booking Creation Timestamp</span>
+                  <span className="text-white/80 font-mono text-xs">{selectedHistoryBooking.createdAt.toLocaleString("en-GB")}</span>
+                </div>
+                <div className="text-right">
+                  <span className="block text-white/50 text-[11px] uppercase tracking-wider">Source</span>
+                  <span className="text-yellow-500 font-semibold text-xs">{selectedHistoryBooking.source}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Ledger Balance */}
+        <div className="bg-white/5 p-4 rounded-lg border border-white/5">
+          <span className="block text-[#C8A64D] uppercase text-xs font-semibold mb-3 tracking-widest">Amount</span>
+          <div className="grid grid-cols-2 gap-y-3 gap-x-4">
+            <div>
+              <span className="block text-white/50 text-[11px] uppercase tracking-wider">Total </span>
+              <span className="text-emerald-400 font-bold text-lg">₹{selectedHistoryBooking.amount.toLocaleString()}</span>
+            </div>
+            <div>
+              <span className="block text-white/50 text-[11px] uppercase tracking-wider">Payment Gateway</span>
+              <span className="text-white font-medium">{selectedHistoryBooking.paymentMethod}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

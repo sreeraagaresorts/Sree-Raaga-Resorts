@@ -23,7 +23,7 @@ const AdminBookings = () => {
   const [error, setError] = useState(null);
 
   // Filters
-  const [statusFilter, setStatusFilter] = useState("Today");
+  const [statusFilter, setStatusFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
   // New booking form details
@@ -116,7 +116,6 @@ const AdminBookings = () => {
   const fetchUsersAndRooms = async () => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
     try {
-      // Fetch users
       const uRes = await fetch(`${API_URL}/api/auth/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -131,7 +130,6 @@ const AdminBookings = () => {
         }
       }
 
-      // Fetch rooms
       const rRes = await fetch(`${API_URL}/api/rooms`);
       const rData = await rRes.json();
       if (rData.success) {
@@ -147,7 +145,6 @@ const AdminBookings = () => {
     fetchBookings();
     fetchUsersAndRooms();
 
-    // Auto-refresh bookings silently every 10 seconds
     const interval = setInterval(() => {
       fetchBookings(true);
     }, 10000);
@@ -242,7 +239,6 @@ const AdminBookings = () => {
       }
     });
 
-    // Ensure currently selected rooms are in the list so they can be deselected
     const currentRooms = assignBooking.room_number 
       ? assignBooking.room_number.split(",").map(r => r.trim())
       : [];
@@ -337,10 +333,15 @@ const AdminBookings = () => {
       return;
     }
 
-    if (!guestName || !guestEmail || !guestPhone) {
-      toast.warning("Please enter all guest details.");
-      return;
-    }
+if (!guestName || !guestPhone) {
+  toast.warning("Please enter guest name and phone number.");
+  return;
+}
+
+if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
+  toast.warning("Please enter a valid email address.");
+  return;
+}
 
     const phoneRegex = /^\+91\d{10}$/;
     if (!phoneRegex.test(guestPhone)) {
@@ -354,7 +355,6 @@ const AdminBookings = () => {
     try {
       let finalUserId = null;
 
-      // Register the new user first
       const regRes = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: {
@@ -375,7 +375,6 @@ const AdminBookings = () => {
       }
       finalUserId = regData.userId;
 
-      // Create the booking
       const response = await fetch(`${API_URL}/api/bookings`, {
         method: "POST",
         headers: {
@@ -534,7 +533,7 @@ const AdminBookings = () => {
     } else {
       showConfirm(
         "Confirm Guest Check-Out",
-        "Are you sure you want to check out this guest?",
+        "Are you sure you want to check out this guest? This will move the record to the Billing History.",
         "primary",
         () => {
           handleUpdateStatus(b.id, "checked_out");
@@ -620,7 +619,6 @@ const AdminBookings = () => {
       (b.guest_email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       (b.room_name || "").toLowerCase().includes(searchQuery.toLowerCase());
 
-    // Date Filter Logic (Local Timezone Safe)
     const getLocalDateString = (dateInput) => {
       if (!dateInput) return "";
       const d = new Date(dateInput);
@@ -634,11 +632,15 @@ const AdminBookings = () => {
     const checkInStr = getLocalDateString(b.check_in);
 
     let matchesFilter = true;
+    
+    // Hide checked_out bookings from standard views to simulate them moving to History
     if (statusFilter === "Today") {
-      matchesFilter = checkInStr === todayStr;
+      matchesFilter = checkInStr === todayStr && b.status !== "checked_out";
     } else if (statusFilter === "Reservations") {
-      matchesFilter = checkInStr !== todayStr;
-    } else if (statusFilter !== "All") {
+      matchesFilter = checkInStr !== todayStr && b.status !== "checked_out";
+    } else if (statusFilter === "All") {
+      matchesFilter = b.status !== "checked_out";
+    } else {
       matchesFilter = (b.status || "").toLowerCase() === statusFilter.toLowerCase();
     }
 
@@ -681,12 +683,14 @@ const AdminBookings = () => {
           onChange={(e) => setStatusFilter(e.target.value)}
           className="bg-[#071524] px-3 py-2 rounded-lg text-sm border border-white/10 text-white outline-none focus:border-[#C8A64D]"
         >
-          <option value="Today">Checking In Today</option>
+           <option value="All">All Active Bookings</option>
+          <option value="Today"> Today Checking-in</option>
+                 <option value="checked_in">Checked In</option>
           <option value="confirmed">Confirmed</option>
-          <option value="checked_in">Checked In</option>
-          <option value="Reservations">Reservations (Other Dates)</option>
+   
+          <option value="Reservations">Reservations</option>
           <option value="cancelled">Cancelled</option>
-          <option value="All">All Bookings</option>
+         
         </select>
       </div>
 
@@ -810,13 +814,6 @@ const AdminBookings = () => {
                       <div className="text-[#C8A64D] font-bold text-[16px]">
                         ₹{parseFloat(b.total_price).toLocaleString()}
                       </div>
-                      {/* <span className={`text-[10px] px-3 py-1 rounded border font-bold mt-1.5 inline-block ${
-                        b.payment_status === "Unpaid"
-                          ? "bg-red-500/10 text-red-400 border-red-500/20"
-                          : "bg-green-500/10 text-green-400 border-green-500/20"
-                      }`}>
-                        {b.payment_status || "Paid"}
-                      </span> */}
                     </td>
 
                     {/* PAYMENT METHOD */}
@@ -974,7 +971,7 @@ const AdminBookings = () => {
                       placeholder="Enter Email (Optional)"
                       value={guestEmail}
                       onChange={(e) => setGuestEmail(e.target.value)}
-                      required
+                      
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
                     />
                   </div>
@@ -1015,7 +1012,7 @@ const AdminBookings = () => {
                         <ChevronDown size={16} className="text-white/40" />
                       </button>
                     }
-                    calendarClassName="custom-datepicker"
+                    calendarClassName="custom-datepicker mt-14"
                     popperModifiers={[
                       {
                         name: "preventOverflow",
@@ -1253,26 +1250,50 @@ const AdminBookings = () => {
               </button>
             </div>
 
-            <form onSubmit={handleUpdateDates} className="space-y-4">
-              <div>
-                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check-In Date</label>
-                <input
-                  type="date"
-                  value={editCheckIn}
-                  onChange={(e) => setEditCheckIn(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#C8A64D]"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check-Out Date</label>
-                <input
-                  type="date"
-                  value={editCheckOut}
-                  onChange={(e) => setEditCheckOut(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-[#C8A64D]"
-                  required
+         <form onSubmit={handleUpdateDates} className="space-y-4">
+              <div className="relative">
+                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Check In - Check Out Dates</label>
+                <DatePicker
+                  wrapperClassName="w-full"
+                  selectsRange={true}
+                  startDate={editCheckIn ? new Date(editCheckIn) : null}
+                  endDate={editCheckOut ? new Date(editCheckOut) : null}
+                  onChange={(update) => {
+                    const [start, end] = update;
+                    const formatDate = (date) => {
+                      if (!date) return "";
+                      const tzOffset = date.getTimezoneOffset() * 60000;
+                      return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
+                    };
+                    setEditCheckIn(start ? formatDate(start) : "");
+                    setEditCheckOut(end ? formatDate(end) : "");
+                  }}
+                  customInput={
+                    <button
+                      type="button"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white flex items-center justify-between outline-none cursor-pointer text-left focus:border-[#C8A64D] transition-all text-sm"
+                    >
+                      <span>
+                        {editCheckIn
+                          ? `${new Date(editCheckIn).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}${
+                              editCheckOut
+                                ? ` - ${new Date(editCheckOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}`
+                                : " - Check Out"
+                            }`
+                          : "Select Check-in and Check-out dates"}
+                      </span>
+                      <ChevronDown size={16} className="text-white/40" />
+                    </button>
+                  }
+                  calendarClassName="custom-datepicker mt-14"
+                  popperModifiers={[
+                    {
+                      name: "preventOverflow",
+                      options: {
+                        boundary: "viewport",
+                      },
+                    },
+                  ]}
                 />
               </div>
 
@@ -1448,7 +1469,7 @@ const AdminBookings = () => {
             </p>
             
             <div className="flex gap-3 pt-2">
-             
+              
               <button
                 type="button"
                 onClick={() => {
@@ -1479,4 +1500,3 @@ const AdminBookings = () => {
 };
 
 export default AdminBookings;
-

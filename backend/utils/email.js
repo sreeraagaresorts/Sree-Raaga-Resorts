@@ -269,7 +269,7 @@ exports.sendBookingCreatedEmail = async (booking) => {
     <p>${isConfirmed ? "Your booking has been successfully confirmed. We look forward to welcoming you!" : "Thank you for booking with us. We have received your booking and are checking it now."}</p>
     <div class="box">
       <strong>Booking Details:</strong><br>
-      • Booking ID: #${booking.id || "N/A"}<br>
+      • Booking ID:BK-0${booking.id || "N/A"}<br>
       • Room: ${booking.room_name || "Premium Room"}<br>
       ${booking.room_number ? `• Room Number: <strong>${booking.room_number}</strong><br>` : ""}
       • Dates: ${checkIn} to ${checkOut}<br>
@@ -282,9 +282,9 @@ exports.sendBookingCreatedEmail = async (booking) => {
   `;
   return sendMail({
     to: booking.guest_email,
-    subject: isConfirmed ? `Booking Confirmed - #${booking.id} - Sree Raaga Resort` : `Booking Request Received - #${booking.id} - Sree Raaga Resort`,
+    subject: isConfirmed ? `Booking Confirmed - BK-0${booking.id} - Sree Raaga Resort` : `Booking Request Received - BK-0${booking.id} - Sree Raaga Resort`,
     html: getEmailShell(isConfirmed ? "Booking Confirmed" : "Booking Received", content),
-    text: isConfirmed ? `Booking Confirmed: Booking #${booking.id} for ${booking.room_name} is confirmed.` : `Booking Request Received: Booking #${booking.id} for ${booking.room_name} is currently ${booking.status}.`
+    text: isConfirmed ? `Booking Confirmed: Booking BK-0${booking.id} for ${booking.room_name} is confirmed.` : `Booking Request Received: Booking BK-0${booking.id} for ${booking.room_name} is currently ${booking.status}.`
   });
 };
 
@@ -300,7 +300,7 @@ exports.sendBookingUpdatedEmail = async (booking) => {
     <p>Your booking status has been updated.</p>
     <div class="box">
       <strong>Booking Details:</strong><br>
-      • Booking ID: #${booking.id}<br>
+      • Booking ID: BK-0${booking.id}<br>
       • Room: ${booking.room_name}<br>
       ${booking.room_number ? `• Room Number: <strong>${booking.room_number}</strong><br>` : ""}
       • Dates: ${checkIn} to ${checkOut}<br>
@@ -312,9 +312,9 @@ exports.sendBookingUpdatedEmail = async (booking) => {
   `;
   return sendMail({
     to: booking.guest_email,
-    subject: `Booking Updated - #${booking.id} - Sree Raaga Resort`,
+    subject: `Booking Updated - BK-0${booking.id} - Sree Raaga Resort`,
     html: getEmailShell("Booking Updated", content),
-    text: `Booking Updated: Booking #${booking.id} status is now: ${booking.status}.`
+    text: `Booking Updated: Booking BK-0${booking.id} status is now: ${booking.status}.`
   });
 };
 
@@ -326,7 +326,7 @@ exports.sendBookingDeletedEmail = async (booking) => {
   const content = `
     <div class="greeting">Booking Cancelled</div>
     <p>Dear <strong>${booking.guest_name || "Guest"}</strong>,</p>
-    <p>This email confirms that your booking <strong>#${booking.id}</strong> has been cancelled.</p>
+    <p>This email confirms that your booking <strong>BK-0${booking.id}</strong> has been cancelled.</p>
     <div class="box">
       • Room: ${booking.room_name}<br>
       ${booking.room_number ? `• Room Number: <strong>${booking.room_number}</strong><br>` : ""}
@@ -337,9 +337,9 @@ exports.sendBookingDeletedEmail = async (booking) => {
   `;
   return sendMail({
     to: booking.guest_email,
-    subject: `Booking Cancelled - #${booking.id} - Sree Raaga Resort`,
+    subject: `Booking Cancelled - BK-0${booking.id} - Sree Raaga Resort`,
     html: getEmailShell("Booking Cancelled", content),
-    text: `Booking Cancellation: Booking #${booking.id} has been cancelled.`
+    text: `Booking Cancellation: Booking BK-0${booking.id} has been cancelled.`
   });
 };
 

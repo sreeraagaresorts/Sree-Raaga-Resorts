@@ -55,8 +55,10 @@ const AdminDashboard = () => {
       });
       const uData = await uRes.json();
       if (uData.success) {
-        setUsers(uData.data);
-        setUsersCount(uData.data.length);
+        // Only count actual guests (excluding admins) for the user metric
+        const guests = uData.data.filter(u => u.role !== "admin");
+        setUsers(guests);
+        setUsersCount(guests.length);
       }
     } catch (err) {
       if (!silent) setError(err.message);
@@ -582,9 +584,9 @@ const AdminDashboard = () => {
           const circ = 2 * Math.PI * r;
 
           const segments = [
-            { value: occupied, color: "#B3923E", label: "Occupied" },
-            { value: reserved, color: "#C8A64D", label: "Reserved" },
-            { value: available, color: "#152b44", label: "Available" },
+            { value: occupied, color: "#06ce13", label: "Occupied" },
+            { value: reserved, color: "#d00718", label: "Reserved" },
+            { value: available, color: "#B3923E", label: "Available" },
           ];
 
           let cumulative = 0;

@@ -882,7 +882,7 @@ const AdminMenu = () => {
       {/* CATEGORY MANAGE MODAL */}
       {isCategoryFormOpen && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#081A2F] w-full max-w-md rounded-xl p-6 border border-white/10 shadow-2xl flex flex-col max-h-[90vh]">
+          <div className="bg-[#081A2F] w-full max-w-md rounded-xl p-6 border border-white/10 shadow-2xl flex flex-col" style={{maxHeight: '90vh'}}>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">Manage Categories</h2>
               <button
@@ -935,6 +935,7 @@ const AdminMenu = () => {
             </form>
 
             {/* List of Existing Categories */}
+            <div className="flex-1 overflow-y-auto space-y-2 pr-1" style={{minHeight: 0}}>
             {categories.map((cat) => (
               <div
                 key={cat}
@@ -966,6 +967,7 @@ const AdminMenu = () => {
                 </div>
               </div>
             ))}
+            </div>
 
             <div className="flex justify-end pt-4 border-t border-white/10">
               <button

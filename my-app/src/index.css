@@ -69,12 +69,13 @@ body {
 /* Global React Datepicker Overrides */
 .react-datepicker,
 .react-datepicker__month-container {
-  margin-top: 65px;
+  /* margin-top: 55px; */
   background-color: #f7d6b8 !important; /* Peach background */
   border: none !important;
   border-radius: 1.5rem !important; /* rounded-3xl */
   font-family: "Jost", sans-serif !important;
   width: 90%;
+  
   /* box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important; */
 }
 
@@ -167,7 +168,7 @@ body {
 }
 
 .react-datepicker__navigation {
-  top: 1.25rem !important;
+  top: 1.6rem !important;
 }
 
 .react-datepicker__navigation--previous {
