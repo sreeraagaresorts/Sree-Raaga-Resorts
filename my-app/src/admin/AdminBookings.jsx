@@ -32,13 +32,15 @@ const AdminBookings = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedRoom, setSelectedRoom] = useState("");
-  const [selectedRoomNumber, setSelectedRoomNumber] = useState("");
+// Replace selectedRoomNumber (string) with selectedRoomNumbers (array)
+const [selectedRoomNumbers, setSelectedRoomNumbers] = useState([]);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [saving, setSaving] = useState(false);
-
+const [roomCount, setRoomCount] = useState(1);
+const [selectedRoomCount, setSelectedRoomCount] = useState(1);
   // Assign Room Modal State
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [assignBooking, setAssignBooking] = useState(null);
@@ -203,11 +205,22 @@ const AdminBookings = () => {
     return list;
   }, [rooms, bookings, checkIn, checkOut]);
 
+
+  const selectedRoomObject = React.useMemo(() => {
+    return rooms.find((r) => r.id.toString() === selectedRoom.toString());
+  }, [rooms, selectedRoom]);
+
+  const baseCapacityPerRoom = selectedRoomObject?.max_guests || 2;
+  const totalAllowedCapacity = baseCapacityPerRoom * (parseInt(roomCount) || 1);
   const filteredAvailableRoomNumbers = React.useMemo(() => {
+
+
     if (!selectedRoom) return [];
     return availableRoomNumbers.filter(
       (item) => item.roomId.toString() === selectedRoom.toString()
     );
+
+    
   }, [availableRoomNumbers, selectedRoom]);
 
   const assignAvailableRooms = React.useMemo(() => {
@@ -313,7 +326,8 @@ const AdminBookings = () => {
     await fetchUsersAndRooms();
     setCheckIn("");
     setCheckOut("");
-    setSelectedRoomNumber("");
+    setRoomCount(1); // Add this
+    setSelectedRoomNumbers("");
     setSelectedRoom("");
     setAdults(1);
     setChildren(0);
@@ -384,11 +398,12 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
         body: JSON.stringify({
           user_id: finalUserId,
           room_id: Number(selectedRoom),
+          rooms: Number(roomCount), // Add this
           check_in: checkIn,
           check_out: checkOut,
           adults: Number(adults),
           children: Number(children),
-          room_number: selectedRoomNumber || null,
+         room_number: selectedRoomNumbers.join(", ")|| null,
           payment_method: paymentMethod,
           booking_source: bookingSource,
           is_manual: true,
@@ -1030,7 +1045,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                     value={selectedRoom}
                     onChange={(e) => {
                       setSelectedRoom(e.target.value);
-                      setSelectedRoomNumber("");
+                      setSelectedRoomNumbers("");
                     }}
                     required
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
@@ -1044,57 +1059,83 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                   </select>
                 </div>
 
-                {/* Room Number dropdown */}
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Room Number (Available Only)</label>
-                  <select
-                    value={selectedRoomNumber}
-                    onChange={(e) => setSelectedRoomNumber(e.target.value)}
-                    required
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-                  >
-                    <option value="">-- Select Room Number --</option>
-                    {filteredAvailableRoomNumbers.map((item) => (
-                      <option key={item.roomNumber} value={item.roomNumber}>
-                        {item.roomNumber}
-                      </option>
-                    ))}
-                  </select>
-                  {!selectedRoom && (
-                    <p className="text-[12px] text-yellow-500/60 mt-1">Please select a room category first.</p>
-                  )}
-                  {selectedRoom && filteredAvailableRoomNumbers.length === 0 && (
-                    <p className="text-[12px] text-red-400 mt-1">No available rooms found in this category.</p>
-                  )}
-                </div>
+       <div>
+  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">
+    Select {roomCount} Room Number(s)
+  </label>
+  <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto p-2 bg-[#071524] border border-white/10 rounded-lg">
+    {filteredAvailableRoomNumbers.map((item) => {
+      const isSelected = selectedRoomNumbers.includes(item.roomNumber);
+      return (
+        <button
+          key={item.roomNumber}
+          type="button"
+          onClick={() => {
+            if (isSelected) {
+              setSelectedRoomNumbers(prev => prev.filter(n => n !== item.roomNumber));
+            } else if (selectedRoomNumbers.length < roomCount) {
+              setSelectedRoomNumbers(prev => [...prev, item.roomNumber]);
+            } else {
+              toast.warning(`You have already selected ${roomCount} room(s).`);
+            }
+          }}
+          className={`p-2 text-xs rounded border transition ${
+            isSelected 
+              ? "bg-[#C8A64D] text-black border-[#C8A64D]" 
+              : "bg-[#081A2F] text-white border-white/10 hover:border-white/30"
+          }`}
+        >
+          {item.roomNumber}
+        </button>
+      );
+    })}
+  </div>
+</div>
 
                
-
+{/* Number of Rooms */}
+<div>
+  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Number of Rooms</label>
+  <input
+    type="number"
+    min="1"
+    value={roomCount}
+    onChange={(e) => {
+      const count = parseInt(e.target.value) || 1;
+      setRoomCount(count);
+      // Reset guests if they exceed new capacity
+      if (adults + children > (baseCapacityPerRoom * count)) {
+        setAdults(baseCapacityPerRoom * count);
+        setChildren(0);
+      }
+    }}
+    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+  />
+</div>
                 {/* Adults */}
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Adults count</label>
-                  <input
-                    type="number"
-                    min="1"
-                    required
-                    value={adults}
-                    onChange={(e) => setAdults(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-                  />
-                </div>
+            <div>
+  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Adults (Max {totalAllowedCapacity})</label>
+  <input
+    type="number"
+    min="1"
+    max={totalAllowedCapacity - children}
+    value={adults}
+    onChange={(e) => setAdults(Math.min(parseInt(e.target.value) || 1, totalAllowedCapacity - children))}
+    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+  />
+</div>
 
-                {/* Children */}
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children count</label>
-                  <input
-                    type="number"
-                    min="0"
-                    required
-                    value={children}
-                    onChange={(e) => setChildren(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-                  />
-                </div>
+<div>
+  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children (Max {totalAllowedCapacity - adults})</label>
+  <input
+    type="number"
+    min="0"
+    max={totalAllowedCapacity - adults}
+    value={children}
+    onChange={(e) => setChildren(Math.min(parseInt(e.target.value) || 0, totalAllowedCapacity - adults))}
+    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+  />
+</div>
 
                 {/* Payment Method */}
                 <div>
