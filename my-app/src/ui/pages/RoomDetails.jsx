@@ -139,7 +139,7 @@ const RoomDetails = () => {
   const [isAdultsOpen, setIsAdultsOpen] = useState(false);
   const [isChildrenOpen, setIsChildrenOpen] = useState(false);
   const [isPaymentMethodOpen, setIsPaymentMethodOpen] = useState(false);
-
+const roomCapacity = parseInt(room?.guests || "2") || 2;
   // Dynamic Labeling for Villas vs Rooms
   const isVilla = room?.category?.toLowerCase().includes("villa") || false;
   const unitLabelSingle = isVilla ? "Villa" : "Room";
@@ -154,7 +154,13 @@ const RoomDetails = () => {
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
   const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
-
+useEffect(() => {
+  // If the total guests currently set exceeds the room capacity, reset to capacity
+  if (adults + children > roomCapacity) {
+    setAdults(roomCapacity);
+    setChildren(0);
+  }
+}, [roomCapacity]); // Runs whenever the room capacity changes
   useEffect(() => {
     if (!room) return;
     const fetchCoupons = async () => {
@@ -730,16 +736,21 @@ const RoomDetails = () => {
                     -
                   </button>
                   <span className="font-semibold text-sm w-4 text-center">{adults}</span>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (adults < 10) setAdults(adults + 1);
-                    }}
-                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                  >
-                    +
-                  </button>
+               <button
+  type="button"
+  onClick={(e) => {
+    e.stopPropagation();
+    // Only allow increment if total is less than capacity
+    if (adults + children < roomCapacity) {
+      setAdults(adults + 1);
+    } else {
+      toast.warning(`Maximum capacity for this room is ${roomCapacity} guests.`);
+    }
+  }}
+  className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+>
+  +
+</button>
                 </div>
               </div>
             </div>
@@ -783,16 +794,21 @@ const RoomDetails = () => {
                     -
                   </button>
                   <span className="font-semibold text-sm w-4 text-center">{children}</span>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (children < 10) setChildren(children + 1);
-                    }}
-                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
-                  >
-                    +
-                  </button>
+                 <button
+  type="button"
+  onClick={(e) => {
+    e.stopPropagation();
+    // Only allow increment if total is less than capacity
+    if (adults + children < roomCapacity) {
+      setChildren(children + 1);
+    } else {
+      toast.warning(`Maximum capacity for this room is ${roomCapacity} guests.`);
+    }
+  }}
+  className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+>
+  +
+</button>
                 </div>
               </div>
             </div>
