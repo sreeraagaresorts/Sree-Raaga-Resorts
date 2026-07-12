@@ -176,7 +176,7 @@ const AdminBookings = () => {
 
     const bookedRoomNumbers = new Set();
     bookings.forEach((b) => {
-      if (b.status !== "cancelled" && b.room_number) {
+      if (b.status !== "cancelled" && b.status !== "checked_out" && b.room_number) {
         const bStart = new Date(b.check_in);
         const bEnd = new Date(b.check_out);
         if (bStart < end && bEnd > start) {
