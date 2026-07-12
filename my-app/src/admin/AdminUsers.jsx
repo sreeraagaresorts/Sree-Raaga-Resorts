@@ -177,9 +177,10 @@ const AdminUsers = () => {
       if (t.includes("delete")) return "bg-red-500/10 text-red-400 border-red-500/20";
       if (t === "logout") return "bg-red-500/20  border-red-500/20";
       if (t === "login") return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
-    
+      if (t === "booking cancellation") return "bg-red-500/10 text-red-400 border-red-500/20";
       if (t === "booking deletion") return "bg-red-500/20 text-orange-400 border-orange-500/20";
       return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+      
     };
 
     return (

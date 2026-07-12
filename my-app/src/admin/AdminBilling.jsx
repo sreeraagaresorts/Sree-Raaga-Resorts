@@ -29,9 +29,48 @@ const AdminBilling = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
+
+
+  
 
   // Modal State for Booking History details
   const [selectedHistoryBooking, setSelectedHistoryBooking] = useState(null);
+  const handleDeleteBooking = async (bookingId) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to permanently delete this booking?"
+  );
+
+  if (!confirmDelete) return;
+
+  const token =
+    localStorage.getItem("adminToken") ||
+    localStorage.getItem("token");
+
+  try {
+    const res = await fetch(`${API_URL}/api/bookings/${bookingId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || "Failed to delete booking.");
+    }
+
+    setBookings((prev) =>
+      prev.filter((booking) => booking.id !== Number(bookingId))
+    );
+
+    setOpenMenuId(null);
+    toast.success("Booking deleted successfully.");
+  } catch (err) {
+    toast.error(err.message);
+  }
+};
 
   const fetchBookings = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -53,6 +92,8 @@ const AdminBilling = () => {
     } finally {
       if (!silent) setLoading(false);
     }
+
+    
   };
 
   useEffect(() => {
@@ -661,7 +702,7 @@ const AdminBilling = () => {
         </div>
 
         {/* CONTENT */}
-        <div className="p-4 overflow-x-auto">
+        <div className="pb-20 overflow-x-auto  overflow-y-visible">
           {loading ? (
             <div className="flex items-center gap-2 text-white/60 justify-center py-12">
               <RefreshCw className="animate-spin w-5 h-5 text-[#C8A64D]" />
@@ -884,15 +925,39 @@ const AdminBilling = () => {
                               {h.status === 'cancelled' ? 'Cancelled' : 'Checked Out'}
                             </span>
                           </td>
-                          <td className="p-3">
-                            <button 
-                              onClick={() => setSelectedHistoryBooking(h)}
-                              className="p-2 bg-white/5 hover:bg-white/10 rounded-full transition cursor-pointer flex items-center justify-center mx-auto text-white hover:text-white"
-                              title="View Details"
-                            >
-                              <MoreVertical size={18} />
-                            </button>
-                          </td>
+                       <td className="p-3">
+  <div className="relative flex justify-center">
+    <button
+      onClick={() =>
+        setOpenMenuId(openMenuId === h.id ? null : h.id)
+      }
+      className="p-2 bg-white/5 hover:bg-white/10 rounded-full transition cursor-pointer"
+    >
+      <MoreVertical size={18} />
+    </button>
+
+    {openMenuId === h.id && (
+      <div className="absolute right-0 top-10 w-44 bg-[#081A2F] border border-white/10 rounded-lg shadow-xl z-99 overflow-hidden">
+        <button
+          onClick={() => {
+            setSelectedHistoryBooking(h);
+            setOpenMenuId(null);
+          }}
+          className="w-full text-left px-4 py-3 hover:bg-white/5 text-white text-sm cursor-pointer"
+        >
+          View Details
+        </button>
+
+        <button
+          onClick={() => handleDeleteBooking(h.id)}
+          className="w-full text-left px-4 py-3 hover:bg-red-500/10 text-red-400 text-sm cursor-pointer"
+        >
+          Delete Booking
+        </button>
+      </div>
+    )}
+  </div>
+</td>
                         </tr>
                       ))}
                     </tbody>
