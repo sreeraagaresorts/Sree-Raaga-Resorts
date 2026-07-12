@@ -69,7 +69,68 @@ exports.createBooking = async (req, res) => {
     }
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     const roomCount = Number(rooms) || 1;
+// Validate coupon
+if (req.body.coupon_code) {
+  const Coupon = require("../models/Coupon");
 
+  const coupon = await Coupon.findOne({
+    code: req.body.coupon_code.toUpperCase()
+  });
+
+  if (!coupon) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid coupon code."
+    });
+  }
+
+  // Expired / inactive
+  if (coupon.status !== "active") {
+    return res.status(400).json({
+      success: false,
+      message: "This coupon is no longer active."
+    });
+  }
+
+  // Date validation
+  const today = new Date();
+
+  if (today < new Date(coupon.start_date)) {
+    return res.status(400).json({
+      success: false,
+      message: "Coupon is not active yet."
+    });
+  }
+
+  if (today > new Date(coupon.expiry_date)) {
+    return res.status(400).json({
+      success: false,
+      message: "Coupon has expired."
+    });
+  }
+
+  // Total usage validation
+  if (coupon.used_count >= coupon.total_uses) {
+    return res.status(400).json({
+      success: false,
+      message: "Coupon usage limit reached."
+    });
+  }
+
+  // Per-user validation
+  const userUsage = await Booking.countDocuments({
+    user_id: Number(user_id),
+    coupon_code: coupon.code,
+    status: { $ne: "cancelled" }
+  });
+
+  if (userUsage >= coupon.uses_per_user) {
+    return res.status(400).json({
+      success: false,
+      message: `You can use this coupon only ${coupon.uses_per_user} time(s).`
+    });
+  }
+}
     // Check specific room number availability if provided
     if (room_number) {
       const roomNumbers = room_number.split(",").map(num => num.trim());
@@ -780,7 +841,64 @@ exports.verifyRazorpayPayment = async (req, res) => {
     const differenceInTime = end.getTime() - start.getTime();
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
     const roomCount = Number(rooms) || 1;
+// Validate coupon
+if (coupon_code) {
+  const Coupon = require("../models/Coupon");
 
+  const coupon = await Coupon.findOne({
+    code: coupon_code.toUpperCase()
+  });
+
+  if (!coupon) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid coupon code."
+    });
+  }
+
+  if (coupon.status !== "active") {
+    return res.status(400).json({
+      success: false,
+      message: "This coupon is no longer active."
+    });
+  }
+
+  const today = new Date();
+
+  if (today < new Date(coupon.start_date)) {
+    return res.status(400).json({
+      success: false,
+      message: "Coupon is not active yet."
+    });
+  }
+
+  if (today > new Date(coupon.expiry_date)) {
+    return res.status(400).json({
+      success: false,
+      message: "Coupon has expired."
+    });
+  }
+
+  if (coupon.used_count >= coupon.total_uses) {
+    return res.status(400).json({
+      success: false,
+      message: "Coupon usage limit reached."
+    });
+  }
+
+  const userUsage = await Booking.countDocuments({
+    user_id: Number(user_id),
+    coupon_code: coupon.code,
+    status: { $ne: "cancelled" }
+  });
+
+  if (userUsage >= coupon.uses_per_user) {
+    return res.status(400).json({
+      success: false,
+      message: `You can use this coupon only ${coupon.uses_per_user} time(s).`
+    });
+  }
+}
     // Check availability
     const totalRooms = room.totalRooms || 1;
 
@@ -806,6 +924,43 @@ exports.verifyRazorpayPayment = async (req, res) => {
 
     const computed_price = nights * roomPrice * roomCount;
     const final_total_price = req_total_price !== undefined ? Number(req_total_price) : computed_price;
+if (req.body.coupon_code) {
+  const Coupon = require("../models/Coupon");
+
+  const coupon = await Coupon.findOne({
+    code: req.body.coupon_code.toUpperCase(),
+  });
+
+  if (!coupon) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid coupon.",
+    });
+  }
+
+  // Check expiry
+  if (coupon.status !== "active") {
+    return res.status(400).json({
+      success: false,
+      message: "Coupon has expired.",
+    });
+  }
+
+  // Count how many times THIS USER used this coupon
+  const userUsage = await Booking.countDocuments({
+    user_id: Number(user_id),
+    coupon_code: req.body.coupon_code.toUpperCase(),
+    status: { $ne: "cancelled" },
+  });
+
+  if (userUsage >= coupon.uses_per_user) {
+    return res.status(400).json({
+      success: false,
+      message: `You can use this coupon only ${coupon.uses_per_user} time(s).`,
+    });
+  }
+}
+
 
     const booking = new Booking({
       user_id: Number(user_id),
