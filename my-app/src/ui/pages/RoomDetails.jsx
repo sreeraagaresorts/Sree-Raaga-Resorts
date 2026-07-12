@@ -139,7 +139,12 @@ const RoomDetails = () => {
   const [isAdultsOpen, setIsAdultsOpen] = useState(false);
   const [isChildrenOpen, setIsChildrenOpen] = useState(false);
   const [isPaymentMethodOpen, setIsPaymentMethodOpen] = useState(false);
-const roomCapacity = parseInt(room?.guests || "2") || 2;
+// const roomCapacity = parseInt(room?.guests || "2") || 2;
+// Add this useMemo to manage the capacity safely
+  const roomCapacity = React.useMemo(() => {
+    return parseInt(room?.guests || "2") || 2;
+  }, [room]);
+const totalCapacity = roomCapacity * rooms;
   // Dynamic Labeling for Villas vs Rooms
   const isVilla = room?.category?.toLowerCase().includes("villa") || false;
   const unitLabelSingle = isVilla ? "Villa" : "Room";
@@ -155,12 +160,13 @@ const roomCapacity = parseInt(room?.guests || "2") || 2;
   const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
 useEffect(() => {
-  // If the total guests currently set exceeds the room capacity, reset to capacity
-  if (adults + children > roomCapacity) {
+  // If the user reduces the number of rooms, ensure the guest count doesn't exceed new total capacity
+  if (adults + children > totalCapacity) {
+    // Reset to base capacity of one room (defaulting adults to capacity, children to 0)
     setAdults(roomCapacity);
     setChildren(0);
   }
-}, [roomCapacity]); // Runs whenever the room capacity changes
+}, [rooms, totalCapacity]);
   useEffect(() => {
     if (!room) return;
     const fetchCoupons = async () => {
@@ -312,8 +318,12 @@ useEffect(() => {
     ];
   };
 
+
+
+
   const calculateTotal = () => {
     if (!room) return { nights: 0, subtotal: 0, services: 0, total: 0 };
+    // ... rest of your existing calculateTotal code ...
 
     let nights = 0;
     if (checkIn && checkOut) {
@@ -740,11 +750,11 @@ useEffect(() => {
   type="button"
   onClick={(e) => {
     e.stopPropagation();
-    // Only allow increment if total is less than capacity
-    if (adults + children < roomCapacity) {
+    // Check against totalCapacity
+    if (adults + children < totalCapacity) {
       setAdults(adults + 1);
     } else {
-      toast.warning(`Maximum capacity for this room is ${roomCapacity} guests.`);
+      toast.warning(`Maximum capacity for ${rooms} ${unitLabelPlural} is ${totalCapacity} guests.`);
     }
   }}
   className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
@@ -794,15 +804,15 @@ useEffect(() => {
                     -
                   </button>
                   <span className="font-semibold text-sm w-4 text-center">{children}</span>
-                 <button
+                <button
   type="button"
   onClick={(e) => {
     e.stopPropagation();
-    // Only allow increment if total is less than capacity
-    if (adults + children < roomCapacity) {
+    // Check against totalCapacity
+    if (adults + children < totalCapacity) {
       setChildren(children + 1);
     } else {
-      toast.warning(`Maximum capacity for this room is ${roomCapacity} guests.`);
+      toast.warning(`Maximum capacity for ${rooms} ${unitLabelPlural} is ${totalCapacity} guests.`);
     }
   }}
   className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
