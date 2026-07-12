@@ -968,7 +968,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                     <label className="block text-yellow-500 text-[12px] uppercase tracking-wider mb-1.5">Email Address</label>
                     <input
                       type="email"
-                      placeholder="Enter Email (Optional)"
+                      placeholder="Enter Email "
                       value={guestEmail}
                       onChange={(e) => setGuestEmail(e.target.value)}
                       
