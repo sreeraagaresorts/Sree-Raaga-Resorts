@@ -29,7 +29,7 @@ const navItems = [
       { name: "Billing & Payments", path: "/admin/billing", icon: CreditCard },
     { name: "Rooms Management", path: "/admin/rooms-mgmt", icon: BedDouble },
 
-  { name: "Guests", path: "/admin/users", icon: Users },
+  { name: "Users and Admin", path: "/admin/users", icon: Users },
   { name: "Manage Hotel", path: "/admin/hotel-mgmt", icon: CalendarDays },
   { name: "Restaurant Menu", path: "/admin/menu", icon: UtensilsCrossed },
   { name: "Enquiries",         path: "/admin/enquiries",  icon: MessageSquare },

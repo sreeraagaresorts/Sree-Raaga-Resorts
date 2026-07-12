@@ -142,7 +142,7 @@ const AdminUsers = () => {
       return u.role === "admin";
     }
     // Removed `!u.is_manual` so manual guest walk-ins successfully display in the Users Table
-    return u.role !== "admin";
+   return u.role === "user" && !u.is_manual;
   });
 
   const renderHistory = () => {
@@ -287,7 +287,9 @@ const AdminUsers = () => {
       {/* STATS CARDS */}
       {!loading && !error && (() => {
         // Updated stat calculation to include manual guests, ensuring total counts map perfectly 
-        const guestUsers = users.filter((u) => u.role !== "admin");
+    const guestUsers = users.filter(
+  (u) => u.role !== "admin" && !u.is_manual
+);
         const totalUsers = guestUsers.length;
         const activeUserIds = new Set(bookings.filter(b => b.status !== "cancelled").map(b => b.user_id));
         const activeUsers = guestUsers.filter(u => activeUserIds.has(u.id)).length;
