@@ -210,17 +210,30 @@ const AdminBilling = () => {
 
   const stats = getStats();
 
-  // Map bookings to invoice format
-  const invoices = bookings.map((b) => ({
+// Map bookings to invoice format
+const invoices = bookings.map((b) => {
+  const isPaid =
+   b.payment_status?.toLowerCase() === "paid" ||
+    b.payment_method === "online" ||
+    b.payment_method === "razorpay" ||
+    !!b.razorpay_payment_id;
+
+  return {
     id: b.id.toString(),
     invoiceNumber: `INV-${b.id.toString().padStart(4, "0")}`,
     customerName: b.guest_name,
     customerEmail: b.guest_email,
     customerPhone: b.guest_phone,
-    amount:Math.floor(b.total_price || 0),
-    status: b.status === "confirmed" || b.status === "checked_in" ? "Paid Invoice" : b.status === "cancelled" ? "Cancelled" : "Pending",
-    createdAt: new Date(b.created_at)
-  }));
+    amount: Math.floor(b.total_price || 0),
+    status:
+      b.status === "cancelled"
+        ? "Cancelled"
+        : isPaid
+        ? "Paid Invoice"
+        : "Pending",
+    createdAt: new Date(b.created_at),
+  };
+});
 
   // Map bookings to payment records
   const payments = bookings.map((b) => {
@@ -237,6 +250,8 @@ const AdminBilling = () => {
       isPayLaterDue ? "Due" :
       b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out" ? "Paid" :
       b.status === "cancelled" ? "Refunded" : "Pending";
+
+      
     return {
       id: b.id.toString(),
       paymentId: b.razorpay_payment_id || `PAY-${b.id.toString().padStart(4, "0")}`,
