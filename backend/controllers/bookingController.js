@@ -437,6 +437,11 @@ exports.updateBookingStatus = async (req, res) => {
       if (status === "cancelled" && cancellation_reason !== undefined) {
         updateFields.cancellation_reason = cancellation_reason || null;
       }
+      if (status === "checked_in") {
+        updateFields.checked_in_at = new Date();
+      } else if (status === "checked_out") {
+        updateFields.checked_out_at = new Date();
+      }
     }
 
     if (payment_method !== undefined) {

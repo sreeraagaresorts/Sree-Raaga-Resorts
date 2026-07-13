@@ -24,6 +24,8 @@ const bookingSchema = new mongoose.Schema({
   booking_source: { type: String, default: "Walk-in" },
   is_manual: { type: Boolean, default: false },
   cancellation_reason: { type: String, default: null },
+  checked_in_at: { type: Date, default: null },
+  checked_out_at: { type: Date, default: null },
   created_at: { type: Date, default: Date.now }
 });
 

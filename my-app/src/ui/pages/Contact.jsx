@@ -271,7 +271,7 @@ setPhone(formatted);
 
           {/* Info Right */}
           <div className="w-full lg:w-1/2 bg-[#011b3c] text-white p-12 md:p-20 lg:pl-34 flex flex-col justify-center items-start lg:h-full">
-            <div className="flex flex-col items-start text-left space-y-6 max-w-md w-full">
+            <div className="flex flex-col items-start text-left space-y-6 max-w-lg w-full">
               <div>
                 <span className="text-[#c8a64d] text-[36px] tracking-[4px] font-medium uppercase block">
                   CONTACT
@@ -286,7 +286,7 @@ setPhone(formatted);
                 </p>
                 <p className="text-lg md:text-[24px]">
                   <span className="text-white font-semibold">Email:</span><span className="text-[#c8a64d] break-all sm:break-normal"> info@sreeraagaresorts.in</span><br />
-                  <span className="text-white font-semibold">Phone:</span> <span className="text-[#c8a64d] ">+91 89045 61155</span>
+                  <span className="text-white font-semibold">Phone:</span> <span className="text-[#c8a64d] ">+91 890 456 1155 | +91 890 438 1155</span>
                 </p>
               </div>
 

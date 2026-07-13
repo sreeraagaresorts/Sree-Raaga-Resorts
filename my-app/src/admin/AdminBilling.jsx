@@ -36,6 +36,19 @@ const AdminBilling = () => {
 
   // Modal State for Booking History details
   const [selectedHistoryBooking, setSelectedHistoryBooking] = useState(null);
+
+  const formatLoggedDate = (date) => {
+    if (!date) return "";
+    return date.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+  };
   const handleDeleteBooking = async (bookingId) => {
   const confirmDelete = window.confirm(
     "Are you sure you want to permanently delete this booking?"
@@ -995,7 +1008,7 @@ const invoices = bookings.map((b) => {
         <X size={20} />
       </button>
       <h3 className="text-xl font-bold text-white mb-4 border-b border-white/10 pb-3 tracking-wide">
-        Historical Stay Audit Ledger
+        Guest Booking Details
       </h3>
 
       <div className="space-y-5 text-sm">
@@ -1053,7 +1066,7 @@ const invoices = bookings.map((b) => {
                 {selectedHistoryBooking.checkIn ? selectedHistoryBooking.checkIn.toLocaleDateString("en-GB") : "—"}
               </span>
               <span className="text-[11px] text-white/40 block mt-0.5 font-mono">
-                Logged: {selectedHistoryBooking.checkedInAt ? selectedHistoryBooking.checkedInAt.toLocaleString("en-GB", {hour: '2-digit', minute:'2-digit', second:'2-digit'}) : "N/A"}
+                Logged: {selectedHistoryBooking.checkedInAt ? formatLoggedDate(selectedHistoryBooking.checkedInAt) : "N/A"}
               </span>
             </div>
             <div>
@@ -1062,7 +1075,7 @@ const invoices = bookings.map((b) => {
                 {selectedHistoryBooking.checkOut ? selectedHistoryBooking.checkOut.toLocaleDateString("en-GB") : "—"}
               </span>
               <span className="text-purple-300 font-semibold text-[11px] block mt-0.5 font-mono">
-                Logged: {selectedHistoryBooking.checkedOutAt ? selectedHistoryBooking.checkedOutAt.toLocaleString("en-GB", {hour: '2-digit', minute:'2-digit', second:'2-digit'}) : "Just Now / Processing"}
+                Logged: {selectedHistoryBooking.checkedOutAt ? formatLoggedDate(selectedHistoryBooking.checkedOutAt) : "Just Now / Processing"}
               </span>
             </div>
             <div className="col-span-2 pt-2 border-t border-white/5 mt-1">
