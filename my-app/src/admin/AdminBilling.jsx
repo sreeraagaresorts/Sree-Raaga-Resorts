@@ -1065,8 +1065,8 @@ const invoices = bookings.map((b) => {
               <span className="text-white block font-medium">
                 {selectedHistoryBooking.checkIn ? selectedHistoryBooking.checkIn.toLocaleDateString("en-GB") : "—"}
               </span>
-              <span className="text-[11px] text-white/40 block mt-0.5 font-mono">
-                Logged: {selectedHistoryBooking.checkedInAt ? formatLoggedDate(selectedHistoryBooking.checkedInAt) : "N/A"}
+              <span className="text-[14px] text-purple-300 font-semibold block mt-0.5 font-mono">
+                {selectedHistoryBooking.checkedInAt ? formatLoggedDate(selectedHistoryBooking.checkedInAt) : "N/A"}
               </span>
             </div>
             <div>
@@ -1074,8 +1074,8 @@ const invoices = bookings.map((b) => {
               <span className="text-white block font-medium">
                 {selectedHistoryBooking.checkOut ? selectedHistoryBooking.checkOut.toLocaleDateString("en-GB") : "—"}
               </span>
-              <span className="text-purple-300 font-semibold text-[11px] block mt-0.5 font-mono">
-                Logged: {selectedHistoryBooking.checkedOutAt ? formatLoggedDate(selectedHistoryBooking.checkedOutAt) : "Just Now / Processing"}
+              <span className="text-purple-300 font-semibold text-[14px] block mt-0.5 font-mono">
+                {selectedHistoryBooking.checkedOutAt ? formatLoggedDate(selectedHistoryBooking.checkedOutAt) : "Just Now / Processing"}
               </span>
             </div>
             <div className="col-span-2 pt-2 border-t border-white/5 mt-1">
