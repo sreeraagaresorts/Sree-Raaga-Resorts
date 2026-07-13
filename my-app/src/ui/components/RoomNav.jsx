@@ -303,15 +303,15 @@ const Navbar = () => {
             paddingBottom: "24px"
           },
           menuOpen: {
-  y: 0,
-  opacity: 1,
-  backgroundColor: "rgba(13, 43, 78, 0)", // transparent
-  backdropFilter: "blur(0px)",
-  borderBottomColor: "rgba(255,255,255,0.15)",
-  boxShadow: "0 0 0 rgba(0,0,0,0)",
-  paddingTop: "24px",
-  paddingBottom: "24px",
-},
+            y: 0,
+            opacity: 1,
+            backgroundColor: "rgba(13, 43, 78, 0)", // transparent
+            backdropFilter: "blur(0px)",
+            borderBottomColor: "rgba(255,255,255,0.15)",
+            boxShadow: "0 0 0 rgba(0,0,0,0)",
+            paddingTop: "10px",
+            paddingBottom: "10px",
+          },
         }}
         transition={{ type: "spring", stiffness: 100, damping: 18, mass: 1 }}
         className="fixed top-0 left-0 right-0 z-50 border-b flex flex-col  items-center"
@@ -357,7 +357,7 @@ const Navbar = () => {
   <img
     src="/logo.png" /* <-- Replace this with your actual logo path */
     alt="Sree Raaga Resorts"
-    className="h-[50px] md:h-12 lg:h-16 w-auto object-contain" 
+    className="h-[65px] md:h-12 lg:h-16 w-auto object-contain" 
   />
 </motion.div>
           </Link>
@@ -488,11 +488,11 @@ const Navbar = () => {
       })}
 
       {/* Mobile Only Quick Actions */}
-      <div className="flex flex-col gap-4 mt-8 md:hidden border-t border-white/10 pt-8 w-full max-w-xs shrink-0">
+      <div className="grid grid-cols-2 gap-3 mt-8 md:hidden border-t border-white/10 pt-8 w-full max-w-[280px] sm:max-w-xs shrink-0">
         <Link 
           to="/rooms"
           onClick={() => setIsOpen(false)}
-          className="px-6 py-4 bg-[#c8a64d] text-white text-center  uppercase tracking-widest text-xs font-bold hover:bg-[#b08e3b] transition"
+          className="px-3 py-3 bg-[#c8a64d] text-white text-center uppercase tracking-wider text-[10px] font-bold hover:bg-[#b08e3b] transition flex items-center justify-center"
         >
           Book Your Stay
         </Link>
@@ -502,7 +502,7 @@ const Navbar = () => {
               setIsOpen(false);
               handleSignOut();
             }}
-            className="px-6 py-4 border border-red-500/35 text-red-400 text-center rounded uppercase tracking-widest text-xs font-bold hover:bg-red-500/10 transition cursor-pointer"
+            className="px-3 py-3 border border-red-500/35 text-red-400 text-center rounded uppercase tracking-wider text-[10px] font-bold hover:bg-red-500/10 transition cursor-pointer flex items-center justify-center"
           >
             Sign Out
           </button>
@@ -510,7 +510,7 @@ const Navbar = () => {
           <Link 
             to="/login"
             onClick={() => setIsOpen(false)}
-            className="px-6 py-3 border border-white/20 text-white text-center rounded uppercase tracking-widest text-xs font-bold hover:bg-white/10 transition"
+            className="px-3 py-3 border border-white/20 text-white text-center rounded uppercase tracking-wider text-[10px] font-bold hover:bg-white/10 transition flex items-center justify-center"
           >
             Login / Register
           </Link>

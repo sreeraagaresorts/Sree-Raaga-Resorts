@@ -1081,8 +1081,22 @@ const invoices = bookings.map((b) => {
             <div className="col-span-2 pt-2 border-t border-white/5 mt-1">
               <div className="flex justify-between items-center">
                 <div>
-                  <span className="block text-white/50 text-[11px] uppercase tracking-wider">Booking Creation Timestamp</span>
-                  <span className="text-white/80 font-mono text-xs">{selectedHistoryBooking.createdAt.toLocaleString("en-GB")}</span>
+                <div>
+  <span className="block text-white/50 text-[11px] uppercase tracking-wider">
+    Booking Creation Timestamp
+  </span>
+  <span className="text-white/80 font-mono text-xs">
+    {selectedHistoryBooking.createdAt.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    })}
+  </span>
+</div>
                 </div>
                 <div className="text-right">
                   <span className="block text-white/50 text-[11px] uppercase tracking-wider">Source</span>
