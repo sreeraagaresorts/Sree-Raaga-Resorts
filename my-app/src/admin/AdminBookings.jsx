@@ -958,7 +958,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
             <form onSubmit={handleCreateBooking} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Guest Information */}
-                <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6 bg-yellow-500/5 p-6 rounded-lg border border-yellow-500/10">
+                <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 bg-yellow-500/5 p-6 rounded-lg border border-yellow-500/10">
                   <h3 className="col-span-1 md:col-span-3 text-xs font-semibold text-yellow-500 uppercase tracking-widest border-b border-yellow-500/10 pb-2 mb-1">
                     Guest Information
                   </h3>
@@ -985,7 +985,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
                     />
                   </div>
-                   <div>
+                   {/* <div>
                     <label className="block text-yellow-500 text-[12px] uppercase tracking-wider mb-1.5">Email Address</label>
                     <input
                       type="email"
@@ -995,7 +995,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                       
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
                     />
-                  </div>
+                  </div> */}
                 </div>
  {/* Dates range picker */}
                 <div className="col-span-1 md:col-span-2 relative">
