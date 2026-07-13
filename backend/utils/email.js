@@ -141,7 +141,7 @@ function getEmailShell(title, contentHtml) {
           color: rgba(255, 255, 255, 0.4);
           border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .footer p { margin: 5px 0; }
+        .footer p { margin: 5px 0; color: #c8a64d; }
         .footer a { color: #c8a64d; text-decoration: none; }
         .logo-desktop {
           display: block;

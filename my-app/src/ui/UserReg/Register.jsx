@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff,ArrowLeft } from "lucide-react";
 import { useToast } from "../components/Toast";
 import { API_URL } from "../../config/api";
 
@@ -102,7 +102,7 @@ const Register = () => {
           backgroundImage: "url('https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=2000')",
         }}
       >
-        <div className="absolute inset-0 bg-[#011b3c] backdrop-blur-[1px]"></div>
+        <div className="absolute inset-0 bg-[#011b3c] "></div>
         <div className="relative z-10 text-center space-y-3 max-w-md">
           <h1 className="text-4xl lg:text-6xl font-light text-white leading-tight">Sign Up</h1>
           <p className="text-yellow-500 uppercase tracking-[4px] text-xs font-semibold">
@@ -112,7 +112,7 @@ const Register = () => {
       </div>
 
       {/* Right Column: Centered Card */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6 bg-[#011b3c]  relative overflow-y-auto h-full">
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-6 bg-[#011b3c]  relative overflow-y-auto h-full">
         {/* Mobile background banner */}
         <div 
           className="absolute inset-0 bg-cover bg-center md:hidden"
@@ -120,7 +120,7 @@ const Register = () => {
             backgroundImage: "url('https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=2000')",
           }}
         ></div>
-        <div className="absolute inset-0 bg-black/85 backdrop-blur-[2px] md:hidden"></div>
+        <div className="absolute inset-0  md:hidden"></div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -289,6 +289,15 @@ const Register = () => {
             </Link>
           </div>
         </motion.div>
+            <div className="flex justify-center">
+  <Link
+    to="/"
+    className="inline-flex items-center gap-2 px-5 py-3 m-8  border border-[#C8A64D] bg-transparent text-[#C8A64D] text-sm font-semibold uppercase tracking-wider transition-all duration-300 hover:bg-[#C8A64D] hover:text-[#071524] hover:shadow-lg"
+  >
+    <ArrowLeft size={16} />
+    Back to Homepage
+  </Link>
+</div>
       </div>
     </div>
   );
