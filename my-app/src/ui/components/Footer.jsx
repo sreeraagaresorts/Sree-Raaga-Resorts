@@ -129,11 +129,22 @@ const Footer = () => {
 
           {/* About Us Column */}
           <div>
+   <Link 
+            to="/" 
+            className="text-center transition-all duration-500  flex-1"
+          >
+       <motion.div
+  animate={{ scale: 1 }}
+  transition={{ duration: 0.5, ease: "easeInOut" }}
+  className="flex flex"
+>
       <img
     src="/logo.png" /* <-- Replace this with your actual logo path */
     alt="Sree Raaga Resorts"
     className="h-[55px] mb-5 md:h-20 lg:h-25 w-auto object-contain" 
   />
+</motion.div>
+          </Link>
             <p className="text-white text-[16px] leading-relaxed max-w-xs">
               Sree Raaga Resorts offers a sanctuary of peace, where luxury meets nature. Escape the city's hustle and enjoy a perfect blend of stays, corporate events, weddings, and family recreation.
             </p>
