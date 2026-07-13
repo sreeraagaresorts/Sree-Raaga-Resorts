@@ -568,3 +568,117 @@ exports.updateProfile = async (req, res) => {
     });
   }
 };
+
+// Send Password Reset OTP
+exports.forgotPasswordSendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required"
+      });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User with this email does not exist"
+      });
+    }
+
+    // Don't allow password resets for admin via user interface to enhance security
+    if (user.role === "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Admin password cannot be reset through this interface"
+      });
+    }
+
+    // Generate random 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
+    user.otp = otp;
+    user.otp_expiry = expiry;
+    await user.save();
+
+    // Send email
+    const { sendOtpEmail } = require("../utils/email");
+    const mailSent = await sendOtpEmail(user, otp);
+
+    if (!mailSent) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to send OTP email. Please try again later."
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "OTP sent to your email address successfully."
+    });
+  } catch (error) {
+    console.error("Forgot password send OTP error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
+// Verify OTP and Reset Password
+exports.forgotPasswordVerifyAndReset = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Email, OTP, and new password are required"
+      });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User with this email does not exist"
+      });
+    }
+
+    if (!user.otp || !user.otp_expiry || new Date(user.otp_expiry) < new Date()) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP has expired or is invalid. Please request a new one."
+      });
+    }
+
+    if (user.otp !== otp.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect OTP. Please try again."
+      });
+    }
+
+    // Reset password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.otp = null;
+    user.otp_expiry = null;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfully. You can now login with your new password."
+    });
+  } catch (error) {
+    console.error("Forgot password reset error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};

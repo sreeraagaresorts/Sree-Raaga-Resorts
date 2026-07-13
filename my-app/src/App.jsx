@@ -15,6 +15,7 @@ import Contact from "./ui/pages/Contact";
 import Menu from "./ui/pages/Menu";
 import Login from "./ui/UserReg/Login";
 import Register from "./ui/UserReg/Register";
+import ForgotPassword from "./ui/UserReg/ForgotPassword";
 import FAQ from "./ui/pages/FAQ";
 import LegalLayout from "./ui/pages/LegalLayout";
 import NotFound from "./ui/pages/NotFound";
@@ -99,6 +100,7 @@ const App = () => {
         {/* AUTH */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* USER DASHBOARD (NO Navbar/Footer) */}
         <Route

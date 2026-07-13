@@ -161,7 +161,7 @@ const handleLogin = async (e) => {
           <div className="mt-3 text-center">
             <Link
               to="/forgot-password"
-              className="text-sm text-gray-100 hover:text-yellow-500 transition"
+              className="text-[16px] text-gray-100 hover:text-yellow-500 transition"
             >
               Forgot Password?
             </Link>

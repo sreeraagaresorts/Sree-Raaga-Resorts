@@ -148,7 +148,7 @@ function getEmailShell(title, contentHtml) {
     <body>
       <div class="container">
         <div class="header">
-          <h1>Sree Raaga Resort</h1>
+          <img src="${process.env.FRONTEND_URL || "https://sreeraagaresorts.in"}/logo.png" alt="Sree Raaga Resort" style="max-height: 70px; width: auto; display: block; margin: 0 auto;" />
         </div>
         <div class="content">
           ${contentHtml}
@@ -439,5 +439,24 @@ exports.sendContactSubmissionEmail = async (contact) => {
     html: getEmailShell("New Contact Submission", content),
     text: `New contact form submission from ${contact.name} (${contact.email})${contact.phone ? ` [Phone: ${contact.phone}]` : ""}: ${contact.message}`,
     allowAdminDesk: true
+  });
+};
+
+// 11. Send Password Reset OTP
+exports.sendOtpEmail = async (user, otp) => {
+  const content = `
+    <div class="greeting">Password Reset OTP</div>
+    <p>Dear <strong>${user.full_name}</strong>,</p>
+    <p>You requested to reset your password. Please use the following One-Time Password (OTP) to complete the request. This OTP is valid for 10 minutes.</p>
+    <div class="box" style="text-align: center; font-size: 24px; letter-spacing: 5px; color: #c8a64d; font-weight: bold; background-color: #04101e; border: 1px solid rgba(200, 166, 77, 0.2); padding: 15px; border-radius: 8px;">
+      ${otp}
+    </div>
+    <p>If you did not make this request, you can ignore this email. Your password will remain unchanged.</p>
+  `;
+  return sendMail({
+    to: user.email,
+    subject: "Reset Password OTP - Sree Raaga Resort",
+    html: getEmailShell("Reset Password OTP", content),
+    text: `Your password reset OTP is ${otp}. It is valid for 10 minutes.`
   });
 };

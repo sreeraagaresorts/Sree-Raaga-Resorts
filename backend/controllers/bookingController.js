@@ -570,10 +570,17 @@ exports.updateBookingStatus = async (req, res) => {
         guest_email: user ? user.email : null
       };
 
-      const { sendBookingUpdatedEmail } = require("../utils/email");
-      sendBookingUpdatedEmail(emailPayload).catch(err => {
-        console.error("[Email Error] Failed to send booking updated email:", err);
-      });
+      if (updatedBooking.status === "cancelled") {
+        const { sendBookingDeletedEmail } = require("../utils/email");
+        sendBookingDeletedEmail(emailPayload).catch(err => {
+          console.error("[Email Error] Failed to send booking cancelled email:", err);
+        });
+      } else {
+        const { sendBookingUpdatedEmail } = require("../utils/email");
+        sendBookingUpdatedEmail(emailPayload).catch(err => {
+          console.error("[Email Error] Failed to send booking updated email:", err);
+        });
+      }
     } catch (err) {
       console.error("[Email] Failed to fetch booking details for update notification:", err);
     }

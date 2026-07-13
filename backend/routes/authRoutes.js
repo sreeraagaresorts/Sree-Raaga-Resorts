@@ -15,7 +15,9 @@ const {
   deleteOwnAccount,
   getAuditLogs,
   getWishlist,
-  toggleWishlist
+  toggleWishlist,
+  forgotPasswordSendOtp,
+  forgotPasswordVerifyAndReset
 } = require("../controllers/authController");
 
 const verifyToken = require("../middleware/authMiddleware");
@@ -25,6 +27,9 @@ router.post("/register", register);
 
 router.post("/login", login);
 router.post("/logout", verifyToken, logout);
+
+router.post("/forgot-password/send-otp", forgotPasswordSendOtp);
+router.post("/forgot-password/reset", forgotPasswordVerifyAndReset);
 
 router.get(
   "/profile",

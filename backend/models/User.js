@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
   role: { type: String, default: "user" },
   is_manual: { type: Boolean, default: false },
   wishlist: [{ type: Number, default: [] }],
+  otp: { type: String, default: null },
+  otp_expiry: { type: Date, default: null },
   created_at: { type: Date, default: Date.now }
 });
 
