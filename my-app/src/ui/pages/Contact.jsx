@@ -286,7 +286,20 @@ setPhone(formatted);
                 </p>
                 <p className="text-lg md:text-[24px]">
                   <span className="text-white font-semibold">Email:</span><span className="text-[#c8a64d] break-all sm:break-normal"> info@sreeraagaresorts.in</span><br />
-                  <span className="text-white font-semibold">Phone:</span> <span className="text-[#c8a64d] ">+91 890 456 1155 | +91 890 438 1155</span>
+               <span className="text-white font-semibold">Phone:</span>{" "}
+<a
+  href="tel:+918904561155"
+  className="text-[#c8a64d] hover:text-white"
+>
+  +91 890 456 1155
+</a>
+{" | "}
+<a
+  href="tel:+918904381155"
+  className="text-[#c8a64d] hover:text-white"
+>
+  +91 890 438 1155
+</a>
                 </p>
               </div>
 
