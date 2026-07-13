@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import DatePicker from "react-datepicker";
 import { API_URL } from "../config/api";
 import {
   Tag,
@@ -14,6 +15,7 @@ import {
   BarChart2,
   RefreshCw,
   Ticket,
+  Calendar,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────
@@ -214,12 +216,44 @@ function CampaignModal({ mode, initial, onClose, onSave }) {
           {/* Dates */}
           <div className="grid grid-cols-2 gap-4">
             <Field label="Start Date">
-              <input type="date" className={inp} value={form.start_date}
-                onChange={(e) => set("start_date", e.target.value)} />
+              <div className="relative flex items-center">
+                <DatePicker
+                  selected={form.start_date ? new Date(form.start_date) : null}
+                  onChange={(date) => {
+                    if (date) {
+                      const tzOffset = date.getTimezoneOffset() * 60000;
+                      set("start_date", new Date(date.getTime() - tzOffset).toISOString().split("T")[0]);
+                    } else {
+                      set("start_date", "");
+                    }
+                  }}
+                  dateFormat="dd/MM/yyyy"
+                  className={inp + " pl-10 cursor-pointer"}
+                  placeholderText="DD/MM/YYYY"
+                  wrapperClassName="w-full"
+                />
+                <Calendar className="w-4 h-4 text-[#C8A64D] absolute left-3.5 pointer-events-none" />
+              </div>
             </Field>
             <Field label="Expiration Date">
-              <input type="date" className={inp} value={form.expiry_date}
-                onChange={(e) => set("expiry_date", e.target.value)} />
+              <div className="relative flex items-center">
+                <DatePicker
+                  selected={form.expiry_date ? new Date(form.expiry_date) : null}
+                  onChange={(date) => {
+                    if (date) {
+                      const tzOffset = date.getTimezoneOffset() * 60000;
+                      set("expiry_date", new Date(date.getTime() - tzOffset).toISOString().split("T")[0]);
+                    } else {
+                      set("expiry_date", "");
+                    }
+                  }}
+                  dateFormat="dd/MM/yyyy"
+                  className={inp + " pl-10 cursor-pointer"}
+                  placeholderText="DD/MM/YYYY"
+                  wrapperClassName="w-full"
+                />
+                <Calendar className="w-4 h-4 text-[#C8A64D] absolute left-3.5 pointer-events-none" />
+              </div>
             </Field>
           </div>
 

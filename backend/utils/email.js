@@ -143,12 +143,33 @@ function getEmailShell(title, contentHtml) {
         }
         .footer p { margin: 5px 0; }
         .footer a { color: #c8a64d; text-decoration: none; }
+        .logo-desktop {
+          display: block;
+          max-height: 70px;
+          width: auto;
+          margin: 0 auto;
+        }
+        .logo-mobile {
+          display: none;
+          max-height: 70px;
+          width: auto;
+          margin: 0 auto;
+        }
+        @media only screen and (max-width: 480px) {
+          .logo-desktop {
+            display: none !important;
+          }
+          .logo-mobile {
+            display: block !important;
+          }
+        }
       </style>
     </head>
     <body>
       <div class="container">
         <div class="header">
-          <img src="${process.env.FRONTEND_URL || "https://sreeraagaresorts.in"}/logo2.png" alt="Sree Raaga Resort" style="max-height: 70px; width: auto; display: block; margin: 0 auto;" />
+          <img class="logo-desktop" src="${process.env.FRONTEND_URL || "https://sreeraagaresorts.in"}/logo.png" alt="Sree Raaga Resort" style="max-height: 70px; width: auto; margin: 0 auto;" />
+          <img class="logo-mobile" src="${process.env.FRONTEND_URL || "https://sreeraagaresorts.in"}/logo2.png" alt="Sree Raaga Resort" style="max-height: 70px; width: auto; margin: 0 auto; display: none;" />
         </div>
         <div class="content">
           ${contentHtml}
