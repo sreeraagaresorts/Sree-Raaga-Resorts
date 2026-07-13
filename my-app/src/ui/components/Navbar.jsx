@@ -348,7 +348,7 @@ const Navbar = () => {
   <img
     src="/logo.png" /* <-- Replace this with your actual logo path */
     alt="Sree Raaga Resorts"
-    className="h-[65px] md:h-12 lg:h-16 w-auto object-contain" 
+    className="h-[65px] md:h-12 lg:h-16 w-auto object-contain scale-123" 
   />
 </motion.div>
           </Link>

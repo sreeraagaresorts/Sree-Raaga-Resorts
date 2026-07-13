@@ -357,7 +357,7 @@ const Navbar = () => {
   <img
     src="/logo.png" /* <-- Replace this with your actual logo path */
     alt="Sree Raaga Resorts"
-    className="h-[65px] md:h-12 lg:h-16 w-auto object-contain" 
+    className="h-[65px] md:h-12 lg:h-16 w-auto object-contain scale-123" 
   />
 </motion.div>
           </Link>
@@ -379,7 +379,7 @@ const Navbar = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="hover:text-[#c8a64d] text-white uppercase tracking-widest text-[10px] md:text-xs lg:text-sm font-semibold"
+                  className="hover:text-[#c8a64d] text-white uppercase tracking-widest text-[13px] md:text-xs lg:text-sm font-semibold"
                 >
                   Login
                 </Link>
