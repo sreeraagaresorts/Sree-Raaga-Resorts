@@ -440,7 +440,8 @@ useEffect(() => {
             check_in: checkIn,
             check_out: checkOut,
             rooms,
-            total_amount: totals.total // Include calculated totals with services
+            total_amount: totals.total, // Include calculated totals with services
+            coupon_code: appliedCoupon ? appliedCoupon.code : null
           })
         });
 

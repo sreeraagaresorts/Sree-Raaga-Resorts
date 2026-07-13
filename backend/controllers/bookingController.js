@@ -120,7 +120,7 @@ if (req.body.coupon_code) {
   // Per-user validation
   const userUsage = await Booking.countDocuments({
     user_id: Number(user_id),
-    coupon_code: coupon.code,
+    coupon_code: { $regex: new RegExp(`^${coupon.code}$`, "i") },
     status: { $ne: "cancelled" }
   });
 
@@ -214,7 +214,7 @@ if (req.body.coupon_code) {
       services_price: req.body.services_price !== undefined ? Number(req.body.services_price) : 0,
       discount_price: req.body.discount_price !== undefined ? Number(req.body.discount_price) : 0,
       gst_amount: req.body.gst_amount !== undefined ? Number(req.body.gst_amount) : 0,
-      coupon_code: req.body.coupon_code || null,
+      coupon_code: req.body.coupon_code ? req.body.coupon_code.trim().toUpperCase() : null,
       status: 'confirmed',
       payment_method: payment_method || 'online',
       payment_status: req.body.payment_status !== undefined ? req.body.payment_status : (payment_method === 'pay_later' ? 'Unpaid' : 'Paid'),
@@ -683,7 +683,7 @@ exports.createRazorpayOrder = async (req, res) => {
       });
     }
 
-    const { room_id, check_in, check_out, rooms, total_amount } = req.body;
+    const { room_id, check_in, check_out, rooms, total_amount, coupon_code } = req.body;
     if (!room_id || !check_in || !check_out) {
       return res.status(400).json({
         success: false,
@@ -712,6 +712,64 @@ exports.createRazorpayOrder = async (req, res) => {
       });
     }
     const nights = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+
+    // Validate coupon if provided
+    if (coupon_code) {
+      const Coupon = require("../models/Coupon");
+      const coupon = await Coupon.findOne({
+        code: coupon_code.toUpperCase()
+      });
+
+      if (!coupon) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid coupon code."
+        });
+      }
+
+      if (coupon.status !== "active") {
+        return res.status(400).json({
+          success: false,
+          message: "This coupon is no longer active."
+        });
+      }
+
+      const today = new Date();
+      if (today < new Date(coupon.start_date)) {
+        return res.status(400).json({
+          success: false,
+          message: "Coupon is not active yet."
+        });
+      }
+
+      if (today > new Date(coupon.expiry_date)) {
+        return res.status(400).json({
+          success: false,
+          message: "Coupon has expired."
+        });
+      }
+
+      if (coupon.used_count >= coupon.total_uses) {
+        return res.status(400).json({
+          success: false,
+          message: "Coupon usage limit reached."
+        });
+      }
+
+      const user_id = req.user.id;
+      const userUsage = await Booking.countDocuments({
+        user_id: Number(user_id),
+        coupon_code: { $regex: new RegExp(`^${coupon.code}$`, "i") },
+        status: { $ne: "cancelled" }
+      });
+
+      if (userUsage >= coupon.uses_per_user) {
+        return res.status(400).json({
+          success: false,
+          message: `You can use this coupon only ${coupon.uses_per_user} time(s).`
+        });
+      }
+    }
 
     const Razorpay = require("razorpay");
     const key_id = process.env.RAZORPAY_KEY_ID || "rzp_test_mockkeyid12";
@@ -888,7 +946,7 @@ if (coupon_code) {
 
   const userUsage = await Booking.countDocuments({
     user_id: Number(user_id),
-    coupon_code: coupon.code,
+    coupon_code: { $regex: new RegExp(`^${coupon.code}$`, "i") },
     status: { $ne: "cancelled" }
   });
 
@@ -924,44 +982,6 @@ if (coupon_code) {
 
     const computed_price = nights * roomPrice * roomCount;
     const final_total_price = req_total_price !== undefined ? Number(req_total_price) : computed_price;
-if (req.body.coupon_code) {
-  const Coupon = require("../models/Coupon");
-
-  const coupon = await Coupon.findOne({
-    code: req.body.coupon_code.toUpperCase(),
-  });
-
-  if (!coupon) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid coupon.",
-    });
-  }
-
-  // Check expiry
-  if (coupon.status !== "active") {
-    return res.status(400).json({
-      success: false,
-      message: "Coupon has expired.",
-    });
-  }
-
-  // Count how many times THIS USER used this coupon
-  const userUsage = await Booking.countDocuments({
-    user_id: Number(user_id),
-    coupon_code: req.body.coupon_code.toUpperCase(),
-    status: { $ne: "cancelled" },
-  });
-
-  if (userUsage >= coupon.uses_per_user) {
-    return res.status(400).json({
-      success: false,
-      message: `You can use this coupon only ${coupon.uses_per_user} time(s).`,
-    });
-  }
-}
-
-
     const booking = new Booking({
       user_id: Number(user_id),
       room_id: Number(room_id),
@@ -975,7 +995,7 @@ if (req.body.coupon_code) {
       services_price: services_price !== undefined ? Number(services_price) : 0,
       discount_price: discount_price !== undefined ? Number(discount_price) : 0,
       gst_amount: gst_amount !== undefined ? Number(gst_amount) : 0,
-      coupon_code: coupon_code || null,
+      coupon_code: coupon_code ? coupon_code.trim().toUpperCase() : null,
       status: 'confirmed',
       payment_method: 'online',
       razorpay_payment_id: razorpay_payment_id
