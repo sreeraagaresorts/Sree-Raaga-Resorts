@@ -1459,7 +1459,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                 value={cancelReason}
                 onChange={e => setCancelReason(e.target.value)}
                 rows={4}
-                placeholder="Enter the reason for cancelling this booking (e.g. Guest requested, No-show, Overbooking, etc.)..."
+                placeholder="Enter the reason for cancelling this booking "
                 className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#C8A64D] resize-none placeholder:text-white/30 leading-relaxed"
               />
               {!cancelReason.trim() && (

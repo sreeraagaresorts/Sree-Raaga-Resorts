@@ -148,7 +148,7 @@ function getEmailShell(title, contentHtml) {
     <body>
       <div class="container">
         <div class="header">
-          <img src="${process.env.FRONTEND_URL || "https://sreeraagaresorts.in"}/logo.png" alt="Sree Raaga Resort" style="max-height: 70px; width: auto; display: block; margin: 0 auto;" />
+          <img src="${process.env.FRONTEND_URL || "https://sreeraagaresorts.in"}/logo2.png" alt="Sree Raaga Resort" style="max-height: 70px; width: auto; display: block; margin: 0 auto;" />
         </div>
         <div class="content">
           ${contentHtml}
@@ -303,6 +303,7 @@ exports.sendBookingUpdatedEmail = async (booking) => {
       • Booking ID: BK-0${booking.id}<br>
       • Room: ${booking.room_name}<br>
       ${booking.room_number ? `• Room Number: <strong>${booking.room_number}</strong><br>` : ""}
+      • Guests: ${booking.adults || 1} Adults, ${booking.children || 0} Children<br>
       • Dates: ${checkIn} to ${checkOut}<br>
       • Price: ₹${price.toLocaleString("en-IN")}<br>
       • Payment Method: ${booking.payment_method || "cash"}<br>
