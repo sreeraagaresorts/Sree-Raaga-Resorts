@@ -985,17 +985,17 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
                     />
                   </div>
-                   {/* <div>
+                   <div>
                     <label className="block text-yellow-500 text-[12px] uppercase tracking-wider mb-1.5">Email Address</label>
                     <input
                       type="email"
-                      placeholder="Enter Email "
+                      placeholder="Enter Email (Optional) "
                       value={guestEmail}
                       onChange={(e) => setGuestEmail(e.target.value)}
                       
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 text-white outline-none focus:border-yellow-500 text-sm"
                     />
-                  </div> */}
+                  </div>
                 </div>
  {/* Dates range picker */}
                 <div className="col-span-1 md:col-span-2 relative">
