@@ -757,8 +757,10 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                     {/* GUEST */}
                     <td className="px-4 py-3">
                       <div className="font-semibold text-[15px]">{b.guest_name}</div>
+                         {b.guest_phone &&
+                       <div className="text-[14px] text-white mt-0.5">{formatPhoneNumber(b.guest_phone)}</div>}
                       <div className="text-[14px] text-white mt-0.5">{b.guest_email}</div>
-                      {b.guest_phone && <div className="text-[14px] text-white mt-0.5">{formatPhoneNumber(b.guest_phone)}</div>}
+                   
                     </td>
 
                     {/* ROOM */}
@@ -1180,7 +1182,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                   disabled={saving}
                   className="px-6 py-2 bg-[#C8A64D] text-black font-bold rounded-lg hover:bg-[#b09141] transition disabled:bg-yellow-600/50 cursor-pointer"
                 >
-                  {saving ? "Creating..." : "Save Reservation"}
+                  {saving ? "Creating..." : "Create Booking"}
                 </button>
               </div>
             </form>
