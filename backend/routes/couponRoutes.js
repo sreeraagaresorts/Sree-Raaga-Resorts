@@ -4,15 +4,15 @@ const {
   createCoupon,
   updateCoupon,
   deleteCoupon,
+  validateCoupon
 } = require("../controllers/couponController");
-
-// If you have auth middleware to protect these routes, import and use it.
-// e.g., const { protect, authorize } = require("../middleware/auth");
+const verifyToken = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Assuming admin routes might need auth in the future, we'll leave it standard for now.
-// Add protect and authorize('admin') if needed.
+// Public validation endpoint for users to apply coupon
+router.post("/validate", verifyToken, validateCoupon);
+
 router.route("/")
   .get(getCoupons)
   .post(createCoupon);

@@ -190,18 +190,39 @@ useEffect(() => {
     fetchCoupons();
   }, [room]);
 
-  const handleApplyCoupon = (codeOverride) => {
+  const handleApplyCoupon = async (codeOverride) => {
     const code = (typeof codeOverride === 'string' ? codeOverride : couponInput).trim().toUpperCase();
     if (!code) return;
-    const coupon = coupons.find(c => c.code === code);
-    if (!coupon) {
-      toast.error("Invalid or expired coupon code.");
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.warning("Please sign in to apply a coupon.");
+      navigate("/login");
       return;
     }
-    setAppliedCoupon(coupon);
-    setIsCouponModalOpen(false);
-    setCouponInput("");
-    toast.success(`Coupon ${code} applied successfully!`);
+
+    try {
+      const res = await fetch(`${API_URL}/api/coupons/validate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ code })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to validate coupon.");
+      }
+
+      setAppliedCoupon(data.coupon);
+      setIsCouponModalOpen(false);
+      setCouponInput("");
+      toast.success(`Coupon ${code} applied successfully!`);
+    } catch (err) {
+      toast.error(err.message || "Failed to apply coupon.");
+    }
   };
 
   const removeCoupon = () => {
@@ -517,9 +538,8 @@ useEffect(() => {
         const rzp = new window.Razorpay(options);
         rzp.open();
       } catch (err) {
-        console.error("Booking API Error, mock booking request:", err.message);
-        toast.success("Demo Mode: Booking request processed successfully!");
-        navigate("/dashboard/bookings");
+        console.error("Booking API Error:", err.message);
+        toast.error(err.message || "Failed to initiate online order.");
       } finally {
         setBookingLoading(false);
       }
@@ -557,9 +577,8 @@ useEffect(() => {
         toast.success("Booking request submitted successfully! Please pay cash at resort check-in.");
         navigate("/dashboard/bookings");
       } catch (err) {
-        console.warn("Cash booking API failure, mock request successful:", err.message);
-        toast.success("Demo Mode: Cash booking request processed successfully!");
-        navigate("/dashboard/bookings");
+        console.error("Booking API Error:", err.message);
+        toast.error(err.message || "Failed to submit booking.");
       } finally {
         setBookingLoading(false);
       }
@@ -832,7 +851,15 @@ useEffect(() => {
           {!appliedCoupon && (
             <div className="flex justify-between items-start pt-2">
               <span className="text-gray-800">Coupon Code</span>
-              <button type="button" onClick={() => setIsCouponModalOpen(true)} className="text-[15px] font-bold text-[#800000] underline underline-offset-2 decoration-[1.5px] hover:text-red-900 transition cursor-pointer">
+              <button type="button" onClick={() => {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                  toast.warning("Please sign in to apply a coupon.");
+                  navigate("/login");
+                  return;
+                }
+                setIsCouponModalOpen(true);
+              }} className="text-[15px] font-bold text-[#800000] underline underline-offset-2 decoration-[1.5px] hover:text-red-900 transition cursor-pointer">
                 Add Coupon
               </button>
             </div>
