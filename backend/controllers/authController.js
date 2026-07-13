@@ -5,7 +5,12 @@ const AuditLog = require("../models/AuditLog");
 
 exports.register = async (req, res) => {
   try {
-    const { full_name, email, phone, password, is_manual } = req.body;
+    let { full_name, email, phone, password, is_manual } = req.body;
+
+    if (!email || email.trim() === "") {
+      const cleanPhone = phone ? phone.replace(/\D/g, "") : Date.now();
+      email = `guest_${cleanPhone}@sreeraagaresorts.com`;
+    }
 
     if (!full_name || !email || !phone || !password) {
       return res.status(400).json({
@@ -47,12 +52,23 @@ exports.register = async (req, res) => {
       }
     }
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({
+      $or: [{ phone }, { email }]
+    });
+
     if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "Email Already Exists"
-      });
+      if (is_manual) {
+        return res.status(200).json({
+          success: true,
+          message: "User found.",
+          userId: existingUser.id
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: existingUser.email === email ? "Email Already Exists" : "Phone Number Already Registered"
+        });
+      }
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -71,11 +87,13 @@ exports.register = async (req, res) => {
     });
     await user.save();
 
-    // Trigger welcome email in background
-    const { sendWelcomeEmail } = require("../utils/email");
-    sendWelcomeEmail({ id: user.id, full_name, email, role }).catch(err => {
-      console.error("[Email Error] Failed to send welcome email:", err);
-    });
+    // Trigger welcome email in background for non-manual users
+    if (!is_manual) {
+      const { sendWelcomeEmail } = require("../utils/email");
+      sendWelcomeEmail({ id: user.id, full_name, email, role }).catch(err => {
+        console.error("[Email Error] Failed to send welcome email:", err);
+      });
+    }
 
     res.status(201).json({
       success: true,
