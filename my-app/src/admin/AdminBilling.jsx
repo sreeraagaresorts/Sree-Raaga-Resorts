@@ -1085,7 +1085,7 @@ const invoices = bookings.map((b) => {
   <span className="block text-white/50 text-[11px] uppercase tracking-wider">
     Booking Creation Timestamp
   </span>
-  <span className="text-white/80 font-mono text-xs">
+  <span className="text-purple-300 font-semibold font-mono text-xs">
     {selectedHistoryBooking.createdAt.toLocaleString("en-GB", {
       day: "2-digit",
       month: "2-digit",
