@@ -9,7 +9,7 @@ exports.register = async (req, res) => {
 
     if (!email || email.trim() === "") {
       const cleanPhone = phone ? phone.replace(/\D/g, "") : Date.now();
-      email = ``;
+      email = `guest_${cleanPhone}@sreeraagaresorts.com`;
     }
 
     if (!full_name || !email || !phone || !password) {
