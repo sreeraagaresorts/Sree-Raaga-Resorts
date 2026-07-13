@@ -68,7 +68,7 @@ const handleLogin = async (e) => {
           backgroundImage: "url('https://images.unsplash.com/photo-1542314831-c6a4d27ece91?q=80&w=2000')",
         }}
       >
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]"></div>
+        <div className="absolute inset-0 bg-[#011b3c] backdrop-blur-[1px]"></div>
         <div className="relative z-10 text-center space-y-3 max-w-md">
           <h1 className="text-4xl lg:text-6xl font-light text-white leading-tight">Sign In</h1>
           <p className="text-yellow-500 uppercase tracking-[4px] text-xs font-semibold">
@@ -78,7 +78,7 @@ const handleLogin = async (e) => {
       </div>
 
       {/* Right Column: Centered Card */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6 bg-zinc-950/40 relative">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-6 bg-[#011b3c] relative">
         {/* Mobile background banner */}
         <div 
           className="absolute inset-0 bg-cover bg-center md:hidden"

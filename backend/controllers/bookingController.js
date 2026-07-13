@@ -610,9 +610,21 @@ exports.updateBookingStatus = async (req, res) => {
       }
     }
 
+    const room = await Room.findOne({ id: updatedBooking.room_id });
+    const user = await User.findOne({ id: updatedBooking.user_id });
+    const populatedBooking = {
+      ...updatedBooking.toObject(),
+      room_name: room ? room.name : null,
+      room_gst_percentage: room ? room.gst_percentage : 8,
+      guest_name: user ? user.full_name : null,
+      guest_email: user ? user.email : null,
+      guest_phone: user ? user.phone : null
+    };
+
     res.json({
       success: true,
-      message: "Booking updated successfully."
+      message: "Booking updated successfully.",
+      data: populatedBooking
     });
   } catch (error) {
     console.error(error);

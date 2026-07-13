@@ -445,7 +445,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
       }
 
       toast.success(`Booking status changed to ${status}!`);
-      setBookings((prev) => prev.map((b) => b.id === id ? { ...b, ...data.data } : b));
+      setBookings((prev) => prev.map((b) => b.id === id ? { ...b, status: status, ...data.data } : b));
     } catch (err) {
       toast.error(err.message || "Failed to update booking status.");
     }
@@ -586,7 +586,15 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
           toast.success("Payment settled and guest checked out successfully!");
           setBookings((prev) =>
             prev.map((b) =>
-              b.id === checkoutBooking.id ? { ...b, ...data.data } : b
+              b.id === checkoutBooking.id
+                ? {
+                    ...b,
+                    status: "checked_out",
+                    payment_method: settlePaymentMethod,
+                    payment_status: "Paid",
+                    ...data.data,
+                  }
+                : b
             )
           );
           setCheckoutBooking(null);
