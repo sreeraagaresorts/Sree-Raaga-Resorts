@@ -327,7 +327,7 @@ const [selectedRoomCount, setSelectedRoomCount] = useState(1);
     setCheckIn("");
     setCheckOut("");
     setRoomCount(1); // Add this
-    setSelectedRoomNumbers("");
+    setSelectedRoomNumbers([]);
     setSelectedRoom("");
     setAdults(1);
     setChildren(0);
@@ -935,8 +935,8 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
 
       {/* NEW BOOKING MODAL */}
       {isFormOpen && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#081A2F] w-full max-w-3xl p-6 rounded-xl border border-white/10 space-y-4">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 md:p-10">
+          <div className="bg-[#081A2F] w-full max-w-5xl p-6 md:p-8 rounded-xl border border-white/10 space-y-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center pb-2 border-b border-white/5">
               <h2 className="text-xl font-bold">New Booking Creation</h2>
               <button 
@@ -947,10 +947,10 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
               </button>
             </div>
 
-            <form onSubmit={handleCreateBooking} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleCreateBooking} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Guest Information */}
-                <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 bg-yellow-500/5 p-4 rounded-lg border border-yellow-500/10">
+                <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6 bg-yellow-500/5 p-6 rounded-lg border border-yellow-500/10">
                   <h3 className="col-span-1 md:col-span-3 text-xs font-semibold text-yellow-500 uppercase tracking-widest border-b border-yellow-500/10 pb-2 mb-1">
                     Guest Information
                   </h3>
@@ -1043,7 +1043,8 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                     value={selectedRoom}
                     onChange={(e) => {
                       setSelectedRoom(e.target.value);
-                      setSelectedRoomNumbers("");
+                      setSelectedRoomNumbers([]);
+                      setRoomCount(1);
                     }}
                     required
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
@@ -1059,9 +1060,9 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
 
        <div>
   <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">
-    Select {roomCount} Room Number(s)
+    Select Room Number(s)
   </label>
-  <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto p-2 bg-[#071524] border border-white/10 rounded-lg">
+  <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto p-3 bg-[#071524] border border-white/10 rounded-lg">
     {filteredAvailableRoomNumbers.map((item) => {
       const isSelected = selectedRoomNumbers.includes(item.roomNumber);
       return (
@@ -1070,11 +1071,13 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
           type="button"
           onClick={() => {
             if (isSelected) {
-              setSelectedRoomNumbers(prev => prev.filter(n => n !== item.roomNumber));
-            } else if (selectedRoomNumbers.length < roomCount) {
-              setSelectedRoomNumbers(prev => [...prev, item.roomNumber]);
+              const updated = selectedRoomNumbers.filter(n => n !== item.roomNumber);
+              setSelectedRoomNumbers(updated);
+              setRoomCount(updated.length || 1);
             } else {
-              toast.warning(`You have already selected ${roomCount} room(s).`);
+              const updated = [...selectedRoomNumbers, item.roomNumber];
+              setSelectedRoomNumbers(updated);
+              setRoomCount(updated.length);
             }
           }}
           className={`p-2 text-xs rounded border transition ${
@@ -1096,41 +1099,30 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
   <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Number of Rooms</label>
   <input
     type="number"
-    min="1"
     value={roomCount}
-    onChange={(e) => {
-      const count = parseInt(e.target.value) || 1;
-      setRoomCount(count);
-      // Reset guests if they exceed new capacity
-      if (adults + children > (baseCapacityPerRoom * count)) {
-        setAdults(baseCapacityPerRoom * count);
-        setChildren(0);
-      }
-    }}
-    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+    readOnly
+    className="w-full bg-[#071524]/50 border border-white/10 rounded-lg p-3 text-white/70 outline-none cursor-not-allowed"
   />
 </div>
                 {/* Adults */}
             <div>
-  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Adults (Max {totalAllowedCapacity})</label>
+  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Adults</label>
   <input
     type="number"
     min="1"
-    max={totalAllowedCapacity - children}
     value={adults}
-    onChange={(e) => setAdults(Math.min(parseInt(e.target.value) || 1, totalAllowedCapacity - children))}
+    onChange={(e) => setAdults(parseInt(e.target.value) || 1)}
     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
   />
 </div>
 
 <div>
-  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children (Max {totalAllowedCapacity - adults})</label>
+  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children</label>
   <input
     type="number"
     min="0"
-    max={totalAllowedCapacity - adults}
     value={children}
-    onChange={(e) => setChildren(Math.min(parseInt(e.target.value) || 0, totalAllowedCapacity - adults))}
+    onChange={(e) => setChildren(parseInt(e.target.value) || 0)}
     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
   />
 </div>

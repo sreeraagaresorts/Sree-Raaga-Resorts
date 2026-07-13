@@ -55,8 +55,8 @@ const AdminDashboard = () => {
       });
       const uData = await uRes.json();
       if (uData.success) {
-        // Only count actual guests (excluding admins) for the user metric
-        const guests = uData.data.filter(u => u.role !== "admin");
+        // Only count actual registered guests (excluding admins and manual users) for the user metric
+        const guests = uData.data.filter(u => u.role !== "admin" && !u.is_manual);
         setUsers(guests);
         setUsersCount(guests.length);
       }
