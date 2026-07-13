@@ -170,7 +170,7 @@ const handleLogin = async (e) => {
           </div>
           
         </motion.div>
-     <div className="flex justify-center">
+     <div className="flex justify-center relative z-10">
   <Link
     to="/"
     className="inline-flex items-center gap-2 px-5 py-3 m-8  border border-[#C8A64D] bg-transparent text-[#C8A64D] text-sm font-semibold uppercase tracking-wider transition-all duration-300 hover:bg-[#C8A64D] hover:text-[#071524] hover:shadow-lg"
