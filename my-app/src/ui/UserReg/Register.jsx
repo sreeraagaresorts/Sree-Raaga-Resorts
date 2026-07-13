@@ -29,6 +29,23 @@ const Register = () => {
       return;
     }
 
+    const minLength = 8;
+    const hasNumber = /\d/;
+    const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/;
+
+    if (formData.password.length < minLength) {
+      toast.error("Password must be at least 8 characters long");
+      return;
+    }
+    if (!hasNumber.test(formData.password)) {
+      toast.error("Password must contain at least one number");
+      return;
+    }
+    if (!hasSymbol.test(formData.password)) {
+      toast.error("Password must contain at least one special character/symbol");
+      return;
+    }
+
     const phoneRegex = /^\+91\d{10}$/;
     if (!phoneRegex.test(formData.phone)) {
       toast.error("Phone number must be a valid 10-digit number starting with +91");
@@ -188,9 +205,14 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1 font-semibold">
-                Password
-              </label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-yellow-500 text-[14px] uppercase tracking-widest font-semibold">
+                  Password
+                </label>
+                <span className="text-[10px] text-gray-400 font-medium">
+                  Min 8 chars, 1 number & 1 symbol
+                </span>
+              </div>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}

@@ -22,6 +22,31 @@ exports.register = async (req, res) => {
       });
     }
 
+    if (!is_manual) {
+      const minLength = 8;
+      const hasNumber = /\d/;
+      const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/;
+
+      if (password.length < minLength) {
+        return res.status(400).json({
+          success: false,
+          message: "Password must be at least 8 characters long."
+        });
+      }
+      if (!hasNumber.test(password)) {
+        return res.status(400).json({
+          success: false,
+          message: "Password must contain at least one number."
+        });
+      }
+      if (!hasSymbol.test(password)) {
+        return res.status(400).json({
+          success: false,
+          message: "Password must contain at least one special character/symbol."
+        });
+      }
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
