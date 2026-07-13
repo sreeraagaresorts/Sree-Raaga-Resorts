@@ -282,7 +282,7 @@ setPhone(formatted);
                 <p>
                   No. 1246, Budigere Bypass Road,<br />
                   Devanahalli Hobli, Taluk Chamarayapatna,<br />
-                  Karnataka 562129.<br />
+                  Karnataka - 562129.<br />
                 </p>
                 <p className="text-lg md:text-[24px]">
                   <span className="text-white font-semibold">Email:</span><span className="text-[#c8a64d] break-all sm:break-normal"> info@sreeraagaresorts.in</span><br />

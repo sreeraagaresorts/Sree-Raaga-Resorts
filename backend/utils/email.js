@@ -175,8 +175,12 @@ function getEmailShell(title, contentHtml) {
           ${contentHtml}
         </div>
         <div class="footer">
-          <p><strong>Sree Raaga Resort</strong></p>
-          <p>Bypass Road, Main Highway | Phone: +91 98765 43210</p>
+          <p><strong>Sree Raaga Resorts Pvt.Ltd.</strong></p>
+          <p>Phone: +91 890 438 1155 | +91 890 456 1155</p>
+            <p>www.sreeraagaresorts.in | info@sreeraagaresorts.in</p>
+            <p>No. 1246, Budigere Bypass Road,
+Devanahalli Hobli, Taluk Chamarayapatna,
+Karnataka - 562129</p>
           <p>&copy; ${new Date().getFullYear()} Sree Raaga Resort. All rights reserved.</p>
         </div>
       </div>

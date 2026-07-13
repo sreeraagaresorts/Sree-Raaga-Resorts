@@ -161,7 +161,7 @@ const Footer = () => {
                 <br />
                 Devanahalli Hobli, Taluk Chamarayapatna,
                 <br />
-                Karnataka 562129
+                Karnataka - 562129
               </p>
               
               <a

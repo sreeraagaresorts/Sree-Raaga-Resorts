@@ -545,7 +545,7 @@ const Navbar = () => {
                   Devanahalli Hobli, Taluk Chamarayapatna
                 </span>
                 <span className="text-xl text-gray-700 font-medium leading-relaxed mt-0.5">
-                  Karnataka 562129, India
+                  Karnataka - 562129, India
                 </span>
               </div>
 
