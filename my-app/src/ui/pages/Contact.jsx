@@ -293,7 +293,9 @@ setPhone(formatted);
 >
   +91 890 456 1155
 </a>
-{" | "}
+
+<span className="mx-2 text-[#c8a64d]">|</span>
+
 <a
   href="tel:+918904381155"
   className="text-[#c8a64d] hover:text-white"

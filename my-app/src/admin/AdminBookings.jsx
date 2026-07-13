@@ -1062,7 +1062,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
   <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">
     Select Room Number(s)
   </label>
-  <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto p-3 bg-[#071524] border border-white/10 rounded-lg">
+  <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto p-2 bg-[#071524] border border-white/10 rounded-lg">
     {filteredAvailableRoomNumbers.map((item) => {
       const isSelected = selectedRoomNumbers.includes(item.roomNumber);
       return (

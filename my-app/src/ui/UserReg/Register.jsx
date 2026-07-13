@@ -20,9 +20,11 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setPasswordTouched(true);
 
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
@@ -85,6 +87,11 @@ const Register = () => {
       setLoading(false);
     }
   };
+
+  const isPasswordValid =
+    formData.password.length >= 8 &&
+    /\d/.test(formData.password) &&
+    /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
 
   return (
     <div className="bg-black text-white min-h-screen md:h-screen md:overflow-hidden flex flex-col md:flex-row">
@@ -209,9 +216,11 @@ const Register = () => {
                 <label className="block text-yellow-500 text-[14px] uppercase tracking-widest font-semibold">
                   Password
                 </label>
-                <span className="text-[10px] text-gray-400 font-medium">
-                  Min 8 chars, 1 number & 1 symbol
-                </span>
+                {passwordTouched && !isPasswordValid && (
+                  <span className="text-[10px] text-white font-medium">
+                    Min 8 chars, 1 number & 1 symbol
+                  </span>
+                )}
               </div>
               <div className="relative">
                 <input
@@ -224,6 +233,7 @@ const Register = () => {
                       password: e.target.value,
                     })
                   }
+                  onBlur={() => setPasswordTouched(true)}
                   className="w-full bg-transparent border-b border-yellow-500/20 py-1.5 pr-10 outline-none focus:border-yellow-500 text-white transition text-sm"
                 />
                 <button

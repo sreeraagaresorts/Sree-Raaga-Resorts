@@ -166,8 +166,15 @@ export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
   const addToast = useCallback((type, message, duration) => {
-    const id = Math.random().toString(36).substring(2, 9);
-    setToasts((prev) => [...prev, { id, type, message, duration }]);
+    let id = null;
+    setToasts((prev) => {
+      // Prevent duplicate active toasts with the same message
+      if (prev.some((t) => t.message === message)) {
+        return prev;
+      }
+      id = Math.random().toString(36).substring(2, 9);
+      return [...prev, { id, type, message, duration }];
+    });
     return id;
   }, []);
 

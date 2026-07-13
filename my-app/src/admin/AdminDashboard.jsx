@@ -592,9 +592,9 @@ console.log("Rooms Count:", roomsCount);
           const circ = 2 * Math.PI * r;
 
           const segments = [
-            { value: occupied, color: "#05df72", label: "Occupied" },
+            { value: occupied, color: "#c8a64d", label: "Occupied" },
             { value: reserved, color: "#d00718", label: "Reserved" },
-            { value: available, color: "#c8a64d", label: "Available" },
+            { value: available, color: "#05df72", label: "Available" },
           ];
 
           let cumulative = 0;

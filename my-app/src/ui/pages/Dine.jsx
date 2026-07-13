@@ -175,7 +175,7 @@ const Dine = () => {
               </p>
               <div className="pt-2">
                 <Link 
-                  to="/contact"
+                  to="/menu"
                   className="inline-block border border-[#0d2b4e] px-10 py-5 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest  font-bold  transition duration-300"
                 >
                   Reserve A Table
@@ -198,7 +198,7 @@ const Dine = () => {
               </p>
               <div className="pt-2">
                 <Link 
-                  to="/amenities"
+                  to="/menu"
                   className="inline-block border border-[#0d2b4e] px-10 py-5 text-[#0d2b4e] hover:bg-[#0d2b4e] hover:text-white uppercase tracking-widest  font-bold  transition duration-300"
                 >
                   Explore Games
