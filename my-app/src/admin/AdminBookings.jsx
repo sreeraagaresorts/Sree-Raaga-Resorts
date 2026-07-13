@@ -182,7 +182,8 @@ const [selectedRoomCount, setSelectedRoomCount] = useState(1);
         const bStart = new Date(b.check_in);
         const bEnd = new Date(b.check_out);
         if (bStart < end && bEnd > start) {
-          bookedRoomNumbers.add(b.room_number);
+          const nums = b.room_number.split(",").map(num => num.trim());
+          nums.forEach(n => bookedRoomNumbers.add(n));
         }
       }
     });

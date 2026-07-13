@@ -143,10 +143,10 @@ if (req.body.coupon_code) {
           });
         }
 
-        if (unit.status !== "Available") {
+        if (unit.status === "Maintenance") {
           return res.status(400).json({
             success: false,
-            message: `Room unit "${num}" is currently marked as "${unit.status}" and cannot be booked.`
+            message: `Room unit "${num}" is currently under maintenance and cannot be booked.`
           });
         }
       }
