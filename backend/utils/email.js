@@ -181,7 +181,7 @@ function getEmailShell(title, contentHtml) {
             <p>No. 1246, Budigere Bypass Road,
 Devanahalli Hobli, Taluk Chamarayapatna,
 Karnataka - 562129</p>
-          <p>&copy; ${new Date().getFullYear()} Sree Raaga Resort. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} Sree Raaga Resorts Pvt.Ltd. All rights reserved.</p>
         </div>
       </div>
     </body>

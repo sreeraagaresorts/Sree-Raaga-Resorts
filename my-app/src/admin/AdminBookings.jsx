@@ -659,7 +659,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
     if (statusFilter === "Today") {
       matchesFilter = checkInStr === todayStr && b.status !== "checked_out" && b.status !== "cancelled";
     } else if (statusFilter === "Reservations") {
-      matchesFilter = checkInStr !== todayStr && b.status !== "checked_out" && b.status !== "cancelled";
+      matchesFilter = checkInStr > todayStr && b.status !== "checked_in" && b.status !== "checked_out" && b.status !== "cancelled";
     } else if (statusFilter === "All") {
       matchesFilter = b.status !== "checked_out" && b.status !== "cancelled";
     } else {

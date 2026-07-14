@@ -21,10 +21,16 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setPasswordTouched(true);
+
+    if (!agreeToTerms) {
+      toast.error("Please agree to the Terms & Privacy Policy");
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
@@ -271,6 +277,27 @@ const Register = () => {
                   {showConfirmPassword ? <Eye size={16} /> : <EyeOff size={16} />}
                 </button>
               </div>
+            </div>
+
+            <div className="flex items-center gap-2 mt-4 select-none">
+              <input
+                type="checkbox"
+                id="agreeToTerms"
+                required
+                checked={agreeToTerms}
+                onChange={(e) => setAgreeToTerms(e.target.checked)}
+                className="w-4 h-4 rounded border border-yellow-500/20 bg-transparent text-yellow-500 focus:ring-yellow-500 cursor-pointer accent-yellow-500"
+              />
+              <label htmlFor="agreeToTerms" className="text-gray-300 text-sm cursor-pointer select-none">
+                I agree to the{" "}
+                <Link to="/terms-conditions" className="text-yellow-500 hover:underline font-bold">
+                  Terms
+                </Link>{" "}
+                &amp;{" "}
+                <Link to="/privacy-policy" className="text-yellow-500 hover:underline font-bold">
+                  Privacy Policy
+                </Link>
+              </label>
             </div>
 
             <button
