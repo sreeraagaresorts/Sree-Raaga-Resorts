@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { API_URL } from "../config/api";
 import { motion } from "motion/react";
-import { ShieldCheck, ArrowLeft } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Smartphone } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const AdminLogin = () => {
@@ -9,6 +9,17 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      // Restrict access on screens smaller than 1024px (mobile & tablet)
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -46,6 +57,51 @@ const AdminLogin = () => {
       setLoading(false);
     }
   };
+
+  if (isMobile) {
+    return (
+      <div 
+        className="h-screen overflow-hidden flex items-center justify-center bg-cover bg-center relative p-4"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000')"
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/90 backdrop-blur-[4px]"></div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md bg-zinc-950/95 border border-red-500/20 p-6 sm:p-8 shadow-2xl relative z-10 text-center"
+        >
+          {/* Brand/Header */}
+          <div className="text-center mb-6">
+            <div className="w-16 h-16 rounded-full border border-red-500/20 bg-red-500/5 flex items-center justify-center mx-auto mb-4">
+              <Smartphone className="text-red-500 w-8 h-8 animate-pulse" />
+            </div>
+            <p className="text-red-500 text-[10px] uppercase tracking-[4px] mb-2 font-semibold">
+              Access Restricted
+            </p>
+            <h2 className="text-2xl text-white font-light mb-3">
+              Desktop Access Only
+            </h2>
+            <p className="text-xs text-gray-400 leading-relaxed uppercase tracking-wider mb-6">
+              For security reasons, the Admin Portal is only accessible from desktop devices. Please log in using a computer or larger screen.
+            </p>
+          </div>
+
+          {/* Return Home Link */}
+          <Link 
+            to="/" 
+            className="flex items-center py-4 justify-center gap-2 text-xs text-yellow-500 hover:text-yellow-400 border border-yellow-500/20 bg-yellow-500/5 hover:bg-yellow-500/10 transition uppercase tracking-wider font-semibold"
+          >
+            <ArrowLeft size={12} /> Return to Homepage
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div 

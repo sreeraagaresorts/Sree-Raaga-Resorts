@@ -102,7 +102,7 @@ const UserBookings = () => {
   />
 </td>
             <td style="text-align: right; vertical-align: top;">
-              <h3 style="font-family: Georgia, serif; font-size: 26px; color: #0d2b4e; margin: 0; font-weight: 300; text-transform:uppercase;">Invoice</h3>
+              <h3 style=" font-size: 26px; color: #0d2b4e; margin: 0; font-weight: 300; text-transform:uppercase;">Invoice</h3>
               <p style="font-size: 16px; font-weight: bold; margin: 5px 0 0 0; color: #0d2b4e;">#BK-${booking.id.toString().padStart(6, "0")}</p>
             </td>
           </tr>
@@ -134,7 +134,7 @@ const UserBookings = () => {
                 </p>
               </td>
               <td style="text-align: right; vertical-align: top; width: 50%;">
-                <h4 style="font-family: Georgia, serif; font-size: 18px; margin: 0 0 8px 0; font-weight: normal; color: #0d2b4e; text-transform:uppercase;">Customer</h4>
+                <h4 style=" font-size: 18px; margin: 0 0 8px 0; font-weight: normal; color: #0d2b4e; text-transform:uppercase;">Customer</h4>
                 <p style="font-size: 15px; font-weight: bold; margin: 0; color: #0d2b4e;">${customerName}</p>
                 <p style="font-size: 14px; color: rgba(13, 43, 78, 0.8); margin: 5px 0 0 0; line-height: 1.5;">
                   ${customerEmail}<br />
@@ -176,7 +176,7 @@ const UserBookings = () => {
             ${pricing.services > 0 ? `
             <tr>
               <td style="padding: 12px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e;">
-                <strong>Extra Services</strong>
+                <strong>Extra Bed</strong>
               </td>
               <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e;">
                 ₹${pricing.services.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}

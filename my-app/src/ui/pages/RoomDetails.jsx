@@ -819,7 +819,7 @@ const RoomDetails = () => {
           {isChildrenOpen && (
             <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-sm">Children</span>
+                <span className="font-semibold text-sm">Children (Below 10 Years)</span>
                 <div className="flex items-center gap-6">
                   <button
                     type="button"
@@ -906,7 +906,7 @@ const RoomDetails = () => {
               <div>
                 <div className="text-[17px] font-semibold text-[#3d2c23]">Price</div>
               </div>
-              <div className="text-[#c8a64d] font-bold text-[25px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+              <div className="text-[#c8a64d] font-bold text-[25px]">₹ {totals.subtotal .toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
               
             </div>
                 {checkingAvailability ? (
@@ -935,8 +935,22 @@ const RoomDetails = () => {
                     <div className="text-gray-800 text=[14px]">Base Price</div>
                     <div className="text-[#a89082] text-[12px] font-semibold ">For {totals.nights > 0 ? totals.nights : 1} Night{totals.nights > 1 ? 's' : ''}</div>
                   </div>
-                  <div className="text-gray-800 font-medium text-[14px]">₹ {(totals.subtotal + totals.services).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                  <div className="text-gray-800 font-medium text-[14px]">₹ {totals.subtotal.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
                 </div>
+
+                {extraBed && (
+                  <div className="flex justify-between items-start pt-1">
+                    <div>
+                      <div className="text-gray-800 text-[14px]">Extra Bed</div>
+                      <div className="text-[#a89082] text-[12px] font-semibold">
+                        ₹1,500 × {totals.nights > 0 ? totals.nights : 1} Night{totals.nights > 1 ? 's' : ''} × {rooms} {rooms === 1 ? unitLabelSingle : unitLabelPlural}
+                      </div>
+                    </div>
+                    <div className="text-gray-800 font-medium text-[14px]">
+                      ₹ {(1500 * (totals.nights > 0 ? totals.nights : 1) * rooms).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                    </div>
+                  </div>
+                )}
                 
                 {/* Applied Coupon Details */}
                 {appliedCoupon && (
