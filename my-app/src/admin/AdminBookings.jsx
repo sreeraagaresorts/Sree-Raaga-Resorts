@@ -834,6 +834,13 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                       <div className="text-[14px]  mt-1">
                         Guests: {b.adults} Adults {b.children > 0 && `, ${b.children} Children`}
                       </div>
+                      {b.extraBed && (
+                        <div className="mt-1.5">
+                          <span className="text-[12px] font-semibold text-yellow-500 bg-yellow-500/10 border border-yellow-500/20 px-2 py-0.5 rounded">
+                            Extra Bed Requested
+                          </span>
+                        </div>
+                      )}
                     </td>
 
                     {/* AMOUNT */}
