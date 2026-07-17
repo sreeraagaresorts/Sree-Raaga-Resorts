@@ -165,7 +165,7 @@ exports.deleteDish = async (req, res) => {
     if (req.user) {
       logAction(
         req.user.id,
-        "Dish Deletion",
+        "Dish Deleted",
         `Deleted dish "${dish.name}" (ID: #${dish.id})`
       );
     }

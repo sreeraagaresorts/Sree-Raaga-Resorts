@@ -447,7 +447,7 @@ const Rooms = () => {
                           </div>
                           <div className="flex items-center">
                             <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                            <span>{room.guests || "2 Guests"} </span>
+                            <span>{room.guests || "2 Guests"}{room.children ? ` & ${room.children}` : ""}</span>
                           </div>
                           <div className="flex items-center">
                             <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
@@ -576,7 +576,7 @@ const Rooms = () => {
                           </div>
                           <div className="flex items-center">
                             <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                            <span>{room.guests || "2 Guests"} </span>
+                            <span>{room.guests || "2 Guests"}{room.children ? ` & ${room.children}` : ""}</span>
                           </div>
                           <div className="flex items-center">
                             <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />

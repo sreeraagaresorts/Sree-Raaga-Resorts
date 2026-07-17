@@ -362,7 +362,7 @@ exports.deleteUser = async (req, res) => {
       const adminName = adminUser ? adminUser.full_name : req.user.email;
       await AuditLog.create({
         adminName,
-        actionType: "User Deletion",
+        actionType: "User Deleted",
         details: `Deleted user account "${user.full_name}" (ID: #${user.id}) and all associated bookings`
       });
     } catch (logErr) {

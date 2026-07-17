@@ -166,19 +166,19 @@ const AdminUsers = () => {
 
     const getRowClass = (actionType) => {
       const t = (actionType || "").toLowerCase();
-      if (t.includes("delete")) return "bg-red-500/10 hover:bg-red-500/15";
+      if (t.includes("delete") || t.includes("deletion") || t === "booking cancellation") {
+        return "bg-red-500/10 hover:bg-red-500/15";
+      }
       if (t === "logout") return " ";
-      if (t === "booking cancellation") return "";
       return "hover:bg-white/5";
     };
 
     const getBadgeClass = (actionType) => {
       const t = (actionType || "").toLowerCase();
-      if (t.includes("delete")) return "bg-red-500/10 text-red-400 border-red-500/20";
+      if (t.includes("delete") || t.includes("deletion")) return "bg-red-500/10 text-red-400 border-red-500/20";
       if (t === "logout") return "bg-red-500/20  border-red-500/20";
       if (t === "login") return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
       if (t === "booking cancellation") return "bg-red-500/10 text-red-400 border-red-500/20";
-      if (t === "booking deletion") return "bg-red-500/20 text-orange-400 border-orange-500/20";
       return "bg-amber-500/10 text-amber-400 border-amber-500/20";
       
     };
@@ -252,13 +252,21 @@ const AdminUsers = () => {
                       <td className="p-4 font-semibold text-white/90">{log.adminName}</td>
                       <td className="p-4">
                         <span className={`text-xs px-2.5 py-0.5 rounded border font-semibold inline-flex items-center gap-1 ${getBadgeClass(log.actionType)}`}>
-                          {log.actionType}
+                          {log.actionType ? log.actionType.replace(/Deletion/g, "Deleted").replace(/deletion/g, "deleted") : ""}
                         </span>
                       </td>
                       <td className="p-4 text-white/80 text-xs">{log.details}</td>
                       <td className="p-4 text-center">
-                        <span className="text-xs px-2.5 py-0.5 rounded border font-semibold bg-green-500/10 text-green-400 border-green-500/20">
-                          {log.status}
+                        <span className={`text-xs px-2.5 py-0.5 rounded border font-semibold ${
+                          (log.actionType || "").toLowerCase() === "booking cancellation"
+                            ? "bg-red-500/10 text-red-400 border-red-500/20"
+                            : (log.actionType || "").toLowerCase().includes("delete") || (log.actionType || "").toLowerCase().includes("deletion")
+                            ? "bg-red-500/10 text-red-400 border-red-500/20"
+                            : "bg-green-500/10 text-green-400 border-green-500/20"
+                        }`}>
+                          {(log.actionType || "").toLowerCase() === "Success"
+                            ? "booking cancellation"
+                            : log.status}
                         </span>
                       </td>
                     </tr>

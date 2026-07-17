@@ -167,6 +167,8 @@ exports.createRoom = async (req, res) => {
       beds,
       bathrooms,
       guests,
+      children,
+      allowExtraBed,
       description,
       totalRooms,
       view360Iframe
@@ -234,6 +236,8 @@ exports.createRoom = async (req, res) => {
       beds: beds || null,
       bathrooms: bathrooms || null,
       guests: guests || null,
+      children: children || null,
+      allowExtraBed: allowExtraBed === "true" || allowExtraBed === true,
       description,
       view360Iframe: view360Iframe || null
     });
@@ -274,6 +278,8 @@ exports.updateRoom = async (req, res) => {
       beds,
       bathrooms,
       guests,
+      children,
+      allowExtraBed,
       description,
       totalRooms,
       view360Iframe
@@ -349,6 +355,8 @@ exports.updateRoom = async (req, res) => {
       beds: beds || null,
       bathrooms: bathrooms || null,
       guests: guests || null,
+      children: children || null,
+      allowExtraBed: allowExtraBed === "true" || allowExtraBed === true,
       description,
       view360Iframe: view360Iframe || null
     };

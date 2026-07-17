@@ -130,6 +130,7 @@ const RoomDetails = () => {
   const [paymentMethod, setPaymentMethod] = useState("online");
   const [extraService1, setExtraService1] = useState(false); // Service per Booking (₹1000)
   const [extraService2, setExtraService2] = useState(false); // Service per Person Daily (₹1200)
+  const [extraBed, setExtraBed] = useState(false); // Extra Bed (₹1500 / night per room)
   
   const [availability, setAvailability] = useState(null);
   const [checkingAvailability, setCheckingAvailability] = useState(false);
@@ -144,7 +145,11 @@ const RoomDetails = () => {
   const roomCapacity = React.useMemo(() => {
     return parseInt(room?.guests || "2") || 2;
   }, [room]);
-const totalCapacity = roomCapacity * rooms;
+  const childrenCapacity = React.useMemo(() => {
+    return parseInt(room?.children || "0") || 0;
+  }, [room]);
+  const maxAdults = roomCapacity * rooms;
+  const maxChildren = childrenCapacity * rooms;
   // Dynamic Labeling for Villas vs Rooms
   const isVilla = room?.category?.toLowerCase().includes("villa") || false;
   const unitLabelSingle = isVilla ? "Villa" : "Room";
@@ -159,14 +164,15 @@ const totalCapacity = roomCapacity * rooms;
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
   const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
-useEffect(() => {
-  // If the user reduces the number of rooms, ensure the guest count doesn't exceed new total capacity
-  if (adults + children > totalCapacity) {
-    // Reset to base capacity of one room (defaulting adults to capacity, children to 0)
-    setAdults(roomCapacity);
-    setChildren(0);
-  }
-}, [rooms, totalCapacity]);
+  useEffect(() => {
+    // If the user reduces the number of rooms, ensure separate guest counts don't exceed capacities
+    if (adults > maxAdults) {
+      setAdults(maxAdults);
+    }
+    if (children > maxChildren) {
+      setChildren(maxChildren);
+    }
+  }, [rooms, maxAdults, maxChildren]);
   useEffect(() => {
     if (!room) return;
     const fetchCoupons = async () => {
@@ -365,6 +371,9 @@ useEffect(() => {
     if (extraService2) {
       const totalGuests = Number(adults) + Number(children);
       services += 1200 * totalGuests * (nights > 0 ? nights : 1);
+    }
+    if (extraBed) {
+      services += 1500 * (nights > 0 ? nights : 1) * rooms;
     }
 
     let subtotalWithServices = subtotal + services;
@@ -766,21 +775,20 @@ useEffect(() => {
                     -
                   </button>
                   <span className="font-semibold text-sm w-4 text-center">{adults}</span>
-               <button
-  type="button"
-  onClick={(e) => {
-    e.stopPropagation();
-    // Check against totalCapacity
-    if (adults + children < totalCapacity) {
-      setAdults(adults + 1);
-    } else {
-      toast.warning(`Maximum capacity for ${rooms} ${unitLabelPlural} is ${totalCapacity} guests.`);
-    }
-  }}
-  className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
->
-  +
-</button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (adults < maxAdults) {
+                        setAdults(adults + 1);
+                      } else {
+                        toast.warning(`Maximum adult capacity for ${rooms} ${unitLabelPlural} is ${maxAdults} adults.`);
+                      }
+                    }}
+                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             </div>
@@ -824,26 +832,40 @@ useEffect(() => {
                     -
                   </button>
                   <span className="font-semibold text-sm w-4 text-center">{children}</span>
-                <button
-  type="button"
-  onClick={(e) => {
-    e.stopPropagation();
-    // Check against totalCapacity
-    if (adults + children < totalCapacity) {
-      setChildren(children + 1);
-    } else {
-      toast.warning(`Maximum capacity for ${rooms} ${unitLabelPlural} is ${totalCapacity} guests.`);
-    }
-  }}
-  className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
->
-  +
-</button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (children < maxChildren) {
+                        setChildren(children + 1);
+                      } else {
+                        toast.warning(`Maximum children capacity for ${rooms} ${unitLabelPlural} is ${maxChildren} children.`);
+                      }
+                    }}
+                    className="text-[#0d2b4e] font-semibold text-lg hover:text-[#c8a64d] transition cursor-pointer px-2"
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             </div>
           )}
         </div>
+
+        {room.allowExtraBed && (
+          <div className="flex items-center gap-3 py-4 px-4 border border-gray-200 rounded-none booking-field">
+            <input
+              type="checkbox"
+              id="extraBed"
+              checked={extraBed}
+              onChange={(e) => setExtraBed(e.target.checked)}
+              className="w-5 h-5 accent-[#c8a64d] cursor-pointer"
+            />
+            <label htmlFor="extraBed" className="text-[17px] text-[#0d2b4e] font-medium font-jost cursor-pointer select-none">
+              Extra Bed (₹1,500 / night per room)
+            </label>
+          </div>
+        )}
 
         {/* Payment Method / Coupon Section */}
         <div>
@@ -1085,7 +1107,7 @@ useEffect(() => {
                   </div>
                   <div className="flex items-center">
                     <Users className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                    <span>{room.guests || "2 Guests"} </span>
+                    <span>{room.guests || "2 Guests"}{room.children ? ` & ${room.children}` : ""}</span>
                   </div>
                   <div className="flex items-center">
                     <Bed className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />

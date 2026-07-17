@@ -9,7 +9,8 @@ import {
   Maximize,
   BedDouble,
   RefreshCw,
-  GripVertical // Add this import
+  GripVertical,
+  Baby
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
@@ -125,6 +126,8 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
   const [beds, setBeds] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [guests, setGuests] = useState("");
+  const [children, setChildren] = useState("");
+  const [allowExtraBed, setAllowExtraBed] = useState(false);
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -194,6 +197,8 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
     setBeds("");
     setBathrooms("");
     setGuests("");
+    setChildren("");
+    setAllowExtraBed(false);
     setDescription("");
     setImageFile(null);
     setImagePreview("");
@@ -217,6 +222,8 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
     setBeds(room.beds);
     setBathrooms(room.bathrooms);
     setGuests(room.guests || "");
+    setChildren(room.children || "");
+    setAllowExtraBed(room.allowExtraBed || false);
     setDescription(room.description);
     setImageFile(null);
     setImagePreview(
@@ -307,6 +314,8 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
       formData.append("beds", beds);
       formData.append("bathrooms", bathrooms);
       formData.append("guests", guests);
+      formData.append("children", children);
+      formData.append("allowExtraBed", allowExtraBed);
       formData.append("description", description);
       formData.append("view360Iframe", view360Iframe);
       if (compressedMainImage) {
@@ -508,6 +517,13 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
               </span>
             )}
 
+            {room.children && (
+              <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Children Capacity">
+                <Baby size={14} className="text-[#C8A64D]" />
+                {room.children}
+              </span>
+            )}
+
             {room.images && room.images.length > 0 && (
               <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20 col-span-full sm:col-span-1" title="Gallery Images">
                 <Upload size={14} className="text-[#C8A64D]" />
@@ -588,18 +604,17 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
 
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Number of Units
+                    Room Number / Prefix
                   </label>
                   <input
                     required
-                    type="number"
                     placeholder="e.g. 40"
-                    value={totalRooms}
-                    onChange={(e) => setTotalRooms(e.target.value)}
+                    value={roomNumber}
+                    onChange={(e) => setRoomNumber(e.target.value)}
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
                   />
                 </div>
-                <div>
+                       <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
                     Room Name
                   </label>
@@ -611,6 +626,8 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
                   />
                 </div>
+               
+         
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
@@ -625,14 +642,25 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
                     />
                   </div>
-                
+                     <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+                      GST (%)
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. 12"
+                      value={gstPercentage}
+                      onChange={(e) => setGstPercentage(e.target.value)}
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
                     Area
                   </label>
                   <input
-                    required
                     placeholder="e.g. 500 SQ FT"
                     value={area}
                     onChange={(e) => setArea(e.target.value)}
@@ -644,7 +672,6 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     Beds
                   </label>
                   <input
-                    required
                     placeholder="e.g. KING BED"
                     value={beds}
                     onChange={(e) => setBeds(e.target.value)}
@@ -656,7 +683,6 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     Bathrooms
                   </label>
                   <input
-                    required
                     placeholder="e.g. 1 BATHROOM"
                     value={bathrooms}
                     onChange={(e) => setBathrooms(e.target.value)}
@@ -665,15 +691,37 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                 </div>
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Capacity
+                    Adults Capacity
                   </label>
                   <input
-                    required
-                    placeholder="e.g. 2 GUESTS"
+                    placeholder="e.g. 2 ADULTS"
                     value={guests}
                     onChange={(e) => setGuests(e.target.value)}
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
                   />
+                </div>
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+                    Children Capacity
+                  </label>
+                  <input
+                    placeholder="e.g. 1 CHILD"
+                    value={children}
+                    onChange={(e) => setChildren(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
+                  />
+                </div>
+                <div className="flex items-center gap-2.5 pt-8">
+                  <input
+                    type="checkbox"
+                    id="allowExtraBed"
+                    checked={allowExtraBed}
+                    onChange={(e) => setAllowExtraBed(e.target.checked)}
+                    className="w-4 h-4 rounded bg-[#071524] border-white/10 accent-yellow-500 cursor-pointer"
+                  />
+                  <label htmlFor="allowExtraBed" className="text-yellow-500 text-xs uppercase tracking-widest cursor-pointer select-none">
+                    Allow Extra Bed
+                  </label>
                 </div>
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
@@ -691,19 +739,20 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     ))}
                   </select>
                 </div>
-                  <div>
-                    <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                      GST (%)
-                    </label>
-                    <input
-                      required
-                      type="number"
-                      placeholder="e.g. 12"
-                      value={gstPercentage}
-                      onChange={(e) => setGstPercentage(e.target.value)}
-                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
-                    />
-                  </div>
+                 <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+                    Number of Units
+                  </label>
+                  <input
+                    required
+                    type="number"
+                    placeholder="e.g. 40"
+                    value={totalRooms}
+                    onChange={(e) => setTotalRooms(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
+                  />
+                </div>
+             
               </div>
 
               <div>

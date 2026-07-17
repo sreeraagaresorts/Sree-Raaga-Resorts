@@ -25,6 +25,8 @@ const roomSchema = new mongoose.Schema({
   beds: { type: String },
   bathrooms: { type: String },
   guests: { type: String },
+  children: { type: String },
+  allowExtraBed: { type: Boolean, default: false },
   description: { type: String },
   view360Iframe: { type: String },
   created_at: { type: Date, default: Date.now }
