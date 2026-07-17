@@ -605,7 +605,7 @@ if (hasConflict) {
         return otherStart < extensionEnd && otherEnd > extensionStart;
       });
 if (hasConflict) {
-    toast.error(`Cannot extend stay. Room ${extendBooking.room_number} is already booked for the selected extension dates.`);
+    toast.error(`Cannot extend stay.Room ${extendBooking.room_number} is already booked for the selected extension dates.`);
     return;
 }
     }
