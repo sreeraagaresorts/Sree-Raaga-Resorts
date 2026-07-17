@@ -658,7 +658,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                 </div>
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
-                    Area
+                    Included Meal
                   </label>
                   <input
                     placeholder="e.g. 500 SQ FT"

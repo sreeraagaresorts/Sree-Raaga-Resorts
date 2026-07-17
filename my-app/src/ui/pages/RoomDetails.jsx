@@ -1117,7 +1117,7 @@ const RoomDetails = () => {
                 <div className="flex flex-wrap items-center gap-6 text-[17px] text-gray-500 font-jost">
                   <div className="flex items-center">
                     <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                    <span>{room.area || "30 M²"} Sqft</span>
+                    <span>{room.area || ""}</span>
                   </div>
                   <div className="flex items-center">
                     <Users className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
