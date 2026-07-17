@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { 
-  Maximize, 
+  Maximize,
   Users, 
   Bed, 
   Bath, 
@@ -16,7 +16,8 @@ import {
   Lock,
   Wind,
   X,
-  Tag
+  Tag,
+  Meal
 } from "lucide-react";
 import Navbar from "../components/RoomNav";
 import Footer from "../components/Footer";
@@ -29,7 +30,7 @@ const fallbackRoomsDetails = {
     id: "executive-room",
     name: "Executive Room",
     price: 4990,
-    area: "30 M²",
+    area: "",
     beds: "1 Double Bed",
     bathrooms: "1 Bathroom",
     guests: "2 Guests",
@@ -1116,7 +1117,7 @@ const RoomDetails = () => {
                 {/* Specs Row */}
                 <div className="flex flex-wrap items-center gap-6 text-[17px] text-gray-500 font-jost">
                   <div className="flex items-center">
-                    <Maximize className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                    <Meal className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                     <span>{room.area || ""}</span>
                   </div>
                   <div className="flex items-center">
@@ -1445,8 +1446,8 @@ const RoomDetails = () => {
                     {/* Specs Row */}
                     <div className="flex flex-wrap items-center gap-5 pb-6 text-[17px]  text-gray-400">
                       <div className="flex items-center">
-                        <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                        <span className="text-black">{item.area || "30 M²"} Sqft</span>
+                        <Meal className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                        <span className="text-black">{item.area || ""} Sqft</span>
                       </div>
                       <div className="flex items-center">
                         <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
