@@ -221,6 +221,7 @@ if (req.body.coupon_code) {
       rooms: roomCount,
       room_number: room_number || null,
       total_price,
+      initial_price: total_price,
       subtotal,
       services_price,
       discount_price,
@@ -229,6 +230,7 @@ if (req.body.coupon_code) {
       status: 'confirmed',
       payment_method: payment_method || 'online',
       payment_status: req.body.payment_status !== undefined ? req.body.payment_status : (payment_method === 'pay_later' ? 'Unpaid' : 'Paid'),
+      paid_amount: (req.body.payment_status !== undefined ? req.body.payment_status : (payment_method === 'pay_later' ? 'Unpaid' : 'Paid')) === 'Paid' ? total_price : 0,
       booking_source: (payment_method === 'online' || payment_method === 'razorpay')
         ? 'Website'
         : (['Direct', 'Walkin', 'Walk-in'].includes(booking_source) ? 'Direct' : (booking_source || 'Direct')),
@@ -435,7 +437,7 @@ const syncRoomUnitStatus = async (roomId, roomNumber, bookingStatus) => {
 // 4. Update booking status or details (Admin only)
 exports.updateBookingStatus = async (req, res) => {
   try {
-    const { status, payment_method, room_number, check_in, check_out, payment_status, cancellation_reason } = req.body;
+    const { status, payment_method, room_number, check_in, check_out, payment_status, cancellation_reason, initial_price } = req.body;
     const { id } = req.params;
 
     const booking = await Booking.findOne({ id: Number(id) });
@@ -622,6 +624,33 @@ exports.updateBookingStatus = async (req, res) => {
     const finalRoomNumber = room_number !== undefined ? room_number : oldRoomNumber;
     if (room_number !== undefined && oldRoomNumber && oldRoomNumber !== room_number) {
       await syncRoomUnitStatus(booking.room_id, oldRoomNumber, "cancelled");
+    }
+
+    // Calculate final paid_amount and final payment_status
+    const finalTotalPrice = updateFields.total_price !== undefined ? updateFields.total_price : booking.total_price;
+    const finalStatus = status !== undefined ? status : booking.status;
+    const finalPaymentStatus = (finalStatus === "checked_out") 
+      ? "Paid" 
+      : (updateFields.payment_status !== undefined ? updateFields.payment_status : booking.payment_status);
+
+    if (finalStatus === "checked_out") {
+      updateFields.payment_status = "Paid";
+    }
+
+    if (initial_price !== undefined) {
+      updateFields.initial_price = Number(initial_price);
+    } else if (booking.initial_price === undefined || booking.initial_price === null || booking.initial_price === 0) {
+      updateFields.initial_price = booking.total_price;
+    }
+
+    if (finalPaymentStatus === "Paid") {
+      updateFields.paid_amount = finalTotalPrice;
+    } else {
+      if (booking.payment_status === "Paid") {
+        updateFields.paid_amount = booking.paid_amount || booking.total_price;
+      } else {
+        updateFields.paid_amount = booking.paid_amount || 0;
+      }
     }
 
     const updatedBooking = await Booking.findOneAndUpdate(

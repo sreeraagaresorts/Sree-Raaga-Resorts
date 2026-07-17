@@ -545,6 +545,7 @@ if (hasConflict) {
             body: JSON.stringify({
               check_in: editCheckIn,
               check_out: editCheckOut,
+              initial_price: editBooking.initial_price || editBooking.total_price,
             }),
           });
 
@@ -627,6 +628,7 @@ if (hasConflict) {
             },
             body: JSON.stringify({
               check_out: extendCheckOut,
+              initial_price: extendBooking.initial_price || extendBooking.total_price,
             }),
           });
 
@@ -885,7 +887,6 @@ if (hasConflict) {
                          {b.guest_phone &&
                        <div className="text-[14px] text-white mt-0.5">{formatPhoneNumber(b.guest_phone)}</div>}
                       <div className="text-[14px] text-white mt-0.5">{b.guest_email}</div>
-                   
                     </td>
 
                     {/* ROOM */}
@@ -966,16 +967,37 @@ if (hasConflict) {
 
                     {/* AMOUNT */}
                     <td className="px-4 py-3 text-center">
-                      <div className="text-[#C8A64D] font-bold text-[16px]">
-                        ₹{(b.total_price).toLocaleString()}
-                      </div>
+                      {(() => {
+                        const initialPrice = (b.initial_price && b.initial_price > 0) ? b.initial_price : b.total_price;
+                        const isExtended = b.total_price > initialPrice;
+                        return (
+                          <>
+                            <div className="text-[#C8A64D] font-bold text-[16px]">
+                              ₹{initialPrice.toLocaleString()}
+                            </div>
+                            {isExtended ? (
+                              <div className="text-red-400 text-xs mt-1 font-semibold">
+                                Due: ₹{(b.total_price - initialPrice).toLocaleString()}
+                              </div>
+                            ) : (
+                              b.payment_status === "Unpaid" && (
+                                <div className="text-red-400 text-xs mt-1 font-semibold">
+                                  Due: ₹{b.total_price.toLocaleString()}
+                                </div>
+                              )
+                            )}
+                          </>
+                        );
+                      })()}
                     </td>
 
                     {/* PAYMENT METHOD */}
                     <td className="px-4 py-3">
                       <span
                         className={`text-xs px-2.5 py-1 rounded-full border font-semibold uppercase ${
-                          b.payment_method === "online"
+                          b.payment_status === "Unpaid"
+                            ? "bg-red-500/10 text-red-400 border-red-500/20"
+                            : b.payment_method === "online"
                             ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"
                             : b.payment_method === "credit_card"
                             ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
@@ -988,7 +1010,9 @@ if (hasConflict) {
                             : "bg-[#C8A64D]/10 text-[#C8A64D] border-[#C8A64D]/20"
                         }`}
                       >
-                        {b.payment_method === "online" 
+                        {b.payment_status === "Unpaid"
+                          ? "Unpaid"
+                          : b.payment_method === "online" 
                           ? "Razorpay" 
                           : b.payment_method === "credit_card" 
                           ? "Debit/Credit Card" 
