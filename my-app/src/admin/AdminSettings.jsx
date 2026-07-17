@@ -82,6 +82,15 @@ const ADDONS = [
     bg: "rgba(100,116,139,0.08)",
     border: "rgba(100,116,139,0.2)",
   },
+  {
+    id: "sms",
+    icon: MessageCircle,
+    label: "SMS & OTP Verification",
+    desc: "Send automated booking notifications, OTP verifications, and alerts to guests.",
+    color: "#14b8a6",
+    bg: "rgba(20,184,166,0.08)",
+    border: "rgba(20,184,166,0.2)",
+  },
 ];
 
 /* ─── Add-on Card (Now Default Active) ───────────────────────── */
@@ -219,7 +228,7 @@ const AdminSettings = () => {
     <div className="space-y-6 text-white max-w-5xl mx-auto pb-16">
 
       {/* ── HEADER ── */}
-      <div className="flex justify-between items-center border-b border-white/5 pb-6">
+      <div className="flex justify-between items-center border-b border-white/5 ">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Sparkles className="text-[#C8A64D]" size={22} /> Add-on Modules
@@ -233,7 +242,7 @@ const AdminSettings = () => {
       {/* ══ SYSTEM MODULES (Active by default) ══ */}
       <div className="space-y-4">
   
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {ADDONS.map((addon) => (
             <AddonCard key={addon.id} addon={addon} />
           ))}
