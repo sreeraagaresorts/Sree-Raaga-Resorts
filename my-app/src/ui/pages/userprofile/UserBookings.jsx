@@ -176,7 +176,7 @@ const UserBookings = () => {
             ${pricing.services > 0 ? `
             <tr>
               <td style="padding: 12px 10px; border: 1px solid #d1d5db; font-size: 14px; color: #0d2b4e;">
-                <strong>Extra Bed</strong>
+                <strong>Extra Bed with complimentory breakfast</strong>
               </td>
               <td style="padding: 12px 10px; border: 1px solid #d1d5db; text-align: right; font-size: 14px; color: #0d2b4e;">
                 ₹${pricing.services.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
