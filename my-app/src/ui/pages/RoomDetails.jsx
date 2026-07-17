@@ -36,7 +36,7 @@ const fallbackRoomsDetails = {
     guests: "2 Guests",
     category: "EXECUTIVE ROOMS",
     description: "Our Executive Rooms offer a perfect blend of comfort and style, featuring modern amenities, cozy bedding, and a peaceful atmosphere for business or leisure travelers.",
-    image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=800"
+    image: ""
   },
   "1bhk-villa": {
     id: "1bhk-villa",
@@ -48,7 +48,7 @@ const fallbackRoomsDetails = {
     guests: "2 Guests",
     category: "1 BHK VILLAS",
     description: "Indulge in our private 1 BHK Villas, offering a spacious living area, fully equipped kitchenette, and a private balcony overlooking the resort's lush gardens.",
-    image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=800"
+    image: ""
   },
   "compact-villa": {
     id: "compact-villa",
@@ -60,7 +60,7 @@ const fallbackRoomsDetails = {
     guests: "2 Guests",
     category: "COMPACT VILLAS",
     description: "Compact yet luxurious, these villas are perfect for couples looking for privacy and comfort, complete with premium fittings and beautiful outdoor patio seating.",
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800"
+    image: ""
   },
   "duplex-villa": {
     id: "duplex-villa",
@@ -72,7 +72,7 @@ const fallbackRoomsDetails = {
     guests: "4 Guests",
     category: "DUPLEX VILLA",
     description: "Our signature Duplex Villa is the pinnacle of resort luxury, spanning two levels with separate living spaces, a private pool access, and premium butler service.",
-    image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=800"
+    image: ""
   },
   "panorama-suite": {
     id: "panorama-suite",
@@ -84,7 +84,7 @@ const fallbackRoomsDetails = {
     guests: "2 Guests",
     category: "PANORAMA SUITE",
     description: "Wake up to stunning panoramic views of the scenic surrounding mountains. Features a luxury jacuzzi, premium sound system, and floor-to-ceiling glass windows.",
-    image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=800"
+    image: ""
   },
   "garden-cottage": {
     id: "garden-cottage",
@@ -96,7 +96,7 @@ const fallbackRoomsDetails = {
     guests: "2 Guests",
     category: "COMPACT VILLAS",
     description: "Tucked away in the resort's quietest garden corner, this cottage offers rustic charm blended with modern comfort, ideal for a serene nature getaway.",
-    image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=800"
+    image: ""
   }
 };
 
@@ -327,23 +327,22 @@ const RoomDetails = () => {
   }, []);
 
   const getImageUrl = (image) => {
-    if (!image) return "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200";
+    if (!image) return "";
     if (image.startsWith("http")) return image;
     return `${API_URL}/uploads/${image}`;
   };
 
   const getGalleryImages = () => {
     const mainImg = getImageUrl(room?.image);
+    const list = [];
+    if (mainImg) list.push(mainImg);
     if (room?.images && room.images.length > 0) {
-      return [mainImg, ...room.images.map(img => getImageUrl(img))];
+      room.images.forEach(img => {
+        const url = getImageUrl(img);
+        if (url) list.push(url);
+      });
     }
-    return [
-      mainImg,
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=800",
-      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=800",
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800",
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=800"
-    ];
+    return list;
   };
 
 
@@ -490,7 +489,7 @@ const RoomDetails = () => {
           currency: orderData.currency,
           name: "Sree Raaga Resort",
           description: `Booking for ${room.name}`,
-          image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=120&h=120",
+          image: "/logo.png",
           order_id: orderData.order_id,
           handler: async function (response) {
             // If running in demo/mock mode, skip server-side signature verification
@@ -1057,50 +1056,52 @@ const RoomDetails = () => {
             <div className="space-y-8">
               
               {/* Gallery Image Slider (Single active image layout matching Swiss Resort) */}
-              <div className="relative overflow-hidden aspect-[80/55] shadow-md group select-none bg-black/5 ">
-                {room?.view360Iframe && (
-                  <button
-                    onClick={() => setIs360ModalOpen(true)}
-                    className="absolute top-4 left-4 z-30 bg-[#c8a64d] text-white px-2 py-1 md:px-4 md:py-2  text-sm font-bold shadow-xl hover:bg-[#b09141] transition cursor-pointer border border-white/20 uppercase tracking-widest"
-                  >
-                    360° View
-                  </button>
-                )}
-                {gallery.map((src, idx) => (
-                  <div
-                    key={idx}
-                    className={`absolute inset-0 transition-all duration-750 ease-in-out ${
-                      idx === galleryIndex ? "opacity-100 scale-100 z-10" : "opacity-0 scale-95 z-0 pointer-events-none"
-                    }`}
-                  >
-                    <img
-                      src={src}
-                      alt={`Room Gallery ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-                
-                {/* Left/Right chevrons */}
-                {gallery.length > 1 && (
-                  <>
+              {gallery.length > 0 && (
+                <div className="relative overflow-hidden aspect-[80/55] shadow-md group select-none bg-black/5 ">
+                  {room?.view360Iframe && (
                     <button
-                      type="button"
-                      onClick={() => setGalleryIndex(prev => (prev === 0 ? gallery.length - 1 : prev - 1))}
-                      className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
+                      onClick={() => setIs360ModalOpen(true)}
+                      className="absolute top-4 left-4 z-30 bg-[#c8a64d] text-white px-2 py-1 md:px-4 md:py-2  text-sm font-bold shadow-xl hover:bg-[#b09141] transition cursor-pointer border border-white/20 uppercase tracking-widest"
                     >
-                      <ChevronLeft className="w-7 h-7" />
+                      360° View
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => setGalleryIndex(prev => (prev === gallery.length - 1 ? 0 : prev + 1))}
-                      className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
+                  )}
+                  {gallery.map((src, idx) => (
+                    <div
+                      key={idx}
+                      className={`absolute inset-0 transition-all duration-750 ease-in-out ${
+                        idx === galleryIndex ? "opacity-100 scale-100 z-10" : "opacity-0 scale-95 z-0 pointer-events-none"
+                      }`}
                     >
-                      <ChevronRight className="w-6 h-6" />
-                    </button>
-                  </>
-                )}
-              </div>
+                      <img
+                        src={src}
+                        alt={`Room Gallery ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                  
+                  {/* Left/Right chevrons */}
+                  {gallery.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setGalleryIndex(prev => (prev === 0 ? gallery.length - 1 : prev - 1))}
+                        className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
+                      >
+                        <ChevronLeft className="w-7 h-7" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setGalleryIndex(prev => (prev === gallery.length - 1 ? 0 : prev + 1))}
+                        className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/20 hover:bg-[#c8a64d] backdrop-blur-md text-white flex items-center justify-center transition-all z-20 border border-white/10 cursor-pointer shadow-lg opacity-0 group-hover:opacity-100"
+                      >
+                        <ChevronRight className="w-6 h-6" />
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
 
               {/* Price, Title & Specs */}
               <div className="select-none space-y-2 px-6 md:px-0">

@@ -20,6 +20,7 @@ const AdminDashboard = () => {
 
   const [bookings, setBookings] = useState([]);
   const [roomsCount, setRoomsCount] = useState(0);
+  const [roomsData, setRoomsData] = useState([]);
   const [usersCount, setUsersCount] = useState(0);
   const [users, setUsers] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -46,7 +47,9 @@ const AdminDashboard = () => {
       const rRes = await fetch(`${API_URL}/api/rooms`);
       const rData = await rRes.json();
       if (rData.success) {
-        setRoomsCount(rData.data.length);
+        setRoomsData(rData.data);
+        const totalUnits = rData.data.reduce((acc, r) => acc + (Number(r.totalRooms) || 0), 0);
+        setRoomsCount(totalUnits);
       }
 
       // 3. Fetch users
@@ -150,9 +153,9 @@ const AdminDashboard = () => {
           pendingLastWeek += price;
         }
       }
-const status = (b.status || "").toLowerCase();
-     if (status === "checked_in" || status === "checked in") {
-        checkedInCount += 1;
+      const status = (b.status || "").toLowerCase();
+      if (status === "checked_in" || status === "checked in") {
+        checkedInCount += Number(b.rooms) || 1;
       }
 
       // Occupancy 7 days ago (confirmed/checked_in/completed bookings active 7 days ago)
@@ -160,7 +163,7 @@ const status = (b.status || "").toLowerCase();
         const checkInDate = new Date(b.check_in);
         const checkOutDate = new Date(b.check_out);
         if (checkInDate <= sevenDaysAgo && checkOutDate >= sevenDaysAgo) {
-          occupancyLastWeek += 1;
+          occupancyLastWeek += Number(b.rooms) || 1;
         }
       }
     });
@@ -580,10 +583,10 @@ console.log("Rooms Count:", roomsCount);
 
         {/* RIGHT — Room Inventory Donut Chart */}
         {(() => {
-          const occupied = bookings.filter(b => b.status === "checked_in").length;
-          const reserved = bookings.filter(b => b.status === "confirmed").length;
-          const available = Math.max(0, roomsCount - occupied - reserved);
+          const occupied = bookings.filter(b => b.status === "checked_in" || b.status === "checked in").reduce((acc, b) => acc + (Number(b.rooms) || 1), 0);
+          const available = roomsData.reduce((acc, r) => acc + (Number(r.availableRooms) || 0), 0);
           const total = roomsCount || 1;
+          const reserved = Math.max(0, total - occupied - available);
 
           const occupancyPct = Math.round((occupied / total) * 100);
 
