@@ -1141,21 +1141,6 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
   />
 </div>
 
-{rooms.find((r) => Number(r.id) === Number(selectedRoom))?.allowExtraBed && (
-  <div className="flex items-center gap-2.5 pt-8">
-    <input
-      type="checkbox"
-      id="extraBedCheckbox"
-      checked={extraBed}
-      onChange={(e) => setExtraBed(e.target.checked)}
-      className="w-4 h-4 rounded bg-[#071524] border-white/10 accent-yellow-500 cursor-pointer"
-    />
-    <label htmlFor="extraBedCheckbox" className="text-yellow-500 text-xs uppercase tracking-wider cursor-pointer select-none">
-      Extra Bed (₹1,500 / night per room)
-    </label>
-  </div>
-)}
-
                 {/* Payment Method */}
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Payment Method</label>
@@ -1184,6 +1169,20 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                     <option value="Make My Trip">Make My Trip</option>
                     <option value="Goibibo">Goibibo</option>
                   </select>
+                </div>
+                
+                {/* Extra Bed Checkbox (Spans both columns) */}
+                <div className="col-span-1 md:col-span-2 flex items-center gap-3 bg-yellow-500/5 p-4 rounded-lg border border-yellow-500/10">
+                  <input
+                    type="checkbox"
+                    id="extraBedCheckbox"
+                    checked={extraBed}
+                    onChange={(e) => setExtraBed(e.target.checked)}
+                    className="w-4 h-4 rounded bg-[#071524] border-white/10 accent-yellow-500 cursor-pointer"
+                  />
+                  <label htmlFor="extraBedCheckbox" className="text-yellow-500 text-xs uppercase tracking-wider cursor-pointer select-none font-semibold">
+                    Request Extra Bed (₹1,500 / night per room)
+                  </label>
                 </div>
               </div>
 
