@@ -110,12 +110,12 @@ const AdminDashboard = () => {
     bookings.forEach((b) => {
       const price = Math.floor(b.total_price || 0);
       const isPayLater = b.payment_method === "pay_later" && b.status !== "cancelled" && b.status !== "checked_out";
-// const status = (b.status || "").toLowerCase();
-  if (
-  b.status === "confirmed" ||
-  b.status === "checked_in" ||
-  b.status === "checked_out"
-) {
+      if (
+        b.status === "confirmed" ||
+        b.status === "checked_in" ||
+        b.status === "checked_out" ||
+        b.status === "cancelled"
+      ) {
         if (!isPayLater) {
           // Only count as revenue if payment is not deferred
           totalRevenue += price;

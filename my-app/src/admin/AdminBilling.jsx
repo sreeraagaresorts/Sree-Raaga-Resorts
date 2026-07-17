@@ -186,7 +186,7 @@ const AdminBilling = () => {
       // 1. TODAY'S REVENUE (Revenue collected specifically today)
       // We check if it was 'checked_out' today OR 'confirmed'/'checked_in' and paid today
       if (bookingDateStr === todayStr || (b.check_out && new Date(b.check_out).toDateString() === todayStr)) {
-        if ((b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out") && !isPayLaterDue) {
+        if ((b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out" || b.status === "cancelled") && !isPayLaterDue) {
           todaysCollections += price;
         }
       }
@@ -201,7 +201,7 @@ const AdminBilling = () => {
         if (isPayLaterDue) {
           pendingPayments += price;
           payLaterDueCount += 1;
-        } else if (b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out") {
+        } else if (b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out" || b.status === "cancelled") {
           totalRevenue += price;
         } else if (b.status === "pending") {
           pendingPayments += price;

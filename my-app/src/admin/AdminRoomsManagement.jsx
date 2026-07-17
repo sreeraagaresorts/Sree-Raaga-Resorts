@@ -115,15 +115,17 @@ const AdminRoomsManagement = () => {
     let occupied = 0;
     let reserved = 0;
     let maintenance = 0;
+    let cleaning = 0;
 
     categoryFilteredUnits.forEach(({ unit }) => {
       if (unit.status === "Occupied") occupied++;
       else if (unit.status === "Reserved") reserved++;
-      else if (unit.status === "Maintenance" || unit.status === "Cleaning") maintenance++;
+      else if (unit.status === "Maintenance") maintenance++;
+      else if (unit.status === "Cleaning") cleaning++;
       else available++;
     });
 
-    return { available, occupied, reserved, maintenance };
+    return { available, occupied, reserved, maintenance, cleaning };
   }, [categoryFilteredUnits]);
 
   // Unique categories for filtering
@@ -344,7 +346,7 @@ const AdminRoomsManagement = () => {
       </div>
 
       {/* STATS TILES */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Available */}
         <div className="bg-[#081A2F] border border-green-500/20 p-5 rounded-xl">
           <span className="text-green-400 text-xs font-bold uppercase tracking-wider block">Available</span>
@@ -364,6 +366,11 @@ const AdminRoomsManagement = () => {
         <div className="bg-[#081A2F] border border-red-500/20 p-5 rounded-xl">
           <span className="text-red-400 text-xs font-bold uppercase tracking-wider block">Maintenance</span>
           <span className="text-4xl font-bold text-red-400 block mt-2">{stats.maintenance}</span>
+        </div>
+        {/* Cleaning Required */}
+        <div className="bg-[#081A2F] border border-purple-500/20 p-5 rounded-xl">
+          <span className="text-purple-400 text-xs font-bold uppercase tracking-wider block">Cleaning Required</span>
+          <span className="text-4xl font-bold text-purple-400 block mt-2">{stats.cleaning}</span>
         </div>
       </div>
 
