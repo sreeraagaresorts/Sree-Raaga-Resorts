@@ -233,14 +233,14 @@ const About = () => {
         <section 
           className={`relative w-full my-16  flex items-center justify-center bg-cover bg-center transition-all duration-700 ${isVideoOpen ? 'aspect-video max-h-[90vh]' : 'h-[500px] md:h-[750px]'}`}
           style={{
-            backgroundImage: !isVideoOpen ? "url('https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=2000')" : "none",
-            backgroundColor: "#000"
+            backgroundImage: !isVideoOpen ? "url('/cd.avif')" : "none",
+            backgroundColor: ""
           }}
         >
           {!isVideoOpen ? (
             <>
               {/* Dark overlay for text readability */}
-              <div className="absolute inset-0 bg-[#04121a]/30"></div>
+              <div className="absolute inset-0 bg-[#04121a]/20"></div>
               
               <div className="relative z-10 flex flex-col items-center text-center text-white select-none px-4">
                 <span className="text-white/90 uppercase tracking-[4px] text-xs md:text-[13px] font-medium mb-4 block font-jost">
@@ -269,7 +269,7 @@ const About = () => {
                       <polygon points="5 3 19 12 5 21 5 3"></polygon>
                     </svg>
                   </div>
-                  <span className="text-white/80 uppercase tracking-[3px] text-[10px] md:text-xs font-semibold group-hover:text-white transition-colors mt-2">
+                  <span className="text-white uppercase tracking-[3px] text-[10px] md:text-xs font-semibold group-hover:text-white transition-colors mt-2">
                     PLAY INTRO VIDEO
                   </span>
                 </button>

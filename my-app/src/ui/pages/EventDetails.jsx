@@ -103,7 +103,7 @@ const EventDetails = () => {
   }, [id]);
 
   const getImageUrl = (image) => {
-    if (!image) return "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200";
+    if (!image) return "";
     if (image.startsWith("http")) return image;
     return `${API_URL}/uploads/${image}`;
   };
@@ -112,9 +112,9 @@ const EventDetails = () => {
     const mainImg = getImageUrl(event?.image);
     return [
       mainImg,
-      "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800",
-      "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?q=80&w=800",
-      "https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=800"
+      "",
+      "",
+      ""
     ];
   };
 const handleEnquiry = async (e) => {
