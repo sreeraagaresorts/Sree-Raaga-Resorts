@@ -497,6 +497,32 @@ exports.updateBookingStatus = async (req, res) => {
       updateFields.check_in = start;
       updateFields.check_out = end;
 
+      // Check for overlapping bookings on the assigned room numbers
+      if (booking.room_number) {
+        const assignedRooms = booking.room_number.split(",").map(r => r.trim());
+        const overlappingBookings = await Booking.find({
+          id: { $ne: booking.id },
+          status: { $ne: "cancelled" },
+          $or: [
+            { check_in: { $lt: end }, check_out: { $gt: start } }
+          ]
+        });
+
+        for (const num of assignedRooms) {
+          const isOverlapping = overlappingBookings.some(ob => {
+            if (!ob.room_number) return false;
+            const obRooms = ob.room_number.split(",").map(r => r.trim());
+            return obRooms.includes(num);
+          });
+          if (isOverlapping) {
+            return res.status(400).json({
+              success: false,
+              message: `Room unit "${num}" is already booked for these dates.`
+            });
+          }
+        }
+      }
+
       // Recalculate price
       const Room = require("../models/Room");
       const room = await Room.findOne({ id: booking.room_id });
@@ -507,7 +533,31 @@ exports.updateBookingStatus = async (req, res) => {
         const roomCount = Number(booking.rooms) || 1;
         
         updateFields.subtotal = nights * roomPrice * roomCount;
-        updateFields.total_price = updateFields.subtotal + (Number(booking.services_price) || 0) - (Number(booking.discount_price) || 0) + (Number(booking.gst_amount) || 0);
+
+        let services_price = Number(booking.services_price) || 0;
+        const oldStart = new Date(booking.check_in);
+        const oldEnd = new Date(booking.check_out);
+        const oldNights = Math.max(1, Math.ceil(Math.abs(oldEnd - oldStart) / (1000 * 60 * 60 * 24)));
+        
+        // If extraBed was checked (services_price matches old calculation), recalculate it
+        if (services_price > 0 && Math.abs(services_price - (1500 * oldNights * roomCount)) < 10) {
+          services_price = 1500 * nights * roomCount;
+          updateFields.services_price = services_price;
+        }
+
+        const discount_price = Number(booking.discount_price) || 0;
+        const gstRate = room.gst_percentage !== undefined ? room.gst_percentage : 8;
+        const taxableAmount = Math.max(0, updateFields.subtotal + services_price - discount_price);
+        
+        const gst_amount = taxableAmount * gstRate / 100;
+        updateFields.gst_amount = gst_amount;
+        
+        const total_price = taxableAmount + gst_amount;
+        updateFields.total_price = total_price;
+
+        if (total_price > booking.total_price) {
+          updateFields.payment_status = "Unpaid";
+        }
       }
     }
 

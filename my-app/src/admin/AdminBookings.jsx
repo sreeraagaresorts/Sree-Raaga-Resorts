@@ -52,6 +52,11 @@ const [selectedRoomCount, setSelectedRoomCount] = useState(1);
   const [editCheckOut, setEditCheckOut] = useState("");
   const [updatingDates, setUpdatingDates] = useState(false);
 
+  // Extend Stay Modal State
+  const [extendBooking, setExtendBooking] = useState(null);
+  const [extendCheckOut, setExtendCheckOut] = useState("");
+  const [extending, setExtending] = useState(false);
+
   // Settle Payment & Check Out State
   const [checkoutBooking, setCheckoutBooking] = useState(null);
   const [settlePaymentMethod, setSettlePaymentMethod] = useState("cash");
@@ -560,6 +565,88 @@ if (hasConflict) {
     });
   };
 
+  const handleOpenExtendModal = (booking) => {
+    setExtendBooking(booking);
+    setExtendCheckOut(new Date(booking.check_out).toISOString().split("T")[0]);
+  };
+
+  const handleExtendStay = async (e) => {
+    e.preventDefault();
+    if (!extendCheckOut) {
+      toast.warning("Please select a new check-out date.");
+      return;
+    }
+
+    const originalCheckOut = new Date(extendBooking.check_out);
+    const newCheckOutDate = new Date(extendCheckOut);
+
+    if (newCheckOutDate <= originalCheckOut) {
+      toast.warning("New check-out date must be after the current check-out date.");
+      return;
+    }
+
+    if (extendBooking.room_number) {
+      const assignedRooms = extendBooking.room_number.split(",").map(r => r.trim());
+      const extensionStart = originalCheckOut;
+      const extensionEnd = newCheckOutDate;
+
+      const hasConflict = bookings.some(b => {
+        if (b.id === extendBooking.id || b.status === "cancelled") return false;
+        if (!b.room_number) return false;
+
+        const otherRooms = b.room_number.split(",").map(r => r.trim());
+        const shareRoom = assignedRooms.some(r => otherRooms.includes(r));
+        if (!shareRoom) return false;
+
+        const otherStart = new Date(b.check_in);
+        const otherEnd = new Date(b.check_out);
+
+        return otherStart < extensionEnd && otherEnd > extensionStart;
+      });
+
+      if (hasConflict) {
+        toast.error(`Extension failed: One or more of the assigned room units (${extendBooking.room_number}) are already booked during the extension period.`);
+        return;
+      }
+    }
+
+    setConfirmModal({
+      isOpen: true,
+      title: "Extend Guest Stay",
+      message: `Are you sure you want to extend this stay until ${new Date(extendCheckOut).toLocaleDateString("en-GB")}?`,
+      type: "primary",
+      onConfirm: async () => {
+        setExtending(true);
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/bookings/${extendBooking.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              check_out: extendCheckOut,
+            }),
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to extend stay.");
+          }
+
+          toast.success("Stay extended successfully!");
+          fetchBookings(true);
+          setExtendBooking(null);
+        } catch (err) {
+          toast.error(err.message || "Failed to extend stay.");
+        } finally {
+          setExtending(false);
+        }
+      }
+    });
+  };
+
   const handleCheckInClick = (b) => {
     const today = new Date();
     const checkInDate = new Date(b.check_in);
@@ -949,12 +1036,20 @@ if (hasConflict) {
                           </button>
                         )}
                         {b.status === "checked_in" && (
-                          <button
-                            onClick={() => handleCheckOutClick(b)}
-                            className="px-2 py-1 bg-green-500/10 text-green-400 hover:bg-green-500/20 rounded cursor-pointer transition text-xs font-semibold"
-                          >
-                            Check Out
-                          </button>
+                          <>
+                            <button
+                              onClick={() => handleCheckOutClick(b)}
+                              className="px-2 py-1 bg-green-500/10 text-green-400 hover:bg-green-500/20 rounded cursor-pointer transition text-xs font-semibold"
+                            >
+                              Check Out
+                            </button>
+                            <button
+                              onClick={() => handleOpenExtendModal(b)}
+                              className="px-2 py-1 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 rounded cursor-pointer transition text-xs font-semibold"
+                            >
+                              Extend
+                            </button>
+                          </>
                         )}
 
                         {/* Cancel Button */}
@@ -1366,14 +1461,14 @@ if (hasConflict) {
                       return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
                     };
 
-                    const isOneDayBooking = editBooking && (() => {
+                    const originalNights = editBooking && (() => {
                       const s = new Date(editBooking.check_in);
                       const e = new Date(editBooking.check_out);
-                      return Math.ceil((e - s) / (1000 * 60 * 60 * 24)) === 1;
+                      return Math.round((e - s) / (1000 * 60 * 60 * 24));
                     })();
 
-                    if (isOneDayBooking && start) {
-                      const calculatedEnd = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+                    if (originalNights && start) {
+                      const calculatedEnd = new Date(start.getTime() + originalNights * 24 * 60 * 60 * 1000);
                       setEditCheckIn(formatDate(start));
                       setEditCheckOut(formatDate(calculatedEnd));
                     } else {
@@ -1424,6 +1519,80 @@ if (hasConflict) {
                   className="px-4 py-2 bg-[#C8A64D] hover:bg-[#b09141] text-black rounded font-bold border-0 cursor-pointer transition text-sm disabled:opacity-50"
                 >
                   {updatingDates ? "Updating..." : "Save Dates"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EXTEND STAY MODAL */}
+      {extendBooking && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#081A2F] w-full max-w-md p-6 rounded-xl border border-white/10 space-y-4 text-left">
+            <div className="flex justify-between items-center pb-2 border-b border-white/5">
+              <h2 className="text-lg font-bold text-white">Extend Guest Stay</h2>
+              <button 
+                onClick={() => setExtendBooking(null)}
+                className=" hover:text-white cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleExtendStay} className="space-y-4">
+              <div className="bg-white/5 p-4 rounded-lg border border-white/5 space-y-2 text-sm text-white/80">
+                <p><span className="font-semibold text-white">Room(s):</span> {extendBooking.room_number || "—"}</p>
+                <p><span className="font-semibold text-white">Current Check-In:</span> {new Date(extendBooking.check_in).toLocaleDateString("en-GB")}</p>
+                <p><span className="font-semibold text-white">Current Check-Out:</span> {new Date(extendBooking.check_out).toLocaleDateString("en-GB")}</p>
+              </div>
+
+              <div>
+                <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">New Check Out Date</label>
+                <DatePicker
+                  wrapperClassName="w-full"
+                  selected={extendCheckOut ? new Date(extendCheckOut) : null}
+                  onChange={(date) => {
+                    if (!date) {
+                      setExtendCheckOut("");
+                      return;
+                    }
+                    const tzOffset = date.getTimezoneOffset() * 60000;
+                    const dateStr = new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
+                    setExtendCheckOut(dateStr);
+                  }}
+                  minDate={new Date(new Date(extendBooking.check_out).getTime() + 24 * 60 * 60 * 1000)}
+                  customInput={
+                    <button
+                      type="button"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white flex items-center justify-between outline-none cursor-pointer text-left focus:border-[#C8A64D] transition-all text-sm"
+                    >
+                      <span>
+                        {extendCheckOut
+                          ? new Date(extendCheckOut).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
+                          : "Select new Check-out date"}
+                      </span>
+                      <ChevronDown size={16} className="text-white/40" />
+                    </button>
+                  }
+                  calendarClassName="custom-datepicker mt-14"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setExtendBooking(null)}
+                  className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white rounded font-semibold cursor-pointer border-0 transition text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={extending}
+                  className="px-4 py-2 bg-[#C8A64D] hover:bg-[#b09141] text-black rounded font-bold border-0 cursor-pointer transition text-sm disabled:opacity-50"
+                >
+                  {extending ? "Extending..." : "Save Extension"}
                 </button>
               </div>
             </form>
