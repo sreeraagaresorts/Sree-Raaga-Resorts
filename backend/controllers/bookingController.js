@@ -377,8 +377,6 @@ const syncRoomUnitStatus = async (roomId, roomNumber, bookingStatus) => {
     for (const num of roomNumbers) {
       const unit = room.roomStatuses.find(u => u.roomNumber === num);
       if (unit) {
-        if (unit.status === "Maintenance") continue;
-
         // Find if there is any active stay today for this room unit
         const todaysBooking = allBookings.find(b => {
           if (!b.room_number) return false;
@@ -398,11 +396,24 @@ const syncRoomUnitStatus = async (roomId, roomNumber, bookingStatus) => {
         });
 
         let targetStatus = "Available";
-        if (todaysBooking) {
-          if (todaysBooking.status === "checked_in") {
-            targetStatus = "Occupied";
-          } else if (todaysBooking.status === "confirmed") {
-            targetStatus = "Reserved";
+
+        if (bookingStatus === "checked_out") {
+          targetStatus = "Cleaning";
+        } else {
+          if (unit.status === "Maintenance") continue;
+
+          if (unit.status === "Cleaning") {
+            if (todaysBooking && todaysBooking.status === "checked_in") {
+              targetStatus = "Occupied";
+            } else {
+              continue; // Keep Cleaning status
+            }
+          } else if (todaysBooking) {
+            if (todaysBooking.status === "checked_in") {
+              targetStatus = "Occupied";
+            } else if (todaysBooking.status === "confirmed") {
+              targetStatus = "Reserved";
+            }
           }
         }
 
