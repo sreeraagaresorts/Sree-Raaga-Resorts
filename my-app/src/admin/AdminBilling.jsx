@@ -262,7 +262,7 @@ const invoices = bookings.map((b) => {
     const paymentStatus =
       isPayLaterDue ? "Due" :
       b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out" ? "Paid" :
-      b.status === "cancelled" ? "Refunded" : "Pending";
+      b.status === "cancelled" ? "Not-Refunded" : "Pending";
 
       
     return {
@@ -841,7 +841,7 @@ const invoices = bookings.map((b) => {
                                 ? "bg-green-500/10 text-green-400 border-green-500/20"
                                 : pay.paymentStatus === "Due"
                                 ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                                : pay.paymentStatus === "Refunded"
+                                : pay.paymentStatus === "Not-Refunded"
                                 ? "bg-red-500/10 text-red-400 border-red-500/20"
                                 : "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
                             }`}>
