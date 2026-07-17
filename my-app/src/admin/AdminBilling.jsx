@@ -304,7 +304,7 @@ const invoices = bookings.map((b) => {
       customerPhone: b.guest_phone,
       adults: b.adults || 1,
       children: b.children || 0,
-      source: b.booking_source || "Walk-in",
+      source: b.booking_source || "Direct",
       roomName: b.room_name || `Room #${b.room_id}`,
       roomNumber: b.room_number || "—",
       checkIn: b.check_in ? new Date(b.check_in) : null,

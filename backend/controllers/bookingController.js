@@ -231,7 +231,7 @@ if (req.body.coupon_code) {
       payment_status: req.body.payment_status !== undefined ? req.body.payment_status : (payment_method === 'pay_later' ? 'Unpaid' : 'Paid'),
       booking_source: (payment_method === 'online' || payment_method === 'razorpay')
         ? 'Website'
-        : (booking_source === 'Direct' || booking_source === 'Walkin' ? 'Walk-in' : (booking_source || 'Walk-in')),
+        : (['Direct', 'Walkin', 'Walk-in'].includes(booking_source) ? 'Direct' : (booking_source || 'Direct')),
       is_manual: req.user.role === 'admin' || req.body.is_manual === true || false,
       extraBed: isExtraBed
     });

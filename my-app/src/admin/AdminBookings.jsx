@@ -62,8 +62,8 @@ const [selectedRoomCount, setSelectedRoomCount] = useState(1);
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("+91");
-  const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [bookingSource, setBookingSource] = useState("Walk-in");
+  const [paymentMethod, setPaymentMethod] = useState("pay_later");
+  const [bookingSource, setBookingSource] = useState("Direct");
   const [extraBed, setExtraBed] = useState(false);
 
   // Custom Confirmation Modal State
@@ -338,8 +338,8 @@ const [selectedRoomCount, setSelectedRoomCount] = useState(1);
     setGuestName("");
     setGuestEmail("");
     setGuestPhone("+91");
-    setPaymentMethod("cash");
-    setBookingSource("Walk-in");
+    setPaymentMethod("pay_later");
+    setBookingSource("Direct");
     setIsFormOpen(true);
   };
 
@@ -775,8 +775,8 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                         Source: {
                           (b.payment_method === "online" || b.payment_method === "razorpay")
                             ? "Website"
-                            : (b.booking_source === "Direct" || b.booking_source === "Walkin" || !b.booking_source)
-                            ? "Walk-in"
+                            : (b.booking_source === "Direct" || b.booking_source === "Walkin" || b.booking_source === "Walk-in" || !b.booking_source)
+                            ? "Direct"
                             : b.booking_source === "MakeMyTrip"
                             ? "Make My Trip"
                             : b.booking_source
@@ -1126,7 +1126,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                 {/* Adults & Children */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Adults</label>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Adults (18+ Years)</label>
                     <input
                       type="number"
                       min="1"
@@ -1136,7 +1136,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                     />
                   </div>
                   <div>
-                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children</label>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children (Below 10 Years)</label>
                     <input
                       type="number"
                       min="0"
@@ -1170,7 +1170,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                       onChange={(e) => setBookingSource(e.target.value)}
                       className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
                     >
-                      <option value="Walk-in">Walk-in</option>
+                      <option value="Direct">Direct</option>
                       <option value="Make My Trip">Make My Trip</option>
                       <option value="Goibibo">Goibibo</option>
                     </select>

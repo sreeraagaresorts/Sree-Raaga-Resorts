@@ -435,9 +435,9 @@ const AdminUsers = () => {
                     <td className="p-4 text-white  text-xs">
                       <div className="flex flex-col items-center justify-center gap-1">
                         {new Date(u.created_at).toLocaleDateString("en-GB")}
-                        {/* New indicator helping Admins distinguish Online Users vs Walk-Ins */}
+                        {/* New indicator helping Admins distinguish Online Users vs Direct Guests */}
                         {u.is_manual ? (
-                          <span className="bg-white/10 text-white/70 px-2 py-0.5 rounded text-[10px] uppercase font-bold border border-white/10">Walk-in</span>
+                          <span className="bg-white/10 text-white/70 px-2 py-0.5 rounded text-[10px] uppercase font-bold border border-white/10">Direct</span>
                         ) : (
                           <span className="bg-blue-500/10 text-blue-300 px-2 py-0.5 rounded text-[10px] uppercase font-bold border border-blue-500/20">Online</span>
                         )}

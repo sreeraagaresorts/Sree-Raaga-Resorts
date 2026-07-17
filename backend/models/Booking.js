@@ -21,7 +21,7 @@ const bookingSchema = new mongoose.Schema({
   discount_price: { type: Number, default: 0 },
   gst_amount: { type: Number, default: 0 },
   coupon_code: { type: String, default: null },
-  booking_source: { type: String, default: "Walk-in" },
+  booking_source: { type: String, default: "Direct" },
   is_manual: { type: Boolean, default: false },
   extraBed: { type: Boolean, default: false },
   cancellation_reason: { type: String, default: null },

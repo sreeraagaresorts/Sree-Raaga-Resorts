@@ -10,7 +10,8 @@ import {
   BedDouble,
   RefreshCw,
   GripVertical,
-  Baby
+  Baby,
+  Utensils
 } from "lucide-react";
 import { useToast } from "../ui/components/Toast";
 import { API_URL } from "../config/api";
@@ -506,7 +507,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
             </span>
 
             <span className="flex items-center justify-center gap-1.5 border border-white/10 p-2 rounded-lg bg-black/20" title="Area">
-              <Maximize size={14} className="text-[#C8A64D]" />
+              <Utensils size={14} className="text-[#C8A64D]" />
               {room.area}
             </span>
 

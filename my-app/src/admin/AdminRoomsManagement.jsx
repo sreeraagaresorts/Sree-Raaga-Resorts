@@ -311,7 +311,7 @@ const AdminRoomsManagement = () => {
       case "Maintenance":
         return "bg-red-500/10 text-red-400 border-red-500/20";
       case "Cleaning":
-        return "bg-purple-500/10 text-purple-400 border-purple-500/20";
+        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/20";
       default:
         return "bg-green-500/10 text-green-400 border-green-500/20";
     }
@@ -352,26 +352,28 @@ const AdminRoomsManagement = () => {
           <span className="text-green-400 text-xs font-bold uppercase tracking-wider block">Available</span>
           <span className="text-4xl font-bold text-green-400 block mt-2">{stats.available}</span>
         </div>
+            {/* Reserved */}
+        <div className="bg-[#081A2F] border border-orange-500/20 p-5 rounded-xl">
+          <span className="text-orange-400 text-xs font-bold uppercase tracking-wider block">Reserved</span>
+          <span className="text-4xl font-bold text-orange-400 block mt-2">{stats.reserved}</span>
+        </div>
         {/* Occupied */}
         <div className="bg-[#081A2F] border border-[#06B6D4]/20 p-5 rounded-xl">
           <span className="text-[#06B6D4] text-xs font-bold uppercase tracking-wider block">Occupied</span>
           <span className="text-4xl font-bold text-[#06B6D4] block mt-2">{stats.occupied}</span>
         </div>
-        {/* Reserved */}
-        <div className="bg-[#081A2F] border border-orange-500/20 p-5 rounded-xl">
-          <span className="text-orange-400 text-xs font-bold uppercase tracking-wider block">Reserved</span>
-          <span className="text-4xl font-bold text-orange-400 block mt-2">{stats.reserved}</span>
+    
+             {/* Cleaning Required */}
+        <div className="bg-[#081A2F] border border-yellow-500/20 p-5 rounded-xl">
+          <span className="text-yellow-400 text-xs font-bold uppercase tracking-wider block">Cleaning Required</span>
+          <span className="text-4xl font-bold text-yellow-400 block mt-2">{stats.cleaning}</span>
         </div>
         {/* Maintenance */}
         <div className="bg-[#081A2F] border border-red-500/20 p-5 rounded-xl">
           <span className="text-red-400 text-xs font-bold uppercase tracking-wider block">Maintenance</span>
           <span className="text-4xl font-bold text-red-400 block mt-2">{stats.maintenance}</span>
         </div>
-        {/* Cleaning Required */}
-        <div className="bg-[#081A2F] border border-purple-500/20 p-5 rounded-xl">
-          <span className="text-purple-400 text-xs font-bold uppercase tracking-wider block">Cleaning Required</span>
-          <span className="text-4xl font-bold text-purple-400 block mt-2">{stats.cleaning}</span>
-        </div>
+   
       </div>
 
       {/* FILTERS */}
