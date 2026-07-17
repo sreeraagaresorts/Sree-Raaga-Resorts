@@ -496,34 +496,68 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
       return;
     }
 
-    setUpdatingDates(true);
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-    try {
-      const response = await fetch(`${API_URL}/api/bookings/${editBooking.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          check_in: editCheckIn,
-          check_out: editCheckOut,
-        }),
+    // Check if the assigned room units are already booked by another active booking on the new dates
+    if (editBooking.room_number) {
+      const assignedRooms = editBooking.room_number.split(",").map(r => r.trim());
+      const newStart = new Date(editCheckIn);
+      const newEnd = new Date(editCheckOut);
+
+      const hasConflict = bookings.some(b => {
+        if (b.id === editBooking.id || b.status === "cancelled") return false;
+        if (!b.room_number) return false;
+
+        const otherRooms = b.room_number.split(",").map(r => r.trim());
+        const shareRoom = assignedRooms.some(r => otherRooms.includes(r));
+        if (!shareRoom) return false;
+
+        const otherStart = new Date(b.check_in);
+        const otherEnd = new Date(b.check_out);
+
+        return newStart < otherEnd && newEnd > otherStart;
       });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to update booking dates.");
+      if (hasConflict) {
+        toast.error(`One or more of the assigned room units (${editBooking.room_number}) are already booked for the selected dates.`);
+        return;
       }
-
-      toast.success("Booking dates updated successfully!");
-      fetchBookings(true);
-      setEditBooking(null);
-    } catch (err) {
-      toast.error(err.message || "Failed to update booking dates.");
-    } finally {
-      setUpdatingDates(false);
     }
+
+    setConfirmModal({
+      isOpen: true,
+      title: "Update Booking Dates",
+      message: `Are you sure you want to change the stay dates to: ${new Date(editCheckIn).toLocaleDateString("en-GB")} - ${new Date(editCheckOut).toLocaleDateString("en-GB")}?`,
+      type: "primary",
+      onConfirm: async () => {
+        setUpdatingDates(true);
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/bookings/${editBooking.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              check_in: editCheckIn,
+              check_out: editCheckOut,
+            }),
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to update booking dates.");
+          }
+
+          toast.success("Booking dates updated successfully!");
+          fetchBookings(true);
+          setEditBooking(null);
+        } catch (err) {
+          toast.error(err.message || "Failed to update booking dates.");
+        } finally {
+          setUpdatingDates(false);
+        }
+      }
+    });
   };
 
   const handleCheckInClick = (b) => {
@@ -1323,6 +1357,7 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                   selectsRange={true}
                   startDate={editCheckIn ? new Date(editCheckIn) : null}
                   endDate={editCheckOut ? new Date(editCheckOut) : null}
+                  minDate={new Date()}
                   onChange={(update) => {
                     const [start, end] = update;
                     const formatDate = (date) => {
@@ -1330,8 +1365,21 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
                       const tzOffset = date.getTimezoneOffset() * 60000;
                       return new Date(date.getTime() - tzOffset).toISOString().split("T")[0];
                     };
-                    setEditCheckIn(start ? formatDate(start) : "");
-                    setEditCheckOut(end ? formatDate(end) : "");
+
+                    const isOneDayBooking = editBooking && (() => {
+                      const s = new Date(editBooking.check_in);
+                      const e = new Date(editBooking.check_out);
+                      return Math.ceil((e - s) / (1000 * 60 * 60 * 24)) === 1;
+                    })();
+
+                    if (isOneDayBooking && start) {
+                      const calculatedEnd = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+                      setEditCheckIn(formatDate(start));
+                      setEditCheckOut(formatDate(calculatedEnd));
+                    } else {
+                      setEditCheckIn(start ? formatDate(start) : "");
+                      setEditCheckOut(end ? formatDate(end) : "");
+                    }
                   }}
                   customInput={
                     <button
