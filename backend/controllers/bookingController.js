@@ -660,9 +660,9 @@ exports.updateBookingStatus = async (req, res) => {
     );
 
     // Sync new/current room status based on status
-    const finalStatus = status !== undefined ? status : updatedBooking.status;
+    const finalSyncStatus = status !== undefined ? status : updatedBooking.status;
     if (finalRoomNumber) {
-      await syncRoomUnitStatus(updatedBooking.room_id, finalRoomNumber, finalStatus);
+      await syncRoomUnitStatus(updatedBooking.room_id, finalRoomNumber, finalSyncStatus);
     }
 
     // Fetch details for email notification
