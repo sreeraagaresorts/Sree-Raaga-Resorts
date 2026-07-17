@@ -365,8 +365,8 @@ const AdminRoomsManagement = () => {
     
              {/* Cleaning Required */}
         <div className="bg-[#081A2F] border border-yellow-500/20 p-5 rounded-xl">
-          <span className="text-yellow-400 text-xs font-bold uppercase tracking-wider block">Cleaning Required</span>
-          <span className="text-4xl font-bold text-yellow-400 block mt-2">{stats.cleaning}</span>
+          <span className="text-[#ffc300] text-xs font-bold uppercase tracking-wider block">Cleaning Required</span>
+          <span className="text-4xl font-bold text-[#ffc300] block mt-2">{stats.cleaning}</span>
         </div>
         {/* Maintenance */}
         <div className="bg-[#081A2F] border border-red-500/20 p-5 rounded-xl">
@@ -400,10 +400,12 @@ const AdminRoomsManagement = () => {
           >
             <option value="All">All Statuses</option>
             <option value="Available">Available</option>
-            <option value="Occupied">Occupied</option>
             <option value="Reserved">Reserved</option>
-            <option value="Maintenance">Maintenance</option>
+            <option value="Occupied">Occupied</option>
+            
+           
             <option value="Cleaning">Cleaning Required</option>
+             <option value="Maintenance">Maintenance</option>
           </select>
         </div>
       </div>
@@ -550,10 +552,12 @@ const AdminRoomsManagement = () => {
                   className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
                 >
                   <option value="Available">Available (Clean & Ready)</option>
+                                    <option value="Reserved">Reserved</option>
                   <option value="Occupied">Occupied</option>
-                  <option value="Reserved">Reserved</option>
-                  <option value="Maintenance">Maintenance (Out Of Service)</option>
+
+                 
                   <option value="Cleaning">Cleaning Required</option>
+                   <option value="Maintenance">Maintenance (Out Of Service)</option>
                 </select>
               </div>
             </div>
