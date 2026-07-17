@@ -64,6 +64,7 @@ const [selectedRoomCount, setSelectedRoomCount] = useState(1);
   const [guestPhone, setGuestPhone] = useState("+91");
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [bookingSource, setBookingSource] = useState("Walk-in");
+  const [extraBed, setExtraBed] = useState(false);
 
   // Custom Confirmation Modal State
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
@@ -332,6 +333,7 @@ const [selectedRoomCount, setSelectedRoomCount] = useState(1);
     setSelectedRoom("");
     setAdults(1);
     setChildren(0);
+    setExtraBed(false);
     setGuestMode("new");
     setGuestName("");
     setGuestEmail("");
@@ -404,7 +406,8 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
           check_out: checkOut,
           adults: Number(adults),
           children: Number(children),
-         room_number: selectedRoomNumbers.join(", ")|| null,
+          extraBed: extraBed,
+          room_number: selectedRoomNumbers.join(", ")|| null,
           payment_method: paymentMethod,
           booking_source: bookingSource,
           is_manual: true,
@@ -1137,6 +1140,21 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
     className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
   />
 </div>
+
+{rooms.find((r) => Number(r.id) === Number(selectedRoom))?.allowExtraBed && (
+  <div className="flex items-center gap-2.5 pt-8">
+    <input
+      type="checkbox"
+      id="extraBedCheckbox"
+      checked={extraBed}
+      onChange={(e) => setExtraBed(e.target.checked)}
+      className="w-4 h-4 rounded bg-[#071524] border-white/10 accent-yellow-500 cursor-pointer"
+    />
+    <label htmlFor="extraBedCheckbox" className="text-yellow-500 text-xs uppercase tracking-wider cursor-pointer select-none">
+      Extra Bed (₹1,500 / night per room)
+    </label>
+  </div>
+)}
 
                 {/* Payment Method */}
                 <div>

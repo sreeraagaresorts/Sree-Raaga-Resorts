@@ -198,7 +198,18 @@ if (req.body.coupon_code) {
       });
     }
 
-    const total_price = nights * roomPrice * roomCount;
+    const isExtraBed = req.body.extraBed === true || req.body.extraBed === "true";
+    const subtotal = req.body.subtotal !== undefined ? Number(req.body.subtotal) : (nights * roomPrice * roomCount);
+    let services_price = req.body.services_price !== undefined ? Number(req.body.services_price) : 0;
+    if (isExtraBed && req.body.services_price === undefined) {
+      services_price = 1500 * nights * roomCount;
+    }
+
+    const discount_price = req.body.discount_price !== undefined ? Number(req.body.discount_price) : 0;
+    const gstRate = room.gst_percentage !== undefined ? room.gst_percentage : 8;
+    const taxableAmount = Math.max(0, subtotal + services_price - discount_price);
+    const gst_amount = req.body.gst_amount !== undefined ? Number(req.body.gst_amount) : (taxableAmount * gstRate / 100);
+    const total_price = req.body.total_price !== undefined ? Number(req.body.total_price) : (taxableAmount + gst_amount);
 
     const booking = new Booking({
       user_id: Number(user_id),
@@ -209,11 +220,11 @@ if (req.body.coupon_code) {
       children: children || 0,
       rooms: roomCount,
       room_number: room_number || null,
-      total_price: req.body.total_price !== undefined ? Number(req.body.total_price) : total_price,
-      subtotal: req.body.subtotal !== undefined ? Number(req.body.subtotal) : (nights * roomPrice * roomCount),
-      services_price: req.body.services_price !== undefined ? Number(req.body.services_price) : 0,
-      discount_price: req.body.discount_price !== undefined ? Number(req.body.discount_price) : 0,
-      gst_amount: req.body.gst_amount !== undefined ? Number(req.body.gst_amount) : 0,
+      total_price,
+      subtotal,
+      services_price,
+      discount_price,
+      gst_amount,
       coupon_code: req.body.coupon_code ? req.body.coupon_code.trim().toUpperCase() : null,
       status: 'confirmed',
       payment_method: payment_method || 'online',
@@ -221,7 +232,8 @@ if (req.body.coupon_code) {
       booking_source: (payment_method === 'online' || payment_method === 'razorpay')
         ? 'Website'
         : (booking_source === 'Direct' || booking_source === 'Walkin' ? 'Walk-in' : (booking_source || 'Walk-in')),
-      is_manual: req.user.role === 'admin' || req.body.is_manual === true || false
+      is_manual: req.user.role === 'admin' || req.body.is_manual === true || false,
+      extraBed: isExtraBed
     });
     await booking.save();
 
