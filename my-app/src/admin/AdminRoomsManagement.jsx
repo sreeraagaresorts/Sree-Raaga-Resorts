@@ -34,7 +34,7 @@ const AdminRoomsManagement = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [addRoomNumber, setAddRoomNumber] = useState("");
   const [addCategory, setAddCategory] = useState("Executive Rooms");
-  const [addFloor, setAddFloor] = useState("1");
+  const [addFloor, setAddFloor] = useState("");
   const [addPrice, setAddPrice] = useState("");
   const [addStatus, setAddStatus] = useState("Available");
   const [addSaving, setAddSaving] = useState(false);
@@ -43,7 +43,7 @@ const AdminRoomsManagement = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editOldRoomNumber, setEditOldRoomNumber] = useState("");
   const [editRoomNumber, setEditRoomNumber] = useState("");
-  const [editFloor, setEditFloor] = useState("1");
+  const [editFloor, setEditFloor] = useState("");
   const [editStatus, setEditStatus] = useState("Available");
   const [editSaving, setEditSaving] = useState(false);
 
@@ -90,7 +90,7 @@ const AdminRoomsManagement = () => {
     rooms.forEach((room) => {
       const statuses = room.roomStatuses || [];
       statuses.forEach((unit) => {
-        const floor = unit.floor || 1;
+        const floor = unit.floor !== undefined && unit.floor !== null ? unit.floor : "";
 
         list.push({
           room,
@@ -201,7 +201,7 @@ const AdminRoomsManagement = () => {
         body: JSON.stringify({
           roomNumber: addRoomNumber,
           categoryName: addCategory,
-          floor: addFloor ? Number(addFloor) : 1,
+          floor: addFloor !== "" ? Number(addFloor) : null,
           price: addPrice ? parseFloat(addPrice) : undefined,
           status: addStatus
         })
@@ -215,7 +215,7 @@ const AdminRoomsManagement = () => {
       toast.success(`Room ${addRoomNumber} added successfully to ${addCategory}!`);
       setIsAddModalOpen(false);
       setAddRoomNumber("");
-      setAddFloor("1");
+      setAddFloor("");
       setAddPrice("");
       setAddStatus("Available");
       fetchRooms(true);
@@ -230,7 +230,7 @@ const AdminRoomsManagement = () => {
     setSelectedUnit({ room, unit });
     setEditOldRoomNumber(unit.roomNumber);
     setEditRoomNumber(unit.roomNumber);
-    setEditFloor(unit.floor || 1);
+    setEditFloor(unit.floor !== undefined && unit.floor !== null ? unit.floor : "");
     setEditStatus(unit.status);
     setIsEditModalOpen(true);
   };
@@ -254,7 +254,7 @@ const AdminRoomsManagement = () => {
         body: JSON.stringify({
           oldRoomNumber: editOldRoomNumber,
           newRoomNumber: editRoomNumber,
-          floor: Number(editFloor) || 1,
+          floor: editFloor !== "" ? Number(editFloor) : null,
           status: editStatus
         })
       });
@@ -488,10 +488,12 @@ const AdminRoomsManagement = () => {
 
               {/* Specs */}
               <div className="mt-4 border-t border-white/5 pt-3 space-y-1.5 text-[13px] text-white/70">
-                <div className="flex justify-between">
-                  <span>Floor</span>
-                  <span className="text-white font-medium">{floor}</span>
-                </div>
+                {floor !== undefined && floor !== null && floor !== "" && (
+                  <div className="flex justify-between">
+                    <span>Floor</span>
+                    <span className="text-white font-medium">{floor}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Rate</span>
                   <span className="text-white font-medium">₹{parseFloat(room.price).toLocaleString()}/night</span>

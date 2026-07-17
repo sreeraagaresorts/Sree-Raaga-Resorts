@@ -617,7 +617,7 @@ exports.addRoomUnit = async (req, res) => {
       });
     }
 
-    const floorVal = Number(req.body.floor) || 1;
+    const floorVal = (req.body.floor === undefined || req.body.floor === null || req.body.floor === "") ? null : Number(req.body.floor);
     roomCategory.roomStatuses.push({
       roomNumber,
       status: status || "Available",
@@ -693,7 +693,7 @@ exports.updateRoomUnit = async (req, res) => {
     }
 
     unit.roomNumber = newRoomNumber;
-    if (floor !== undefined) unit.floor = Number(floor) || 1;
+    if (floor !== undefined) unit.floor = (floor === null || floor === "") ? null : Number(floor);
     if (status !== undefined) unit.status = status;
 
     await room.save();
