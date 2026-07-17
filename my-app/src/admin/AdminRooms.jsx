@@ -661,7 +661,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     Included Meal
                   </label>
                   <input
-                    placeholder="e.g. 500 SQ FT"
+                    placeholder="Add Meal"
                     value={area}
                     onChange={(e) => setArea(e.target.value)}
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
