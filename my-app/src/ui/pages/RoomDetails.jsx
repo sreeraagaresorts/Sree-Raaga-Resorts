@@ -861,7 +861,7 @@ const RoomDetails = () => {
               onChange={(e) => setExtraBed(e.target.checked)}
               className="w-5 h-5 accent-[#c8a64d] cursor-pointer"
             />
-            <label htmlFor="extraBed" className="text-[17px] text-[#0d2b4e] font-medium font-jost cursor-pointer select-none">
+            <label htmlFor="extraBed" className="text-[14px] text-[#0d2b4e] font-medium font-jost cursor-pointer select-none">
               Extra Bed (₹1,500 / night per room)
             </label>
           </div>
