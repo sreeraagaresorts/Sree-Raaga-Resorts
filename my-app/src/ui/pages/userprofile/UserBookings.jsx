@@ -126,7 +126,7 @@ const UserBookings = () => {
           <table style="width: 100%; border-collapse: collapse;">
             <tr>
               <td style="vertical-align: top; width: 50%;">
-                <h4 style="font-family: Georgia, serif; font-size: 18px; margin: 0 0 8px 0; font-weight: normal; color: #0d2b4e;">Supplier</h4>
+                <h4 style="font-size: 13px; color: rgba(13, 43, 78, 0.7); margin: 0; text-transform: uppercase; font-weight: bold;">Supplier</h4>
                 <p style="font-size: 15px; font-weight: bold; margin: 0; color: #0d2b4e;">Sree Raaga Resorts</p>
                 <p style="font-size: 14px; color: rgba(13, 43, 78, 0.8); margin: 5px 0 0 0; line-height: 1.5;">
                   123 Luxury Road, SRM District,<br />
@@ -134,7 +134,7 @@ const UserBookings = () => {
                 </p>
               </td>
               <td style="text-align: right; vertical-align: top; width: 50%;">
-                <h4 style=" font-size: 18px; margin: 0 0 8px 0; font-weight: normal; color: #0d2b4e; text-transform:uppercase;">Customer</h4>
+                <h4 style=" font-size: 13px; color: rgba(13, 43, 78, 0.7); margin: 0; text-transform: uppercase; font-weight: bold;">Customer</h4>
                 <p style="font-size: 15px; font-weight: bold; margin: 0; color: #0d2b4e;">${customerName}</p>
                 <p style="font-size: 14px; color: rgba(13, 43, 78, 0.8); margin: 5px 0 0 0; line-height: 1.5;">
                   ${customerEmail}<br />
