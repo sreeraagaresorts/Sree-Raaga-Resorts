@@ -17,7 +17,7 @@ import {
   Wind,
   X,
   Tag,
-  Meal
+  Utensils
 } from "lucide-react";
 import Navbar from "../components/RoomNav";
 import Footer from "../components/Footer";
@@ -1117,10 +1117,6 @@ const RoomDetails = () => {
                 {/* Specs Row */}
                 <div className="flex flex-wrap items-center gap-6 text-[17px] text-gray-500 font-jost">
                   <div className="flex items-center">
-                    <Meal className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                    <span>{room.area || ""}</span>
-                  </div>
-                  <div className="flex items-center">
                     <Users className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                     <span>{room.guests || "2 Guests"}{room.children ? ` & ${room.children}` : ""}</span>
                   </div>
@@ -1131,6 +1127,10 @@ const RoomDetails = () => {
                   <div className="flex items-center">
                     <Bath className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                     <span>{room.bathrooms || "1 Bath"} </span>
+                  </div>
+                     <div className="flex items-center">
+                    <Utensils className="w-4 h-4 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                    <span>{room.area || ""}</span>
                   </div>
                 </div>
               </div>
@@ -1446,8 +1446,8 @@ const RoomDetails = () => {
                     {/* Specs Row */}
                     <div className="flex flex-wrap items-center gap-5 pb-6 text-[17px]  text-gray-400">
                       <div className="flex items-center">
-                        <Meal className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                        <span className="text-black">{item.area || ""} Sqft</span>
+                        <Utensils className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                        <span className="text-black">{item.area || ""} </span>
                       </div>
                       <div className="flex items-center">
                         <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "motion/react";
-import { Maximize,Meal, Users, Bed, Bath, ArrowRight, Heart } from "lucide-react";
+import { Maximize, Utensils, Users, Bed, Bath, ArrowRight, Heart } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useToast } from "../components/Toast";
@@ -442,8 +442,8 @@ const Rooms = () => {
                         {/* Details Pills */}
                         <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px] text-gray-500 border-b border-gray-100">
                           <div className="flex items-center">
-                            <Meal className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                            <span>{room.area || ""} Sqft</span>
+                            <Utensils className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.area || ""} </span>
                           </div>
                           <div className="flex items-center">
                             <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
@@ -571,8 +571,8 @@ const Rooms = () => {
                         {/* Details Pills */}
                         <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px] text-gray-500 border-b border-gray-100">
                           <div className="flex items-center">
-                            <Meal className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                            <span>{room.area || ""} Sqft</span>
+                            <Utensils className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.area || ""} </span>
                           </div>
                           <div className="flex items-center">
                             <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
