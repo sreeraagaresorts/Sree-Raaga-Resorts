@@ -119,7 +119,7 @@ const AdminRoomsManagement = () => {
     categoryFilteredUnits.forEach(({ unit }) => {
       if (unit.status === "Occupied") occupied++;
       else if (unit.status === "Reserved") reserved++;
-      else if (unit.status === "Maintenance") maintenance++;
+      else if (unit.status === "Maintenance" || unit.status === "Cleaning") maintenance++;
       else available++;
     });
 
@@ -308,6 +308,8 @@ const AdminRoomsManagement = () => {
         return "bg-orange-500/10 text-orange-400 border-orange-500/20";
       case "Maintenance":
         return "bg-red-500/10 text-red-400 border-red-500/20";
+      case "Cleaning":
+        return "bg-purple-500/10 text-purple-400 border-purple-500/20";
       default:
         return "bg-green-500/10 text-green-400 border-green-500/20";
     }
@@ -392,6 +394,7 @@ const AdminRoomsManagement = () => {
             <option value="Occupied">Occupied</option>
             <option value="Reserved">Reserved</option>
             <option value="Maintenance">Maintenance</option>
+            <option value="Cleaning">Cleaning Required</option>
           </select>
         </div>
       </div>
@@ -523,8 +526,7 @@ const AdminRoomsManagement = () => {
               <div>
                 <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Floor Number</label>
                 <input
-                  type="number"
-                  required
+                  type="text"
                   value={editFloor}
                   onChange={(e) => setEditFloor(e.target.value)}
                   className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
@@ -541,7 +543,8 @@ const AdminRoomsManagement = () => {
                   <option value="Available">Available (Clean & Ready)</option>
                   <option value="Occupied">Occupied</option>
                   <option value="Reserved">Reserved</option>
-                  <option value="Maintenance">Maintenance</option>
+                  <option value="Maintenance">Maintenance (Out Of Service)</option>
+                  <option value="Cleaning">Cleaning Required</option>
                 </select>
               </div>
             </div>
@@ -613,7 +616,6 @@ const AdminRoomsManagement = () => {
                 <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Floor Number</label>
                 <input
                   type="number"
-                  required
                   placeholder="e.g. 1"
                   value={addFloor}
                   onChange={(e) => setAddFloor(e.target.value)}
@@ -643,6 +645,7 @@ const AdminRoomsManagement = () => {
                   <option value="Occupied">Occupied</option>
                   <option value="Reserved">Reserved</option>
                   <option value="Maintenance">Maintenance</option>
+                  <option value="Cleaning">Cleaning Required</option>
                 </select>
               </div>
             </div>
