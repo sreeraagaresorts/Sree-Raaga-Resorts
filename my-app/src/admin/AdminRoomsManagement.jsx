@@ -311,7 +311,7 @@ const AdminRoomsManagement = () => {
       case "Maintenance":
         return "bg-red-500/10 text-red-400 border-red-500/20";
       case "Cleaning":
-        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/20";
+        return "bg-[#ffc300]/20 text-[#ffc300] border-[#ffc300]/30";
       default:
         return "bg-green-500/10 text-green-400 border-green-500/20";
     }
