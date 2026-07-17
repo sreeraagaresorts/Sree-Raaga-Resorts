@@ -516,8 +516,8 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
         return newStart < otherEnd && newEnd > otherStart;
       });
 
- if (hasConflict) {
-    toast.error("The selected room unit(s) are unavailable for the chosen dates. Please select different room(s) or change the booking dates.");
+if (hasConflict) {
+    toast.error(`Room ${editBooking.room_number} is not available for the selected dates. Please choose a different room or change the booking dates.`);
     return;
 }
     }
