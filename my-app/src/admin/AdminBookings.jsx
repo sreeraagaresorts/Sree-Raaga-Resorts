@@ -971,10 +971,8 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
             <form onSubmit={handleCreateBooking} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Guest Information */}
-                <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6 bg-yellow-500/5 p-6 rounded-lg border border-yellow-500/10">
-                  <h3 className="col-span-1 md:col-span-3 text-xs font-semibold text-yellow-500 uppercase tracking-widest border-b border-yellow-500/10 pb-2 mb-1">
-                    Guest Information
-                  </h3>
+                <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6 ">
+         
                   <div>
                     <label className="block text-yellow-500 text-[12px] uppercase tracking-wider mb-1.5">Full Name</label>
                     <input
@@ -1125,61 +1123,62 @@ if (guestEmail && !/\S+@\S+\.\S+/.test(guestEmail)) {
     className="w-full bg-[#071524]/50 border border-white/10 rounded-lg p-3 text-white/70 outline-none cursor-not-allowed"
   />
 </div>
-                {/* Adults */}
-            <div>
-  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Adults</label>
-  <input
-    type="number"
-    min="1"
-    value={adults}
-    onChange={(e) => setAdults(parseInt(e.target.value) || 1)}
-    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-  />
-</div>
-
-<div>
-  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children</label>
-  <input
-    type="number"
-    min="0"
-    value={children}
-    onChange={(e) => setChildren(parseInt(e.target.value) || 0)}
-    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-  />
-</div>
-
-                {/* Payment Method */}
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Payment Method</label>
-                  <select
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-                  >
-                    <option value="pay_later">Pay Later</option>
-                    <option value="cash">Cash</option>
-                    <option value="upi">UPI</option>
-                    <option value="credit_card">Debit/Credit Card</option>
-                    <option value="bank_transfer">Bank Transfer</option>
-                  </select>
+                {/* Adults & Children */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Adults</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={adults}
+                      onChange={(e) => setAdults(parseInt(e.target.value) || 1)}
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={children}
+                      onChange={(e) => setChildren(parseInt(e.target.value) || 0)}
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                    />
+                  </div>
                 </div>
 
-                {/* Booking Source */}
-                <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Booking Source</label>
-                  <select
-                    value={bookingSource}
-                    onChange={(e) => setBookingSource(e.target.value)}
-                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
-                  >
-                    <option value="Walk-in">Walk-in</option>
-                    <option value="Make My Trip">Make My Trip</option>
-                    <option value="Goibibo">Goibibo</option>
-                  </select>
+                {/* Payment Method & Booking Source */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Payment Method</label>
+                    <select
+                      value={paymentMethod}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                    >
+                      <option value="pay_later">Pay Later</option>
+                      <option value="cash">Cash</option>
+                      <option value="upi">UPI</option>
+                      <option value="credit_card">Debit/Credit Card</option>
+                      <option value="bank_transfer">Bank Transfer</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Booking Source</label>
+                    <select
+                      value={bookingSource}
+                      onChange={(e) => setBookingSource(e.target.value)}
+                      className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
+                    >
+                      <option value="Walk-in">Walk-in</option>
+                      <option value="Make My Trip">Make My Trip</option>
+                      <option value="Goibibo">Goibibo</option>
+                    </select>
+                  </div>
                 </div>
                 
-                {/* Extra Bed Checkbox (Spans both columns) */}
-                <div className="col-span-1 md:col-span-2 flex items-center gap-3 bg-yellow-500/5 p-4 rounded-lg border border-yellow-500/10">
+                {/* Extra Bed Checkbox (Second Column) */}
+                <div className="flex items-center gap-3 bg-yellow-500/5 p-3.5 rounded-lg border border-yellow-500/10 self-end h-[50px]">
                   <input
                     type="checkbox"
                     id="extraBedCheckbox"
