@@ -1446,7 +1446,10 @@ const RoomDetails = () => {
 
                     {/* Specs Row */}
                     <div className="flex flex-wrap items-center gap-5 pb-6 text-[17px]  text-gray-400">
-                     
+                        <div className="flex items-center">
+                        <Utensils className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                        <span className="text-black">{item.area || ""} </span>
+                      </div>
                       <div className="flex items-center">
                         <Bed className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                         <span className="text-black">{item.beds || "1 Bed"}</span>
@@ -1455,10 +1458,7 @@ const RoomDetails = () => {
                         <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                         <span className="text-black">{item.bathrooms || "1 Bath"} </span>
                       </div>
-                       <div className="flex items-center">
-                        <Utensils className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                        <span className="text-black">{item.area || ""} </span>
-                      </div>
+                    
                     </div>
                   </div>
 
