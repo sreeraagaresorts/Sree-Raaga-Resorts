@@ -441,10 +441,7 @@ const Rooms = () => {
 
                         {/* Details Pills */}
                         <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px] text-gray-500 border-b border-gray-100">
-                          <div className="flex items-center">
-                            <Utensils className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                            <span>{room.area || ""} </span>
-                          </div>
+                        
                           <div className="flex items-center">
                             <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                             <span>{room.guests || "2 Guests"}{room.children ? ` & ${room.children}` : ""}</span>
@@ -456,6 +453,10 @@ const Rooms = () => {
                           <div className="flex items-center">
                             <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                             <span>{room.bathrooms || "1 Bath"} </span>
+                          </div>
+                            <div className="flex items-center">
+                            <Utensils className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.area || ""} </span>
                           </div>
                         </div>
 
@@ -570,10 +571,7 @@ const Rooms = () => {
 
                         {/* Details Pills */}
                         <div className="flex flex-wrap items-center gap-6 pb-6 text-[15px] md:text-[17px] text-gray-500 border-b border-gray-100">
-                          <div className="flex items-center">
-                            <Utensils className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                            <span>{room.area || ""} </span>
-                          </div>
+                         
                           <div className="flex items-center">
                             <Users className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                             <span>{room.guests || "2 Guests"}{room.children ? ` & ${room.children}` : ""}</span>
@@ -585,6 +583,10 @@ const Rooms = () => {
                           <div className="flex items-center">
                             <Bath className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
                             <span>{room.bathrooms || "1 Bath"} </span>
+                          </div>
+                           <div className="flex items-center">
+                            <Utensils className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
+                            <span>{room.area || ""} </span>
                           </div>
                         </div>
 

@@ -253,7 +253,7 @@ const About = () => {
                   onClick={() => setIsVideoOpen(true)}
                   className="group flex flex-col items-center gap-4 cursor-pointer transition-all duration-300 hover:scale-105"
                 >
-                  <div className="w-16 h-16 md:w-[102px] md:h-[102px] rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/20 transition-all">
+                  <div className="w-16 h-16 md:w-[135px] md:h-[135px] rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/20 transition-all">
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
                       viewBox="0 0 24 24" 
@@ -262,7 +262,7 @@ const About = () => {
                       strokeWidth="1.2" 
                       strokeLinecap="round" 
                       strokeLinejoin="round" 
-                      className="w-5 h-5 md:w-6 md:h-6 text-white ml-1"
+                      className="w-5 h-5 md:w-8 md:h-8 text-white ml-1"
                     >
                       <polygon points="5 3 19 12 5 21 5 3"></polygon>
                     </svg>
