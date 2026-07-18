@@ -309,30 +309,30 @@ const About = () => {
                 />
               </div>
               <div className="flex flex-col items-start select-none" data-aos="fade-left" data-aos-delay="200">
-                <h2 className="text-3xl md:text-5xl font-medium font-corm  text-[#0d2b4e] mb-6">
-                  Sophisticated Comfort
-                </h2>
-                <p className="text-gray-500 text-[17px] leading-relaxed  mb-0 md:mb-8  text-start ">
-                  Every element of our rooms has been carefully curated to provide the
-                  highest standard of comfort. From the fine linens and custom furnishings
-                  to the stunning views of the surrounding natural landscape, we ensure
-                  your stay is peaceful and relaxing.
-                </p>
+             <h2 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e] mb-6">
+  Where Nature Meets Luxury
+</h2>
+
+<p className="text-gray-500 text-[17px] leading-relaxed mb-0 md:mb-8 text-start">
+  Sree Raaga Resorts is a tranquil retreat where comfort, nature, and hospitality come together to create unforgettable moments. Surrounded by lush greenery, our resort features elegantly designed villas and rooms, premium amenities, and exceptional service. Whether you're seeking a peaceful escape, celebrating life's special occasions, or hosting a corporate gathering, every experience at Sree Raaga Resorts is crafted with care to make your stay truly memorable.
+</p>
               </div>
             </div>
 
             {/* Row 2: A Unique Experience */}
             <div className="max-w-[150vh] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mt-[-90px] md:mt-[-60px] ">
               <div className="order-2 md:order-1 flex flex-col items-start select-none" data-aos="fade-right" data-aos-delay="200">
-                <h2 className=" text-3xl md:text-5xl font-medium font-corm  text-[#0d2b4e] mb-6">
-                  A Unique Experience
-                </h2>
-                <p className="text-gray-500 text-[17px] leading-relaxed  mb-8 text-start">
-                  Immerse yourself in unique experiences tailored to your lifestyle.
-                  Whether you choose to unwind by the pool, indulge in luxury dining,
-                  or explore nature trails, our resort offers a perfect balance of leisure
-                  and adventure.
-                </p>
+              <h2 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e] mb-6">
+  Unforgettable Experiences
+</h2>
+
+<p className="text-gray-500 text-[17px] leading-relaxed mb-8 text-start">
+  At Sree Raaga Resorts, every stay is designed to create lasting memories. Enjoy refreshing
+  moments by the swimming pool, exciting indoor and outdoor activities, delicious cuisine,
+  and beautifully landscaped surroundings. Whether you're here for a relaxing weekend,
+  a family holiday, a destination wedding, or a corporate retreat, we provide the perfect
+  blend of comfort, recreation, and warm hospitality for an exceptional experience.
+</p>
               </div>
               {/* Unified Height here */}
               <div className="order-1 md:order-2 w-full h-[400px] md:h-[650px]">
