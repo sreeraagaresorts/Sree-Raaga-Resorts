@@ -49,41 +49,42 @@ const AdminBilling = () => {
       hour12: true,
     });
   };
-  const handleDeleteBooking = async (bookingId) => {
-  const confirmDelete = window.confirm(
-    "Are you sure you want to permanently delete this booking?"
-  );
+  const handleDeleteBooking = (bookingId) => {
+    toast.confirm(
+      "Confirm Booking Deletion",
+      "Are you sure you want to permanently delete this booking? This action is irreversible.",
+      async () => {
+        const token =
+          localStorage.getItem("adminToken") ||
+          localStorage.getItem("token");
 
-  if (!confirmDelete) return;
+        try {
+          const res = await fetch(`${API_URL}/api/bookings/${bookingId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-  const token =
-    localStorage.getItem("adminToken") ||
-    localStorage.getItem("token");
+          const data = await res.json();
 
-  try {
-    const res = await fetch(`${API_URL}/api/bookings/${bookingId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
+          if (!res.ok || !data.success) {
+            throw new Error(data.message || "Failed to delete booking.");
+          }
+
+          setBookings((prev) =>
+            prev.filter((booking) => booking.id !== Number(bookingId))
+          );
+
+          setOpenMenuId(null);
+          toast.success("Booking deleted successfully.");
+        } catch (err) {
+          toast.error(err.message);
+        }
       },
-    });
-
-    const data = await res.json();
-
-    if (!res.ok || !data.success) {
-      throw new Error(data.message || "Failed to delete booking.");
-    }
-
-    setBookings((prev) =>
-      prev.filter((booking) => booking.id !== Number(bookingId))
+      "destructive"
     );
-
-    setOpenMenuId(null);
-    toast.success("Booking deleted successfully.");
-  } catch (err) {
-    toast.error(err.message);
-  }
-};
+  };
 
   const fetchBookings = async (silent = false) => {
     if (!silent) setLoading(true);

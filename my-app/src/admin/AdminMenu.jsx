@@ -98,26 +98,31 @@ const AdminMenu = () => {
     }
   };
 
-  const handleDeleteCategory = async (catName) => {
-    if (!window.confirm(`Are you sure you want to delete the category "${catName}"?`)) return;
-
-    try {
-      const response = await fetch(`${API_URL}/api/categories/${encodeURIComponent(catName)}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if (data.success) {
-        toast.success(data.message || "Category deleted successfully!");
-        fetchCategories(true);
-      } else {
-        throw new Error(data.message || "Failed to delete category.");
-      }
-    } catch (err) {
-      toast.error(err.message || "Failed to delete category.");
-    }
+  const handleDeleteCategory = (catName) => {
+    toast.confirm(
+      "Confirm Category Deletion",
+      `Are you sure you want to delete the category "${catName}"? This action is irreversible.`,
+      async () => {
+        try {
+          const response = await fetch(`${API_URL}/api/categories/${encodeURIComponent(catName)}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          if (data.success) {
+            toast.success(data.message || "Category deleted successfully!");
+            fetchCategories(true);
+          } else {
+            throw new Error(data.message || "Failed to delete category.");
+          }
+        } catch (err) {
+          toast.error(err.message || "Failed to delete category.");
+        }
+      },
+      "destructive"
+    );
   };
 
   const handleUpdateCategory = async (e) => {
@@ -289,27 +294,32 @@ const AdminMenu = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this dish from the menu?")) return;
+  const handleDelete = (id) => {
+    toast.confirm(
+      "Confirm Dish Deletion",
+      "Are you sure you want to delete this dish from the menu? This action is irreversible.",
+      async () => {
+        try {
+          const response = await fetch(`${API_URL}/api/dishes/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-    try {
-      const response = await fetch(`${API_URL}/api/dishes/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to delete dish.");
+          }
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete dish.");
-      }
-
-      toast.success("Dish deleted successfully!");
-      fetchDishes(true);
-    } catch (err) {
-      toast.error(err.message || "Failed to delete dish.");
-    }
+          toast.success("Dish deleted successfully!");
+          fetchDishes(true);
+        } catch (err) {
+          toast.error(err.message || "Failed to delete dish.");
+        }
+      },
+      "destructive"
+    );
   };
 
   const handleUpdateStatus = async (id, newStatus) => {
@@ -337,25 +347,31 @@ const AdminMenu = () => {
     }
   };
 
-  const handleDeleteOrder = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this order?")) return;
-    try {
-      const response = await fetch(`${API_URL}/api/orders/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if (data.success) {
-        toast.success("Order deleted successfully!");
-        fetchOrders(true);
-      } else {
-        throw new Error(data.message || "Failed to delete order.");
-      }
-    } catch (err) {
-      toast.error(err.message || "Error deleting order.");
-    }
+  const handleDeleteOrder = (id) => {
+    toast.confirm(
+      "Confirm Order Deletion",
+      "Are you sure you want to delete this order? This action is irreversible.",
+      async () => {
+        try {
+          const response = await fetch(`${API_URL}/api/orders/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          if (data.success) {
+            toast.success("Order deleted successfully!");
+            fetchOrders(true);
+          } else {
+            throw new Error(data.message || "Failed to delete order.");
+          }
+        } catch (err) {
+          toast.error(err.message || "Error deleting order.");
+        }
+      },
+      "destructive"
+    );
   };
 
   const getImageUrl = (image) => {

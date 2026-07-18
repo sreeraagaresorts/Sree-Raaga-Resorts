@@ -83,25 +83,31 @@ const AdminEnquiries = () => {
     }
   };
 
-  const handleDeleteEventEnquiry = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this enquiry?")) return;
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-    try {
-      const response = await fetch(`${API_URL}/api/events/enquiries/admin/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete enquiry.");
-      }
-      toast.success("Event enquiry deleted successfully!");
-      fetchEventEnquiries(true);
-      // Dispatch event to also remove it from notifications just in case
-      window.dispatchEvent(new CustomEvent("eventEnquiryDeleted", { detail: { id } }));
-    } catch (err) {
-      toast.error(err.message);
-    }
+  const handleDeleteEventEnquiry = (id) => {
+    toast.confirm(
+      "Confirm Enquiry Deletion",
+      "Are you sure you want to delete this enquiry? This action is irreversible.",
+      async () => {
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/events/enquiries/admin/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to delete enquiry.");
+          }
+          toast.success("Event enquiry deleted successfully!");
+          fetchEventEnquiries(true);
+          // Dispatch event to also remove it from notifications just in case
+          window.dispatchEvent(new CustomEvent("eventEnquiryDeleted", { detail: { id } }));
+        } catch (err) {
+          toast.error(err.message);
+        }
+      },
+      "destructive"
+    );
   };
 
   // ----------------------------------------------------
@@ -148,24 +154,30 @@ const AdminEnquiries = () => {
     }
   };
 
-  const handleDeleteContactEnquiry = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this enquiry?")) return;
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-    try {
-      const response = await fetch(`${API_URL}/api/contact/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete message.");
-      }
-      toast.success("Contact message deleted successfully!");
-      fetchContactEnquiries(true);
-      window.dispatchEvent(new CustomEvent("inquiryDeleted", { detail: { id } }));
-    } catch (err) {
-      toast.error(err.message);
-    }
+  const handleDeleteContactEnquiry = (id) => {
+    toast.confirm(
+      "Confirm Enquiry Deletion",
+      "Are you sure you want to delete this contact message? This action is irreversible.",
+      async () => {
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/contact/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to delete message.");
+          }
+          toast.success("Contact message deleted successfully!");
+          fetchContactEnquiries(true);
+          window.dispatchEvent(new CustomEvent("inquiryDeleted", { detail: { id } }));
+        } catch (err) {
+          toast.error(err.message);
+        }
+      },
+      "destructive"
+    );
   };
 
   // Fetch initial data for both categories on mount and run periodic syncs
