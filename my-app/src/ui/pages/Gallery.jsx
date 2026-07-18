@@ -8,6 +8,30 @@ import { Helmet } from "react-helmet";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+const getEmbedUrl = (url) => {
+  if (!url) return "";
+  if (url.includes("youtube.com/embed/")) return url;
+  if (url.includes("youtu.be/")) {
+    const id = url.split("youtu.be/")[1]?.split("?")[0];
+    return `https://www.youtube.com/embed/${id}`;
+  }
+  if (url.includes("youtube.com/watch")) {
+    try {
+      const urlParams = new URLSearchParams(new URL(url).search);
+      const id = urlParams.get("v");
+      return `https://www.youtube.com/embed/${id}`;
+    } catch (e) {
+      return url;
+    }
+  }
+  return url;
+};
+
+const isYouTubeUrl = (url) => {
+  if (!url) return false;
+  return url.includes("youtube.com") || url.includes("youtu.be");
+};
+
 const galleryItems = [
   {
     id: 1,
@@ -78,8 +102,8 @@ const galleryItems = [
   {
     id: 9,
     type: "video",
-    src: "https://assets.mixkit.co/videos/preview/mixkit-dramatic-drone-shot-of-a-luxury-hotel-41664-large.mp4",
-    thumbnail: "/a3.avif",
+    src: "https://youtu.be/J9aMyrLAsZM",
+    thumbnail: "/cover.avif",
     category: "Lush Outdoors",
     title: "Aerial Resort Tour",
     description: "High-flying drone views showcasing our pristine property boundaries."
@@ -378,12 +402,12 @@ const Gallery = () => {
                         />
                         {/* Play Overlay */}
                         <div className="absolute inset-0 bg-[#04121a]/30 flex items-center justify-center transition-all duration-300 group-hover:bg-[#04121a]/10">
-                          <div className="w-14 h-14 rounded-full bg-black/45 backdrop-blur-sm border border-white/40 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-[#c8a64d] group-hover:border-transparent text-white">
+                          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-black/45 backdrop-blur-sm border border-white/40 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-[#c8a64d] group-hover:border-transparent text-white">
                             <svg 
                               xmlns="http://www.w3.org/2000/svg" 
                               viewBox="0 0 24 24" 
                               fill="currentColor" 
-                              className="w-5 h-5 ml-0.5"
+                              className="w-8 h-8 md:w-10 md:h-10 ml-1"
                             >
                               <polygon points="5 3 19 12 5 21 5 3"></polygon>
                             </svg>
@@ -476,6 +500,16 @@ const Gallery = () => {
                       alt={currentItem.title} 
                       className="max-w-full max-h-full object-contain rounded-sm shadow-2xl"
                     />
+                  ) : isYouTubeUrl(currentItem.src) ? (
+                    <div className="relative w-full h-full flex items-center justify-center bg-black/40 rounded-sm">
+                      <iframe 
+                        src={getEmbedUrl(currentItem.src)} 
+                        title={currentItem.title}
+                        className="w-full h-full aspect-video rounded-sm shadow-2xl border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
                   ) : (
                     <div className="relative w-full h-full flex items-center justify-center bg-black/40 rounded-sm">
                       <video 
