@@ -110,12 +110,8 @@ const EventDetails = () => {
 
   const getGalleryImages = () => {
     const mainImg = getImageUrl(event?.image);
-    return [
-      mainImg,
-      "",
-      "",
-      ""
-    ];
+    const extraImgs = (event?.images || []).map(img => getImageUrl(img));
+    return [mainImg, ...extraImgs].filter(Boolean);
   };
 const handleEnquiry = async (e) => {
   e.preventDefault();

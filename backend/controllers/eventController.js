@@ -58,12 +58,20 @@ exports.createEvent = async (req, res) => {
 
     if (req.file) {
       image = req.file.filename;
+    } else if (req.files && req.files['image'] && req.files['image'][0]) {
+      image = req.files['image'][0].filename;
+    }
+
+    let extraImages = [];
+    if (req.files && req.files['extraImages']) {
+      extraImages = req.files['extraImages'].map(f => f.filename);
     }
 
     const event = new Event({
       name,
       category: category || "",
       image,
+      images: extraImages,
       event_date: event_date || "",
       description,
       price: price ? Number(price) : 0,
@@ -110,6 +118,28 @@ exports.updateEvent = async (req, res) => {
 
     if (req.file) {
       updateData.image = req.file.filename;
+    } else if (req.files && req.files['image'] && req.files['image'][0]) {
+      updateData.image = req.files['image'][0].filename;
+    }
+
+    let existingImages = [];
+    if (req.body.existingExtraImages) {
+      try {
+        existingImages = JSON.parse(req.body.existingExtraImages);
+      } catch (e) {
+        if (typeof req.body.existingExtraImages === 'string') {
+          existingImages = [req.body.existingExtraImages];
+        }
+      }
+    }
+
+    let newExtraImages = [];
+    if (req.files && req.files['extraImages']) {
+      newExtraImages = req.files['extraImages'].map(f => f.filename);
+    }
+
+    if (req.body.existingExtraImages !== undefined || (req.files && req.files['extraImages'])) {
+      updateData.images = [...existingImages, ...newExtraImages];
     }
 
     const event = await Event.findOneAndUpdate(

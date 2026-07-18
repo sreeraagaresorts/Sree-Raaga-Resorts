@@ -116,7 +116,7 @@ function WaterSportsIcon({ className = "" }) {
   <meta property="og:type" content="website" />
 </Helmet>
       <Navbar />
-      <div className="bg-[#fdfeff] text-[#0d2b4e]  min-h-screen overflow-x-hidden">
+      <div className="bg-[#fdfeff] text-[#0d2b4e]  min-h-screen ">
 
         {/* HERO SECTION */}
         <section

@@ -28,6 +28,11 @@ const AdminEvents = () => {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
 
+  // Extra images states
+  const [existingExtraImages, setExistingExtraImages] = useState([]);
+  const [newExtraImageFiles, setNewExtraImageFiles] = useState([]);
+  const [extraImagePreviews, setExtraImagePreviews] = useState([]);
+
   const [saving, setSaving] = useState(false);
 
   const fetchEvents = async (silent = false) => {
@@ -66,6 +71,9 @@ const AdminEvents = () => {
     setShowPrice(false);
     setImageFile(null);
     setImagePreview("");
+    setExistingExtraImages([]);
+    setNewExtraImageFiles([]);
+    setExtraImagePreviews([]);
     setIsFormOpen(true);
   };
 
@@ -78,6 +86,18 @@ const AdminEvents = () => {
     setShowPrice(event.show_price || false);
     setImageFile(null);
     setImagePreview(event.image ? (event.image.startsWith("http") ? event.image : `${API_URL}/uploads/${event.image}`) : "");
+    
+    const extraImgs = event.images || [];
+    setExistingExtraImages(extraImgs);
+    setNewExtraImageFiles([]);
+    setExtraImagePreviews(
+      extraImgs.map((img) => ({
+        id: img,
+        url: img.startsWith("http") ? img : `${API_URL}/uploads/${img}`,
+        isExisting: true,
+        filename: img,
+      }))
+    );
     setIsFormOpen(true);
   };
 
@@ -86,6 +106,32 @@ const AdminEvents = () => {
     if (file) {
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleExtraFilesChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      const newFiles = [...newExtraImageFiles, ...files];
+      setNewExtraImageFiles(newFiles);
+
+      const newPreviews = files.map((file) => ({
+        id: Math.random().toString(36).substr(2, 9),
+        url: URL.createObjectURL(file),
+        isExisting: false,
+        file,
+      }));
+
+      setExtraImagePreviews((prev) => [...prev, ...newPreviews]);
+    }
+  };
+
+  const handleRemoveExtraImage = (previewItem) => {
+    setExtraImagePreviews((prev) => prev.filter((item) => item.id !== previewItem.id));
+    if (previewItem.isExisting) {
+      setExistingExtraImages((prev) => prev.filter((img) => img !== previewItem.filename));
+    } else {
+      setNewExtraImageFiles((prev) => prev.filter((file) => file !== previewItem.file));
     }
   };
 
@@ -103,6 +149,12 @@ const AdminEvents = () => {
         compressedImage = await compressImage(imageFile);
       }
 
+      const compressedExtraImages = [];
+      for (const file of newExtraImageFiles) {
+        const compressed = await compressImage(file);
+        compressedExtraImages.push(compressed);
+      }
+
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
@@ -112,6 +164,10 @@ const AdminEvents = () => {
       if (compressedImage) {
         formData.append("image", compressedImage);
       }
+      formData.append("existingExtraImages", JSON.stringify(existingExtraImages));
+      compressedExtraImages.forEach((file) => {
+        formData.append("extraImages", file);
+      });
 
       let url = `${API_URL}/api/events`;
       let method = "POST";
@@ -281,28 +337,78 @@ const AdminEvents = () => {
               </div>
 
               {/* IMAGE UPLOAD UI */}
-              <div>
-                <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Event Image</label>
-                <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative">
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleFileChange}
-                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                  />
-                  {imagePreview ? (
-                    <div className="space-y-2">
-                      <img src={imagePreview} className="max-h-40 mx-auto object-cover rounded" alt="Preview" />
-                      <p className="text-[#C8A64D] text-xs">Click or drag another image to change</p>
-                    </div>
-                  ) : (
-                    <>
-                      <Upload className="mx-auto mb-2 text-[#C8A64D]" />
-                      <p className="text-white/60 text-sm">Click or drag image to upload</p>
-                    </>
-                  )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Event Image</label>
+                  <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative h-[120px] flex flex-col justify-center items-center">
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={handleFileChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    />
+                    {imagePreview ? (
+                      <div className="space-y-1">
+                        <img src={imagePreview} className="max-h-16 mx-auto object-cover rounded" alt="Preview" />
+                        <p className="text-[#C8A64D] text-[10px]">Click or drag to change</p>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="mx-auto mb-1 text-[#C8A64D]" size={20} />
+                        <p className="text-white/60 text-xs">Click or drag image to upload</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+                    Extra Images (Details Gallery)
+                  </label>
+                  <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative h-[120px] flex flex-col justify-center items-center">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleExtraFilesChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    />
+                    <Upload className="mx-auto mb-1 text-[#C8A64D]" size={20} />
+                    <p className="text-white/60 text-xs">
+                      Click or drag multiple images to upload
+                    </p>
+                  </div>
                 </div>
               </div>
+
+              {extraImagePreviews.length > 0 && (
+                <div>
+                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
+                    Uploaded Gallery Images ({extraImagePreviews.length})
+                  </label>
+                  <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2 p-2 bg-[#071524] border border-white/10 rounded-lg">
+                    {extraImagePreviews.map((previewItem) => (
+                      <div
+                        key={previewItem.id}
+                        className="relative group aspect-square rounded overflow-hidden bg-black/40 border border-white/10"
+                      >
+                        <img
+                          src={previewItem.url}
+                          alt="Extra Preview"
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveExtraImage(previewItem)}
+                          className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 cursor-pointer transition shadow z-10 border-0"
+                        >
+                          <X size={10} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* ACTIONS */}
               <div className="flex justify-end gap-3 pt-2">
@@ -360,9 +466,16 @@ const AdminEvents = () => {
                 {/* CONTENT */}
                 <div className="p-4 space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-white/40 text-[11px] uppercase tracking-widest font-semibold">
-                      {event.sqft || "N/A Sq Ft"}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-white/40 text-[11px] uppercase tracking-widest font-semibold">
+                        {event.sqft || "N/A Sq Ft"}
+                      </span>
+                      {event.images && event.images.length > 0 && (
+                        <span className="text-[#C8A64D] text-[10px] bg-[#C8A64D]/10 px-1.5 py-0.5 rounded border border-[#C8A64D]/25" title={`${event.images.length} Gallery Images`}>
+                          {event.images.length} Photos
+                        </span>
+                      )}
+                    </div>
                     <span className={`text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 rounded border ${
                       event.show_price 
                         ? "bg-green-500/10 text-green-400 border-green-500/20" 

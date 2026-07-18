@@ -106,7 +106,7 @@ const About = () => {
   <meta property="og:type" content="website" />
 </Helmet>
       <Navbar />
-      <div className="bg-[#fdfeff] text-[#0d2b4e] overflow-x-hidden ">
+      <div className="bg-[#fdfeff] text-[#0d2b4e]  ">
         
         {/* ================= HERO SECTION ================= */}
         <section
