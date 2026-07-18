@@ -927,7 +927,7 @@ return (
                             <span>{room.beds}</span>
                             <span>•</span>
                             <span>{room.bathrooms} </span>
-                                 <span>•</span>
+                            <span>•</span>
                             <span>{room.area} </span>
                           </div>
                         </div>
