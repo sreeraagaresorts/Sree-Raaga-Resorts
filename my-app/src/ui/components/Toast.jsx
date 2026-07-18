@@ -48,44 +48,54 @@ const ToastCard = ({ id, type, message, duration = 3000, onClose }) => {
   // Color config based on the user screenshot
   const config = {
     success: {
-      cardBg: "bg-[#cbebdc]",
-      textColor: "text-[#104b38]",
-      descColor: "text-[#185e47]",
+      cardBg: "bg-[#081a2f]/90 backdrop-blur-md border border-emerald-500/30",
+      glow: "shadow-[0_8px_32px_rgba(16,185,129,0.15)]",
+      textColor: "text-white",
+      descColor: "text-emerald-300/80",
       titleText: "Success",
-      icon: <Check className="text-[#104b38]" size={20} strokeWidth={3.5} />,
-      closeColor: "text-[#104b38]/40 hover:text-[#104b38]/80",
+      icon: <Check className="text-emerald-400" size={18} strokeWidth={3.5} />,
+      iconBg: "bg-emerald-500/10 border border-emerald-500/20",
+      closeColor: "text-white/40 hover:text-white/80",
     },
     error: {
-      cardBg: "bg-[#fad2d2]",
-      textColor: "text-[#5e1818]",
-      descColor: "text-[#792626]",
+      cardBg: "bg-[#081a2f]/90 backdrop-blur-md border border-rose-500/30",
+      glow: "shadow-[0_8px_32px_rgba(244,63,94,0.15)]",
+      textColor: "text-white",
+      descColor: "text-rose-300/80",
       titleText: "Error",
-      icon: <span className="text-[#5e1818] font-bold text-xl leading-none ">!</span>,
-      closeColor: "text-[#5e1818]/40 hover:text-[#5e1818]/80",
+      icon: <span className="text-rose-400 font-bold text-lg leading-none">!</span>,
+      iconBg: "bg-rose-500/10 border border-rose-500/20",
+      closeColor: "text-white/40 hover:text-white/80",
     },
     warning: {
-      cardBg: "bg-[#fef3c7]",
-      textColor: "text-[#78350f]",
-      descColor: "text-[#92400e]",
+      cardBg: "bg-[#081a2f]/90 backdrop-blur-md border border-amber-500/30",
+      glow: "shadow-[0_8px_32px_rgba(245,158,11,0.15)]",
+      textColor: "text-white",
+      descColor: "text-amber-300/80",
       titleText: "Warning",
-      icon: <AlertTriangle className="text-[#78350f]" size={20} strokeWidth={2.5} />,
-      closeColor: "text-[#78350f]/40 hover:text-[#78350f]/80",
+      icon: <AlertTriangle className="text-amber-400" size={18} strokeWidth={2.5} />,
+      iconBg: "bg-amber-500/10 border border-amber-500/20",
+      closeColor: "text-white/40 hover:text-white/80",
     },
     info: {
-      cardBg: "bg-[#e0f2fe]",
-      textColor: "text-[#0c4a6e]",
-      descColor: "text-[#075985]",
+      cardBg: "bg-[#081a2f]/90 backdrop-blur-md border border-sky-500/30",
+      glow: "shadow-[0_8px_32px_rgba(14,165,233,0.15)]",
+      textColor: "text-white",
+      descColor: "text-sky-300/80",
       titleText: "Information",
-      icon: <Info className="text-[#0c4a6e]" size={20} strokeWidth={2.5} />,
-      closeColor: "text-[#0c4a6e]/40 hover:text-[#0c4a6e]/80",
+      icon: <Info className="text-sky-400" size={18} strokeWidth={2.5} />,
+      iconBg: "bg-sky-500/10 border border-sky-500/20",
+      closeColor: "text-white/40 hover:text-white/80",
     },
   }[type] || {
-    cardBg: "bg-[#cbebdc]",
-    textColor: "text-[#104b38]",
-    descColor: "text-[#185e47]",
+    cardBg: "bg-[#081a2f]/90 backdrop-blur-md border border-emerald-500/30",
+    glow: "shadow-[0_8px_32px_rgba(16,185,129,0.15)]",
+    textColor: "text-white",
+    descColor: "text-emerald-300/80",
     titleText: "Notification",
-    icon: <Check className="text-[#104b38]" size={20} strokeWidth={3.5} />,
-    closeColor: "text-[#104b38]/40 hover:text-[#104b38]/80",
+    icon: <Check className="text-emerald-400" size={18} strokeWidth={3.5} />,
+    iconBg: "bg-emerald-500/10 border border-emerald-500/20",
+    closeColor: "text-white/40 hover:text-white/80",
   };
 
   const progressWidth = (timeLeft / duration) * 100;
@@ -112,23 +122,22 @@ const ToastCard = ({ id, type, message, duration = 3000, onClose }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -50, scale: 0.9 }}
+      initial={{ opacity: 0, y: 20, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -20, scale: 0.95, transition: { duration: 0.15 } }}
+      exit={{ opacity: 0, y: -10, scale: 0.95, transition: { duration: 0.15 } }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative w-[90vw] max-w-[420px] ${config.cardBg} ${config.textColor} px-6 py-5 overflow-hidden rounded-[26px] shadow-[0_10px_35px_rgba(0,0,0,0.07)] border border-white/10`}
+      className={`relative w-[90vw] max-w-[400px] ${config.cardBg} ${config.textColor} px-5 py-4 overflow-hidden rounded-2xl ${config.glow}`}
     >
-      {/* Background organic blobs matching the user's design */}
-      <div className="absolute left-0 top-0 bottom-0 w-28 overflow-hidden pointer-events-none select-none rounded-l-[26px]">
-        <div className="absolute -left-3 -top-3 w-16 h-16 rounded-full bg-white/20 blur-[1px]" />
-        <div className="absolute -left-1 -bottom-4 w-16 h-16 rounded-full bg-white/15 blur-[1px]" />
-        <div className="absolute left-8 top-6 w-8 h-8 rounded-full bg-white/10 blur-[1px]" />
+      {/* Background organic blur blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none rounded-2xl">
+        <div className="absolute -left-10 -top-10 w-24 h-24 rounded-full bg-white/5 blur-xl" />
+        <div className="absolute -right-10 -bottom-10 w-24 h-24 rounded-full bg-white/5 blur-xl" />
       </div>
 
-      <div className="relative z-10 flex gap-4 items-center pr-6">
-        {/* White circular icon container */}
-        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+      <div className="relative z-10 flex gap-3.5 items-center pr-6">
+        {/* Themed circular icon container */}
+        <div className={`w-9 h-9 rounded-full ${config.iconBg} flex items-center justify-center shrink-0`}>
           {config.icon}
         </div>
 
