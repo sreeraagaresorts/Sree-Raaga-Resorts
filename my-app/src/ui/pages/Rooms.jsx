@@ -45,7 +45,7 @@ const fallbackRooms = [
     guests: "2 Guests",
     category: "COMPACT VILLAS",
     description: "Compact yet luxurious, these villas are perfect for couples looking for privacy and comfort, complete with premium fittings and beautiful outdoor patio seating.",
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800"
+    image: "/al.avif"
   },
   {
     id: "duplex-villa",

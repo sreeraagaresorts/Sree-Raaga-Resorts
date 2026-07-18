@@ -113,7 +113,7 @@ const About = () => {
           className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2000')",
+              "url('/a3.avif')",
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
@@ -139,22 +139,22 @@ const About = () => {
           {/* Staggered Images Grid */}
           <div className="relative max-w-[170vh] mx-auto grid grid-cols-3 gap-2 sm:gap-6 md:gap-12 lg:gap-24 items-center z-10 mb-8 md:mb-12">
             <WindowReveal 
-              src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
+              src="/al.avif" 
               alt="Villa Exterior" 
-              className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[420px] w-full object-cover rounded-sm"
+              className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[425px] w-full object-cover "
             />
             
             {/* Center image is taller and offset upwards */}
             <WindowReveal 
-              src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
+              src="/ac.avif" 
               alt="Villa Interior" 
-              className="h-[140px] sm:h-[280px] md:h-[430px] lg:h-[520px] -translate-y-3 md:-translate-y-6 w-full object-cover rounded-sm"
+              className="h-[140px] sm:h-[280px] md:h-[430px] lg:h-[520px] -translate-y-3 md:-translate-y-6 w-full object-cover "
             />
             
             <WindowReveal 
-              src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
+              src="/ar.avif" 
               alt="Luxury Pool" 
-              className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[420px] w-full object-cover rounded-sm"
+              className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[425px] w-full object-cover "
             />
           </div>
 
@@ -303,18 +303,18 @@ const About = () => {
               {/* Unified Height here */}
               <div className="w-full h-[400px] md:h-[650px]">
                 <WindowReveal 
-                  src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=800"
+                  src="/director.avif"
                   alt="Sophisticated Comfort"
                   className="w-full h-full shadow-xl "
                 />
               </div>
               <div className="flex flex-col items-start select-none" data-aos="fade-left" data-aos-delay="200">
-             <h2 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e] mb-6">
-  Where Nature Meets Luxury
+            <h2 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e] mb-6">
+  A Message from Our Director
 </h2>
 
 <p className="text-gray-500 text-[17px] leading-relaxed mb-0 md:mb-8 text-start">
-  Sree Raaga Resorts is a tranquil retreat where comfort, nature, and hospitality come together to create unforgettable moments. Surrounded by lush greenery, our resort features elegantly designed villas and rooms, premium amenities, and exceptional service. Whether you're seeking a peaceful escape, celebrating life's special occasions, or hosting a corporate gathering, every experience at Sree Raaga Resorts is crafted with care to make your stay truly memorable.
+  At Sree Raaga Resorts, our vision has always been to create a destination where guests can reconnect with nature while enjoying exceptional comfort and warm hospitality. Every detail of our resort has been thoughtfully designed to provide memorable experiences, whether you're visiting for a family getaway, a celebration, or a corporate retreat. We are committed to delivering personalized service, maintaining the highest standards of quality, and ensuring that every guest leaves with cherished memories. Thank you for choosing Sree Raaga Resorts—we look forward to welcoming you.
 </p>
               </div>
             </div>
@@ -322,22 +322,18 @@ const About = () => {
             {/* Row 2: A Unique Experience */}
             <div className="max-w-[150vh] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mt-[-90px] md:mt-[-60px] ">
               <div className="order-2 md:order-1 flex flex-col items-start select-none" data-aos="fade-right" data-aos-delay="200">
-              <h2 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e] mb-6">
-  Unforgettable Experiences
+          <h2 className="text-3xl md:text-5xl font-medium font-corm text-[#0d2b4e] mb-6">
+  The Sree Raaga Resort Experience
 </h2>
 
 <p className="text-gray-500 text-[17px] leading-relaxed mb-8 text-start">
-  At Sree Raaga Resorts, every stay is designed to create lasting memories. Enjoy refreshing
-  moments by the swimming pool, exciting indoor and outdoor activities, delicious cuisine,
-  and beautifully landscaped surroundings. Whether you're here for a relaxing weekend,
-  a family holiday, a destination wedding, or a corporate retreat, we provide the perfect
-  blend of comfort, recreation, and warm hospitality for an exceptional experience.
+  Discover a destination where refined luxury blends seamlessly with the tranquility of nature. Every stay at Sree Raaga Resorts is thoughtfully curated with elegant accommodations, personalized hospitality, exceptional dining, and world-class amenities. From intimate getaways to grand celebrations, we create experiences that are sophisticated, memorable, and truly extraordinary.
 </p>
               </div>
               {/* Unified Height here */}
               <div className="order-1 md:order-2 w-full h-[400px] md:h-[650px]">
                 <WindowReveal 
-                  src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800"
+                  src="/train.avif"
                   alt="A Unique Experience"
                   className="w-full h-full shadow-xl "
                 />
@@ -387,28 +383,28 @@ const About = () => {
      {
   title: "Swimming Pool",
   image:
-    "https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=1200",
+    "/pool.avif",
   description:
     "Enjoy our refreshing swimming pool, perfect for relaxation, leisure, and a rejuvenating experience.",
 },
 {
   title: "Adventures Activities",
   image:
-    "./adv1.jpg",
+    "./adv.avif",
   description:
     "Take part in exciting indoor and outdoor activities designed for fun, recreation, and memorable experiences for guests of all ages.",
 },
 {
   title: "Indoor Games",
   image:
-    "./indoor.jpg",
+    "./indoor.avif",
   description:
     "Enjoy a variety of indoor games including table tennis, carrom, chess, and more for hours of entertainment.",
 },
 {
   title: "Play Area",
   image:
-    "./play.jpg",
+    "./play.avif",
   description:
     "A safe and exciting play area where children can have fun, explore, and create unforgettable memories.",
 },

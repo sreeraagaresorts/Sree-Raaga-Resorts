@@ -84,6 +84,7 @@ const menuLinks = [
   { name: "Dine", path: "/dine" },
   { name: "Resort Menu", path: "/menu" },
   { name: "Events", path: "/events" },
+  { name: "Gallery", path: "/gallery" },
   { name: "Contact", path: "/contact" }
 ];
 
@@ -402,12 +403,12 @@ const Navbar = () => {
           ref={bgImageRef}
           className="absolute left-0 top-0 w-full lg:w-[60%] h-full bg-cover bg-center pointer-events-none"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2000')",
+            backgroundImage: "url('/menu.avif')",
             opacity: 0.5
           }}
         />
         {/* Dark overlay for readability */}
-        <div className="absolute left-0 top-0 w-full lg:w-[60%] h-full bg-black/60 pointer-events-none" />
+        <div className="absolute left-0 top-0 w-full lg:w-[60%] h-full bg-black/50 pointer-events-none" />
 
         {/* Custom Follower Cursor */}
         {isOpen && (

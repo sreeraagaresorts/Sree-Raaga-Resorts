@@ -145,10 +145,10 @@ setPhone(formatted);
           className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000')",
+              "url('./ctbr.avif')",
           }}
         >
-          <div className="absolute inset-0 bg-[#04121a]/55"></div>
+          <div className="absolute inset-0 bg-[#04121a]/60"></div>
           <div className="relative z-10 text-center text-white select-none">
             <span className="text-white uppercase tracking-[6px] block mb-2 text-[17px]  font-semibold " data-aos="fade-up" >
               contact us

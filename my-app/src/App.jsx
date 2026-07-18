@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Home from "./ui/pages/Home";
 import About from "./ui/pages/About";
+import Gallery from "./ui/pages/Gallery";
 import Amenities from "./ui/pages/Amenities";
 import Rooms from "./ui/pages/Rooms";
 import RoomDetails from "./ui/pages/RoomDetails";
@@ -74,6 +75,7 @@ const App = () => {
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/gallery" element={<Gallery />} />
         <Route path="/amenities" element={<Amenities />} />
         <Route path="/rooms" element={<Rooms />} />
         <Route path="/rooms/:id" element={<RoomDetails />} />

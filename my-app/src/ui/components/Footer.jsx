@@ -217,9 +217,14 @@ const Footer = () => {
                     Amenities
                   </Link>
                 </li>
-                    <li>
+                <li>
                   <Link to="/faq" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
                     FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/gallery" className="text-white hover:text-[#c8a64d] transition" onClick={scrollToTop}>
+                    Gallery
                   </Link>
                 </li>
               </ul> 

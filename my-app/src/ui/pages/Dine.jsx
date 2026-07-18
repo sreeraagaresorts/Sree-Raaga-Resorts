@@ -98,7 +98,7 @@ const Dine = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="relative aspect-[4/3]  overflow-hidden shadow-lg select-none">
               <img 
-                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200" 
+                src="/multi.avif" 
                 alt="Multi-Cuisine Dining" 
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />
@@ -147,7 +147,7 @@ const Dine = () => {
             </div>
             <div className="relative aspect-[4/3]  overflow-hidden shadow-lg select-none lg:order-2 order-1">
               <img 
-                src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1200" 
+                src="/coffee.avif" 
                 alt="Coffee Shop" 
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />
@@ -158,7 +158,7 @@ const Dine = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="relative aspect-[4/3]  overflow-hidden shadow-lg select-none">
               <img 
-                src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?q=80&w=1200" 
+                src="/bar.avif" 
                 alt="Bar & Restaurant" 
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />
@@ -207,7 +207,7 @@ const Dine = () => {
             </div>
             <div className="relative aspect-[4/3] rounded-sm overflow-hidden shadow-lg select-none lg:order-2 order-1">
               <img 
-                src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=1200" 
+                src="/sports.avif" 
                 alt="Sports Bar" 
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
               />

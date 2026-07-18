@@ -201,23 +201,22 @@ import restaurantIcon from "../../assets/icons/restaurant.png";
 import barIcon from "../../assets/icons/bar.png";
 import sportsIcon from "../../assets/icons/sports.png";
 import coffeeIcon from "../../assets/icons/coffee.png";
-
 const tabData = {
   multicuisine: {
     title: "Multi Cuisine Restaurant",
     description:
       "Embark on a culinary journey with an extensive selection of Indian, Asian, and international delicacies, thoughtfully prepared by our expert chefs using the finest ingredients.",
     image:
-      "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200",
+      "/multi.avif",
     iconImage: restaurantIcon,
   },
 
-  barrestaurant: {
+  barrestaurant: { 
     title: "Bar & Restaurant",
     description:
       "Unwind in an elegant setting where handcrafted cocktails, premium spirits, and gourmet cuisine come together to create the perfect dining and social experience.",
     image:
-      "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=1200",
+      "/bar.avif",
     iconImage: barIcon,
   },
 
@@ -226,7 +225,7 @@ const tabData = {
     description:
       "Feel the excitement of every match on large HD screens while enjoying refreshing beverages, signature appetizers, and an energetic atmosphere with fellow fans.",
     image:
-      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200",
+      "/sports.avif",
     iconImage: sportsIcon,
   },
 
@@ -235,7 +234,7 @@ const tabData = {
     description:
       "Relax with freshly brewed coffee, aromatic teas, freshly baked pastries, and light bites in a warm and inviting café designed for casual meetings and quiet moments.",
     image:
-      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200",
+      "/coffee.avif",
     iconImage: coffeeIcon,
   },
 };
@@ -693,22 +692,22 @@ return (
       {/* Staggered Images Grid - Now maintaining 3 columns on mobile */}
       <div className="relative max-w-[170vh] mx-auto grid grid-cols-3 gap-2 sm:gap-6 md:gap-12 lg:gap-24 items-center z-10 mb-8 md:mb-12">
         <WindowReveal 
-          src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800" 
+          src="/al.avif" 
           alt="Villa Exterior" 
-          className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[420px] w-full object-cover rounded-sm"
+          className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[425px] w-full object-cover "
         />
         
         {/* Center image is taller and offset upwards, overlapping background text */}
         <WindowReveal 
-          src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=800" 
+          src="/ac.avif" 
           alt="Villa Interior" 
-          className="h-[140px] sm:h-[280px] md:h-[430px] lg:h-[520px] -translate-y-3 md:-translate-y-6 w-full object-cover rounded-sm"
+          className="h-[140px] sm:h-[280px] md:h-[430px] lg:h-[520px] -translate-y-3 md:-translate-y-6 w-full object-cover "
         />
         
         <WindowReveal 
-          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800" 
+          src="/ar.avif" 
           alt="Luxury Pool" 
-          className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[420px] w-full object-cover rounded-sm"
+          className="h-[110px] mb-6 md:mb-0 sm:h-[220px] md:h-[350px] lg:h-[425px] w-full object-cover "
         />
       </div>
 
@@ -1019,9 +1018,9 @@ return (
                 {/* Custom circular interaction overlay: BOOK NOW */}
                 <Link 
                   to="/rooms"
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-30 h-30 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
                 >
-                  <span className="text-[11px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
+                  <span className="text-[14px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
                     Book Now
                   </span>
                 </Link>
@@ -1081,28 +1080,28 @@ return (
      {
   title: "Swimming Pool",
   image:
-    "https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=1200",
+    "/pool.avif",
   description:
     "Enjoy our refreshing swimming pool, perfect for relaxation, leisure, and a rejuvenating experience.",
 },
 {
   title: "Adventures Activities",
   image:
-    "./adv1.jpg",
+    "./adv.avif",
   description:
     "Take part in exciting indoor and outdoor activities designed for fun, recreation, and memorable experiences for guests of all ages.",
 },
 {
   title: "Indoor Games",
   image:
-    "./indoor.jpg",
+    "./indoor.avif",
   description:
     "Enjoy a variety of indoor games including table tennis, carrom, chess, and more for hours of entertainment.",
 },
 {
   title: "Play Area",
   image:
-    "./play.jpg",
+    "./play.avif",
   description:
     "A safe and exciting play area where children can have fun, explore, and create unforgettable memories.",
 },
@@ -1247,7 +1246,7 @@ return (
       className="relative py-32 md:py-49 bg-fixed bg-cover bg-center flex items-center justify-center"
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000')",
+          "url('/bookbread.avif')",
       }}
     >
       <div className="absolute inset-0 bg-black/50"></div>

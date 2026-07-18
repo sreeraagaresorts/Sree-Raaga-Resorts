@@ -140,16 +140,16 @@ const tabData = {
     description:
       "Embark on a culinary journey with an extensive selection of Indian, Asian, and international delicacies, thoughtfully prepared by our expert chefs using the finest ingredients.",
     image:
-      "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200",
+      "/multi.avif",
     iconImage: restaurantIcon,
   },
 
-  barrestaurant: {
+  barrestaurant: { 
     title: "Bar & Restaurant",
     description:
       "Unwind in an elegant setting where handcrafted cocktails, premium spirits, and gourmet cuisine come together to create the perfect dining and social experience.",
     image:
-      "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=1200",
+      "/bar.avif",
     iconImage: barIcon,
   },
 
@@ -158,7 +158,7 @@ const tabData = {
     description:
       "Feel the excitement of every match on large HD screens while enjoying refreshing beverages, signature appetizers, and an energetic atmosphere with fellow fans.",
     image:
-      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200",
+      "/sports.avif",
     iconImage: sportsIcon,
   },
 
@@ -167,7 +167,7 @@ const tabData = {
     description:
       "Relax with freshly brewed coffee, aromatic teas, freshly baked pastries, and light bites in a warm and inviting café designed for casual meetings and quiet moments.",
     image:
-      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200",
+      "/coffee.avif",
     iconImage: coffeeIcon,
   },
 };
@@ -260,7 +260,7 @@ const Amenities = () => {
         <section
           className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1517176118179-65244903d13c?q=80&w=2000')"
+            backgroundImage: "url('/amebread.avif')"
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
@@ -313,7 +313,7 @@ Luxury Beyond Expectations
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="https://images.unsplash.com/photo-1572331165267-854da2b10ccc?q=80&w=800" 
+                  src="/pool.avif" 
                   alt="Swimming Pool"
                   className="h-full w-full"
                 />
@@ -344,7 +344,7 @@ Luxury Beyond Expectations
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center" >
               <div className="lg:col-span-6 lg:order-2 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="./play.jpg" 
+                  src="./play.avif" 
                   alt="Childrens Play Area"
                   className="h-full w-full"
                 />
@@ -375,7 +375,7 @@ Luxury Beyond Expectations
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="./adv1.jpg" 
+                  src="./adv.avif" 
                   alt="Adventures Activity"
                   className="h-full w-full"
                 />
@@ -406,7 +406,7 @@ Luxury Beyond Expectations
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 lg:order-2 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="./indoor.jpg" 
+                  src="./indoor.avif" 
                   alt="Indoor Games"
                   className="h-full w-full"
                 />
@@ -437,7 +437,7 @@ Luxury Beyond Expectations
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="./rain.jpg" 
+                  src="./rain.avif" 
                   alt="Rain Dance"
                   className="h-full w-full"
                 />
@@ -468,7 +468,7 @@ Luxury Beyond Expectations
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 lg:order-2 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="./outdoor.jpg" 
+                  src="./outdoor.avif" 
                   alt="Outdoor Recreation"
                   className="h-full w-full"
                 />
@@ -499,7 +499,7 @@ Luxury Beyond Expectations
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
               <div className="lg:col-span-6 h-[350px] lg:h-[500px]">
                 <WindowReveal 
-                  src="./green.jpg" 
+                  src="./green.avif" 
                   alt="Open Green Space"
                   className="h-full w-full"
                 />
@@ -568,7 +568,7 @@ Luxury Beyond Expectations
       className="relative py-32 md:py-49 bg-fixed bg-cover bg-center flex items-center justify-center"
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2000')",
+          "url('/bookbread.avif')",
       }}
     >
       <div className="absolute inset-0 bg-black/50"></div>
@@ -863,9 +863,9 @@ Luxury Beyond Expectations
                     {/* Custom circular interaction overlay: BOOK NOW */}
                     <Link 
                       to="/rooms"
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-30 h-30 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-[#0d2b4e]/70 backdrop-blur-[3px] border border-white/20 hover:bg-[#c8a64d] hover:border-[#c8a64d] flex flex-col items-center justify-center text-white transition-all duration-500 shadow-xl group/btn"
                     >
-                      <span className="text-[11px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
+                      <span className="text-[14px]  font-bold tracking-widest uppercase transition-transform duration-300 group-hover/btn:scale-105">
                         Book Now
                       </span>
                     </Link>
