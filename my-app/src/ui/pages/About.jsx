@@ -247,15 +247,13 @@ const About = () => {
           
                 </span>
                 
-                <h2 className="text-4xl md:text-6xl lg:text-[75px] font-medium font-corm mb-12 leading-tight" data-aos="fade-up" data-aos-delay="200"> 
-                  Experience Resort Living
-                </h2>
+         
                 
                 <button  data-aos="fade-up" data-aos-delay="300"
                   onClick={() => setIsVideoOpen(true)}
                   className="group flex flex-col items-center gap-4 cursor-pointer transition-all duration-300 hover:scale-105"
                 >
-                  <div className="w-16 h-16 md:w-[72px] md:h-[72px] rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/20 transition-all">
+                  <div className="w-16 h-16 md:w-[102px] md:h-[102px] rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/20 transition-all">
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
                       viewBox="0 0 24 24" 

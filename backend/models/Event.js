@@ -12,6 +12,7 @@ const eventSchema = new mongoose.Schema({
   price: { type: Number, default: 0 },
   sqft: { type: String },
   show_price: { type: Boolean, default: false },
+  view360Iframe: { type: String },
   created_at: { type: Date, default: Date.now }
 });
 

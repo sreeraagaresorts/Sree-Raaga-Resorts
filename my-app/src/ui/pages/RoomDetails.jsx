@@ -808,7 +808,7 @@ const RoomDetails = () => {
             className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
           >
             <span className="font-medium text-[#0d2b4e]">
-              {children === 0 ? "Children (Below 10 Years)" : children === 1 ? "1 Child" : `${children} Children`}
+              {children === 0 ? "Children (Below 10 Years)" : children === 1 ? "1 Child (Below 10 Years)" : `${children} Children (Below 10 Years)`}
             </span>
             <ChevronDown
               size={16}

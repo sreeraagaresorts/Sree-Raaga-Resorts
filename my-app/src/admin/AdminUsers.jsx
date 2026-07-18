@@ -84,57 +84,66 @@ const AdminUsers = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleToggleRole = async (user) => {
+  const handleToggleRole = (user) => {
     const newRole = user.role === "admin" ? "user" : "admin";
-    if (!window.confirm(`Are you sure you want to change ${user.full_name}'s role to ${newRole}?`)) return;
+    toast.confirm(
+      "Change User Role",
+      `Are you sure you want to change ${user.full_name}'s role to ${newRole}?`,
+      async () => {
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/auth/users/${user.id}/role`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ role: newRole }),
+          });
 
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-    try {
-      const response = await fetch(`${API_URL}/api/auth/users/${user.id}/role`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ role: newRole }),
-      });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to change user role.");
+          }
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to change user role.");
+          toast.success("User role updated successfully!");
+          fetchUsersAndBookings(true);
+          loadHistoryLogs();
+        } catch (err) {
+          toast.error(err.message || "Failed to change user role.");
+        }
       }
-
-      toast.success("User role updated successfully!");
-      fetchUsersAndBookings(true);
-      loadHistoryLogs();
-    } catch (err) {
-      toast.error(err.message || "Failed to change user role.");
-    }
+    );
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this user profile? All their bookings will also be deleted!")) return;
+  const handleDelete = (id) => {
+    toast.confirm(
+      "Delete User Profile",
+      "Are you sure you want to delete this user profile? All their bookings will also be deleted!",
+      async () => {
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/auth/users/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-    try {
-      const response = await fetch(`${API_URL}/api/auth/users/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to delete user.");
+          }
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete user.");
-      }
-
-      toast.success("User account deleted successfully!");
-      fetchUsersAndBookings(true);
-      loadHistoryLogs();
-    } catch (err) {
-      toast.error(err.message || "Failed to delete user.");
-    }
+          toast.success("User account deleted successfully!");
+          fetchUsersAndBookings(true);
+          loadHistoryLogs();
+        } catch (err) {
+          toast.error(err.message || "Failed to delete user.");
+        }
+      },
+      "destructive"
+    );
   };
 
   const displayedUsers = users.filter((u) => {

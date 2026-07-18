@@ -358,29 +358,34 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this room?")) return;
+  const handleDelete = (id) => {
+    toast.confirm(
+      "Confirm Room Deletion",
+      "Are you sure you want to delete this room? This action cannot be undone.",
+      async () => {
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/rooms/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-    try {
-      const response = await fetch(`${API_URL}/api/rooms/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to delete room.");
+          }
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete room.");
-      }
-
-      toast.success("Room deleted successfully!");
-      fetchRooms(true);
-    } catch (err) {
-      toast.error(err.message || "Failed to delete room.");
-    }
+          toast.success("Room deleted successfully!");
+          setRooms((prev) => prev.filter((room) => room.id !== id));
+        } catch (err) {
+          toast.error(err.message || "Failed to delete room.");
+        }
+      },
+      "destructive"
+    );
   };
 
   const handleSaveCategory = async (e) => {
@@ -589,7 +594,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
       {/* ADD / EDIT ROOM MODAL */}
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#081A2F] w-full max-w-5xl rounded-xl p-6 lg:p-8 border border-white/10 shadow-2xl">
+          <div className="bg-[#081A2F] w-full max-w-5xl rounded-xl p-6 lg:p-8 border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">{editingRoom ? "Edit Room" : "Add Room"}</h2>
               <button
@@ -712,18 +717,7 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
                   />
                 </div>
-                <div className="flex items-center gap-2.5 pt-8">
-                  <input
-                    type="checkbox"
-                    id="allowExtraBed"
-                    checked={allowExtraBed}
-                    onChange={(e) => setAllowExtraBed(e.target.checked)}
-                    className="w-4 h-4 rounded bg-[#071524] border-white/10 accent-yellow-500 cursor-pointer"
-                  />
-                  <label htmlFor="allowExtraBed" className="text-yellow-500 text-xs uppercase tracking-widest cursor-pointer select-none">
-                    Allow Extra Bed
-                  </label>
-                </div>
+              
                 <div>
                   <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">
                     Category
@@ -753,7 +747,18 @@ const [draggedCatIndex, setDraggedCatIndex] = useState(null);
                     className="w-full bg-[#071524] border border-white/10 rounded-lg p-2.5 outline-none focus:border-yellow-500 transition text-white text-sm"
                   />
                 </div>
-             
+               <div className="flex items-center gap-2.5 pt-8">
+                  <input
+                    type="checkbox"
+                    id="allowExtraBed"
+                    checked={allowExtraBed}
+                    onChange={(e) => setAllowExtraBed(e.target.checked)}
+                    className="w-4 h-4 rounded bg-[#071524] border-white/10 accent-yellow-500 cursor-pointer"
+                  />
+                  <label htmlFor="allowExtraBed" className="text-yellow-500 text-xs uppercase tracking-widest cursor-pointer select-none">
+                    Allow Extra Bed
+                  </label>
+                </div>
               </div>
 
               <div>

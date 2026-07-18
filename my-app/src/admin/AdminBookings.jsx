@@ -71,21 +71,12 @@ const [selectedRoomCount, setSelectedRoomCount] = useState(1);
   const [bookingSource, setBookingSource] = useState("Direct");
   const [extraBed, setExtraBed] = useState(false);
 
-  // Custom Confirmation Modal State
-  const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
-
   // Cancel Booking Modal State
   const [cancelModal, setCancelModal] = useState({ isOpen: false, booking: null });
   const [cancelReason, setCancelReason] = useState("");
 
   const showConfirm = (title, message, type = "primary", onConfirm) => {
-    setConfirmModal({
-      isOpen: true,
-      title,
-      message,
-      type,
-      onConfirm
-    });
+    toast.confirm(title, message, onConfirm, type);
   };
 
   const handlePhoneChange = (e) => {
@@ -667,8 +658,23 @@ if (hasConflict) {
     });
   };
 
+  const getDueAmount = (b) => {
+    if (!b) return 0;
+    if (b.status === "checked_out" || b.status === "cancelled") {
+      return 0;
+    }
+    if (b.payment_status === "Unpaid") {
+      return b.total_price;
+    }
+    const initialPrice = (b.initial_price && b.initial_price > 0) ? b.initial_price : b.total_price;
+    if (b.total_price > initialPrice) {
+      return b.total_price - initialPrice;
+    }
+    return 0;
+  };
+
   const handleCheckOutClick = (b) => {
-    if (b.payment_method === "pay_later") {
+    if (getDueAmount(b) > 0) {
       setCheckoutBooking(b);
       setSettlePaymentMethod("cash");
     } else {
@@ -968,22 +974,16 @@ if (hasConflict) {
                     <td className="px-4 py-3 text-center">
                       {(() => {
                         const initialPrice = (b.initial_price && b.initial_price > 0) ? b.initial_price : b.total_price;
-                        const isExtended = b.total_price > initialPrice;
+                        const dueAmount = getDueAmount(b);
                         return (
                           <>
                             <div className="text-[#C8A64D] font-bold text-[16px]">
                               ₹{initialPrice.toLocaleString()}
                             </div>
-                            {isExtended ? (
+                            {dueAmount > 0 && (
                               <div className="text-red-400 text-xs mt-1 font-semibold">
-                                Due: ₹{(b.total_price - initialPrice).toLocaleString()}
+                                Due: ₹{dueAmount.toLocaleString()}
                               </div>
-                            ) : (
-                              b.payment_status === "Unpaid" && (
-                                <div className="text-red-400 text-xs mt-1 font-semibold">
-                                  Due: ₹{b.total_price.toLocaleString()}
-                                </div>
-                              )
                             )}
                           </>
                         );
@@ -1645,8 +1645,16 @@ if (hasConflict) {
                     <p className="text-white font-bold text-sm">BK-{checkoutBooking.id.toString().padStart(4, "0")}</p>
                   </div>
                   <div>
+                    <p className="text-white/40 text-xs uppercase">Total Price</p>
+                    <p className="text-white font-bold text-sm">₹{parseFloat(checkoutBooking.total_price).toLocaleString()}</p>
+                  </div>
+                  <div>
+                    <p className="text-white/40 text-xs uppercase">Paid So Far</p>
+                    <p className="text-green-400 font-bold text-sm">₹{(checkoutBooking.total_price - getDueAmount(checkoutBooking)).toLocaleString()}</p>
+                  </div>
+                  <div>
                     <p className="text-white/40 text-xs uppercase">Outstanding Due</p>
-                    <p className="text-red-400 font-bold text-lg">₹{parseFloat(checkoutBooking.total_price).toLocaleString()}</p>
+                    <p className="text-red-400 font-bold text-lg">₹{getDueAmount(checkoutBooking).toLocaleString()}</p>
                   </div>
                 </div>
                 {checkoutBooking.guest_phone && (
@@ -1757,49 +1765,6 @@ if (hasConflict) {
         </div>
       )}
 
-      {/* CUSTOM CONFIRMATION MODAL */}
-      {confirmModal.isOpen && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4">
-          <div className="bg-[#081A2F] border border-white/10 rounded-2xl p-6 max-w-xl w-full text-center space-y-4 shadow-2xl">
-            <div className="mx-auto w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 mb-2">
-              <RefreshCw className={`w-6 h-6 ${confirmModal.type === "destructive" ? "text-red-400 animate-spin" : "text-[#C8A64D]"}`} />
-            </div>
-            
-            <h3 className="text-lg font-bold text-white tracking-wide">
-              {confirmModal.title}
-            </h3>
-            
-            <p className="text-[20px] text-white  leading-relaxed">
-              {confirmModal.message}
-            </p>
-            
-            <div className="flex gap-3 pt-2">
-              
-              <button
-                type="button"
-                onClick={() => {
-                  if (confirmModal.onConfirm) confirmModal.onConfirm();
-                  setConfirmModal({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
-                }}
-                className={`flex-1 px-4 py-3 rounded-lg font-bold transition cursor-pointer text-sm ${
-                  confirmModal.type === "destructive"
-                    ? "bg-red-500 hover:bg-red-600 text-white"
-                    : "bg-[#C8A64D] hover:bg-[#b09141] text-black"
-                }`}
-              >
-                Confirm
-              </button>
-               <button
-                type="button"
-                onClick={() => setConfirmModal({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null })}
-                className="flex-1 px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 text-white font-semibold transition cursor-pointer text-sm"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

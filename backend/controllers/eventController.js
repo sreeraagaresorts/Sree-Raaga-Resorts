@@ -51,7 +51,8 @@ exports.createEvent = async (req, res) => {
       description,
       price,
       sqft,
-      show_price
+      show_price,
+      view360Iframe
     } = req.body;
 
     let image = null;
@@ -76,7 +77,8 @@ exports.createEvent = async (req, res) => {
       description,
       price: price ? Number(price) : 0,
       sqft: sqft || "",
-      show_price: show_price === "true" || show_price === true
+      show_price: show_price === "true" || show_price === true,
+      view360Iframe: view360Iframe || null
     });
     await event.save();
 
@@ -103,7 +105,8 @@ exports.updateEvent = async (req, res) => {
       description,
       price,
       sqft,
-      show_price
+      show_price,
+      view360Iframe
     } = req.body;
 
     const updateData = {
@@ -113,7 +116,8 @@ exports.updateEvent = async (req, res) => {
       description,
       price: price ? Number(price) : 0,
       sqft: sqft || "",
-      show_price: show_price === "true" || show_price === true
+      show_price: show_price === "true" || show_price === true,
+      view360Iframe: view360Iframe || null
     };
 
     if (req.file) {

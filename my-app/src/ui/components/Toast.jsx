@@ -164,6 +164,7 @@ const ToastCard = ({ id, type, message, duration = 3000, onClose }) => {
 
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
 
   const addToast = useCallback((type, message, duration) => {
     let id = null;
@@ -187,6 +188,15 @@ export const ToastProvider = ({ children }) => {
     error: (message, duration = 3000) => addToast("error", message, duration),
     warning: (message, duration = 3000) => addToast("warning", message, duration),
     info: (message, duration = 3000) => addToast("info", message, duration),
+    confirm: (title, message, onConfirm, type = "primary") => {
+      setConfirmModal({
+        isOpen: true,
+        title,
+        message,
+        type,
+        onConfirm
+      });
+    }
   };
 
   return (
@@ -209,6 +219,61 @@ export const ToastProvider = ({ children }) => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* CUSTOM CONFIRMATION MODAL */}
+      <AnimatePresence>
+        {confirmModal.isOpen && (
+          <div className="fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center z-[10000] p-4">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-[#081A2F] border border-white/10 rounded-2xl p-8 max-w-md w-full text-center space-y-5 shadow-2xl relative"
+            >
+              {/* Header Icon */}
+              <div className="mx-auto w-14 h-14 rounded-full flex items-center justify-center bg-white/5 border border-white/10 mb-2">
+                {confirmModal.type === "destructive" ? (
+                  <AlertTriangle className="w-7 h-7 text-red-500 animate-pulse" />
+                ) : (
+                  <Info className="w-7 h-7 text-[#C8A64D]" />
+                )}
+              </div>
+              
+              <h3 className="text-xl font-bold text-white tracking-wide">
+                {confirmModal.title}
+              </h3>
+              
+              <p className="text-white/80 text-sm leading-relaxed">
+                {confirmModal.message}
+              </p>
+              
+              <div className="flex gap-4 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setConfirmModal({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null })}
+                  className="flex-1 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold transition cursor-pointer text-sm border border-white/10"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (confirmModal.onConfirm) confirmModal.onConfirm();
+                    setConfirmModal({ isOpen: false, title: "", message: "", type: "primary", onConfirm: null });
+                  }}
+                  className={`flex-1 px-4 py-3 rounded-xl font-bold transition cursor-pointer text-sm ${
+                    confirmModal.type === "destructive"
+                      ? "bg-red-600 hover:bg-red-700 text-white"
+                      : "bg-[#C8A64D] hover:bg-[#b09141] text-black"
+                  }`}
+                >
+                  Confirm
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </ToastContext.Provider>
   );
 };

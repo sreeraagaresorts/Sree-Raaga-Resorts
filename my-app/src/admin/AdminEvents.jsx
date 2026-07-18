@@ -33,6 +33,9 @@ const AdminEvents = () => {
   const [newExtraImageFiles, setNewExtraImageFiles] = useState([]);
   const [extraImagePreviews, setExtraImagePreviews] = useState([]);
 
+  const [view360Iframe, setView360Iframe] = useState("");
+  const [show360Input, setShow360Input] = useState(false);
+
   const [saving, setSaving] = useState(false);
 
   const fetchEvents = async (silent = false) => {
@@ -74,6 +77,8 @@ const AdminEvents = () => {
     setExistingExtraImages([]);
     setNewExtraImageFiles([]);
     setExtraImagePreviews([]);
+    setView360Iframe("");
+    setShow360Input(false);
     setIsFormOpen(true);
   };
 
@@ -98,6 +103,8 @@ const AdminEvents = () => {
         filename: img,
       }))
     );
+    setView360Iframe(event.view360Iframe || "");
+    setShow360Input(!!event.view360Iframe);
     setIsFormOpen(true);
   };
 
@@ -161,6 +168,7 @@ const AdminEvents = () => {
       formData.append("price", price);
       formData.append("sqft", sqft);
       formData.append("show_price", showPrice);
+      formData.append("view360Iframe", view360Iframe);
       if (compressedImage) {
         formData.append("image", compressedImage);
       }
@@ -200,29 +208,34 @@ const AdminEvents = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this event?")) return;
+  const handleDelete = (id) => {
+    toast.confirm(
+      "Confirm Event Deletion",
+      "Are you sure you want to delete this event? This action cannot be undone.",
+      async () => {
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/events/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-    try {
-      const response = await fetch(`${API_URL}/api/events/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to delete event.");
+          }
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete event.");
-      }
-
-      toast.success("Event deleted successfully!");
-      fetchEvents(true);
-    } catch (err) {
-      toast.error(err.message || "Failed to delete event.");
-    }
+          toast.success("Event deleted successfully!");
+          setEvents((prev) => prev.filter((event) => event.id !== id));
+        } catch (err) {
+          toast.error(err.message || "Failed to delete event.");
+        }
+      },
+      "destructive"
+    );
   };
 
   const getImageUrl = (image) => {
@@ -259,8 +272,8 @@ const AdminEvents = () => {
 
       {/* FORM MODAL */}
       {isFormOpen && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-[#081A2F] w-full max-w-2xl rounded-xl p-6 border border-white/10 my-8">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#081A2F] w-full max-w-5xl rounded-xl p-6 border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto">
             {/* HEADER */}
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">{editingEvent ? "Edit Event" : "Create Event"}</h2>
@@ -339,7 +352,16 @@ const AdminEvents = () => {
               {/* IMAGE UPLOAD UI */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-2">Event Image</label>
+                  <div className="flex items-center   mt-[-20px]">
+                    <label className="block text-yellow-500 text-xs uppercase tracking-widest mb-0">Event Image</label>
+                    <button
+                      type="button"
+                      onClick={() => setShow360Input(!show360Input)}
+                      className="text-yellow-500 text-xs uppercase hover:underline cursor-pointer bg-transparent border-0 outline-none"
+                    >
+                      {show360Input ? "Hide 360 View" : "+ Add 360 View"}
+                    </button>
+                  </div>
                   <div className="border border-dashed border-white/20 p-6 rounded-lg text-center bg-[#071524] relative h-[120px] flex flex-col justify-center items-center">
                     <input 
                       type="file" 
@@ -407,6 +429,21 @@ const AdminEvents = () => {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {show360Input && (
+                <div>
+                  <label className="block text-yellow-500 text-[14px] uppercase tracking-widest mb-1 font-bold">
+                    360 View Iframe HTML
+                  </label>
+                  <textarea
+                    placeholder='<iframe src="..."></iframe>'
+                    value={view360Iframe}
+                    onChange={(e) => setView360Iframe(e.target.value)}
+                    className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 outline-none focus:border-yellow-500 transition text-white text-xs font-mono"
+                    rows={2}
+                  />
                 </div>
               )}
 

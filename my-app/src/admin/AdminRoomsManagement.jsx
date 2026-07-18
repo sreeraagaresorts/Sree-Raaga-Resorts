@@ -279,27 +279,31 @@ const AdminRoomsManagement = () => {
     setActiveMenuRoom((prev) => (prev === roomNo ? null : roomNo));
   };
 
-  const handleDeleteUnit = async (roomCategory, roomNumber) => {
-    if (!window.confirm(`Are you sure you want to delete room ${roomNumber}?`)) {
-      return;
-    }
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-    try {
-      const response = await fetch(`${API_URL}/api/rooms/${roomCategory.id || roomCategory._id}/unit/${roomNumber}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`
+  const handleDeleteUnit = (roomCategory, roomNumber) => {
+    toast.confirm(
+      "Confirm Room Deletion",
+      `Are you sure you want to delete room ${roomNumber}?`,
+      async () => {
+        const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+        try {
+          const response = await fetch(`${API_URL}/api/rooms/${roomCategory.id || roomCategory._id}/unit/${roomNumber}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to delete room unit.");
+          }
+          toast.success(`Room ${roomNumber} deleted successfully!`);
+          fetchRooms(true);
+        } catch (err) {
+          toast.error(err.message || "Failed to delete room unit.");
         }
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete room unit.");
-      }
-      toast.success(`Room ${roomNumber} deleted successfully!`);
-      fetchRooms(true);
-    } catch (err) {
-      toast.error(err.message || "Failed to delete room unit.");
-    }
+      },
+      "destructive"
+    );
   };
 
   const getStatusColor = (status) => {
@@ -541,6 +545,7 @@ const AdminRoomsManagement = () => {
                 <input
                   type="text"
                   value={editFloor}
+                  placeholder="Optional"
                   onChange={(e) => setEditFloor(e.target.value)}
                   className="w-full bg-[#071524] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-yellow-500"
                 />

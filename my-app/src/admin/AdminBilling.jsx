@@ -252,6 +252,7 @@ const invoices = bookings.map((b) => {
   const payments = bookings.map((b) => {
     const isPayLaterDue = b.payment_method === "pay_later" &&
       b.status !== "cancelled" && b.status !== "checked_out";
+
     const methodLabel =
       b.payment_method === "online" || b.payment_method === "razorpay" ? "Razorpay" :
       b.payment_method === "cash" ? "Cash" :
@@ -259,12 +260,42 @@ const invoices = bookings.map((b) => {
       b.payment_method === "bank_transfer" ? "Bank Transfer" :
       b.payment_method === "pay_later" ? "Pay Later" :
       b.payment_method || "—";
+
     const paymentStatus =
       isPayLaterDue ? "Due" :
       b.status === "confirmed" || b.status === "checked_in" || b.status === "checked_out" ? "Paid" :
       b.status === "cancelled" ? "Not-Refunded" : "Pending";
 
+    // Calculate Paid and Due amounts numerically
+    // Calculate Paid, Checkout Paid, and Due amounts numerically
+    let initialPaid = 0;
+    let checkoutPaid = 0;
+    let dueAmount = 0;
+
+    if (b.status !== "cancelled") {
+      const initialPrice = (b.initial_price && b.initial_price > 0) ? b.initial_price : b.total_price;
       
+      if (b.payment_status === "Unpaid") {
+        if (b.status === "checked_out") {
+          checkoutPaid = Math.floor(b.total_price || 0);
+        } else {
+          dueAmount = Math.floor(b.total_price || 0);
+        }
+      } else {
+        // Paid bookings
+        initialPaid = Math.floor(initialPrice);
+        if (b.status === "checked_out") {
+          if (b.total_price > initialPrice) {
+            checkoutPaid = Math.floor(b.total_price - initialPrice);
+          }
+        } else {
+          if (b.total_price > initialPrice) {
+            dueAmount = Math.floor(b.total_price - initialPrice);
+          }
+        }
+      }
+    }
+
     return {
       id: b.id.toString(),
       paymentId: b.razorpay_payment_id || `PAY-${b.id.toString().padStart(4, "0")}`,
@@ -275,6 +306,9 @@ const invoices = bookings.map((b) => {
       gateway: methodLabel,
       paymentStatus,
       isPayLaterDue,
+      initialPaid,
+      checkoutPaid,
+      dueAmount,
       createdAt: new Date(b.created_at)
     };
   });
@@ -289,6 +323,7 @@ const invoices = bookings.map((b) => {
       customerEmail: b.guest_email,
       customerPhone: b.guest_phone,
       amount: Math.floor(b.total_price || 0),
+      cancellationReason: b.cancellation_reason || "No reason provided",
       createdAt: new Date(b.created_at)
     }));
 
@@ -798,6 +833,7 @@ const invoices = bookings.map((b) => {
                         <th className="p-3 text-center text-[#c8a64d]">Customer</th>
                         <th className="p-3 text-center text-[#c8a64d]">Payment Gateway</th>
                         <th className="p-3 text-center text-[#c8a64d]">Amount Transacted</th>
+                        <th className="p-3 text-center text-[#c8a64d]">Total</th>
                         <th className="p-3 text-center text-[#c8a64d]">Payment Status</th>
                       </tr>
                     </thead>
@@ -832,12 +868,33 @@ const invoices = bookings.map((b) => {
                               <div className="text-amber-400 text-xs mt-0.5 font-semibold">⚠ Due on checkout</div>
                             )}
                           </td>
-                          <td className={`p-3 font-bold text-center ${pay.isPayLaterDue ? "text-amber-400" : "text-emerald-400"}`}>
-                            ₹{pay.amount.toLocaleString()}
+                          <td className="p-3 text-center text-sm font-semibold space-y-1">
+                            {pay.initialPaid > 0 && (
+                              <div className="text-emerald-400">
+                                 ₹{pay.initialPaid.toLocaleString()}
+                              </div>
+                            )}
+                            {pay.checkoutPaid > 0 && (
+                              <div className="text-emerald-400">
+                                Partial Paid : ₹{pay.checkoutPaid.toLocaleString()}
+                              </div>
+                            )}
+                            {pay.dueAmount > 0 && (
+                              <div className="text-amber-400">
+                                Due: ₹{pay.dueAmount.toLocaleString()}
+                              </div>
+                            )}
+                            {pay.initialPaid === 0 && pay.checkoutPaid === 0 && pay.dueAmount === 0 && (
+                              <div className="text-white/40 font-normal">₹0</div>
+                            )}
+                          </td>
+                          <td>
+                              
+
                           </td>
                           <td className="p-3 text-center text-[#c8a64d]">
                             <span className={`text-sm px-3 py-1 rounded-full border font-semibold ${
-                              pay.paymentStatus === "Paid"
+                              pay.paymentStatus === "Paid" || pay.paymentStatus === "Checked Out"
                                 ? "bg-green-500/10 text-green-400 border-green-500/20"
                                 : pay.paymentStatus === "Due"
                                 ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
@@ -864,10 +921,10 @@ const invoices = bookings.map((b) => {
                     <thead className="text-white/40 text-sm uppercase tracking-wider bg-[#071524]">
                       <tr>
                         <th className="p-3 text-left text-[#c8a64d]">Booking Ref</th>
-                        <th className="p-3 text-left text-[#c8a64d]">Guest Name</th>
-                        <th className="p-3 text-left text-[#c8a64d]">Guest Contact</th>
+                        <th className="p-3 text-left text-[#c8a64d]">Guest Details</th>
                         <th className="p-3 text-left text-[#c8a64d]">Date Created</th>
                         <th className="p-3 text-left text-[#c8a64d]">Amount</th>
+                        <th className="p-3 text-left text-[#c8a64d]">Cancellation Reason</th>
                         <th className="p-3 text-center text-[#c8a64d]">Status</th>
                       </tr>
                     </thead>
@@ -875,15 +932,18 @@ const invoices = bookings.map((b) => {
                       {filteredCancellations.map((cancel) => (
                         <tr key={cancel.id} className="border-t border-white/5 hover:bg-white/5 transition">
                           <td className="p-3 font-semibold text-white">{cancel.bookingId}</td>
-                          <td className="p-3">{cancel.customerName}</td>
                           <td className="p-3 text-[16px]">
-                            <div className="text-white">{cancel.customerEmail}</div>
+                            <div className="font-semibold text-white mb-0.5">{cancel.customerName}</div>
+                            <div className="text-white/60 text-sm">{cancel.customerEmail}</div>
                             {cancel.customerPhone && (
-                              <div className="text-white mt-1">{formatPhoneNumber(cancel.customerPhone)}</div>
+                              <div className="text-white/60 text-sm mt-0.5">{formatPhoneNumber(cancel.customerPhone)}</div>
                             )}
                           </td>
                           <td className="p-3 text-xs text-white">{cancel.createdAt.toLocaleDateString("en-GB")}</td>
                           <td className="p-3 font-bold text-red-400">₹{cancel.amount.toLocaleString()}</td>
+                          <td className="p-3 text-sm text-white/80 max-w-xs truncate" title={cancel.cancellationReason}>
+                            {cancel.cancellationReason}
+                          </td>
                           <td className="p-3 text-center text-[#c8a64d]">
                             <span className="text-sm px-3 py-1 rounded-full border font-semibold bg-red-500/10 text-red-400 border-red-500/20">
                               Cancelled
