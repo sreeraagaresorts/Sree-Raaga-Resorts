@@ -924,11 +924,11 @@ return (
                           </h3>
 
                           <div className="flex flex-wrap items-center gap-2 md:gap-3 px-4 md:px-0 text-[#D8C8A5] text-[13px] md:text-[16px] font-medium font-jost uppercase tracking-widest mb-4">
-                            <span>{room.area} SQM</span>
-                            <span>•</span>
                             <span>{room.beds}</span>
                             <span>•</span>
-                            <span>{room.bathrooms} Bath</span>
+                            <span>{room.bathrooms} </span>
+                                 <span>•</span>
+                            <span>{room.area} </span>
                           </div>
                         </div>
                       </Link>
