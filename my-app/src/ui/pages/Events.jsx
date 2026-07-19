@@ -228,7 +228,7 @@ function WaterSportsIcon({ className = "" }) {
                           />
                           {event.sqft && (
                             <span className="absolute top-4 left-3 md:top-6 md:left-6 bg-white/95 backdrop-blur-xs text-[#0d2b4e] text-[12px] md:text-[15px] uppercase tracking-widest font-medium md:px-6 md:py-3 px-2 py-1  border border-[#c8a64d]/30 shadow-xs">
-                              {event.sqft} SQft
+                              {event.sqft} 
                             </span>
                           )}
                         </Link>
@@ -257,7 +257,7 @@ function WaterSportsIcon({ className = "" }) {
                             {event.sqft && (
                               <div className="flex items-center">
                                 <Maximize className="w-5 h-5 text-[#c8a64d] mr-2" strokeWidth={1.2} />
-                                <span>{event.sqft} Sqft</span>
+                                <span>{event.sqft} </span>
                               </div>
                             )}
                           </div>

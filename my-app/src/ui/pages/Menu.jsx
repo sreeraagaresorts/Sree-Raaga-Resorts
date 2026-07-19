@@ -209,6 +209,28 @@ const Menu = () => {
     });
   }, []);
 
+  // Inline Instagram SVG component to avoid lucide-react version compatibility issues
+function InstagramIcon({ size = 20, className = "" }) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      className={className}
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
+
   return (
     <>
     {/* 2. ADD HELMET COMPONENT HERE */}
@@ -465,25 +487,51 @@ const Menu = () => {
           </h2>
         </section>
 
-        {/* ================= RESORT GALLERY IMAGES ================= */}
-        <section className="pb-12 md:pb-16 select-none">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-7xl mx-auto px-4 md:px-6">
-            {[
-              "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=600", // pool
-              "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600", // resort
-              "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600", // dining
-              "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600"  // table
-            ].map((img, idx) => (
-              <div key={idx} className="aspect-[3/4] overflow-hidden rounded-sm shadow-md">
-                <img 
-                  src={img} 
-                  alt={`Resort gallery ${idx + 1}`} 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
-                />
+      {/* ================= FOLLOW US ON INSTAGRAM ================= */}
+      <section className="bg-[#fdfeff] text-[#0d2b4e]">
+        <div className="py-8 md:py-12 text-center mb-12">
+          <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-jost font-semibold block mb-2">
+            Social Media
+          </span>
+          <h2 className="text-[33px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
+            Follow us on Instagram 
+          </h2>
+        </div>
+
+        {/* 
+          Wrapper Changes: 
+          - Mobile: flex, overflow-x-auto, snap-x (for swiping), hidden scrollbars
+          - Desktop (sm+): switch to grid, remove overflow and snapping 
+        */}
+        <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 overflow-x-auto snap-x snap-mandatory sm:overflow-visible sm:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {[
+            "/a2.avif",
+            "/a3.avif",
+            "/al.avif",
+            "/ar.avif",
+            "/bar.avif"
+          ].map((img, i) => (
+            <div 
+              key={i} 
+              /* 
+                Item Changes:
+                - Mobile: flex-none, fixed width (75% of screen), snap to center
+                - Desktop (sm+): auto width (fills grid cell), disable snapping
+              */
+              className="flex-none w-[100%] sm:w-auto snap-center sm:snap-align-none relative aspect-square overflow-hidden group shadow-sm"
+            >
+              <img 
+                src={img} 
+                alt={`Instagram Showcase ${i}`} 
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+              />
+              <div className="absolute inset-0 bg-[#0d2b4e]/60 opacity-0 group-hover:opacity-100 transition duration-300 z-10 flex items-center justify-center">
+                <InstagramIcon size={28} className="text-white" />
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
+      </section>
 
       </div>
 
