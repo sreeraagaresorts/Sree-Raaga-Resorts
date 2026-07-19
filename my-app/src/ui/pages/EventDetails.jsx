@@ -286,7 +286,7 @@ const handleEnquiry = async (e) => {
               <div className="select-none space-y-4 px-4 md:px-0">
                 {event.show_price && event.price && (
                   <div className="font-semibold text-[25px] uppercase tracking-[2px] font-jost text-[#c8a64d]">
-                    ₹{parseFloat(event.price).toLocaleString()} / Package
+                    ₹{parseFloat(event.price).toLocaleString()} / Person
                   </div>
                 )}
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium font-corm text-[#0d2b4e] leading-tight">

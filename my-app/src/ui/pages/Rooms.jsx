@@ -92,6 +92,26 @@ import roomServiceIcon from "../../assets/icons/services.png";
 import laundryIcon from "../../assets/icons/laundry.png";
 import housekeepingIcon from "../../assets/icons/cleaning.png";
 
+function InstagramIcon({ size = 20, className = "" }) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      className={className}
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
 
 const amenities = [
   { icon: wifiIcon, name: "Wifi & Internet" },
@@ -320,7 +340,7 @@ const Rooms = () => {
           className="relative h-[65vh] flex items-center justify-center bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2000')",
+              "url('/roombread.avif')",
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>
@@ -670,11 +690,11 @@ const Rooms = () => {
         */}
         <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 overflow-x-auto snap-x snap-mandatory sm:overflow-visible sm:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {[
-            "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=600",
-            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
-            "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600",
-            "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
-            "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=600"
+            "/a2.avif",
+            "/a3.avif",
+            "/al.avif",
+            "/ar.avif",
+            "/bar.avif"
           ].map((img, i) => (
             <div 
               key={i} 
@@ -691,7 +711,7 @@ const Rooms = () => {
                 className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
               />
               <div className="absolute inset-0 bg-[#0d2b4e]/60 opacity-0 group-hover:opacity-100 transition duration-300 z-10 flex items-center justify-center">
-                {/* <Instagram size={28} className="text-white" /> */}
+                <InstagramIcon size={28} className="text-white" />
               </div>
             </div>
           ))}

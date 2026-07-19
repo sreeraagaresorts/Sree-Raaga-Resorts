@@ -245,7 +245,7 @@ const Menu = () => {
         <section
           className="relative h-[55vh] md:h-[65vh] flex items-center justify-center bg-cover bg-center select-none"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2000')"
+            backgroundImage: "url('/restbread.avif')"
           }}
         >
           <div className="absolute inset-0 bg-[#04121a]/55"></div>

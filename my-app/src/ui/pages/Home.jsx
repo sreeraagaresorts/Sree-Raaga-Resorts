@@ -1118,7 +1118,7 @@ return (
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-black/20"></div>
 
         {/* Content */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-8 text-white">
@@ -1208,7 +1208,7 @@ return (
           {/* Left Image */}
           <div className="w-1/2 lg:w-auto lg:absolute lg:left-12 lg:top-16" data-aos="fade-right" data-aos-delay="700">
             <img
-              src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1200"
+              src="/day1.avif"
               alt="Restaurant"
               className="w-full lg:w-[500px] h-[260px] sm:h-[350px] lg:h-[520px] object-cover shadow-sm lg:shadow-xl"
             />
@@ -1217,7 +1217,7 @@ return (
           {/* Right Image */}
           <div className="w-1/2 lg:w-auto lg:absolute lg:right-12 lg:top-16" data-aos="fade-left" data-aos-delay="700">
             <img
-              src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=1200"
+              src="/day2.avif"
               alt="Pool Bar"
               className="w-full lg:w-[500px] h-[260px] sm:h-[350px] lg:h-[520px] object-cover shadow-sm lg:shadow-xl"
             />
@@ -1490,7 +1490,7 @@ return (
             Social Media
           </span>
           <h2 className="text-[33px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
-            Follow us on Instagram <InstagramIcon size={26} className="text-[#c8a64d] mt-2" />
+            Follow us on Instagram 
           </h2>
         </div>
 
@@ -1501,11 +1501,11 @@ return (
         */}
         <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 overflow-x-auto snap-x snap-mandatory sm:overflow-visible sm:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {[
-            "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=600",
-            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600",
-            "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600",
-            "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600",
-            "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=600"
+            "/a2.avif",
+            "/a3.avif",
+            "/al.avif",
+            "/ar.avif",
+            "/bar.avif"
           ].map((img, i) => (
             <div 
               key={i} 

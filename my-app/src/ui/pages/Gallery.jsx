@@ -70,7 +70,7 @@ const galleryItems = [
   //   id: 5,
   //   type: "video",
   //   src: "https://assets.mixkit.co/videos/preview/mixkit-luxury-resort-with-swimming-pool-41662-large.mp4",
-  //   thumbnail: "/outdoor.jpg",
+  //   thumbnail: "/outdoor.avif",
   //   category: "Pool & Spa",
   //   title: "Poolside Oasis",
   //   description: "Relax by our crystal-clear waters in standard lounge configurations."
@@ -78,7 +78,7 @@ const galleryItems = [
   {
     id: 6,
     type: "photo",
-    src: "/indoor.jpg",
+    src: "/indoor.avif",
     category: "Dining",
     title: "Signature Restaurant Setup",
     description: "Cozy settings for breakfast buffet and culinary plates."
@@ -86,7 +86,7 @@ const galleryItems = [
   {
     id: 7,
     type: "photo",
-    src: "/play.jpg",
+    src: "/play.avif",
     category: "Activities",
     title: "Children's Playground",
     description: "Safe and delightful outdoor recreation area for kids."
@@ -94,7 +94,7 @@ const galleryItems = [
   {
     id: 8,
     type: "photo",
-    src: "/rain.jpg",
+    src: "/rain.avif",
     category: "Activities",
     title: "Rain Dance Arena",
     description: "Enjoy a splashing good time with high-quality beats."
@@ -111,7 +111,7 @@ const galleryItems = [
   {
     id: 10,
     type: "photo",
-    src: "/adv1.jpg",
+    src: "/adv.avif",
     category: "Activities",
     title: "Adventure Rope Courses",
     description: "Challenging rope bridges for family and corporate team building."
@@ -119,7 +119,7 @@ const galleryItems = [
   {
     id: 11,
     type: "photo",
-    src: "/green.jpg",
+    src: "/green.avif",
     category: "Lush Outdoors",
     title: "Manicured Gardens",
     description: "Meticulously maintained green fields under the evening sun."
@@ -127,7 +127,7 @@ const galleryItems = [
   {
     id: 12,
     type: "photo",
-    src: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800",
+    src: "/dinebread.avif",
     category: "Dining",
     title: "Live Barbeque & Grills",
     description: "Fresh meats and vegetarian skewers cooked to your liking."
@@ -135,7 +135,7 @@ const galleryItems = [
   {
     id: 13,
     type: "photo",
-    src: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=800",
+    src: "/bookbread.avif",
     category: "Events & Celebrations",
     title: "Outdoor Lantern Evening",
     description: "Exquisite string lights transforming the lawn into a banquet site."
