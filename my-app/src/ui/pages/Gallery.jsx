@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
@@ -32,143 +32,64 @@ const isYouTubeUrl = (url) => {
   return url.includes("youtube.com") || url.includes("youtu.be");
 };
 
-const galleryItems = [
-  {
-    id: 1,
-    type: "photo",
-    src: "/a2.avif",
-    category: "Villas & Suites",
-    title: "Premium Villa Suite",
-    description: "Experience the serenity of Sree Raaga Resorts in our modern, rustic villas."
-  },
-  {
-    id: 2,
-    type: "video",
-    src: "/IMG_3557.MP4",
-    thumbnail: "/cd.avif",
-    category: "Resort Tour",
-    title: "Resort Video Experience",
-    description: "A panoramic cinematic tour of the lush green resort properties."
-  },
-  {
-    id: 3,
-    type: "photo",
-    src: "/a3.avif",
-    category: "Lush Outdoors",
-    title: "Scenic Pathways",
-    description: "Quiet morning paths perfect for bird watching and walking."
-  },
-  {
-    id: 4,
-    type: "photo",
-    src: "/ctbr.avif",
-    category: "Villas & Suites",
-    title: "Luxury Cottage Bedroom",
-    description: "Lavish wood interiors matching heritage-style architecture."
-  },
-  // {
-  //   id: 5,
-  //   type: "video",
-  //   src: "https://assets.mixkit.co/videos/preview/mixkit-luxury-resort-with-swimming-pool-41662-large.mp4",
-  //   thumbnail: "/outdoor.avif",
-  //   category: "Pool & Spa",
-  //   title: "Poolside Oasis",
-  //   description: "Relax by our crystal-clear waters in standard lounge configurations."
-  // },
-  {
-    id: 6,
-    type: "photo",
-    src: "/indoor.avif",
-    category: "Dining",
-    title: "Signature Restaurant Setup",
-    description: "Cozy settings for breakfast buffet and culinary plates."
-  },
-  {
-    id: 7,
-    type: "photo",
-    src: "/play.avif",
-    category: "Activities",
-    title: "Children's Playground",
-    description: "Safe and delightful outdoor recreation area for kids."
-  },
-  {
-    id: 8,
-    type: "photo",
-    src: "/rain.avif",
-    category: "Activities",
-    title: "Rain Dance Arena",
-    description: "Enjoy a splashing good time with high-quality beats."
-  },
-  {
-    id: 9,
-    type: "video",
-    src: "https://youtu.be/J9aMyrLAsZM",
-    thumbnail: "/cover.avif",
-    category: "Lush Outdoors",
-    title: "Aerial Resort Tour",
-    description: "High-flying drone views showcasing our pristine property boundaries."
-  },
-  {
-    id: 10,
-    type: "photo",
-    src: "/adv.avif",
-    category: "Activities",
-    title: "Adventure Rope Courses",
-    description: "Challenging rope bridges for family and corporate team building."
-  },
-  {
-    id: 11,
-    type: "photo",
-    src: "/green.avif",
-    category: "Lush Outdoors",
-    title: "Manicured Gardens",
-    description: "Meticulously maintained green fields under the evening sun."
-  },
-  {
-    id: 12,
-    type: "photo",
-    src: "/dinebread.avif",
-    category: "Dining",
-    title: "Live Barbeque & Grills",
-    description: "Fresh meats and vegetarian skewers cooked to your liking."
-  },
-  {
-    id: 13,
-    type: "photo",
-    src: "/bookbread.avif",
-    category: "Events & Celebrations",
-    title: "Outdoor Lantern Evening",
-    description: "Exquisite string lights transforming the lawn into a banquet site."
-  },
-  {
-    id: 14,
-    type: "photo",
-    src: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800",
-    category: "Events & Celebrations",
-    title: "Lawn Wedding Mandap",
-    description: "Celebrate grand milestones under traditional floral decorations."
-  },
-  {
-    id: 15,
-    type: "photo",
-    src: "/train.avif",
-    category: "Activities",
-    title: "Resort Toy Train",
-    description: "Fun rides around the garden pathways for guests of all ages."
-  },
-  {
-    id: 16,
-    type: "photo",
-    src: "/workspace.jpg",
-    category: "Events & Meetings",
-    title: "Grand Conference Hall",
-    description: "Fully equipped indoor halls hosting board meetings and seminars."
+const categories = ["Villas & Suites", "Lush Outdoors", "Dining", "Activities", "Events & Celebrations"];
+
+// Dynamically generate entries for images 1 to 60 and r1 (1) to r1 (141)
+const generateDynamicGalleryItems = () => {
+  const items = [];
+  let nextId = 1;
+
+  // Add numbered images 1 to 60 (excluding missing ones like 16)
+  const missingNumbered = [16];
+  for (let i = 1; i <= 60; i++) {
+    if (missingNumbered.includes(i)) continue;
+    items.push({
+      id: nextId++,
+      type: "photo",
+      src: `/${i}.avif`,
+      category: categories[(i - 1) % categories.length],
+      title: `Resort View #${i}`,
+      description: "Experience the serene ambience and beauty of Sree Raaga Resorts."
+    });
   }
-];
+
+  // Add r1 (1) to r1 (141) images
+  for (let i = 1; i <= 141; i++) {
+    items.push({
+      id: nextId++,
+      type: "photo",
+      src: `/r1 (${i}).avif`,
+      category: categories[(i - 1) % categories.length],
+      title: `Resort Experience #${i}`,
+      description: "Capturing fine details and beautiful experiences across the resort grounds."
+    });
+  }
+
+  return items;
+};
+
+const galleryItems = generateDynamicGalleryItems();
+
+const ITEMS_PER_PAGE = 24;
+
+const getPageNumbers = (current, total) => {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  if (current <= 4) {
+    return [1, 2, 3, 4, 5, "...", total];
+  }
+  if (current >= total - 3) {
+    return [1, "...", total - 4, total - 3, total - 2, total - 1, total];
+  }
+  return [1, "...", current - 1, current, current + 1, "...", total];
+};
 
 const Gallery = () => {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
   const [lightbox, setLightbox] = useState({ isOpen: false, itemIndex: 0 });
+  const galleryGridRef = useRef(null);
 
   useEffect(() => {
     AOS.init({
@@ -185,6 +106,17 @@ const Gallery = () => {
     return true; // "all"
   });
 
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE) || 1;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentItems = filteredItems.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+      galleryGridRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const openLightbox = (index) => {
     setLightbox({
       isOpen: true,
@@ -193,10 +125,10 @@ const Gallery = () => {
   };
 
   const closeLightbox = () => {
-    setLightbox({
-      ...lightbox,
+    setLightbox((prev) => ({
+      ...prev,
       isOpen: false,
-    });
+    }));
   };
 
   const nextItem = () => {
@@ -283,7 +215,7 @@ const Gallery = () => {
         </section>
 
         {/* ================= GALLERY CONTENT SECTION ================= */}
-        <section className="py-20 md:py-28 px-4 sm:px-6 bg-[#fdfeff] text-[#0d2b4e]">
+        <section ref={galleryGridRef} className="py-20 md:py-28 px-4 sm:px-6 bg-[#fdfeff] text-[#0d2b4e] scroll-mt-6">
           
           {/* Centered Title Heading */}
           <div className="max-w-7xl mx-auto text-center mb-12">
@@ -311,6 +243,7 @@ const Gallery = () => {
             <button 
               onClick={() => {
                 setActiveFilter("all");
+                setCurrentPage(1);
                 setLightbox((l) => ({ ...l, itemIndex: 0 }));
               }} 
               className={`pb-1 transition-all duration-300 relative cursor-pointer font-semibold ${
@@ -331,6 +264,7 @@ const Gallery = () => {
             <button 
               onClick={() => {
                 setActiveFilter("photos");
+                setCurrentPage(1);
                 setLightbox((l) => ({ ...l, itemIndex: 0 }));
               }} 
               className={`pb-1 transition-all duration-300 relative cursor-pointer font-semibold ${
@@ -351,6 +285,7 @@ const Gallery = () => {
             <button 
               onClick={() => {
                 setActiveFilter("videos");
+                setCurrentPage(1);
                 setLightbox((l) => ({ ...l, itemIndex: 0 }));
               }} 
               className={`pb-1 transition-all duration-300 relative cursor-pointer font-semibold ${
@@ -369,69 +304,132 @@ const Gallery = () => {
 
           {/* Three-grid pictures/videos layout */}
           <div className="max-w-[180vh] mx-auto">
-            <motion.div 
-              layout 
+            <div 
               className={`grid grid-cols-1 md:grid-cols-2 ${activeFilter === "videos" ? "" : "lg:grid-cols-3"} gap-6 sm:gap-8`}
             >
-              <AnimatePresence mode="popLayout">
-                {filteredItems.map((item, index) => (
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.5 }}
-                    key={item.id}
-                    onClick={() => openLightbox(index)}
-                    className="group relative cursor-pointer overflow-hidden rounded-sm shadow-sm aspect-[4/3] bg-gray-100 border border-gray-100"
-                  >
-                    {item.type === "photo" ? (
-                      <img 
-                        src={item.src} 
-                        alt={item.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="w-full h-full relative">
+              <AnimatePresence mode="wait">
+                {currentItems.map((item) => {
+                  const fullIndex = filteredItems.findIndex((fi) => fi.id === item.id);
+                  return (
+                    <motion.div
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      key={item.id}
+                      onClick={() => openLightbox(fullIndex >= 0 ? fullIndex : 0)}
+                      className="group relative cursor-pointer overflow-hidden rounded-sm shadow-sm aspect-[4/3] bg-gray-100 border border-gray-100 transform-gpu"
+                    >
+                      {item.type === "photo" ? (
                         <img 
-                          src={item.thumbnail} 
+                          src={item.src} 
                           alt={item.title} 
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                           loading="lazy"
                         />
-                        {/* Play Overlay */}
-                        <div className="absolute inset-0 bg-[#04121a]/30 flex items-center justify-center transition-all duration-300 group-hover:bg-[#04121a]/10">
-                          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-black/45 backdrop-blur-sm border border-white/40 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-[#c8a64d] group-hover:border-transparent text-white">
-                            <svg 
-                              xmlns="http://www.w3.org/2000/svg" 
-                              viewBox="0 0 24 24" 
-                              fill="currentColor" 
-                              className="w-8 h-8 md:w-10 md:h-10 ml-1"
-                            >
-                              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                            </svg>
+                      ) : (
+                        <div className="w-full h-full relative">
+                          <img 
+                            src={item.thumbnail} 
+                            alt={item.title} 
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                          {/* Play Overlay */}
+                          <div className="absolute inset-0 bg-[#04121a]/30 flex items-center justify-center transition-all duration-300 group-hover:bg-[#04121a]/10">
+                            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-black/45 backdrop-blur-sm border border-white/40 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-[#c8a64d] group-hover:border-transparent text-white">
+                              <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 24 24" 
+                                fill="currentColor" 
+                                className="w-8 h-8 md:w-10 md:h-10 ml-1"
+                              >
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                              </svg>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {/* Gradient & Hover Text Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#04121a]/90 via-[#04121a]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 select-none">
-                      <span className="text-[#c8a64d] text-xs font-semibold uppercase tracking-wider mb-1 font-jost">
-                        {item.type === "photo" ? "Photo" : "Video"} • {item.category}
-                      </span>
-                      <h3 className="text-white text-xl font-medium font-corm leading-tight mb-1">
-                        {item.title}
-                      </h3>
-                      <p className="text-white/80 text-sm font-jost font-light leading-normal line-clamp-2">
-                        {item.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
+                      {/* Gradient & Hover Text Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#04121a]/90 via-[#04121a]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 select-none">
+                        <span className="text-[#c8a64d] text-xs font-semibold uppercase tracking-wider mb-1 font-jost">
+                          {item.type === "photo" ? "Photo" : "Video"} • {item.category}
+                        </span>
+                        <h3 className="text-[#fdfeff] text-xl font-medium font-corm leading-tight mb-1">
+                          {item.title}
+                        </h3>
+                        <p className="text-white/80 text-sm font-jost font-light leading-normal line-clamp-2">
+                          {item.description}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </AnimatePresence>
-            </motion.div>
+            </div>
+
+            {/* ================= PAGINATION CONTROLS ================= */}
+            {totalPages > 1 && (
+              <div className="flex flex-col items-center gap-4 mt-16 font-jost select-none">
+                {/* Page indicator info */}
+                <span className="text-sm text-gray-500 font-medium tracking-wide">
+                  Showing {startIndex + 1}–{Math.min(startIndex + ITEMS_PER_PAGE, filteredItems.length)} of {filteredItems.length} items
+                </span>
+
+                {/* Buttons row */}
+                <div className="flex items-center gap-2 flex-wrap justify-center">
+                  {/* Prev Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                      currentPage === 1
+                        ? "border-gray-200 text-gray-300 cursor-not-allowed"
+                        : "border-[#0d2b4e]/20 text-[#0d2b4e] hover:bg-[#c8a64d] hover:border-[#c8a64d] hover:text-white cursor-pointer"
+                    }`}
+                    title="Previous Page"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+
+                  {/* Page Numbers */}
+                  {getPageNumbers(currentPage, totalPages).map((page, idx) =>
+                    page === "..." ? (
+                      <span key={`dots-${idx}`} className="px-2 text-gray-400 font-medium">
+                        ...
+                      </span>
+                    ) : (
+                      <button
+                        key={`page-${page}`}
+                        onClick={() => handlePageChange(page)}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300 cursor-pointer ${
+                          currentPage === page
+                            ? "bg-[#0d2b4e] text-white shadow-md"
+                            : "bg-gray-50 text-[#0d2b4e] hover:bg-[#c8a64d] hover:text-white border border-gray-200/80"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                      currentPage === totalPages
+                        ? "border-gray-200 text-gray-300 cursor-not-allowed"
+                        : "border-[#0d2b4e]/20 text-[#0d2b4e] hover:bg-[#c8a64d] hover:border-[#c8a64d] hover:text-white cursor-pointer"
+                    }`}
+                    title="Next Page"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 

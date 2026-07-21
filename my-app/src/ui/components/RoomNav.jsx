@@ -584,7 +584,7 @@ const Navbar = () => {
                 {/* Social icons */}
                 {/* <div className="flex gap-4 mt-3">
                   <a 
-                    href="https://instagram.com" 
+                    href="https://www.instagram.com/sreeraagaresorts" 
                     target="_blank" 
                     rel="noreferrer" 
                     className="text-[#0d2b4e]/60 hover:text-[#c8a64d] transition"

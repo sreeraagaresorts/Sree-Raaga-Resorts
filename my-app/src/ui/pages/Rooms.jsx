@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { Maximize, Utensils, Users, Bed, Bath, ArrowRight, Heart } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import InstagramFeed from "../components/InstagramFeed";
 import { useToast } from "../components/Toast";
 import { Helmet } from "react-helmet";
 import { API_URL } from "../../config/api";
@@ -672,51 +673,7 @@ const Rooms = () => {
         </section>
 
      {/* ================= FOLLOW US ON INSTAGRAM ================= */}
-      <section className="bg-[#fdfeff] text-[#0d2b4e]">
-        <div className="py-8 md:py-12 text-center mb-12">
-          <span className="text-[#c8a64d] uppercase tracking-[4px] text-[17px] font-jost font-semibold block mb-2">
-            Social Media
-          </span>
-          <h2 className="text-[33px] md:text-6xl font-medium font-corm flex items-center justify-center gap-2">
-            Follow us on Instagram 
-            {/* <Instagram size={26} className="text-[#c8a64d] mt-2" /> */}
-          </h2>
-        </div>
-
-        {/* 
-          Wrapper Changes: 
-          - Mobile: flex, overflow-x-auto, snap-x (for swiping), hidden scrollbars
-          - Desktop (sm+): switch to grid, remove overflow and snapping 
-        */}
-        <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 overflow-x-auto snap-x snap-mandatory sm:overflow-visible sm:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {[
-            "/a2.avif",
-            "/a3.avif",
-            "/al.avif",
-            "/ar.avif",
-            "/bar.avif"
-          ].map((img, i) => (
-            <div 
-              key={i} 
-              /* 
-                Item Changes:
-                - Mobile: flex-none, fixed width (75% of screen), snap to center
-                - Desktop (sm+): auto width (fills grid cell), disable snapping
-              */
-              className="flex-none w-[100%] sm:w-auto snap-center sm:snap-align-none relative aspect-square overflow-hidden group shadow-sm"
-            >
-              <img 
-                src={img} 
-                alt={`Instagram Showcase ${i}`} 
-                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
-              />
-              <div className="absolute inset-0 bg-[#0d2b4e]/60 opacity-0 group-hover:opacity-100 transition duration-300 z-10 flex items-center justify-center">
-                <InstagramIcon size={28} className="text-white" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <InstagramFeed />
 
       </div>
       <Footer />

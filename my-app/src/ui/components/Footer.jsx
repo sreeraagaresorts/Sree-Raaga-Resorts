@@ -323,9 +323,9 @@ const Footer = () => {
           {/* Center: Brand Typography */}
           <div className="text-center order-1 md:order-2 flex flex-col items-center">
               {/* Left: Copyright */}
-          <div className="text-gray-300 text-[17px] tracking-wider  order-2 md:order-1">
+          <div className="text-[#FFFFFF] text-[17px] tracking-wider  order-2 md:order-1">
             {/* Copyright ©  by Sree Raaga Resorts */}
-            Copyright © {new Date().getFullYear()}. All Right Reserved. Designed By <a className="font-bold text-white/80 hover:text-white/30 transition duration-300" href="https://wa.link/jpp1mq">NEXA DZINE</a>
+            Copyright © {new Date().getFullYear()}. All Right Reserved. Designed By <a className="font-bold text-[#FFC600] hover:text-white/30 transition duration-300" href="https://wa.link/jpp1mq">NEXA DZINE</a>
           </div>
           </div>
 
