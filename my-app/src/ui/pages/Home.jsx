@@ -816,10 +816,12 @@ return (
                     </svg>
                   </span>
 
-                  <span className="relative">
-                    DISCOVER MORE
-                    <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
-                  </span>
+           <Link to="/rooms" className="group inline-block">
+  <span className="relative">
+    DISCOVER MORE
+    <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+  </span>
+</Link>
                 </button>
               </div>
             </div>
