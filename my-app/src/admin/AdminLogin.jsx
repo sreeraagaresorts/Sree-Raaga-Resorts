@@ -87,7 +87,7 @@ const AdminLogin = () => {
               Desktop Access Only
             </h2>
             <p className="text-xs text-gray-400 leading-relaxed uppercase tracking-wider mb-6">
-              For security reasons, the Admin Portal is only accessible from desktop devices. Please log in using a computer or larger screen.
+              For security reasons, the Admin Portal is only accessible from desktop devices. Please log in using a computer.
             </p>
           </div>
 
