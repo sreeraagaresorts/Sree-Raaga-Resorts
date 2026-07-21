@@ -751,7 +751,7 @@ const RoomDetails = () => {
             className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
           >
             <span className="font-medium text-[#0d2b4e]">
-              {adults} {adults === 1 ? "Adult (18+ Years)" : "Adults (18+ Years)"}
+              {adults} {adults === 1 ? "Guest (10 Years & Above)" : "Guests (10 Years & Above)"}
             </span>
             <ChevronDown
               size={16}
@@ -762,7 +762,7 @@ const RoomDetails = () => {
           {isAdultsOpen && (
             <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-sm">Adults (18+ Years)</span>
+                <span className="font-semibold text-sm">Guests (10 Years & Above)</span>
                 <div className="flex items-center gap-6">
                   <button
                     type="button"
@@ -808,7 +808,7 @@ const RoomDetails = () => {
             className="w-full border border-gray-200 px-4 py-5 text-[17px] text-[#0d2b4e] flex items-center justify-between outline-none cursor-pointer text-left font-jost focus:border-[#c8a64d] transition-all"
           >
             <span className="font-medium text-[#0d2b4e]">
-              {children === 0 ? "Children (Below 10 Years)" : children === 1 ? "1 Child (Below 10 Years)" : `${children} Children (Below 10 Years)`}
+              {children === 0 ? "Children (Under 10 Years)" : children === 1 ? "1 Child (Under 10 Years)" : `${children} Children (Under 10 Years)`}
             </span>
             <ChevronDown
               size={16}
@@ -819,7 +819,7 @@ const RoomDetails = () => {
           {isChildrenOpen && (
             <div className="absolute top-[110%] left-0 w-full bg-[#f7d6b8] text-[#0d2b4e] rounded-3xl p-5 shadow-2xl z-50 font-jost text-left select-none">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-sm">Children (Below 10 Years)</span>
+                <span className="font-semibold text-sm">Children (Under 10 Years)</span>
                 <div className="flex items-center gap-6">
                   <button
                     type="button"

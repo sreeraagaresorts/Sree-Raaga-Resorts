@@ -1278,7 +1278,7 @@ if (hasConflict) {
                 {/* Adults & Children */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Adults (18+ Years)</label>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Guests (10 Years & Above)</label>
                     <input
                       type="number"
                       min="1"
@@ -1288,7 +1288,7 @@ if (hasConflict) {
                     />
                   </div>
                   <div>
-                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children (Below 10 Years)</label>
+                    <label className="block text-yellow-500 text-xs uppercase tracking-wider mb-2">Children (Under 10 Years)</label>
                     <input
                       type="number"
                       min="0"
